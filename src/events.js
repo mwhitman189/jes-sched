@@ -40,7 +40,7 @@ export default [
     start: new Date(2019, 3, 11, 14, 0, 0, 0),
     end: new Date(2019, 3, 11, 15, 0, 0, 0),
     duration: 50,
-    resourceId: 0
+    resourceId: 1
   },
   {
     id: 18,
@@ -48,7 +48,7 @@ export default [
     start: new Date(2019, 11, 5, 16, 30, 0),
     end: new Date(2019, 11, 5, 17, 30, 0),
     duration: 60,
-    resourceId: 2
+    resourceId: 3
   },
   {
     id: 19,
@@ -87,7 +87,7 @@ export default [
     title: "Go to the gym",
     start: new Date(2019, 11, 14, 18, 30, 0),
     end: new Date(2019, 11, 14, 20, 0, 0),
-    resourceId: 1,
+    resourceId: 0,
     duration: 50
   }
 ];

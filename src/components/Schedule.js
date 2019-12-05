@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Calendar, momentLocalizer } from "react-big-calendar";
 import withDragAndDrop from "react-big-calendar/lib/addons/dragAndDrop";
 import moment from "moment";
@@ -13,7 +13,7 @@ const DragAndDropCalendar = withDragAndDrop(Calendar);
 const Schedule = props => {
   const [events, setEvents] = useState(eventsList);
   const [teacherData, setTeacherData] = useState(teachersList);
-  console.log(teacherData);
+  const [didChange, setDidChange] = useState(false);
 
   // Limit displayed hours of the day
   const minTime = new Date();
@@ -22,7 +22,11 @@ const Schedule = props => {
   maxTime.setHours(21, 0, 0);
 
   const addTeachingMins = () => {
+    for (let teacher in teacherData) {
+      teacherData[teacher].teachingMins = 0;
+    }
     events.forEach(e => {
+      // Reset teaching minutes to "0", then add all teaching minutes to the corresponding instructor
       teacherData[e.resourceId].teachingMins += e.duration;
       setTeacherData([...teacherData]);
       teacherData[e.resourceId].resourceTitle = `${
@@ -30,6 +34,53 @@ const Schedule = props => {
       } ${teacherData[e.resourceId].teachingMins}`;
     });
   };
+
+  const moveEvent = ({
+    event,
+    resourceId,
+    start,
+    end,
+    isAllDay: droppedOnAllDaySlot
+  }) => {
+    const idx = events.indexOf(event);
+    let allDay = event.allDay;
+
+    if (!event.allDay && droppedOnAllDaySlot) {
+      allDay = true;
+    } else if (event.allDay && !droppedOnAllDaySlot) {
+      allDay = false;
+    }
+
+    const updatedEvent = { ...event, resourceId, start, end, allDay };
+
+    const nextEvents = [...events];
+    nextEvents.splice(idx, 1, updatedEvent);
+
+    setEvents(nextEvents);
+    // alert(`${event.title} was dropped onto ${updatedEvent.start}`)
+  };
+
+  const handleUpdate = ({
+    event,
+    resourceId,
+    start,
+    end,
+    isAllDay: droppedOnAllDaySlot
+  }) => {
+    moveEvent({
+      event,
+      resourceId,
+      start,
+      end,
+      isAllDay: droppedOnAllDaySlot
+    });
+    setDidChange(true);
+  };
+
+  useEffect(() => {
+    addTeachingMins();
+    setDidChange(false);
+  }, [didChange]);
 
   // Style events based on event.type
   const eventStyleGetter = event => {
@@ -66,13 +117,13 @@ const Schedule = props => {
 
   return (
     <div>
-      <button onClick={addTeachingMins}>ClickMe</button>
       <DragAndDropCalendar
         style={{ width: "95vw", maxHeight: "100%" }}
         localizer={localizer}
         views={{ week: WorkWeek, day: true }}
         defaultView="day"
         events={events}
+        onEventDrop={handleUpdate}
         startAccessor="start"
         endAccessor="end"
         resources={teacherData}
