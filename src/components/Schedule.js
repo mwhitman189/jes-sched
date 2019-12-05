@@ -23,16 +23,11 @@ const Schedule = props => {
 
   const addTeachingMins = () => {
     events.forEach(e => {
-      for (let teacher in teacherData) {
-        console.log(teacher);
-        if (parseInt(teacher) === e.resourceId) {
-          teacherData[teacher].teachingMins += e.duration;
-          setTeacherData([...teacherData]);
-        }
-        teacherData[
-          teacher
-        ].resourceTitle = `${teacherData[teacher].name} ${teacherData[teacher].teachingMins}`;
-      }
+      teacherData[e.resourceId].teachingMins += e.duration;
+      setTeacherData([...teacherData]);
+      teacherData[e.resourceId].resourceTitle = `${
+        teacherData[e.resourceId].name
+      } ${teacherData[e.resourceId].teachingMins}`;
     });
   };
 
