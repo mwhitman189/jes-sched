@@ -7,6 +7,7 @@ import useToggle from "../hooks/useToggle";
 import useFormState from "../hooks/useFormState";
 import eventsList from "../events";
 import teachersList from "../teachers";
+import roomList from "../rooms";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 
 import Button from "@material-ui/core/Button";
@@ -16,23 +17,44 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
+import { makeStyles } from "@material-ui/core/styles";
+import InputLabel from "@material-ui/core/InputLabel";
+import FormHelperText from "@material-ui/core/FormHelperText";
+import FormControl from "@material-ui/core/FormControl";
+import Select from "@material-ui/core/Select";
+import NativeSelect from "@material-ui/core/NativeSelect";
 
 const localizer = momentLocalizer(moment);
 const DragAndDropCalendar = withDragAndDrop(Calendar);
 
+const useStyles = makeStyles(theme => ({
+  formControl: {
+    margin: theme.spacing(1),
+    minWidth: 120
+  },
+  selectEmpty: {
+    marginTop: theme.spacing(2)
+  }
+}));
+
 const Schedule = props => {
+  const classes = useStyles();
   const [events, setEvents] = useState(eventsList);
   const [teacherList, setTeacherList] = useState(teachersList);
   const [didChange, setDidChange] = useState(false);
-  const [isOpen, toggleIsOpen] = useToggle(false);
+  const [isOpen, toggleIsOpen] = useToggle(true);
   const [title, handleTitleChange, titleReset] = useFormState("");
   const [startTime, setStartTime] = useState("");
   const [duration, handleDurationChange, durationReset] = useFormState("");
+  const [resource, handleResourceChange, resourceReset] = useFormState("");
+  const [room, handleRoomChange, roomReset] = useFormState("");
 
   useEffect(() => {
     toggleIsOpen();
     durationReset();
     titleReset();
+    resourceReset();
+    roomReset();
     addTeachingMins();
   }, [events]);
 
@@ -115,13 +137,13 @@ const Schedule = props => {
     setEvents([
       ...events,
       {
-        title: title,
+        title: `${title} -- ${room}`,
         start: startTime,
         end: moment(startTime)
           .add(duration, "m")
           .toDate(),
         duration: duration,
-        resourceId: 1
+        resourceId: parseInt(resource)
       }
     ]);
   };
@@ -137,26 +159,81 @@ const Schedule = props => {
         <DialogContentText>
           Please enter the start time and class duration
         </DialogContentText>
-        <TextField
-          autoFocus
-          margin="dense"
-          id="name"
-          label="Class Name"
-          type="text"
-          value={title}
-          onChange={handleTitleChange}
-          fullWidth
-        />
-        <TextField
-          margin="dense"
-          id="name"
-          label="Class Duration"
-          type="text"
-          pattern="[0-9]*"
-          value={duration}
-          onChange={handleDurationChange}
-          fullWidth
-        />
+        <FormControl className={classes.formControl}>
+          <TextField
+            autoFocus
+            margin="dense"
+            id="title"
+            label="Class Name"
+            type="text"
+            value={title}
+            onChange={handleTitleChange}
+            fullWidth
+            required
+          />
+        </FormControl>
+        <FormControl className={classes.formControl}>
+          <TextField
+            autoFocus
+            margin="dense"
+            id="startTime"
+            label="Start Time"
+            type="text"
+            value={moment(startTime).format("hh:mm")}
+            onChange={setStartTime}
+            fullWidth
+            required
+          />
+        </FormControl>
+        <FormControl className={classes.formControl}>
+          <TextField
+            margin="dense"
+            id="duration"
+            label="Class Duration"
+            type="text"
+            pattern="[0-9]*"
+            value={duration}
+            onChange={handleDurationChange}
+            fullWidth
+            required
+          />
+        </FormControl>
+        <FormControl className={classes.formControl}>
+          <InputLabel htmlFor="resource">Teacher</InputLabel>
+          <Select
+            native
+            id="resource"
+            value={resource}
+            onChange={handleResourceChange}
+            name="resource"
+            required
+          >
+            <option value="" />
+            {teacherList.map(t => (
+              <option key={`teacher-${t.resourceId}`} value={t.resourceId}>
+                {t.name}
+              </option>
+            ))}
+          </Select>
+        </FormControl>
+        <FormControl className={classes.formControl}>
+          <InputLabel htmlFor="room">Room #</InputLabel>
+          <Select
+            native
+            id="room"
+            value={room}
+            onChange={handleRoomChange}
+            name="room"
+            required
+          >
+            <option value="" />
+            {roomList.map(r => (
+              <option key={`room-${r}`} value={r}>
+                {r}
+              </option>
+            ))}
+          </Select>
+        </FormControl>
       </DialogContent>
       <DialogActions>
         <Button onClick={toggleIsOpen} color="primary">
