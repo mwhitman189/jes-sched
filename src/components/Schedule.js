@@ -29,6 +29,18 @@ const Schedule = props => {
   const [startTime, setStartTime] = useState("");
   const [duration, handleDurationChange, durationReset] = useFormState("");
 
+  useEffect(() => {
+    toggleIsOpen();
+    durationReset();
+    titleReset();
+    addTeachingMins();
+  }, [events]);
+
+  useEffect(() => {
+    addTeachingMins();
+    setDidChange(false);
+  }, [didChange]);
+
   // Limit displayed hours of the day
   const minTime = new Date();
   minTime.setHours(9, 0, 0);
@@ -44,7 +56,7 @@ const Schedule = props => {
         teacher => teacher.resourceId === e.resourceId
       );
       // Reset teaching minutes to "0", then add all teaching minutes to the corresponding instructor
-      teacherList[index].teachingMins += e.duration;
+      teacherList[index].teachingMins += parseInt(e.duration);
       setTeacherList([...teacherList]);
       teacherList[
         index
@@ -94,11 +106,6 @@ const Schedule = props => {
     setDidChange(true);
   };
 
-  useEffect(() => {
-    addTeachingMins();
-    setDidChange(false);
-  }, [didChange]);
-
   const handleSelect = ({ start }) => {
     toggleIsOpen();
     setStartTime(start);
@@ -117,9 +124,6 @@ const Schedule = props => {
         resourceId: 1
       }
     ]);
-    toggleIsOpen();
-    durationReset();
-    titleReset();
   };
 
   const newEventForm = (
@@ -148,6 +152,7 @@ const Schedule = props => {
           id="name"
           label="Class Duration"
           type="text"
+          pattern="[0-9]*"
           value={duration}
           onChange={handleDurationChange}
           fullWidth
