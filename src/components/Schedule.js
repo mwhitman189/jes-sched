@@ -4,6 +4,7 @@ import withDragAndDrop from "react-big-calendar/lib/addons/dragAndDrop";
 import moment from "moment";
 import { WorkWeek } from "./CustomView";
 import useToggle from "../hooks/useToggle";
+import useFormState from "../hooks/useFormState";
 import eventsList from "../events";
 import teachersList from "../teachers";
 import "react-big-calendar/lib/css/react-big-calendar.css";
@@ -24,6 +25,9 @@ const Schedule = props => {
   const [teacherList, setTeacherList] = useState(teachersList);
   const [didChange, setDidChange] = useState(false);
   const [isOpen, toggleIsOpen] = useToggle(false);
+  const [title, handleTitleChange, titleReset] = useFormState("");
+  const [startTime, setStartTime] = useState("");
+  const [duration, handleDurationChange, durationReset] = useFormState("");
 
   // Limit displayed hours of the day
   const minTime = new Date();
@@ -95,8 +99,27 @@ const Schedule = props => {
     setDidChange(false);
   }, [didChange]);
 
-  const handleSelect = ({ start, end }) => {
+  const handleSelect = ({ start }) => {
     toggleIsOpen();
+    setStartTime(start);
+  };
+
+  const addEvent = () => {
+    setEvents([
+      ...events,
+      {
+        title: title,
+        start: startTime,
+        end: moment(startTime)
+          .add(duration, "m")
+          .toDate(),
+        duration: duration,
+        resourceId: 1
+      }
+    ]);
+    toggleIsOpen();
+    durationReset();
+    titleReset();
   };
 
   const newEventForm = (
@@ -114,8 +137,19 @@ const Schedule = props => {
           autoFocus
           margin="dense"
           id="name"
-          label="Email Address"
-          type="email"
+          label="Class Name"
+          type="text"
+          value={title}
+          onChange={handleTitleChange}
+          fullWidth
+        />
+        <TextField
+          margin="dense"
+          id="name"
+          label="Class Duration"
+          type="text"
+          value={duration}
+          onChange={handleDurationChange}
           fullWidth
         />
       </DialogContent>
@@ -123,8 +157,8 @@ const Schedule = props => {
         <Button onClick={toggleIsOpen} color="primary">
           Cancel
         </Button>
-        <Button onClick={toggleIsOpen} color="primary">
-          Subscribe
+        <Button onClick={addEvent} color="primary">
+          Add Class
         </Button>
       </DialogActions>
     </Dialog>
@@ -151,7 +185,7 @@ const Schedule = props => {
         timeslots={2}
         min={minTime}
         max={maxTime}
-        onSelectSlot={toggleIsOpen}
+        onSelectSlot={handleSelect}
       />
     </div>
   );
