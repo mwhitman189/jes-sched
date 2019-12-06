@@ -3,9 +3,18 @@ import { Calendar, momentLocalizer } from "react-big-calendar";
 import withDragAndDrop from "react-big-calendar/lib/addons/dragAndDrop";
 import moment from "moment";
 import { WorkWeek } from "./CustomView";
+import useToggle from "../hooks/useToggle";
 import eventsList from "../events";
 import teachersList from "../teachers";
 import "react-big-calendar/lib/css/react-big-calendar.css";
+
+import Button from "@material-ui/core/Button";
+import TextField from "@material-ui/core/TextField";
+import Dialog from "@material-ui/core/Dialog";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import DialogTitle from "@material-ui/core/DialogTitle";
 
 const localizer = momentLocalizer(moment);
 const DragAndDropCalendar = withDragAndDrop(Calendar);
@@ -14,6 +23,7 @@ const Schedule = props => {
   const [events, setEvents] = useState(eventsList);
   const [teacherList, setTeacherList] = useState(teachersList);
   const [didChange, setDidChange] = useState(false);
+  const [isOpen, toggleIsOpen] = useToggle(false);
 
   // Limit displayed hours of the day
   const minTime = new Date();
@@ -85,8 +95,44 @@ const Schedule = props => {
     setDidChange(false);
   }, [didChange]);
 
+  const handleSelect = ({ start, end }) => {
+    toggleIsOpen();
+  };
+
+  const newEventForm = (
+    <Dialog
+      open={isOpen}
+      onClose={toggleIsOpen}
+      aria-labelledby="form-dialog-title"
+    >
+      <DialogTitle id="form-dialog-title">Subscribe</DialogTitle>
+      <DialogContent>
+        <DialogContentText>
+          Please enter the start time and class duration
+        </DialogContentText>
+        <TextField
+          autoFocus
+          margin="dense"
+          id="name"
+          label="Email Address"
+          type="email"
+          fullWidth
+        />
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={toggleIsOpen} color="primary">
+          Cancel
+        </Button>
+        <Button onClick={toggleIsOpen} color="primary">
+          Subscribe
+        </Button>
+      </DialogActions>
+    </Dialog>
+  );
+
   return (
     <div>
+      {isOpen && newEventForm}
       <DragAndDropCalendar
         style={{ width: "95vw", maxHeight: "100%" }}
         localizer={localizer}
@@ -105,6 +151,7 @@ const Schedule = props => {
         timeslots={2}
         min={minTime}
         max={maxTime}
+        onSelectSlot={toggleIsOpen}
       />
     </div>
   );
