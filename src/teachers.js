@@ -1,11 +1,5 @@
 export default [
   {
-    resourceId: 0,
-    resourceTitle: "Martin",
-    name: "Martin",
-    teachingMins: 0
-  },
-  {
     resourceId: 1,
     resourceTitle: "Tim",
     name: "Tim",
@@ -21,6 +15,12 @@ export default [
     resourceId: 3,
     resourceTitle: "Miles",
     name: "Miles",
+    teachingMins: 0
+  },
+  {
+    resourceId: 4,
+    resourceTitle: "Martin",
+    name: "Martin",
     teachingMins: 0
   }
 ];

@@ -44,7 +44,7 @@ export default [
   },
   {
     id: 18,
-    title: "Itaewon Halloween Meeting",
+    title: "Halloween Meeting",
     start: new Date(2019, 11, 5, 16, 30, 0),
     end: new Date(2019, 11, 5, 17, 30, 0),
     duration: 60,
@@ -79,7 +79,7 @@ export default [
     title: "Cooking Class",
     start: new Date(2019, 11, 14, 17, 30, 0),
     end: new Date(2019, 11, 14, 19, 0, 0),
-    resourceId: 0,
+    resourceId: 4,
     duration: 60
   },
   {
@@ -87,7 +87,7 @@ export default [
     title: "Go to the gym",
     start: new Date(2019, 11, 14, 18, 30, 0),
     end: new Date(2019, 11, 14, 20, 0, 0),
-    resourceId: 0,
+    resourceId: 1,
     duration: 50
   }
 ];

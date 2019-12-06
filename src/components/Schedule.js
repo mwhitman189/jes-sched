@@ -12,7 +12,7 @@ const DragAndDropCalendar = withDragAndDrop(Calendar);
 
 const Schedule = props => {
   const [events, setEvents] = useState(eventsList);
-  const [teacherData, setTeacherData] = useState(teachersList);
+  const [teacherList, setTeacherList] = useState(teachersList);
   const [didChange, setDidChange] = useState(false);
 
   // Limit displayed hours of the day
@@ -22,16 +22,19 @@ const Schedule = props => {
   maxTime.setHours(21, 0, 0);
 
   const addTeachingMins = () => {
-    for (let teacher in teacherData) {
-      teacherData[teacher].teachingMins = 0;
-    }
+    teacherList.forEach(teacher => {
+      return (teacher.teachingMins = 0);
+    });
     events.forEach(e => {
+      const index = teacherList.findIndex(
+        teacher => teacher.resourceId === e.resourceId
+      );
       // Reset teaching minutes to "0", then add all teaching minutes to the corresponding instructor
-      teacherData[e.resourceId].teachingMins += e.duration;
-      setTeacherData([...teacherData]);
-      teacherData[e.resourceId].resourceTitle = `${
-        teacherData[e.resourceId].name
-      } ${teacherData[e.resourceId].teachingMins}`;
+      teacherList[index].teachingMins += e.duration;
+      setTeacherList([...teacherList]);
+      teacherList[
+        index
+      ].resourceTitle = `${teacherList[index].name} ${teacherList[index].teachingMins}`;
     });
   };
 
@@ -82,39 +85,6 @@ const Schedule = props => {
     setDidChange(false);
   }, [didChange]);
 
-  // Style events based on event.type
-  const eventStyleGetter = event => {
-    let hexColor;
-    switch (event.type) {
-      case "pl":
-        hexColor = "309632";
-        break;
-      case "kids":
-        hexColor = "c47900";
-        break;
-      case "gs":
-        hexColor = "52167d";
-        break;
-      case "prem":
-        hexColor = "781419";
-        break;
-      default:
-        hexColor = "3767a6";
-        break;
-    }
-
-    let backgroundColor = "#" + hexColor;
-    let style = {
-      backgroundColor: backgroundColor,
-      color: "white",
-      border: 0,
-      display: "block"
-    };
-    return {
-      style: style
-    };
-  };
-
   return (
     <div>
       <DragAndDropCalendar
@@ -126,11 +96,11 @@ const Schedule = props => {
         onEventDrop={handleUpdate}
         startAccessor="start"
         endAccessor="end"
-        resources={teacherData}
+        resources={teacherList}
         resourceIdAccessor="resourceId"
         resourceTitleAccessor="resourceTitle"
         selectable
-        eventPropGetter={eventStyleGetter}
+        // eventPropGetter={eventStyleGetter}
         step={30}
         timeslots={2}
         min={minTime}
