@@ -19,10 +19,8 @@ import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import { makeStyles } from "@material-ui/core/styles";
 import InputLabel from "@material-ui/core/InputLabel";
-import FormHelperText from "@material-ui/core/FormHelperText";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
-import NativeSelect from "@material-ui/core/NativeSelect";
 
 const localizer = momentLocalizer(moment);
 const DragAndDropCalendar = withDragAndDrop(Calendar);
@@ -41,8 +39,7 @@ const Schedule = props => {
   const classes = useStyles();
   const [events, setEvents] = useState(eventsList);
   const [teacherList, setTeacherList] = useState(teachersList);
-  const [didChange, setDidChange] = useState(false);
-  const [isOpen, toggleIsOpen] = useToggle(true);
+  const [isOpen, toggleIsOpen] = useToggle(false);
   const [title, handleTitleChange, titleReset] = useFormState("");
   const [startTime, setStartTime] = useState("");
   const [duration, handleDurationChange, durationReset] = useFormState("");
@@ -50,18 +47,12 @@ const Schedule = props => {
   const [room, handleRoomChange, roomReset] = useFormState("");
 
   useEffect(() => {
-    toggleIsOpen();
     durationReset();
     titleReset();
     resourceReset();
     roomReset();
     addTeachingMins();
   }, [events]);
-
-  useEffect(() => {
-    addTeachingMins();
-    setDidChange(false);
-  }, [didChange]);
 
   // Limit displayed hours of the day
   const minTime = new Date();
@@ -86,23 +77,10 @@ const Schedule = props => {
     });
   };
 
-  const moveEvent = ({
-    event,
-    resourceId,
-    start,
-    end,
-    isAllDay: droppedOnAllDaySlot
-  }) => {
+  const moveEvent = ({ event, resourceId, start, end }) => {
     const idx = events.indexOf(event);
-    let allDay = event.allDay;
 
-    if (!event.allDay && droppedOnAllDaySlot) {
-      allDay = true;
-    } else if (event.allDay && !droppedOnAllDaySlot) {
-      allDay = false;
-    }
-
-    const updatedEvent = { ...event, resourceId, start, end, allDay };
+    const updatedEvent = { ...event, resourceId, start, end };
 
     const nextEvents = [...events];
     nextEvents.splice(idx, 1, updatedEvent);
@@ -111,21 +89,13 @@ const Schedule = props => {
     // alert(`${event.title} was dropped onto ${updatedEvent.start}`)
   };
 
-  const handleUpdate = ({
-    event,
-    resourceId,
-    start,
-    end,
-    isAllDay: droppedOnAllDaySlot
-  }) => {
+  const handleUpdate = ({ event, resourceId, start, end }) => {
     moveEvent({
       event,
       resourceId,
       start,
-      end,
-      isAllDay: droppedOnAllDaySlot
+      end
     });
-    setDidChange(true);
   };
 
   const handleSelect = ({ start }) => {
@@ -262,7 +232,14 @@ const Schedule = props => {
         resourceIdAccessor="resourceId"
         resourceTitleAccessor="resourceTitle"
         selectable
-        // eventPropGetter={eventStyleGetter}
+        eventPropGetter={
+          // Hide a dummy event that fixes drag and drop bug
+          event => {
+            if (event.hide) {
+              return { style: { display: "none" } };
+            }
+          }
+        }
         step={30}
         timeslots={2}
         min={minTime}

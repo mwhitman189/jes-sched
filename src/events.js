@@ -1,5 +1,14 @@
 export default [
   {
+    id: 1,
+    title: "Dummy Event to fix drag and drop bug",
+    start: new Date(),
+    end: new Date(),
+    duration: 0,
+    resourceId: 1,
+    hide: true
+  },
+  {
     id: 4,
     title: "Some Event",
     start: new Date(2019, 3, 9, 0, 0, 0),
