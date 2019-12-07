@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Calendar, momentLocalizer } from "react-big-calendar";
 import withDragAndDrop from "react-big-calendar/lib/addons/dragAndDrop";
 import moment from "moment";
 import { WorkWeek } from "./CustomView";
 import EventForm from "./EventForm";
 import useToggle from "../hooks/useToggle";
+import useFormState from "../hooks/useFormState";
 import eventsList from "../events";
 import teachersList from "../teachers";
 import "react-big-calendar/lib/css/react-big-calendar.css";
@@ -12,10 +13,12 @@ import "react-big-calendar/lib/css/react-big-calendar.css";
 const localizer = momentLocalizer(moment);
 const DragAndDropCalendar = withDragAndDrop(Calendar);
 
-const Schedule = props => {
+const Schedule = () => {
   const [events, setEvents] = useState(eventsList);
   const [teacherList, setTeacherList] = useState(teachersList);
-  const [startTime, setStartTime] = useState("");
+  const [startTime, handleStartTimeChange, startTimeReset] = useFormState(
+    new Date()
+  );
   const [isOpen, toggleIsOpen] = useToggle(false);
 
   // Limit displayed hours of the day
@@ -64,7 +67,7 @@ const Schedule = props => {
 
   const handleSelect = ({ start }) => {
     toggleIsOpen();
-    setStartTime(start);
+    handleStartTimeChange(start);
   };
 
   const addEvent = newEvent => {
@@ -87,7 +90,8 @@ const Schedule = props => {
           events={events}
           teacherList={teacherList}
           startTime={startTime}
-          setStartTime={setStartTime}
+          handleStartTimeChange={handleStartTimeChange}
+          startTimeReset={startTimeReset}
         />
       )}
       <DragAndDropCalendar

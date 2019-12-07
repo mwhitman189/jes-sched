@@ -3,7 +3,11 @@ import { useState } from "react";
 export default initialVal => {
   const [value, setValue] = useState(initialVal);
   const handleChange = e => {
-    setValue(e.target.value);
+    if (e.target) {
+      setValue(e.target.value);
+    } else {
+      setValue(e);
+    }
   };
   const reset = () => {
     setValue("");
