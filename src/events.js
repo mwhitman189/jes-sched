@@ -4,6 +4,7 @@ export default [
     title: "Dummy Event to fix drag and drop bug",
     start: new Date(),
     end: new Date(),
+    room: 2,
     duration: 0,
     resourceId: 1,
     hide: true
@@ -13,6 +14,7 @@ export default [
     title: "Some Event",
     start: new Date(2019, 3, 9, 0, 0, 0),
     end: new Date(2019, 3, 10, 0, 0, 0),
+    room: 3,
     duration: 50,
     resourceId: 2
   },
@@ -22,6 +24,7 @@ export default [
     start: new Date(2019, 3, 11),
     end: new Date(2019, 3, 13),
     desc: "Big conference for important people",
+    room: 3,
     duration: 50,
     resourceId: 2
   },
@@ -31,6 +34,7 @@ export default [
     start: new Date(2019, 3, 11, 10, 30, 0, 0),
     end: new Date(2019, 3, 11, 11, 30, 0, 0),
     desc: "Pre-meeting meeting, to prepare for the meeting",
+    room: 4,
     duration: 50,
     resourceId: 2
   },
@@ -39,6 +43,7 @@ export default [
     title: "Lunch",
     start: new Date(2019, 3, 11, 11, 0, 0, 0),
     end: new Date(2019, 3, 11, 13, 0, 0, 0),
+    room: 5,
     desc: "Power lunch",
     duration: 50,
     resourceId: 1
@@ -48,6 +53,7 @@ export default [
     title: "Meeting",
     start: new Date(2019, 3, 11, 14, 0, 0, 0),
     end: new Date(2019, 3, 11, 15, 0, 0, 0),
+    room: 1,
     duration: 50,
     resourceId: 1
   },
@@ -56,6 +62,7 @@ export default [
     title: "Halloween Meeting",
     start: new Date(2019, 11, 5, 16, 30, 0),
     end: new Date(2019, 11, 5, 17, 30, 0),
+    room: 4,
     duration: 60,
     resourceId: 3
   },
@@ -64,6 +71,7 @@ export default [
     title: "Online Coding Test",
     start: new Date(2019, 11, 6, 17, 30, 0),
     end: new Date(2019, 11, 6, 20, 30, 0),
+    room: 4,
     duration: 75,
     resourceId: 2
   },
@@ -72,6 +80,7 @@ export default [
     title: "An overlapped Event",
     start: new Date(2019, 11, 4, 17, 0, 0),
     end: new Date(2019, 11, 4, 18, 30, 0),
+    room: 3,
     resourceId: 1,
     duration: 50
   },
@@ -80,6 +89,7 @@ export default [
     title: "Phone Interview",
     start: new Date(2019, 11, 5, 17, 0, 0),
     end: new Date(2019, 11, 5, 18, 30, 0),
+    room: 2,
     resourceId: 2,
     duration: 75
   },
@@ -88,6 +98,7 @@ export default [
     title: "Cooking Class",
     start: new Date(2019, 11, 14, 17, 30, 0),
     end: new Date(2019, 11, 14, 19, 0, 0),
+    room: 1,
     resourceId: 4,
     duration: 60
   },
@@ -96,6 +107,7 @@ export default [
     title: "Go to the gym",
     start: new Date(2019, 11, 14, 18, 30, 0),
     end: new Date(2019, 11, 14, 20, 0, 0),
+    room: 3,
     resourceId: 1,
     duration: 50
   }

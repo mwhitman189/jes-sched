@@ -66,6 +66,7 @@ export default function EventForm(props) {
       end: moment(startTimeObj)
         .add(duration, "m")
         .toDate(),
+      room: room,
       duration: duration,
       resourceId: parseInt(resource)
     });
