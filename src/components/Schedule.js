@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Calendar, momentLocalizer } from "react-big-calendar";
 import withDragAndDrop from "react-big-calendar/lib/addons/dragAndDrop";
 import moment from "moment";
@@ -27,7 +27,12 @@ const Schedule = () => {
   const maxTime = new Date();
   maxTime.setHours(21, 0, 0);
 
+  useEffect(() => {
+    addTeachingMins();
+  }, [events]);
+
   const addTeachingMins = () => {
+    console.log("working");
     teacherList.forEach(teacher => {
       return (teacher.teachingMins = 0);
     });
