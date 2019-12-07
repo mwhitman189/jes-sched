@@ -3,56 +3,20 @@ import { Calendar, momentLocalizer } from "react-big-calendar";
 import withDragAndDrop from "react-big-calendar/lib/addons/dragAndDrop";
 import moment from "moment";
 import { WorkWeek } from "./CustomView";
+import EventForm from "./EventForm";
 import useToggle from "../hooks/useToggle";
-import useFormState from "../hooks/useFormState";
 import eventsList from "../events";
 import teachersList from "../teachers";
-import roomList from "../rooms";
 import "react-big-calendar/lib/css/react-big-calendar.css";
-
-import Button from "@material-ui/core/Button";
-import TextField from "@material-ui/core/TextField";
-import Dialog from "@material-ui/core/Dialog";
-import DialogActions from "@material-ui/core/DialogActions";
-import DialogContent from "@material-ui/core/DialogContent";
-import DialogContentText from "@material-ui/core/DialogContentText";
-import DialogTitle from "@material-ui/core/DialogTitle";
-import { makeStyles } from "@material-ui/core/styles";
-import InputLabel from "@material-ui/core/InputLabel";
-import FormControl from "@material-ui/core/FormControl";
-import Select from "@material-ui/core/Select";
 
 const localizer = momentLocalizer(moment);
 const DragAndDropCalendar = withDragAndDrop(Calendar);
 
-const useStyles = makeStyles(theme => ({
-  formControl: {
-    margin: theme.spacing(1),
-    minWidth: 120
-  },
-  selectEmpty: {
-    marginTop: theme.spacing(2)
-  }
-}));
-
 const Schedule = props => {
-  const classes = useStyles();
   const [events, setEvents] = useState(eventsList);
   const [teacherList, setTeacherList] = useState(teachersList);
-  const [isOpen, toggleIsOpen] = useToggle(false);
-  const [title, handleTitleChange, titleReset] = useFormState("");
   const [startTime, setStartTime] = useState("");
-  const [duration, handleDurationChange, durationReset] = useFormState("");
-  const [resource, handleResourceChange, resourceReset] = useFormState("");
-  const [room, handleRoomChange, roomReset] = useFormState("");
-
-  useEffect(() => {
-    durationReset();
-    titleReset();
-    resourceReset();
-    roomReset();
-    addTeachingMins();
-  }, [events]);
+  const [isOpen, toggleIsOpen] = useToggle(false);
 
   // Limit displayed hours of the day
   const minTime = new Date();
@@ -103,122 +67,29 @@ const Schedule = props => {
     setStartTime(start);
   };
 
-  const addEvent = () => {
-    setEvents([
-      ...events,
-      {
-        title: `${title} -- ${room}`,
-        start: startTime,
-        end: moment(startTime)
-          .add(duration, "m")
-          .toDate(),
-        duration: duration,
-        resourceId: parseInt(resource)
-      }
-    ]);
+  const addEvent = newEvent => {
+    setEvents([...events, newEvent]);
   };
 
-  const newEventForm = (
-    <Dialog
-      open={isOpen}
-      onClose={toggleIsOpen}
-      aria-labelledby="form-dialog-title"
-    >
-      <DialogTitle id="form-dialog-title">Subscribe</DialogTitle>
-      <DialogContent>
-        <DialogContentText>
-          Please enter the start time and class duration
-        </DialogContentText>
-        <FormControl className={classes.formControl}>
-          <TextField
-            autoFocus
-            margin="dense"
-            id="title"
-            label="Class Name"
-            type="text"
-            value={title}
-            onChange={handleTitleChange}
-            fullWidth
-            required
-          />
-        </FormControl>
-        <FormControl className={classes.formControl}>
-          <TextField
-            autoFocus
-            margin="dense"
-            id="startTime"
-            label="Start Time"
-            type="text"
-            value={moment(startTime).format("hh:mm")}
-            onChange={setStartTime}
-            fullWidth
-            required
-          />
-        </FormControl>
-        <FormControl className={classes.formControl}>
-          <TextField
-            margin="dense"
-            id="duration"
-            label="Class Duration"
-            type="text"
-            pattern="[0-9]*"
-            value={duration}
-            onChange={handleDurationChange}
-            fullWidth
-            required
-          />
-        </FormControl>
-        <FormControl className={classes.formControl}>
-          <InputLabel htmlFor="resource">Teacher</InputLabel>
-          <Select
-            native
-            id="resource"
-            value={resource}
-            onChange={handleResourceChange}
-            name="resource"
-            required
-          >
-            <option value="" />
-            {teacherList.map(t => (
-              <option key={`teacher-${t.resourceId}`} value={t.resourceId}>
-                {t.name}
-              </option>
-            ))}
-          </Select>
-        </FormControl>
-        <FormControl className={classes.formControl}>
-          <InputLabel htmlFor="room">Room #</InputLabel>
-          <Select
-            native
-            id="room"
-            value={room}
-            onChange={handleRoomChange}
-            name="room"
-            required
-          >
-            <option value="" />
-            {roomList.map(r => (
-              <option key={`room-${r}`} value={r}>
-                {r}
-              </option>
-            ))}
-          </Select>
-        </FormControl>
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={toggleIsOpen} color="primary">
-          Cancel
-        </Button>
-        <Button onClick={addEvent} color="primary">
-          Add Class
-        </Button>
-      </DialogActions>
-    </Dialog>
-  );
+  const handleAddEvent = newEvent => {
+    addEvent(newEvent);
+    toggleIsOpen();
+  };
 
   return (
     <div>
-      {isOpen && newEventForm}
+      {isOpen && (
+        <EventForm
+          isOpen={isOpen}
+          toggleIsOpen={toggleIsOpen}
+          addEvent={handleAddEvent}
+          addTeachingMins={addTeachingMins}
+          events={events}
+          teacherList={teacherList}
+          startTime={startTime}
+          setStartTime={setStartTime}
+        />
+      )}
       <DragAndDropCalendar
         style={{ width: "95vw", maxHeight: "100%" }}
         localizer={localizer}
