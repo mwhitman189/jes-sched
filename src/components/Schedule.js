@@ -32,7 +32,6 @@ const Schedule = () => {
   }, [events]);
 
   const addTeachingMins = () => {
-    console.log("working");
     teacherList.forEach(teacher => {
       return (teacher.teachingMins = 0);
     });

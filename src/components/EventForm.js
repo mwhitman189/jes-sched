@@ -2,7 +2,12 @@ import React, { useEffect } from "react";
 import moment from "moment";
 import useFormState from "../hooks/useFormState";
 import { makeStyles } from "@material-ui/core/styles";
-import { ValidatorForm, TextValidator } from "react-material-ui-form-validator";
+import {
+  ValidatorForm,
+  TextValidator,
+  SelectValidator
+} from "react-material-ui-form-validator";
+import MenuItem from "@material-ui/core/MenuItem";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
@@ -11,7 +16,6 @@ import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import InputLabel from "@material-ui/core/InputLabel";
 import FormControl from "@material-ui/core/FormControl";
-import Select from "@material-ui/core/Select";
 import roomList from "../rooms";
 
 const useStyles = makeStyles(theme => ({
@@ -21,6 +25,9 @@ const useStyles = makeStyles(theme => ({
   },
   selectEmpty: {
     marginTop: theme.spacing(2)
+  },
+  selectStyles: {
+    marginTop: "23px"
   }
 }));
 
@@ -46,7 +53,49 @@ export default function EventForm(props) {
   useEffect(() => {
     // Check whether the selected room is available at the specified time
     ValidatorForm.addValidationRule("roomIsAvailable", room => {
-      return true;
+      return events.every(event => {
+        if (
+          testDateOverlap(
+            [event.start, event.end],
+            [
+              moment(new Date(startTime)),
+              moment(
+                moment(new Date(startTime))
+                  .add(duration, "m")
+                  .toDate()
+              )
+            ]
+          )
+        ) {
+          return parseInt(event.room) !== parseInt(room);
+        }
+        return true;
+      });
+    });
+  });
+
+  useEffect(() => {
+    // Check whether the selected room is available at the specified time
+    ValidatorForm.addValidationRule("teacherIsAvailable", teacher => {
+      return events.every(event => {
+        if (
+          testDateOverlap(
+            [event.start, event.end],
+            [
+              moment(new Date(startTime)),
+              moment(
+                moment(new Date(startTime))
+                  .add(duration, "m")
+                  .toDate()
+              )
+            ]
+          )
+        ) {
+          console.log(event.resourceId, teacher);
+          return parseInt(event.resourceId) !== parseInt(teacher);
+        }
+        return true;
+      });
     });
   });
 
@@ -57,6 +106,15 @@ export default function EventForm(props) {
     roomReset();
     startTimeReset();
   }, [events]);
+
+  const testDateOverlap = (dateArr, testDateArr) => {
+    if (
+      testDateArr[0].isBetween(dateArr[0], dateArr[1]) ||
+      testDateArr[1].isBetween(dateArr[0], dateArr[1])
+    ) {
+      return true;
+    }
+  };
 
   const handleAddEvent = () => {
     const startTimeObj = new Date(startTime);
@@ -126,41 +184,51 @@ export default function EventForm(props) {
           </FormControl>
           <FormControl className={classes.formControl}>
             <InputLabel htmlFor="resource">Teacher</InputLabel>
-            <Select
-              native
+            <SelectValidator
+              className={classes.selectStyles}
+              margin="dense"
+              fullWidth
               id="resource"
               value={resource}
               onChange={handleResourceChange}
               name="resource"
-              // validators={["required"]}
-              // errorMessages={["Select a Teacher"]}
+              validators={["required", "teacherIsAvailable"]}
+              errorMessages={["Select a Teacher", "Teacher is unavailable"]}
+              MenuProps={{ classes: { paper: classes.selectStyles } }}
             >
-              <option value="" />
+              <MenuItem value="" />
               {teacherList.map(t => (
-                <option key={`teacher-${t.resourceId}`} value={t.resourceId}>
+                <MenuItem key={`teacher-${t.resourceId}`} value={t.resourceId}>
                   {t.name}
-                </option>
+                </MenuItem>
               ))}
-            </Select>
+            </SelectValidator>
           </FormControl>
           <FormControl className={classes.formControl}>
             <InputLabel htmlFor="room">Room #</InputLabel>
-            <Select
-              native
+            <SelectValidator
+              className={classes.selectStyles}
+              margin="dense"
+              fullWidth
               id="room"
               value={room}
               onChange={handleRoomChange}
               name="room"
-              // validators={["required", "roomIsAvailable"]}
-              // errorMessages={["Select a Room", "That name is already taken"]}
+              validators={["required", "roomIsAvailable"]}
+              errorMessages={["Select a Room", "That room is already taken"]}
+              SelectProps={{
+                MenuProps: {
+                  className: classes.menu
+                }
+              }}
             >
-              <option value="" />
+              <MenuItem value="" />
               {roomList.map(r => (
-                <option key={`room-${r}`} value={r}>
+                <MenuItem key={`room-${r}`} value={r}>
                   {r}
-                </option>
+                </MenuItem>
               ))}
-            </Select>
+            </SelectValidator>
           </FormControl>
         </DialogContent>
         <DialogActions>
