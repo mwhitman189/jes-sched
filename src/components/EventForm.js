@@ -91,7 +91,6 @@ export default function EventForm(props) {
             ]
           )
         ) {
-          console.log(event.resourceId, teacher);
           return parseInt(event.resourceId) !== parseInt(teacher);
         }
         return true;
@@ -194,7 +193,6 @@ export default function EventForm(props) {
               name="resource"
               validators={["required", "teacherIsAvailable"]}
               errorMessages={["Select a Teacher", "Teacher is unavailable"]}
-              MenuProps={{ classes: { paper: classes.selectStyles } }}
             >
               <MenuItem value="" />
               {teacherList.map(t => (
@@ -216,11 +214,6 @@ export default function EventForm(props) {
               name="room"
               validators={["required", "roomIsAvailable"]}
               errorMessages={["Select a Room", "That room is already taken"]}
-              SelectProps={{
-                MenuProps: {
-                  className: classes.menu
-                }
-              }}
             >
               <MenuItem value="" />
               {roomList.map(r => (

@@ -48,6 +48,7 @@ const Schedule = () => {
     });
   };
 
+  // TODO: Add a function to open the new class form with the current data populated, for validation
   const moveEvent = ({ event, resourceId, start, end }) => {
     const idx = events.indexOf(event);
 
