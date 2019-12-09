@@ -7,6 +7,7 @@ import {
   TextValidator,
   SelectValidator
 } from "react-material-ui-form-validator";
+import { validateRoom, validateTeacher } from "../validators";
 import MenuItem from "@material-ui/core/MenuItem";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
@@ -53,48 +54,14 @@ export default function EventForm(props) {
   useEffect(() => {
     // Check whether the selected room is available at the specified time
     ValidatorForm.addValidationRule("roomIsAvailable", room => {
-      return events.every(event => {
-        if (
-          testDateOverlap(
-            [event.start, event.end],
-            [
-              moment(new Date(startTime)),
-              moment(
-                moment(new Date(startTime))
-                  .add(duration, "m")
-                  .toDate()
-              )
-            ]
-          )
-        ) {
-          return parseInt(event.room) !== parseInt(room);
-        }
-        return true;
-      });
+      return validateRoom(events, room, startTime, duration);
     });
   });
 
   useEffect(() => {
     // Check whether the selected room is available at the specified time
     ValidatorForm.addValidationRule("teacherIsAvailable", teacher => {
-      return events.every(event => {
-        if (
-          testDateOverlap(
-            [event.start, event.end],
-            [
-              moment(new Date(startTime)),
-              moment(
-                moment(new Date(startTime))
-                  .add(duration, "m")
-                  .toDate()
-              )
-            ]
-          )
-        ) {
-          return parseInt(event.resourceId) !== parseInt(teacher);
-        }
-        return true;
-      });
+      return validateTeacher(events, teacher, startTime, duration);
     });
   });
 
@@ -105,15 +72,6 @@ export default function EventForm(props) {
     roomReset();
     startTimeReset();
   }, [events]);
-
-  const testDateOverlap = (dateArr, testDateArr) => {
-    if (
-      testDateArr[0].isBetween(dateArr[0], dateArr[1]) ||
-      testDateArr[1].isBetween(dateArr[0], dateArr[1])
-    ) {
-      return true;
-    }
-  };
 
   const handleAddEvent = () => {
     const startTimeObj = new Date(startTime);
