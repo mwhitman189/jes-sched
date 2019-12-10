@@ -1,14 +1,14 @@
 import moment from "moment";
 
-function validateRoom(events, room, startTime, duration) {
+function validateRoom(events, room, start, duration) {
   return events.every(event => {
     if (
       testDateOverlap(
         [event.start, event.end],
         [
-          moment(new Date(startTime)),
+          moment(new Date(start)),
           moment(
-            moment(new Date(startTime))
+            moment(new Date(start))
               .add(duration, "m")
               .toDate()
           )
@@ -21,15 +21,15 @@ function validateRoom(events, room, startTime, duration) {
   });
 }
 
-function validateTeacher(events, teacher, startTime, duration) {
+function validateTeacher(events, teacher, start, duration) {
   return events.every(event => {
     if (
       testDateOverlap(
         [event.start, event.end],
         [
-          moment(new Date(startTime)),
+          moment(new Date(start)),
           moment(
-            moment(new Date(startTime))
+            moment(new Date(start))
               .add(duration, "m")
               .toDate()
           )
@@ -44,8 +44,8 @@ function validateTeacher(events, teacher, startTime, duration) {
 
 function testDateOverlap(dateArr, testDateArr) {
   if (
-    testDateArr[0].isBetween(dateArr[0], dateArr[1]) ||
-    testDateArr[1].isBetween(dateArr[0], dateArr[1])
+    testDateArr[0].isBetween(dateArr[0], dateArr[1], null, "[]") ||
+    testDateArr[1].isBetween(dateArr[0], dateArr[1], null, "[]")
   ) {
     return true;
   }

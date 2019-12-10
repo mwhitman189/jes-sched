@@ -2,10 +2,12 @@ import React, { useState, useEffect } from "react";
 import { Calendar, momentLocalizer } from "react-big-calendar";
 import withDragAndDrop from "react-big-calendar/lib/addons/dragAndDrop";
 import moment from "moment";
+
 import { WorkWeek } from "./CustomView";
 import EventForm from "./EventForm";
 import useToggle from "../hooks/useToggle";
 import useFormState from "../hooks/useFormState";
+import { validateRoom, validateTeacher } from "../validators";
 import eventsList from "../events";
 import teachersList from "../teachers";
 import "react-big-calendar/lib/css/react-big-calendar.css";
@@ -62,12 +64,23 @@ const Schedule = () => {
   };
 
   const handleUpdate = ({ event, resourceId, start, end }) => {
-    moveEvent({
-      event,
-      resourceId,
-      start,
-      end
-    });
+    if (!validateRoom(events, event.room, start, parseInt(event.duration))) {
+    } else if (
+      !validateTeacher(
+        events,
+        event.resourceId,
+        start,
+        parseInt(event.duration)
+      )
+    ) {
+    } else {
+      moveEvent({
+        event,
+        resourceId,
+        start,
+        end
+      });
+    }
   };
 
   const handleSelect = ({ start }) => {

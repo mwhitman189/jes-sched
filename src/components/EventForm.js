@@ -1,13 +1,15 @@
 import React, { useEffect } from "react";
-import moment from "moment";
-import useFormState from "../hooks/useFormState";
-import { makeStyles } from "@material-ui/core/styles";
 import {
   ValidatorForm,
   TextValidator,
   SelectValidator
 } from "react-material-ui-form-validator";
+import moment from "moment";
+
+import useFormState from "../hooks/useFormState";
 import { validateRoom, validateTeacher } from "../validators";
+
+import { makeStyles } from "@material-ui/core/styles";
 import MenuItem from "@material-ui/core/MenuItem";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
@@ -17,6 +19,7 @@ import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import InputLabel from "@material-ui/core/InputLabel";
 import FormControl from "@material-ui/core/FormControl";
+
 import roomList from "../rooms";
 
 const useStyles = makeStyles(theme => ({
