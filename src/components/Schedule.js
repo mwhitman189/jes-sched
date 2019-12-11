@@ -129,13 +129,13 @@ const Schedule = () => {
       case "pl":
         hexColor = "#e6ba1f";
         break;
-      case "kids":
+      case "lg":
         hexColor = "#dfb40c";
         break;
       case "gs":
         hexColor = "#7d6bd5";
         break;
-      case "prem":
+      case "pm":
         hexColor = "#4da18f";
         break;
       default:

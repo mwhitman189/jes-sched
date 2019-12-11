@@ -21,6 +21,7 @@ import InputLabel from "@material-ui/core/InputLabel";
 import FormControl from "@material-ui/core/FormControl";
 
 import roomList from "../rooms";
+import lessonTypes from "../lessonTypes";
 
 const useStyles = makeStyles(theme => ({
   formControl: {
@@ -29,9 +30,6 @@ const useStyles = makeStyles(theme => ({
   },
   selectEmpty: {
     marginTop: theme.spacing(2)
-  },
-  selectStyles: {
-    marginTop: "23px"
   }
 }));
 
@@ -56,6 +54,7 @@ export default function EventForm(props) {
     event ? event.resourceId : ""
   );
   const [room, updateRoom] = useInputState(event ? event.room : "");
+  const [eventType, updateEventType] = useInputState(event ? event.type : "");
 
   useEffect(() => {
     // If an event does not exist, check whether the selected room is
@@ -92,7 +91,8 @@ export default function EventForm(props) {
         .toDate(),
       room: room,
       duration: duration,
-      resourceId: parseInt(resource)
+      resourceId: parseInt(resource),
+      type: eventType
     });
   };
 
@@ -106,7 +106,8 @@ export default function EventForm(props) {
         .toDate(),
       room: room,
       duration: duration,
-      resourceId: parseInt(resource)
+      resourceId: parseInt(resource),
+      type: eventType
     });
   };
 
@@ -163,10 +164,11 @@ export default function EventForm(props) {
             />
           </FormControl>
           <FormControl className={classes.formControl}>
-            <InputLabel htmlFor="resource">Teacher</InputLabel>
             <SelectValidator
               className={classes.selectStyles}
               margin="dense"
+              label="Teacher"
+              InputLabelProps={{ shrink: true }}
               fullWidth
               id="resource"
               value={resource}
@@ -184,9 +186,10 @@ export default function EventForm(props) {
             </SelectValidator>
           </FormControl>
           <FormControl className={classes.formControl}>
-            <InputLabel htmlFor="room">Room #</InputLabel>
             <SelectValidator
               className={classes.selectStyles}
+              label="Room"
+              InputLabelProps={{ shrink: true }}
               margin="dense"
               fullWidth
               id="room"
@@ -200,6 +203,26 @@ export default function EventForm(props) {
               {roomList.map(r => (
                 <MenuItem key={`room-${r}`} value={r}>
                   {r}
+                </MenuItem>
+              ))}
+            </SelectValidator>
+          </FormControl>
+          <FormControl className={classes.formControl}>
+            <SelectValidator
+              className={classes.selectStyles}
+              margin="dense"
+              label="Lesson Type"
+              InputLabelProps={{ shrink: true }}
+              fullWidth
+              id="type"
+              value={eventType}
+              onChange={updateEventType}
+              name="type"
+            >
+              <MenuItem value="" />
+              {lessonTypes.map(t => (
+                <MenuItem key={`type-${t.name}`} value={t.type}>
+                  {t.name}
                 </MenuItem>
               ))}
             </SelectValidator>
