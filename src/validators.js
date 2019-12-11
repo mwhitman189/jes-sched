@@ -15,6 +15,7 @@ function validateRoom(events, room, start, duration) {
         ]
       )
     ) {
+      console.log(parseInt(event.room), room);
       return parseInt(event.room) !== parseInt(room);
     }
     return true;
@@ -36,6 +37,7 @@ function validateTeacher(events, teacher, start, duration) {
         ]
       )
     ) {
+      console.log(parseInt(event.resourceId), teacher);
       return parseInt(event.resourceId) !== parseInt(teacher);
     }
     return true;

@@ -37,12 +37,6 @@ const useStyles = makeStyles(theme => ({
 
 export default function EventForm(props) {
   const classes = useStyles();
-
-  const [title, handleTitleChange, titleReset] = useFormState("");
-  const [duration, handleDurationChange, durationReset] = useFormState("");
-  const [resource, handleResourceChange, resourceReset] = useFormState("");
-  const [room, handleRoomChange, roomReset] = useFormState("");
-
   const {
     addEvent,
     isOpen,
@@ -51,34 +45,62 @@ export default function EventForm(props) {
     teacherList,
     startTime,
     handleStartTimeChange,
-    startTimeReset
+    event,
+    editEvent
   } = props;
+  const startDateTime = startTime ? startTime : event.start;
+
+  const [title, handleTitleChange] = useFormState(event ? event.title : "");
+  const [duration, handleDurationChange] = useFormState(
+    event ? event.duration : ""
+  );
+  const [resource, handleResourceChange] = useFormState(
+    event ? event.resourceId : ""
+  );
+  const [room, handleRoomChange] = useFormState(event ? event.room : "");
 
   useEffect(() => {
-    // Check whether the selected room is available at the specified time
+    // If an event does not exist, check whether the selected room is
+    // available at the specified time
+    ValidatorForm.addValidationRule("teacherIsAvailable", teacher => {
+      return validateTeacher(events, teacher, startTime, duration);
+    });
+
+    // If an event does not exist, check whether the selected room is
+    // available at the specified time
     ValidatorForm.addValidationRule("roomIsAvailable", room => {
       return validateRoom(events, room, startTime, duration);
     });
   });
 
-  useEffect(() => {
-    // Check whether the selected room is available at the specified time
-    ValidatorForm.addValidationRule("teacherIsAvailable", teacher => {
-      return validateTeacher(events, teacher, startTime, duration);
-    });
-  });
-
-  useEffect(() => {
-    durationReset();
-    titleReset();
-    resourceReset();
-    roomReset();
-    startTimeReset();
-  }, [events]);
+  let teacherValidators = ["required"];
+  let teacherValMsgs = ["Teacher Required"];
+  let roomValidators = ["required"];
+  let roomValMsgs = ["Room Required"];
+  if (!event) {
+    teacherValidators.push("teacherIsAvailable");
+    teacherValMsgs.push("Teacher unavailable");
+    roomValidators.push("roomIsAvailable");
+    roomValMsgs.push("Room unavailable");
+  }
 
   const handleAddEvent = () => {
-    const startTimeObj = new Date(startTime);
+    const startTimeObj = new Date(startDateTime);
     addEvent({
+      title: `${title} -- ${room}`,
+      start: startTimeObj,
+      end: moment(startTimeObj)
+        .add(duration, "m")
+        .toDate(),
+      room: room,
+      duration: duration,
+      resourceId: parseInt(resource)
+    });
+  };
+
+  const handleEditEvent = () => {
+    const startTimeObj = new Date(startDateTime);
+    editEvent({
       title: `${title} -- ${room}`,
       start: startTimeObj,
       end: moment(startTimeObj)
@@ -96,7 +118,7 @@ export default function EventForm(props) {
       onClose={toggleIsOpen}
       aria-labelledby="form-dialog-title"
     >
-      <ValidatorForm onSubmit={handleAddEvent}>
+      <ValidatorForm onSubmit={event ? handleEditEvent : handleAddEvent}>
         <DialogTitle id="form-dialog-title">New Lesson</DialogTitle>
         <DialogContent>
           <DialogContentText>Enter Lesson Info</DialogContentText>
@@ -121,7 +143,7 @@ export default function EventForm(props) {
               id="startTime"
               label="Start Time"
               type="text"
-              value={startTime}
+              value={startDateTime}
               onChange={handleStartTimeChange}
               fullWidth
               validators={["required"]}
@@ -152,8 +174,8 @@ export default function EventForm(props) {
               value={resource}
               onChange={handleResourceChange}
               name="resource"
-              validators={["required", "teacherIsAvailable"]}
-              errorMessages={["Select a Teacher", "Teacher is unavailable"]}
+              validators={teacherValidators}
+              errorMessages={teacherValMsgs}
             >
               <MenuItem value="" />
               {teacherList.map(t => (
@@ -173,8 +195,8 @@ export default function EventForm(props) {
               value={room}
               onChange={handleRoomChange}
               name="room"
-              validators={["required", "roomIsAvailable"]}
-              errorMessages={["Select a Room", "That room is already taken"]}
+              validators={roomValidators}
+              errorMessages={roomValMsgs}
             >
               <MenuItem value="" />
               {roomList.map(r => (
@@ -190,7 +212,7 @@ export default function EventForm(props) {
             Cancel
           </Button>
           <Button type="submit" color="primary">
-            Add Class
+            Add Lesson
           </Button>
         </DialogActions>
       </ValidatorForm>

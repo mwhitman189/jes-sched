@@ -22,6 +22,7 @@ const Schedule = () => {
     new Date()
   );
   const [isOpen, toggleIsOpen] = useToggle(false);
+  const [selectedEvent, setSelectedEvent] = useState("");
 
   // Limit displayed hours of the day
   const minTime = new Date();
@@ -63,11 +64,15 @@ const Schedule = () => {
     // alert(`${event.title} was dropped onto ${updatedEvent.start}`)
   };
 
-  const handleUpdate = ({ event, resourceId, start, end }) => {
-    if (!validateRoom(events, event.room, start, parseInt(event.duration))) {
+  const handleMove = ({ event, resourceId, start, end }) => {
+    const idx = events.indexOf(event);
+    const otherEvents = [...events.slice(0, idx), ...events.slice(idx + 1)];
+    if (
+      !validateRoom(otherEvents, event.room, start, parseInt(event.duration))
+    ) {
     } else if (
       !validateTeacher(
-        events,
+        otherEvents,
         event.resourceId,
         start,
         parseInt(event.duration)
@@ -92,8 +97,27 @@ const Schedule = () => {
     setEvents([...events, newEvent]);
   };
 
+  const editEvent = updatedEvent => {
+    const idx = events.indexOf(updatedEvent);
+    const nextEvents = [...events];
+
+    nextEvents.splice(idx, 1, updatedEvent);
+    setEvents(nextEvents);
+  };
+
   const handleAddEvent = newEvent => {
     addEvent(newEvent);
+    toggleIsOpen();
+  };
+
+  const handleEditEvent = updatedEvent => {
+    editEvent(updatedEvent);
+    toggleIsOpen();
+    setSelectedEvent();
+  };
+
+  const handleDoubleClick = event => {
+    setSelectedEvent(event);
     toggleIsOpen();
   };
 
@@ -110,6 +134,8 @@ const Schedule = () => {
           startTime={startTime}
           handleStartTimeChange={handleStartTimeChange}
           startTimeReset={startTimeReset}
+          editEvent={handleEditEvent}
+          event={selectedEvent}
         />
       )}
       <DragAndDropCalendar
@@ -118,13 +144,14 @@ const Schedule = () => {
         views={{ week: WorkWeek, day: true }}
         defaultView="day"
         events={events}
-        onEventDrop={handleUpdate}
+        onEventDrop={handleMove}
         startAccessor="start"
         endAccessor="end"
         resources={teacherList}
         resourceIdAccessor="resourceId"
         resourceTitleAccessor="resourceTitle"
         selectable
+        onDoubleClickEvent={handleDoubleClick}
         eventPropGetter={
           // Hide a dummy event that fixes drag and drop bug
           event => {
