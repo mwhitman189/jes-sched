@@ -16,7 +16,8 @@ export default [
     end: new Date(2019, 3, 10, 0, 0, 0),
     room: 3,
     duration: 50,
-    resourceId: 2
+    resourceId: 2,
+    type: "gs"
   },
   {
     id: 5,
@@ -26,7 +27,8 @@ export default [
     desc: "Big conference for important people",
     room: 3,
     duration: 50,
-    resourceId: 2
+    resourceId: 2,
+    type: "kids"
   },
   {
     id: 6,
@@ -36,7 +38,8 @@ export default [
     desc: "Pre-meeting meeting, to prepare for the meeting",
     room: 4,
     duration: 50,
-    resourceId: 2
+    resourceId: 2,
+    type: "prem"
   },
   {
     id: 7,
@@ -46,7 +49,8 @@ export default [
     room: 5,
     desc: "Power lunch",
     duration: 50,
-    resourceId: 1
+    resourceId: 1,
+    type: "pl"
   },
   {
     id: 8,
@@ -55,7 +59,8 @@ export default [
     end: new Date(2019, 3, 11, 15, 0, 0, 0),
     room: 1,
     duration: 50,
-    resourceId: 1
+    resourceId: 1,
+    type: "gs"
   },
   {
     id: 18,
@@ -64,7 +69,8 @@ export default [
     end: new Date(2019, 11, 5, 17, 30, 0),
     room: 4,
     duration: 60,
-    resourceId: 3
+    resourceId: 3,
+    type: "kids"
   },
   {
     id: 19,
@@ -73,7 +79,8 @@ export default [
     end: new Date(2019, 11, 6, 20, 30, 0),
     room: 4,
     duration: 75,
-    resourceId: 2
+    resourceId: 2,
+    type: "kids"
   },
   {
     id: 20,
@@ -82,7 +89,8 @@ export default [
     end: new Date(2019, 11, 4, 18, 30, 0),
     room: 3,
     resourceId: 1,
-    duration: 50
+    duration: 50,
+    type: "std"
   },
   {
     id: 21,
@@ -91,7 +99,8 @@ export default [
     end: new Date(2019, 11, 5, 18, 30, 0),
     room: 2,
     resourceId: 2,
-    duration: 75
+    duration: 75,
+    type: "std"
   },
   {
     id: 22,
@@ -100,7 +109,8 @@ export default [
     end: new Date(2019, 11, 14, 19, 0, 0),
     room: 1,
     resourceId: 4,
-    duration: 60
+    duration: 60,
+    type: "std"
   },
   {
     id: 23,
@@ -109,6 +119,7 @@ export default [
     end: new Date(2019, 11, 14, 20, 0, 0),
     room: 3,
     resourceId: 1,
-    duration: 50
+    duration: 50,
+    type: "pl"
   }
 ];

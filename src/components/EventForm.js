@@ -6,7 +6,7 @@ import {
 } from "react-material-ui-form-validator";
 import moment from "moment";
 
-import useFormState from "../hooks/useFormState";
+import useInputState from "../hooks/useInputState";
 import { validateRoom, validateTeacher } from "../validators";
 
 import { makeStyles } from "@material-ui/core/styles";
@@ -50,14 +50,12 @@ export default function EventForm(props) {
   } = props;
   const startDateTime = startTime ? startTime : event.start;
 
-  const [title, handleTitleChange] = useFormState(event ? event.title : "");
-  const [duration, handleDurationChange] = useFormState(
-    event ? event.duration : ""
-  );
-  const [resource, handleResourceChange] = useFormState(
+  const [title, updateTitle] = useInputState(event ? event.title : "");
+  const [duration, updateDuration] = useInputState(event ? event.duration : "");
+  const [resource, updateResource] = useInputState(
     event ? event.resourceId : ""
   );
-  const [room, handleRoomChange] = useFormState(event ? event.room : "");
+  const [room, updateRoom] = useInputState(event ? event.room : "");
 
   useEffect(() => {
     // If an event does not exist, check whether the selected room is
@@ -130,7 +128,7 @@ export default function EventForm(props) {
               label="Lesson Name"
               type="text"
               value={title}
-              onChange={handleTitleChange}
+              onChange={updateTitle}
               fullWidth
               validators={["required"]}
               errorMessages={["Enter the Lesson Name"]}
@@ -158,7 +156,7 @@ export default function EventForm(props) {
               type="text"
               pattern="[0-9]*"
               value={duration}
-              onChange={handleDurationChange}
+              onChange={updateDuration}
               fullWidth
               validators={["required"]}
               errorMessages={["Enter the Duration"]}
@@ -172,7 +170,7 @@ export default function EventForm(props) {
               fullWidth
               id="resource"
               value={resource}
-              onChange={handleResourceChange}
+              onChange={updateResource}
               name="resource"
               validators={teacherValidators}
               errorMessages={teacherValMsgs}
@@ -193,7 +191,7 @@ export default function EventForm(props) {
               fullWidth
               id="room"
               value={room}
-              onChange={handleRoomChange}
+              onChange={updateRoom}
               name="room"
               validators={roomValidators}
               errorMessages={roomValMsgs}

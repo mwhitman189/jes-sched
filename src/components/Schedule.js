@@ -6,11 +6,13 @@ import moment from "moment";
 import { WorkWeek } from "./CustomView";
 import EventForm from "./EventForm";
 import useToggle from "../hooks/useToggle";
-import useFormState from "../hooks/useFormState";
+import useFormState from "../hooks/useInputState";
 import { validateRoom, validateTeacher } from "../validators";
 import eventsList from "../events";
 import teachersList from "../teachers";
 import "react-big-calendar/lib/css/react-big-calendar.css";
+import "react-big-calendar/lib/sass/styles.scss";
+import "react-big-calendar/lib/addons/dragAndDrop/styles.scss";
 
 const localizer = momentLocalizer(moment);
 const DragAndDropCalendar = withDragAndDrop(Calendar);
@@ -18,9 +20,7 @@ const DragAndDropCalendar = withDragAndDrop(Calendar);
 const Schedule = () => {
   const [events, setEvents] = useState(eventsList);
   const [teacherList, setTeacherList] = useState(teachersList);
-  const [startTime, handleStartTimeChange, startTimeReset] = useFormState(
-    new Date()
-  );
+  const [startTime, updateStartTime, startTimeReset] = useFormState(new Date());
   const [isOpen, toggleIsOpen] = useToggle(false);
   const [selectedEvent, setSelectedEvent] = useState("");
 
@@ -70,14 +70,11 @@ const Schedule = () => {
     if (
       !validateRoom(otherEvents, event.room, start, parseInt(event.duration))
     ) {
+      return false;
     } else if (
-      !validateTeacher(
-        otherEvents,
-        event.resourceId,
-        start,
-        parseInt(event.duration)
-      )
+      !validateTeacher(otherEvents, resourceId, start, parseInt(event.duration))
     ) {
+      return false;
     } else {
       moveEvent({
         event,
@@ -90,7 +87,7 @@ const Schedule = () => {
 
   const handleSelect = ({ start }) => {
     toggleIsOpen();
-    handleStartTimeChange(start);
+    updateStartTime(start);
   };
 
   const addEvent = newEvent => {
@@ -121,6 +118,43 @@ const Schedule = () => {
     toggleIsOpen();
   };
 
+  // Style events based on event.type
+  const eventStyleGetter = event => {
+    // Hide a dummy event that fixes drag and drop bug
+    if (event.hide) {
+      return { style: { display: "none" } };
+    }
+    let hexColor;
+    switch (event.type) {
+      case "pl":
+        hexColor = "#e6ba1f";
+        break;
+      case "kids":
+        hexColor = "#dfb40c";
+        break;
+      case "gs":
+        hexColor = "#7d6bd5";
+        break;
+      case "prem":
+        hexColor = "#4da18f";
+        break;
+      default:
+        hexColor = "#3e6cde";
+        break;
+    }
+
+    let backgroundColor = hexColor;
+    let style = {
+      backgroundColor: backgroundColor,
+      color: "white",
+      border: 0,
+      display: "block"
+    };
+    return {
+      style: style
+    };
+  };
+
   return (
     <div>
       {isOpen && (
@@ -132,14 +166,14 @@ const Schedule = () => {
           events={events}
           teacherList={teacherList}
           startTime={startTime}
-          handleStartTimeChange={handleStartTimeChange}
+          updateStartTime={updateStartTime}
           startTimeReset={startTimeReset}
           editEvent={handleEditEvent}
           event={selectedEvent}
         />
       )}
       <DragAndDropCalendar
-        style={{ width: "95vw", maxHeight: "100%" }}
+        style={{ width: "95vw", maxHeight: "100vh" }}
         localizer={localizer}
         views={{ week: WorkWeek, day: true }}
         defaultView="day"
@@ -152,14 +186,7 @@ const Schedule = () => {
         resourceTitleAccessor="resourceTitle"
         selectable
         onDoubleClickEvent={handleDoubleClick}
-        eventPropGetter={
-          // Hide a dummy event that fixes drag and drop bug
-          event => {
-            if (event.hide) {
-              return { style: { display: "none" } };
-            }
-          }
-        }
+        eventPropGetter={eventStyleGetter}
         step={30}
         timeslots={2}
         min={minTime}
