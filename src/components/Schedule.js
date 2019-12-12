@@ -238,6 +238,7 @@ const Schedule = () => {
         components={{
           day: { event: LessonEvent }
         }}
+        resizableAccessor={() => false}
       />
     </div>
   );

@@ -80,7 +80,8 @@ export default function EventForm(props) {
     roomValMsgs.push("Room unavailable");
   }
 
-  const handleAddEvent = () => {
+  const handleAddEvent = e => {
+    e.preventDefault();
     const startTimeObj = new Date(startDateTime);
     addEvent({
       title: title,
@@ -95,7 +96,8 @@ export default function EventForm(props) {
     });
   };
 
-  const handleEditEvent = () => {
+  const handleEditEvent = e => {
+    e.preventDefault();
     const startTimeObj = new Date(startDateTime);
     editEvent({
       title: title,
