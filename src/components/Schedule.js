@@ -129,17 +129,59 @@ const Schedule = () => {
       case "pl":
         hexColor = "#e6ba1f";
         break;
-      case "lg":
-        hexColor = "#dfb40c";
+      case "beg":
+        hexColor = "#8adec1";
+        break;
+      case "el":
+        hexColor = "#33dea2";
+        break;
+      case "lint":
+        hexColor = "#1cbd85";
+        break;
+      case "hint":
+        hexColor = "#0b8a5e";
+        break;
+      case "adv":
+        hexColor = "#04593c";
+        break;
+      case "lb":
+        hexColor = "#97dd1a";
+        break;
+      case "lg1":
+        hexColor = "#ca161e";
+        break;
+      case "lg2":
+        hexColor = "#fdc100";
+        break;
+      case "lg3":
+        hexColor = "#0065bd";
+        break;
+      case "lg4":
+        hexColor = "#00ae3e";
+        break;
+      case "lg5":
+        hexColor = "#ff8d2a";
+        break;
+      case "lg6":
+        hexColor = "#8f178e";
         break;
       case "gs":
-        hexColor = "#7d6bd5";
+        hexColor = "#670084";
         break;
-      case "pm":
-        hexColor = "#4da18f";
+      case "ct1":
+        hexColor = "#d90000";
+        break;
+      case "ct2":
+        hexColor = "#0076d0";
+        break;
+      case "ct3":
+        hexColor = "#008935";
+        break;
+      case "prm":
+        hexColor = "#7d190b";
         break;
       default:
-        hexColor = "#3e6cde";
+        hexColor = "#7c9ae6";
         break;
     }
 

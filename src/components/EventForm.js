@@ -17,7 +17,6 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
-import InputLabel from "@material-ui/core/InputLabel";
 import FormControl from "@material-ui/core/FormControl";
 
 import roomList from "../rooms";
@@ -221,8 +220,9 @@ export default function EventForm(props) {
             >
               <MenuItem value="" />
               {lessonTypes.map(t => (
-                <MenuItem key={`type-${t.name}`} value={t.type}>
+                <MenuItem key={`type-${t.shortName}`} value={t.type}>
                   {t.name}
+                  {t.type}
                 </MenuItem>
               ))}
             </SelectValidator>

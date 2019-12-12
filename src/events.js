@@ -24,11 +24,11 @@ export default [
     title: "Conference",
     start: new Date(2019, 3, 11),
     end: new Date(2019, 3, 13),
-    desc: "Big conference for important people",
+    desc: "Big conference for important peopvte",
     room: 3,
     duration: 50,
     resourceId: 2,
-    type: "kids"
+    type: "ct2"
   },
   {
     id: 6,
@@ -39,7 +39,7 @@ export default [
     room: 4,
     duration: 50,
     resourceId: 2,
-    type: "prem"
+    type: "prm"
   },
   {
     id: 7,
@@ -50,7 +50,7 @@ export default [
     desc: "Power lunch",
     duration: 50,
     resourceId: 1,
-    type: "pl"
+    type: "pvt"
   },
   {
     id: 8,
@@ -70,7 +70,7 @@ export default [
     room: 4,
     duration: 60,
     resourceId: 3,
-    type: "kids"
+    type: "lg4"
   },
   {
     id: 19,
@@ -80,7 +80,7 @@ export default [
     room: 4,
     duration: 75,
     resourceId: 2,
-    type: "kids"
+    type: "ct1"
   },
   {
     id: 20,
@@ -90,7 +90,7 @@ export default [
     room: 3,
     resourceId: 1,
     duration: 50,
-    type: "std"
+    type: "lg2"
   },
   {
     id: 21,
@@ -100,7 +100,7 @@ export default [
     room: 2,
     resourceId: 2,
     duration: 75,
-    type: "std"
+    type: "lg1"
   },
   {
     id: 22,
@@ -110,7 +110,7 @@ export default [
     room: 1,
     resourceId: 4,
     duration: 60,
-    type: "std"
+    type: "lb"
   },
   {
     id: 23,
@@ -120,6 +120,6 @@ export default [
     room: 3,
     resourceId: 1,
     duration: 50,
-    type: "pl"
+    type: "pvt"
   }
 ];
