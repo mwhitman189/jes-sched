@@ -83,7 +83,7 @@ export default function EventForm(props) {
   const handleAddEvent = () => {
     const startTimeObj = new Date(startDateTime);
     addEvent({
-      title: `${title} -- ${room}`,
+      title: title,
       start: startTimeObj,
       end: moment(startTimeObj)
         .add(duration, "m")
@@ -98,7 +98,7 @@ export default function EventForm(props) {
   const handleEditEvent = () => {
     const startTimeObj = new Date(startDateTime);
     editEvent({
-      title: `${title} -- ${room}`,
+      title: title,
       start: startTimeObj,
       end: moment(startTimeObj)
         .add(duration, "m")
