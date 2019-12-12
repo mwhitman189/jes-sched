@@ -41,7 +41,7 @@ export default function EventForm(props) {
     events,
     teacherList,
     startTime,
-    handleStartTimeChange,
+    updateStartTime,
     event,
     editEvent
   } = props;
@@ -142,7 +142,7 @@ export default function EventForm(props) {
               label="Start Time"
               type="text"
               value={startDateTime}
-              onChange={handleStartTimeChange}
+              onChange={updateStartTime}
               fullWidth
               validators={["required"]}
               errorMessages={["Enter the Start Time"]}
@@ -222,7 +222,6 @@ export default function EventForm(props) {
               {lessonTypes.map(t => (
                 <MenuItem key={`type-${t.shortName}`} value={t.type}>
                   {t.name}
-                  {t.type}
                 </MenuItem>
               ))}
             </SelectValidator>

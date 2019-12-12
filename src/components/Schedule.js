@@ -5,12 +5,13 @@ import moment from "moment";
 
 import { WorkWeek } from "./CustomView";
 import EventForm from "./EventForm";
+import LessonEvent from "./LessonEvent";
 import useToggle from "../hooks/useToggle";
 import useFormState from "../hooks/useInputState";
 import { validateRoom, validateTeacher } from "../validators";
 import eventsList from "../events";
 import teachersList from "../teachers";
-import "react-big-calendar/lib/css/react-big-calendar.css";
+
 import "react-big-calendar/lib/sass/styles.scss";
 import "react-big-calendar/lib/addons/dragAndDrop/styles.scss";
 
@@ -70,11 +71,11 @@ const Schedule = () => {
     if (
       !validateRoom(otherEvents, event.room, start, parseInt(event.duration))
     ) {
-      return false;
+      alert("That room is unavailable");
     } else if (
       !validateTeacher(otherEvents, resourceId, start, parseInt(event.duration))
     ) {
-      return false;
+      alert("That teacher is unavailable");
     } else {
       moveEvent({
         event,
@@ -215,7 +216,7 @@ const Schedule = () => {
         />
       )}
       <DragAndDropCalendar
-        style={{ width: "95vw", maxHeight: "100vh" }}
+        style={{ width: "100vw", maxHeight: "100vh" }}
         localizer={localizer}
         views={{ week: WorkWeek, day: true }}
         defaultView="day"
@@ -234,6 +235,9 @@ const Schedule = () => {
         min={minTime}
         max={maxTime}
         onSelectSlot={handleSelect}
+        components={{
+          day: { event: LessonEvent }
+        }}
       />
     </div>
   );
