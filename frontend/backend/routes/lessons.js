@@ -36,30 +36,48 @@ router.post("/add", (req, res) => {
     .catch(err => res.status(400).json(`Error: ${err}`));
 });
 
-router.route("/:id").get((req, res) => {
+router.get("/:id", (req, res) => {
   Lesson.findById(req.params.id)
     .then(lesson => res.json(lesson))
     .catch(err => res.status(400).json(`Error: ${err}`));
 });
 
-router.route("/:id").delete((req, res) => {
+router.delete("/:id", (req, res) => {
   Lesson.findByIdAndDelete(req.params.id)
     .then(() => res.json("Lesson deleted"))
     .catch(err => res.status(400).json(`Error: ${err}`));
 });
 
-router.route("/update/:id").post((req, res) => {
+router.post("/update/:id", (req, res) => {
   Lesson.findById(req.params.id)
     .then(lesson => {
-      lesson.groupId = req.body.groupId;
-      lesson.title = req.body.title;
-      lesson.type = req.body.type;
-      lesson.start = req.body.start;
-      lesson.end = req.body.end;
-      lesson.duration = req.body.duration;
-      lesson.resourceId = req.body.resourceId;
-      lesson.room = req.body.room;
-      lesson.hide = req.body.hide;
+      if (req.body.groupId) {
+        lesson.groupId = req.body.groupId;
+      }
+      if (req.body.title) {
+        lesson.title = req.body.title;
+      }
+      if (req.body.type) {
+        lesson.type = req.body.type;
+      }
+      if (req.body.start) {
+        lesson.start = req.body.start;
+      }
+      if (req.body.end) {
+        lesson.end = req.body.end;
+      }
+      if (req.body.duration) {
+        lesson.duration = req.body.duration;
+      }
+      if (req.body.resourceId) {
+        lesson.resourceId = req.body.resourceId;
+      }
+      if (req.body.room) {
+        lesson.room = req.body.room;
+      }
+      if (req.body.hide) {
+        lesson.hide = req.body.hide;
+      }
 
       lesson
         .save()

@@ -43,20 +43,10 @@ router.delete("/:id", (req, res) => {
 router.put("/update/:id", (req, res) => {
   Teacher.findById(req.params.id)
     .then(teacher => {
-      if (req.body.resourceId) {
-        teacher.resourceId = req.body.resourceId;
-      }
-      if (req.body.resourceTitle) {
-        teacher.resourceTitle = req.body.resourceTitle;
-      }
-      if (req.body.name) {
-        teacher.name = req.body.name;
-      }
-      if (req.body.familyName) {
-        teacher.familyName = req.body.familyName;
-      }
-      if (req.body.teachingMins) {
-        teacher.teachingMins = req.body.teachingMins;
+      for (let itemFromBodyIndex in req.body) {
+        if (req.body.hasOwnProperty(itemFromBodyIndex)) {
+          teacher[itemFromBodyIndex] = req.body[itemFromBodyIndex];
+        }
       }
 
       teacher

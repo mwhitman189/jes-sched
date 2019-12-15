@@ -42,27 +42,35 @@ export default function EventForm(props) {
     teachers,
     startTime,
     updateStartTime,
-    event,
-    updateEvent
+    selectedEvent,
+    changeEvent
   } = props;
-  const startDateTime = startTime ? startTime : event.start;
+  const startDateTime = startTime ? startTime : selectedEvent.start;
 
-  const [title, updateTitle] = useInputState(event ? event.title : "");
-  const [duration, updateDuration] = useInputState(event ? event.duration : "");
-  const [resource, updateResource] = useInputState(
-    event ? event.resourceId : ""
+  const [title, updateTitle] = useInputState(
+    selectedEvent ? selectedEvent.title : ""
   );
-  const [room, updateRoom] = useInputState(event ? event.room : "");
-  const [eventType, updateEventType] = useInputState(event ? event.type : "");
+  const [duration, updateDuration] = useInputState(
+    selectedEvent ? selectedEvent.duration : ""
+  );
+  const [resource, updateResource] = useInputState(
+    selectedEvent ? selectedEvent.resourceId : ""
+  );
+  const [room, updateRoom] = useInputState(
+    selectedEvent ? selectedEvent.room : ""
+  );
+  const [eventType, updateEventType] = useInputState(
+    selectedEvent ? selectedEvent.type : ""
+  );
   const [groupId, updateGroupId] = useInputState(
-    event ? event.updateGroupId : ""
+    selectedEvent ? selectedEvent.updateGroupId : ""
   );
 
   let teacherValidators = ["required"];
   let teacherValMsgs = ["Teacher Required"];
   let roomValidators = ["required"];
   let roomValMsgs = ["Room Required"];
-  if (!event) {
+  if (!selectedEvent) {
     teacherValidators.push("teacherIsAvailable");
     teacherValMsgs.push("Teacher unavailable");
     roomValidators.push("roomIsAvailable");
@@ -82,6 +90,8 @@ export default function EventForm(props) {
       return validateRoom(events, room, startTime, duration);
     });
   });
+
+  const hideForm = () => setFormType("");
 
   const handleAddEvent = e => {
     e.preventDefault();
@@ -103,23 +113,10 @@ export default function EventForm(props) {
 
   const handleEditEvent = e => {
     e.preventDefault();
-    const startTimeObj = new Date(startDateTime);
-    updateEvent({
-      groupId: 3,
-      title: title,
-      start: startTimeObj,
-      end: moment(startTimeObj)
-        .add(duration, "m")
-        .toDate(),
-      room: room,
-      duration: duration,
-      resourceId: parseInt(resource),
-      type: eventType
-    });
+    // const startTimeObj = new Date(startDateTime);
+    changeEvent(selectedEvent);
     hideForm();
   };
-
-  const hideForm = () => setFormType("");
 
   return (
     <Dialog
@@ -127,7 +124,9 @@ export default function EventForm(props) {
       onClose={hideForm}
       aria-labelledby="form-dialog-title"
     >
-      <ValidatorForm onSubmit={event ? handleEditEvent : handleAddEvent}>
+      <ValidatorForm
+        onSubmit={selectedEvent ? handleEditEvent : handleAddEvent}
+      >
         <DialogTitle id="form-dialog-title">New Lesson</DialogTitle>
         <DialogContent>
           <DialogContentText>Enter Lesson Info</DialogContentText>
