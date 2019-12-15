@@ -14,7 +14,8 @@ import {
   getLessons,
   addLesson,
   addTeacher,
-  updateTeacher
+  updateTeacher,
+  updateEvent
 } from "../axiosCalls";
 
 import "react-big-calendar/lib/sass/styles.scss";
@@ -92,18 +93,6 @@ const Schedule = () => {
     // alert(`${event.title} was dropped onto ${updatedEvent.start}`)
   };
 
-  const addEvent = newEvent => {
-    addLesson(events, newEvent, setEvents);
-  };
-
-  const editEvent = updatedEvent => {
-    const idx = events.indexOf(updatedEvent);
-    const nextEvents = [...events];
-
-    nextEvents.splice(idx, 1, updatedEvent);
-    setEvents(nextEvents);
-  };
-
   const handleMove = ({ event, resourceId, start, end }) => {
     const idx = events.indexOf(event);
     const otherEvents = [...events.slice(0, idx), ...events.slice(idx + 1)];
@@ -126,12 +115,12 @@ const Schedule = () => {
   };
 
   const handleAddEvent = newEvent => {
-    addEvent(newEvent);
+    addLesson(events, newEvent, setEvents);
     setFormType("event");
   };
 
   const handleEditEvent = updatedEvent => {
-    editEvent(updatedEvent);
+    updateEvent(events, updatedEvent, setEvents);
     setFormType("event");
     setSelectedEvent();
   };
@@ -247,8 +236,9 @@ const Schedule = () => {
           startTime={startTime}
           updateStartTime={updateStartTime}
           startTimeReset={startTimeReset}
-          editEvent={handleEditEvent}
+          updateEvent={handleEditEvent}
           event={selectedEvent}
+          setEvents={setEvents}
         />
       )}
       {formType === "teacher" && (

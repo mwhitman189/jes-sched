@@ -59,4 +59,19 @@ const updateTeacher = async teacher => {
     .catch(err => console.log(err));
 };
 
-export { getTeachers, getLessons, addLesson, addTeacher, updateTeacher };
+const updateEvent = (events, updatedEvent, setEvents) => {
+  const idx = events.indexOf(updatedEvent);
+  const nextEvents = [...events];
+
+  nextEvents.splice(idx, 1, updatedEvent);
+  setEvents(nextEvents);
+};
+
+export {
+  getTeachers,
+  getLessons,
+  addLesson,
+  addTeacher,
+  updateTeacher,
+  updateEvent
+};

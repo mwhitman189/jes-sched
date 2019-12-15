@@ -43,7 +43,7 @@ export default function EventForm(props) {
     startTime,
     updateStartTime,
     event,
-    editEvent
+    updateEvent
   } = props;
   const startDateTime = startTime ? startTime : event.start;
 
@@ -104,7 +104,7 @@ export default function EventForm(props) {
   const handleEditEvent = e => {
     e.preventDefault();
     const startTimeObj = new Date(startDateTime);
-    editEvent({
+    updateEvent({
       groupId: 3,
       title: title,
       start: startTimeObj,
