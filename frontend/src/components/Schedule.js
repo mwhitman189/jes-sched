@@ -6,24 +6,35 @@ import axios from "axios";
 
 import { WorkWeek } from "./CustomView";
 import EventForm from "./EventForm";
+import TeacherForm from "./TeacherForm";
 import LessonEvent from "./LessonEvent";
-import useToggle from "../hooks/useToggle";
 import useFormState from "../hooks/useInputState";
 import { validateRoom, validateTeacher } from "../validators";
-import eventsList from "../events";
-import teachersList from "../teachers";
+import { updateTeacher, getTeachers } from "../axiosCalls";
 
 import "react-big-calendar/lib/sass/styles.scss";
 import "react-big-calendar/lib/addons/dragAndDrop/styles.scss";
 
 const localizer = momentLocalizer(moment);
 const DragAndDropCalendar = withDragAndDrop(Calendar);
+const API_URI = "http://localhost:5000";
 
 const Schedule = () => {
-  const [events, setEvents] = useState(eventsList);
-  const [teacherList, setTeacherList] = useState(teachersList);
+  const [formType, setFormType] = useState("");
+  const [events, setEvents] = useState([
+    {
+      id: 1,
+      title: "Dummy Event to fix drag and drop bug",
+      start: new Date(),
+      end: new Date(),
+      room: 2,
+      duration: 0,
+      resourceId: 1,
+      hide: true
+    }
+  ]);
+  const [teachers, setTeachers] = useState([]);
   const [startTime, updateStartTime, startTimeReset] = useFormState(new Date());
-  const [isOpen, toggleIsOpen] = useToggle(false);
   const [selectedEvent, setSelectedEvent] = useState("");
 
   // Limit displayed hours of the day
@@ -33,11 +44,17 @@ const Schedule = () => {
   maxTime.setHours(21, 0, 0);
 
   useEffect(() => {
-    axios.get("http://localhost:5000/lessons/").then(response => {
+    axios.get(`${API_URI}/lessons/`).then(response => {
       if (response.data.length > 0) {
+        response.data.map(event => {
+          event.start = new Date(event.start);
+          event.end = new Date(event.end);
+        });
         setEvents(response.data);
       }
     });
+
+    getTeachers(setTeachers);
   }, []);
 
   useEffect(() => {
@@ -45,23 +62,30 @@ const Schedule = () => {
   }, [events]);
 
   const addTeachingMins = () => {
-    teacherList.forEach(teacher => {
-      return (teacher.teachingMins = 0);
-    });
-    events.forEach(e => {
-      const index = teacherList.findIndex(
-        teacher => teacher.resourceId === e.resourceId
-      );
+    if (teachers.length > 0) {
       // Reset teaching minutes to "0", then add all teaching minutes to the corresponding instructor
-      teacherList[index].teachingMins += parseInt(e.duration);
-      setTeacherList([...teacherList]);
-      teacherList[
-        index
-      ].resourceTitle = `${teacherList[index].name} ${teacherList[index].teachingMins}`;
-    });
+      teachers.forEach(teacher => {
+        teacher.teachingMins = 0;
+        teacher.resourceTitle = `${teacher.name} ${teacher.teachingMins}`;
+      });
+      events.forEach(e => {
+        const idx = teachers.findIndex(
+          teacher => teacher.resourceId === e.resourceId
+        );
+        teachers[idx].teachingMins += parseInt(e.duration);
+        setTeachers([...teachers]);
+        teachers[
+          idx
+        ].resourceTitle = `${teachers[idx].name} ${teachers[idx].teachingMins}`;
+      });
+
+      teachers.forEach(teacher => {
+        console.log(teacher);
+        updateTeacher(teacher);
+      });
+    }
   };
 
-  // TODO: Add a function to open the new class form with the current data populated, for validation
   const moveEvent = ({ event, resourceId, start, end }) => {
     const idx = events.indexOf(event);
 
@@ -76,9 +100,8 @@ const Schedule = () => {
 
   const addEvent = newEvent => {
     axios
-      .post("http://localhost:5000/lessons/add", newEvent)
+      .post(`${API_URI}/lessons/add`, newEvent)
       .then(res => console.log(res.data));
-
     setEvents([...events, newEvent]);
   };
 
@@ -113,23 +136,39 @@ const Schedule = () => {
 
   const handleAddEvent = newEvent => {
     addEvent(newEvent);
-    toggleIsOpen();
+    setFormType("event");
   };
 
   const handleEditEvent = updatedEvent => {
     editEvent(updatedEvent);
-    toggleIsOpen();
+    setFormType("event");
     setSelectedEvent();
   };
 
   const handleSelect = ({ start }) => {
-    toggleIsOpen();
+    setFormType("event");
     updateStartTime(start);
   };
 
   const handleDoubleClick = event => {
     setSelectedEvent(event);
-    toggleIsOpen();
+    setFormType("event");
+  };
+
+  const addTeacher = newTeacher => {
+    axios
+      .post(`${API_URI}/teachers/add`, newTeacher)
+      .then(res => console.log(res.data));
+    setTeachers([...teachers, newTeacher]);
+  };
+
+  const handleAddTeacher = newTeacher => {
+    addTeacher(newTeacher);
+    setFormType("");
+  };
+
+  const handleBtnClick = () => {
+    setFormType("teacher");
   };
 
   // Style events based on event.type
@@ -213,14 +252,14 @@ const Schedule = () => {
 
   return (
     <div>
-      {isOpen && (
+      {formType === "event" && (
         <EventForm
-          isOpen={isOpen}
-          toggleIsOpen={toggleIsOpen}
+          formType={formType}
+          setFormType={setFormType}
           addEvent={handleAddEvent}
           addTeachingMins={addTeachingMins}
           events={events}
-          teacherList={teacherList}
+          teachers={teachers}
           startTime={startTime}
           updateStartTime={updateStartTime}
           startTimeReset={startTimeReset}
@@ -228,6 +267,16 @@ const Schedule = () => {
           event={selectedEvent}
         />
       )}
+      {formType === "teacher" && (
+        <TeacherForm
+          formType={formType}
+          setFormType={setFormType}
+          addTeacher={handleAddTeacher}
+          setTeachers={setTeachers}
+          teachers={teachers}
+        />
+      )}
+      <button onClick={handleBtnClick}>New Teacher</button>
       <DragAndDropCalendar
         style={{ width: "100vw", maxHeight: "100vh" }}
         localizer={localizer}
@@ -237,7 +286,7 @@ const Schedule = () => {
         onEventDrop={handleMove}
         startAccessor="start"
         endAccessor="end"
-        resources={teacherList}
+        resources={teachers}
         resourceIdAccessor="resourceId"
         resourceTitleAccessor="resourceTitle"
         selectable

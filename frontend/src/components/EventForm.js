@@ -36,10 +36,10 @@ export default function EventForm(props) {
   const classes = useStyles();
   const {
     addEvent,
-    isOpen,
-    toggleIsOpen,
+    formType,
+    setFormType,
     events,
-    teacherList,
+    teachers,
     startTime,
     updateStartTime,
     event,
@@ -98,6 +98,7 @@ export default function EventForm(props) {
       resourceId: parseInt(resource),
       type: eventType
     });
+    hideForm();
   };
 
   const handleEditEvent = e => {
@@ -115,12 +116,15 @@ export default function EventForm(props) {
       resourceId: parseInt(resource),
       type: eventType
     });
+    hideForm();
   };
+
+  const hideForm = () => setFormType("");
 
   return (
     <Dialog
-      open={isOpen}
-      onClose={toggleIsOpen}
+      open={formType === "event"}
+      onClose={hideForm}
       aria-labelledby="form-dialog-title"
     >
       <ValidatorForm onSubmit={event ? handleEditEvent : handleAddEvent}>
@@ -184,7 +188,7 @@ export default function EventForm(props) {
               errorMessages={teacherValMsgs}
             >
               <MenuItem value="" />
-              {teacherList.map(t => (
+              {teachers.map(t => (
                 <MenuItem key={`teacher-${t.resourceId}`} value={t.resourceId}>
                   {t.name}
                 </MenuItem>
@@ -235,7 +239,7 @@ export default function EventForm(props) {
           </FormControl>
         </DialogContent>
         <DialogActions>
-          <Button onClick={toggleIsOpen} color="primary">
+          <Button onClick={hideForm} color="primary">
             Cancel
           </Button>
           <Button type="submit" color="primary">
