@@ -1,15 +1,9 @@
-import React, { useEffect } from "react";
-import {
-  ValidatorForm,
-  TextValidator,
-  SelectValidator
-} from "react-material-ui-form-validator";
+import React from "react";
+import { ValidatorForm, TextValidator } from "react-material-ui-form-validator";
 
 import useInputState from "../hooks/useInputState";
-import { validateRoom, validateTeacher } from "../validators";
 
 import { makeStyles } from "@material-ui/core/styles";
-import MenuItem from "@material-ui/core/MenuItem";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";

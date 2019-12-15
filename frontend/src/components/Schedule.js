@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { Calendar, momentLocalizer } from "react-big-calendar";
 import withDragAndDrop from "react-big-calendar/lib/addons/dragAndDrop";
 import moment from "moment";
-import axios from "axios";
 
 import { WorkWeek } from "./CustomView";
 import EventForm from "./EventForm";
@@ -10,14 +9,19 @@ import TeacherForm from "./TeacherForm";
 import LessonEvent from "./LessonEvent";
 import useFormState from "../hooks/useInputState";
 import { validateRoom, validateTeacher } from "../validators";
-import { updateTeacher, getTeachers } from "../axiosCalls";
+import {
+  getTeachers,
+  getLessons,
+  addLesson,
+  addTeacher,
+  updateTeacher
+} from "../axiosCalls";
 
 import "react-big-calendar/lib/sass/styles.scss";
 import "react-big-calendar/lib/addons/dragAndDrop/styles.scss";
 
 const localizer = momentLocalizer(moment);
 const DragAndDropCalendar = withDragAndDrop(Calendar);
-const API_URI = "http://localhost:5000";
 
 const Schedule = () => {
   const [formType, setFormType] = useState("");
@@ -44,16 +48,7 @@ const Schedule = () => {
   maxTime.setHours(21, 0, 0);
 
   useEffect(() => {
-    axios.get(`${API_URI}/lessons/`).then(response => {
-      if (response.data.length > 0) {
-        response.data.map(event => {
-          event.start = new Date(event.start);
-          event.end = new Date(event.end);
-        });
-        setEvents(response.data);
-      }
-    });
-
+    getLessons(setEvents);
     getTeachers(setTeachers);
   }, []);
 
@@ -80,7 +75,6 @@ const Schedule = () => {
       });
 
       teachers.forEach(teacher => {
-        console.log(teacher);
         updateTeacher(teacher);
       });
     }
@@ -99,10 +93,7 @@ const Schedule = () => {
   };
 
   const addEvent = newEvent => {
-    axios
-      .post(`${API_URI}/lessons/add`, newEvent)
-      .then(res => console.log(res.data));
-    setEvents([...events, newEvent]);
+    addLesson(events, newEvent, setEvents);
   };
 
   const editEvent = updatedEvent => {
@@ -155,15 +146,8 @@ const Schedule = () => {
     setFormType("event");
   };
 
-  const addTeacher = newTeacher => {
-    axios
-      .post(`${API_URI}/teachers/add`, newTeacher)
-      .then(res => console.log(res.data));
-    setTeachers([...teachers, newTeacher]);
-  };
-
   const handleAddTeacher = newTeacher => {
-    addTeacher(newTeacher);
+    addTeacher(teachers, newTeacher, setTeachers);
     setFormType("");
   };
 
