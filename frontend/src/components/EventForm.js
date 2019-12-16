@@ -46,8 +46,9 @@ export default function EventForm(props) {
     event,
     setEvents
   } = props;
+  // If a new start time was input, use it for the form input,
+  // otherwise use the original event's start time
   const startDateTime = startTime ? startTime : event.start;
-  console.log(startTime);
 
   const [title, updateTitle, resetTitle] = useInputState(
     event ? event.title : ""
@@ -124,7 +125,6 @@ export default function EventForm(props) {
   const handleEditEvent = e => {
     e.preventDefault();
     const startTimeObj = new Date(startDateTime);
-    console.log(startTimeObj);
     const editedEvent = {
       title: title,
       start: startTimeObj,
@@ -263,7 +263,7 @@ export default function EventForm(props) {
             Cancel
           </Button>
           <Button type="submit" color="primary">
-            Add Lesson
+            {event ? "Confirm Change" : "Add Lesson"}
           </Button>
         </DialogActions>
       </ValidatorForm>

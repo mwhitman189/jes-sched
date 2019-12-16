@@ -61,15 +61,12 @@ router.put("/update/:id", (req, res) => {
     }
     if (req.body.hasOwnProperty("start")) {
       lesson.start = Date.parse(req.body.start);
-      console.log(lesson.start);
     }
     if (req.body.hasOwnProperty("end")) {
       lesson.end = Date.parse(req.body.end);
-      console.log(lesson.end);
     }
     if (req.body.hasOwnProperty("duration")) {
       lesson.duration = Number(req.body.duration);
-      console.log(lesson.duration);
     }
     if (req.body.hasOwnProperty("resourceId")) {
       lesson.resourceId = Number(req.body.resourceId);

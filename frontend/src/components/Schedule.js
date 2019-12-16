@@ -122,7 +122,12 @@ const Schedule = () => {
           teachers={teachers}
         />
       )}
-      <button onClick={handleBtnClick}>New Teacher</button>
+      <button
+        style={{ position: "absolute", top: "0px", left: "45%" }}
+        onClick={handleBtnClick}
+      >
+        New Teacher
+      </button>
       <CustomDnDCalendar
         handleMove={handleMove}
         handleSelect={handleSelect}

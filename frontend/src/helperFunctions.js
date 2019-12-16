@@ -23,7 +23,6 @@ const addTeachingMins = (events, teachers, setTeachers) => {
 
       teachers.forEach(teacher => {
         updateTeacher(teacher);
-        console.log("teachers updated");
       });
     }
   }
