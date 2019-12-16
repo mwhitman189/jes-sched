@@ -48,43 +48,44 @@ router.delete("/:id", (req, res) => {
     .catch(err => res.status(400).json(`Error: ${err}`));
 });
 
-router.post("/update/:id", (req, res) => {
-  Lesson.findById(req.params.id)
-    .then(lesson => {
-      if (req.body.groupId) {
-        lesson.groupId = req.body.groupId;
-      }
-      if (req.body.title) {
-        lesson.title = req.body.title;
-      }
-      if (req.body.type) {
-        lesson.type = req.body.type;
-      }
-      if (req.body.start) {
-        lesson.start = req.body.start;
-      }
-      if (req.body.end) {
-        lesson.end = req.body.end;
-      }
-      if (req.body.duration) {
-        lesson.duration = req.body.duration;
-      }
-      if (req.body.resourceId) {
-        lesson.resourceId = req.body.resourceId;
-      }
-      if (req.body.room) {
-        lesson.room = req.body.room;
-      }
-      if (req.body.hide) {
-        lesson.hide = req.body.hide;
-      }
+router.put("/update/:id", (req, res) => {
+  Lesson.findById(req.params.id).then(lesson => {
+    if (req.body.hasOwnProperty("groupId")) {
+      lesson.groupId = req.body.groupId;
+    }
+    if (req.body.hasOwnProperty("title")) {
+      lesson.title = req.body.title;
+    }
+    if (req.body.hasOwnProperty("type")) {
+      lesson.type = req.body.type;
+    }
+    if (req.body.hasOwnProperty("start")) {
+      lesson.start = Date.parse(req.body.start);
+      console.log(lesson.start);
+    }
+    if (req.body.hasOwnProperty("end")) {
+      lesson.end = Date.parse(req.body.end);
+      console.log(lesson.end);
+    }
+    if (req.body.hasOwnProperty("duration")) {
+      lesson.duration = Number(req.body.duration);
+      console.log(lesson.duration);
+    }
+    if (req.body.hasOwnProperty("resourceId")) {
+      lesson.resourceId = Number(req.body.resourceId);
+    }
+    if (req.body.hasOwnProperty("room")) {
+      lesson.room = Number(req.body.room);
+    }
+    if (req.body.hasOwnProperty("hide")) {
+      lesson.hide = req.body.hide;
+    }
 
-      lesson
-        .save()
-        .then(() => res.json("Lesson updated!"))
-        .catch(err => res.status(400).json(`Error: ${err}`));
-    })
-    .catch(err => res.status(400).json(`Error: ${err}`));
+    lesson
+      .save()
+      .then(() => res.json("Lesson updated!"))
+      .catch(err => res.status(400).json(`Error: ${err}`));
+  });
 });
 
 module.exports = router;

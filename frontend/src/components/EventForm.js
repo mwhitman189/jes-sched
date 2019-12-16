@@ -8,6 +8,7 @@ import moment from "moment";
 
 import useInputState from "../hooks/useInputState";
 import { validateRoom, validateTeacher } from "../validators";
+import { changeEvent } from "../helperFunctions";
 
 import { makeStyles } from "@material-ui/core/styles";
 import MenuItem from "@material-ui/core/MenuItem";
@@ -42,35 +43,34 @@ export default function EventForm(props) {
     teachers,
     startTime,
     updateStartTime,
-    selectedEvent,
-    changeEvent
+    event,
+    setEvents
   } = props;
-  const startDateTime = startTime ? startTime : selectedEvent.start;
+  const startDateTime = startTime ? startTime : event.start;
+  console.log(startTime);
 
-  const [title, updateTitle] = useInputState(
-    selectedEvent ? selectedEvent.title : ""
+  const [title, updateTitle, resetTitle] = useInputState(
+    event ? event.title : ""
   );
-  const [duration, updateDuration] = useInputState(
-    selectedEvent ? selectedEvent.duration : ""
+  const [duration, updateDuration, resetDuration] = useInputState(
+    event ? event.duration : ""
   );
-  const [resource, updateResource] = useInputState(
-    selectedEvent ? selectedEvent.resourceId : ""
+  const [resource, updateResource, resetResource] = useInputState(
+    event ? event.resourceId : ""
   );
-  const [room, updateRoom] = useInputState(
-    selectedEvent ? selectedEvent.room : ""
+  const [room, updateRoom, resetRoom] = useInputState(event ? event.room : "");
+  const [eventType, updateEventType, resetEventType] = useInputState(
+    event ? event.type : ""
   );
-  const [eventType, updateEventType] = useInputState(
-    selectedEvent ? selectedEvent.type : ""
-  );
-  const [groupId, updateGroupId] = useInputState(
-    selectedEvent ? selectedEvent.updateGroupId : ""
+  const [groupId, updateGroupId, resetGroupId] = useInputState(
+    event ? event.updateGroupId : ""
   );
 
   let teacherValidators = ["required"];
   let teacherValMsgs = ["Teacher Required"];
   let roomValidators = ["required"];
   let roomValMsgs = ["Room Required"];
-  if (!selectedEvent) {
+  if (!event) {
     teacherValidators.push("teacherIsAvailable");
     teacherValMsgs.push("Teacher unavailable");
     roomValidators.push("roomIsAvailable");
@@ -93,6 +93,15 @@ export default function EventForm(props) {
 
   const hideForm = () => setFormType("");
 
+  const resetForm = () => {
+    resetTitle();
+    resetDuration();
+    resetResource();
+    resetRoom();
+    resetEventType();
+    resetGroupId();
+  };
+
   const handleAddEvent = e => {
     e.preventDefault();
     const startTimeObj = new Date(startDateTime);
@@ -108,13 +117,27 @@ export default function EventForm(props) {
       resourceId: parseInt(resource),
       type: eventType
     });
+    resetForm();
     hideForm();
   };
 
   const handleEditEvent = e => {
     e.preventDefault();
-    // const startTimeObj = new Date(startDateTime);
-    changeEvent(selectedEvent);
+    const startTimeObj = new Date(startDateTime);
+    console.log(startTimeObj);
+    const editedEvent = {
+      title: title,
+      start: startTimeObj,
+      end: moment(startTimeObj)
+        .add(duration, "m")
+        .toDate(),
+      room: room,
+      duration: duration,
+      resourceId: parseInt(resource),
+      type: eventType
+    };
+    changeEvent(events, event, editedEvent, setEvents);
+    resetForm();
     hideForm();
   };
 
@@ -124,9 +147,7 @@ export default function EventForm(props) {
       onClose={hideForm}
       aria-labelledby="form-dialog-title"
     >
-      <ValidatorForm
-        onSubmit={selectedEvent ? handleEditEvent : handleAddEvent}
-      >
+      <ValidatorForm onSubmit={event ? handleEditEvent : handleAddEvent}>
         <DialogTitle id="form-dialog-title">New Lesson</DialogTitle>
         <DialogContent>
           <DialogContentText>Enter Lesson Info</DialogContentText>

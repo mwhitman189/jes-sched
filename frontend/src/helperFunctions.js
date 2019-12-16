@@ -1,5 +1,4 @@
 import axios from "axios";
-import moment from "moment";
 
 const API_URI = "http://localhost:5000";
 
@@ -24,24 +23,26 @@ const addTeachingMins = (events, teachers, setTeachers) => {
 
       teachers.forEach(teacher => {
         updateTeacher(teacher);
+        console.log("teachers updated");
       });
     }
   }
 };
 
-const getTeachers = async setTeachers => {
-  await axios
+const getTeachers = async (events, teachers, setTeachers) => {
+  return await axios
     .get(`${API_URI}/teachers/`)
     .then(res => {
       if (res.data.length > 0) {
         setTeachers(res.data);
       }
     })
+    .then(addTeachingMins(events, teachers, setTeachers))
     .catch(err => console.log(err));
 };
 
 const getLessons = async (events, setEvents) => {
-  await axios
+  return await axios
     .get(`${API_URI}/lessons/`)
     .then(res => {
       if (res.data.length > 0) {
@@ -60,7 +61,7 @@ const addLesson = async (events, newEvent, setEvents) => {
     .post(`${API_URI}/lessons/add`, newEvent)
     .then(res => console.log(res.data))
     .catch(err => console.log(err));
-  setEvents([...events, newEvent]);
+  return setEvents([...events, newEvent]);
 };
 
 const addTeacher = async (teachers, newTeacher, setTeachers) => {
@@ -68,11 +69,11 @@ const addTeacher = async (teachers, newTeacher, setTeachers) => {
     .post(`${API_URI}/teachers/add`, newTeacher)
     .then(res => console.log(res.data))
     .catch(err => console.log(err));
-  setTeachers([...teachers, newTeacher]);
+  return setTeachers([...teachers, newTeacher]);
 };
 
 const updateTeacher = async teacher => {
-  await axios
+  return await axios
     .put(`${API_URI}/teachers/update/${teacher._id}`, {
       resourceId: teacher.resourceId,
       resourceTitle: teacher.resourceTitle,
@@ -84,29 +85,14 @@ const updateTeacher = async teacher => {
     .catch(err => console.log(err));
 };
 
-const changeEvent = async (events, event, setEvents) => {
-  const editedEvent = {
-    _id: event._id,
-    groupId: 3,
-    title: event.title,
-    start: event.start,
-    end: moment(event.startTimeObj)
-      .add(event.duration, "m")
-      .toDate(),
-    room: event.room,
-    duration: event.duration,
-    resourceId: parseInt(event.resourceId),
-    type: event.eventType
-  };
-  console.log(editedEvent);
-  const idx = events.indexOf(event);
-  console.log(idx);
+const changeEvent = async (events, event, editedEvent, setEvents) => {
+  const idx = events.findIndex(e => e._id === event._id);
   const nextEvents = [...events];
 
   nextEvents.splice(idx, 1, editedEvent);
   setEvents(nextEvents);
 
-  await axios
+  return await axios
     .put(`${API_URI}/lessons/update/${event._id}`, editedEvent)
     .then(res => console.log(res.data))
     .catch(err => console.log(err));

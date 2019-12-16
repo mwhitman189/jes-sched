@@ -33,12 +33,12 @@ const Schedule = () => {
     }
   ]);
   const [teachers, setTeachers] = useState([]);
-  const [startTime, updateStartTime, startTimeReset] = useFormState(new Date());
+  const [startTime, updateStartTime, resetStartTime] = useFormState(new Date());
   const [selectedEvent, setSelectedEvent] = useState("");
 
   useEffect(() => {
     getLessons(events, setEvents);
-    getTeachers(setTeachers);
+    getTeachers(events, teachers, setTeachers);
   }, []);
 
   useEffect(() => {
@@ -46,17 +46,11 @@ const Schedule = () => {
   }, [events]);
 
   const moveEvent = ({ event, resourceId, start, end }) => {
-    const idx = events.indexOf(event);
-
     const updatedEvent = { ...event, resourceId, start, end };
-
-    const nextEvents = [...events];
-    nextEvents.splice(idx, 1, updatedEvent);
-
-    setEvents(nextEvents);
-    // alert(`${event.title} was dropped onto ${updatedEvent.start}`)
+    changeEvent(events, event, updatedEvent, setEvents);
   };
 
+  // Add validation to a move upon dropping an event with drag and drop
   const handleMove = ({ event, resourceId, start, end }) => {
     const idx = events.indexOf(event);
     const otherEvents = [...events.slice(0, idx), ...events.slice(idx + 1)];
@@ -83,17 +77,13 @@ const Schedule = () => {
     setFormType("event");
   };
 
-  const handleChangeEvent = event => {
-    changeEvent(events, event, setEvents);
-    setFormType("event");
-  };
-
   const handleSelect = ({ start }) => {
-    setFormType("event");
     updateStartTime(start);
+    setFormType("event");
   };
 
   const handleDoubleClick = event => {
+    updateStartTime(event.start);
     setSelectedEvent(event);
     setFormType("event");
   };
@@ -118,9 +108,8 @@ const Schedule = () => {
           teachers={teachers}
           startTime={startTime}
           updateStartTime={updateStartTime}
-          startTimeReset={startTimeReset}
-          changeEvent={handleChangeEvent}
-          selectedEvent={selectedEvent}
+          resetStartTime={resetStartTime}
+          event={selectedEvent}
           setEvents={setEvents}
         />
       )}
