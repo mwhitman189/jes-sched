@@ -84,6 +84,22 @@ const updateTeacher = async teacher => {
     .catch(err => console.log(err));
 };
 
+const deleteTeacher = async teacher => {
+  return await axios
+    .delete(`${API_URI}/teachers/delete/${teacher._id}`)
+    .then(res => console.log(res.data))
+    .catch(err => console.log(err));
+};
+
+const deleteEvent = async (events, event, setEvents) => {
+  const newEvents = events.filter(evt => evt._id !== event._id);
+  setEvents(newEvents);
+  return await axios
+    .delete(`${API_URI}/lessons/delete/${event._id}`)
+    .then(res => console.log(res.data))
+    .catch(err => console.log(err));
+};
+
 const changeEvent = async (events, event, editedEvent, setEvents) => {
   const idx = events.findIndex(e => e._id === event._id);
   const nextEvents = [...events];
@@ -104,5 +120,7 @@ export {
   addLesson,
   addTeacher,
   updateTeacher,
+  deleteTeacher,
+  deleteEvent,
   changeEvent
 };

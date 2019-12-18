@@ -8,7 +8,7 @@ import moment from "moment";
 
 import useInputState from "../hooks/useInputState";
 import { validateRoom, validateTeacher } from "../validators";
-import { changeEvent } from "../helperFunctions";
+import { changeEvent, deleteEvent } from "../helperFunctions";
 
 import { makeStyles } from "@material-ui/core/styles";
 import MenuItem from "@material-ui/core/MenuItem";
@@ -44,7 +44,8 @@ export default function EventForm(props) {
     startTime,
     updateStartTime,
     event,
-    setEvents
+    setEvents,
+    selectedTeacher
   } = props;
   // If a new start time was input, use it for the form input,
   // otherwise use the original event's start time
@@ -57,7 +58,7 @@ export default function EventForm(props) {
     event ? event.duration : ""
   );
   const [resource, updateResource, resetResource] = useInputState(
-    event ? event.resourceId : ""
+    event ? event.resourceId : selectedTeacher
   );
   const [room, updateRoom, resetRoom] = useInputState(event ? event.room : "");
   const [eventType, updateEventType, resetEventType] = useInputState(
@@ -100,7 +101,6 @@ export default function EventForm(props) {
     resetResource();
     resetRoom();
     resetEventType();
-    resetGroupId();
   };
 
   const handleAddEvent = e => {
@@ -115,7 +115,7 @@ export default function EventForm(props) {
         .toDate(),
       room: room,
       duration: duration,
-      resourceId: parseInt(resource),
+      resourceId: parseInt(e.resourceId),
       type: eventType
     });
     resetForm();
@@ -138,6 +138,11 @@ export default function EventForm(props) {
     };
     changeEvent(events, event, editedEvent, setEvents);
     resetForm();
+    hideForm();
+  };
+
+  const handleDeleteEvent = () => {
+    deleteEvent(events, event, setEvents);
     hideForm();
   };
 
@@ -259,6 +264,9 @@ export default function EventForm(props) {
           </FormControl>
         </DialogContent>
         <DialogActions>
+          <Button onClick={handleDeleteEvent} color="secondary">
+            Delete Lesson
+          </Button>
           <Button onClick={hideForm} color="primary">
             Cancel
           </Button>

@@ -13,7 +13,6 @@ import {
   getLessons,
   addLesson,
   addTeacher,
-  updateTeacher,
   changeEvent
 } from "../helperFunctions";
 
@@ -37,8 +36,9 @@ const Schedule = () => {
   const [teachers, setTeachers] = useState([]);
   const [startTime, updateStartTime, resetStartTime] = useFormState(new Date());
   const [selectedEvent, setSelectedEvent] = useState("");
-  const [isOpen, toggleIsOpen] = useToggle(false);
+  const [isOpen, setIsOpen] = useState(false);
   const [message, setMessage] = useState("");
+  const [selectedTeacher, setSelectedTeacher] = useState("");
 
   useEffect(() => {
     getLessons(events, setEvents);
@@ -86,8 +86,9 @@ const Schedule = () => {
     setFormType("event");
   };
 
-  const handleSelect = ({ start }) => {
+  const handleSelect = ({ start, resourceId }) => {
     updateStartTime(start);
+    setSelectedTeacher(resourceId);
     setFormType("event");
   };
 
@@ -108,8 +109,7 @@ const Schedule = () => {
 
   const handleToggleSnackbar = msg => {
     setMessage(msg);
-    console.log(msg);
-    toggleIsOpen();
+    setIsOpen(true);
   };
 
   return (
@@ -126,6 +126,7 @@ const Schedule = () => {
           resetStartTime={resetStartTime}
           event={selectedEvent}
           setEvents={setEvents}
+          selectedTeacher={selectedTeacher}
         />
       )}
       {formType === "teacher" && (
@@ -145,7 +146,7 @@ const Schedule = () => {
       </button>
       <CustomizedSnackbars
         isOpen={isOpen}
-        toggleIsOpen={toggleIsOpen}
+        setIsOpen={setIsOpen}
         variant={"error"}
         msg={message}
       />

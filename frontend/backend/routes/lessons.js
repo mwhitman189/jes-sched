@@ -42,7 +42,7 @@ router.get("/:id", (req, res) => {
     .catch(err => res.status(400).json(`Error: ${err}`));
 });
 
-router.delete("/:id", (req, res) => {
+router.delete("/delete/:id", (req, res) => {
   Lesson.findByIdAndDelete(req.params.id)
     .then(() => res.json("Lesson deleted"))
     .catch(err => res.status(400).json(`Error: ${err}`));

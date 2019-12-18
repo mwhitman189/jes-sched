@@ -36,13 +36,13 @@ const CustomDnDCalendar = props => {
         hexColor = "#e6ba1f";
         break;
       case "beg":
-        hexColor = "#8adec1";
+        hexColor = "#00fca5";
         break;
       case "el":
-        hexColor = "#33dea2";
+        hexColor = "#02bd7b";
         break;
       case "lint":
-        hexColor = "#1cbd85";
+        hexColor = "#018256";
         break;
       case "hint":
         hexColor = "#0b8a5e";
