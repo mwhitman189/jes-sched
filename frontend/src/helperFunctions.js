@@ -9,22 +9,21 @@ const addTeachingMins = (events, teachers, setTeachers) => {
       teacher.teachingMins = 0;
       teacher.resourceTitle = `${teacher.name} ${teacher.teachingMins}`;
     });
-    if (events.length > 0) {
-      events.forEach(e => {
-        const idx = teachers.findIndex(
-          teacher => teacher.resourceId === e.resourceId
-        );
-        teachers[idx].teachingMins += parseInt(e.duration);
-        setTeachers([...teachers]);
-        teachers[
-          idx
-        ].resourceTitle = `${teachers[idx].name} ${teachers[idx].teachingMins}`;
-      });
 
-      teachers.forEach(teacher => {
-        updateTeacher(teacher);
-      });
-    }
+    events.forEach(e => {
+      const idx = teachers.findIndex(
+        teacher => teacher.resourceId === e.resourceId
+      );
+      teachers[idx].teachingMins += parseInt(e.duration);
+      setTeachers([...teachers]);
+      teachers[
+        idx
+      ].resourceTitle = `${teachers[idx].name} ${teachers[idx].teachingMins}`;
+    });
+
+    teachers.forEach(teacher => {
+      updateTeacher(teacher);
+    });
   }
 };
 
@@ -72,14 +71,15 @@ const addTeacher = async (teachers, newTeacher, setTeachers) => {
 };
 
 const updateTeacher = async teacher => {
+  const updatedTeacher = {
+    resourceId: teacher.resourceId,
+    resourceTitle: teacher.resourceTitle,
+    name: teacher.name,
+    familyName: teacher.familyName,
+    teachingMins: teacher.teachingMins
+  };
   return await axios
-    .put(`${API_URI}/teachers/update/${teacher._id}`, {
-      resourceId: teacher.resourceId,
-      resourceTitle: teacher.resourceTitle,
-      name: teacher.name,
-      familyName: teacher.familyName,
-      teachingMins: teacher.teachingMins
-    })
+    .put(`${API_URI}/teachers/update/${teacher._id}`, updatedTeacher)
     .then(res => console.log(res.data))
     .catch(err => console.log(err));
 };

@@ -3,7 +3,9 @@ import React, { useState, useEffect } from "react";
 import CustomDnDCalendar from "./CustomDnDCalendar";
 import EventForm from "./EventForm";
 import TeacherForm from "./TeacherForm";
+import CustomizedSnackbars from "./CustomizedSnackbars";
 import useFormState from "../hooks/useInputState";
+import useToggle from "../hooks/useToggle";
 import { validateRoom, validateTeacher } from "../validators";
 import {
   addTeachingMins,
@@ -35,6 +37,8 @@ const Schedule = () => {
   const [teachers, setTeachers] = useState([]);
   const [startTime, updateStartTime, resetStartTime] = useFormState(new Date());
   const [selectedEvent, setSelectedEvent] = useState("");
+  const [isOpen, toggleIsOpen] = useToggle(false);
+  const [message, setMessage] = useState("");
 
   useEffect(() => {
     getLessons(events, setEvents);
@@ -51,17 +55,22 @@ const Schedule = () => {
   };
 
   // Add validation to a move upon dropping an event with drag and drop
+  // If there is a conflict, bring up the event form to fix the conflict
   const handleMove = ({ event, resourceId, start, end }) => {
     const idx = events.indexOf(event);
     const otherEvents = [...events.slice(0, idx), ...events.slice(idx + 1)];
     if (
       !validateRoom(otherEvents, event.room, start, parseInt(event.duration))
     ) {
-      alert("That room is unavailable");
+      setSelectedEvent(event);
+      handleToggleSnackbar("Room Conflict. Please choose another room or time");
     } else if (
       !validateTeacher(otherEvents, resourceId, start, parseInt(event.duration))
     ) {
-      alert("That teacher is unavailable");
+      setSelectedEvent(event);
+      handleToggleSnackbar(
+        "Teacher Conflict. Please choose another teacher or time"
+      );
     } else {
       moveEvent({
         event,
@@ -97,6 +106,12 @@ const Schedule = () => {
     setFormType("teacher");
   };
 
+  const handleToggleSnackbar = msg => {
+    setMessage(msg);
+    console.log(msg);
+    toggleIsOpen();
+  };
+
   return (
     <div>
       {formType === "event" && (
@@ -128,6 +143,12 @@ const Schedule = () => {
       >
         New Teacher
       </button>
+      <CustomizedSnackbars
+        isOpen={isOpen}
+        toggleIsOpen={toggleIsOpen}
+        variant={"error"}
+        msg={message}
+      />
       <CustomDnDCalendar
         handleMove={handleMove}
         handleSelect={handleSelect}
