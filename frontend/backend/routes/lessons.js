@@ -17,6 +17,7 @@ router.post("/add", (req, res) => {
   const resourceId = Number(req.body.resourceId);
   const room = Number(req.body.room);
   const hide = req.body.hide;
+  const recur = req.body.recur;
 
   const newLesson = new Lesson({
     groupId,
@@ -27,7 +28,8 @@ router.post("/add", (req, res) => {
     duration,
     resourceId,
     room,
-    hide
+    hide,
+    recur
   });
 
   newLesson

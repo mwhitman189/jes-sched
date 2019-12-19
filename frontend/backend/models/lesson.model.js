@@ -12,7 +12,8 @@ const lessonSchema = new Schema(
     duration: { type: Number, required: true },
     resourceId: { type: Number, required: true },
     room: { type: Number, required: true },
-    hide: { type: Boolean, required: false }
+    hide: { type: Boolean, required: false },
+    recur: { type: Boolean, required: false }
   },
   {
     timestamps: true

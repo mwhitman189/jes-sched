@@ -13,7 +13,8 @@ import {
   getLessons,
   addLesson,
   addTeacher,
-  changeEvent
+  changeEvent,
+  getRecurrences
 } from "../helperFunctions";
 
 import "react-big-calendar/lib/sass/styles.scss";
@@ -96,6 +97,7 @@ const Schedule = () => {
     updateStartTime(event.start);
     setSelectedEvent(event);
     setFormType("event");
+    getRecurrences(event);
   };
 
   const handleAddTeacher = newTeacher => {

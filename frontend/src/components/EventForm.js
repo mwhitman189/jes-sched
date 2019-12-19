@@ -115,8 +115,9 @@ export default function EventForm(props) {
         .toDate(),
       room: room,
       duration: duration,
-      resourceId: parseInt(e.resourceId),
-      type: eventType
+      resourceId: parseInt(selectedTeacher),
+      type: eventType,
+      recur: true
     });
     resetForm();
     hideForm();
