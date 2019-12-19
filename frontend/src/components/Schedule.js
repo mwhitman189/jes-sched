@@ -127,6 +127,7 @@ const Schedule = () => {
           updateStartTime={updateStartTime}
           resetStartTime={resetStartTime}
           event={selectedEvent}
+          setSelectedEvent={setSelectedEvent}
           setEvents={setEvents}
           selectedTeacher={selectedTeacher}
         />

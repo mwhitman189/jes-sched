@@ -45,6 +45,7 @@ export default function EventForm(props) {
     updateStartTime,
     event,
     setEvents,
+    setSelectedEvent,
     selectedTeacher
   } = props;
   // If a new start time was input, use it for the form input,
@@ -144,6 +145,7 @@ export default function EventForm(props) {
 
   const handleDeleteEvent = () => {
     deleteEvent(events, event, setEvents);
+    setSelectedEvent("");
     hideForm();
   };
 

@@ -22,6 +22,12 @@ const getRecurrences = event => {
 };
 
 const addTeachingMins = (events, teachers, setTeachers) => {
+  const now = new Date();
+  // Create start and end dates for the current month to calc
+  // teaching minutes
+  const month_start = new Date(now.getFullYear(), now.getMonth(), 1);
+  const month_end = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+
   if (teachers.length > 0) {
     // Reset teaching minutes to "0", then add all teaching minutes to the corresponding instructor
     teachers.forEach(teacher => {
@@ -30,14 +36,16 @@ const addTeachingMins = (events, teachers, setTeachers) => {
     });
 
     events.forEach(e => {
-      const idx = teachers.findIndex(
-        teacher => teacher.resourceId === e.resourceId
-      );
-      teachers[idx].teachingMins += parseInt(e.duration);
-      setTeachers([...teachers]);
-      teachers[
-        idx
-      ].resourceTitle = `${teachers[idx].name} ${teachers[idx].teachingMins}`;
+      if (moment(e.start).isBetween(month_start, month_end, null, "[]")) {
+        const idx = teachers.findIndex(
+          teacher => teacher.resourceId === e.resourceId
+        );
+        teachers[idx].teachingMins += parseInt(e.duration);
+        setTeachers([...teachers]);
+        teachers[
+          idx
+        ].resourceTitle = `${teachers[idx].name} ${teachers[idx].teachingMins}`;
+      }
     });
 
     teachers.forEach(teacher => {
@@ -66,36 +74,41 @@ const getLessons = async (events, setEvents) => {
         res.data.map(event => {
           event.start = new Date(event.start);
           event.end = new Date(event.end);
-          console.log(event);
-          // Add all of the recurrences for an event if recurrences is set to true
-          if (event.recur === true) {
-            const recurrences = getRecurrences(event)[1];
-            recurrences.map(r => {
-              const newEvent = {
-                ...event,
-                start: r,
-                end: moment(r)
-                  .add(event.duration, "m")
-                  .toDate()
-              };
-              res.data.push(newEvent);
-            });
-            // The second item in the array contains all recurrences
-          }
         });
-        console.log(res.data);
         setEvents([...res.data, events[0]]);
       }
     })
     .catch(err => console.log(err));
 };
 
-const addLesson = async (events, newEvent, setEvents) => {
-  await axios
-    .post(`${API_URI}/lessons/add`, newEvent)
-    .then(res => console.log(res.data))
-    .catch(err => console.log(err));
-  return setEvents([...events, newEvent]);
+const addLesson = async (events, event, setEvents) => {
+  if (event.recur === true) {
+    const recurrences = getRecurrences(event)[1];
+
+    console.log("recurrences: ", recurrences);
+    recurrences.map(r => {
+      const newEvent = {
+        ...event,
+        start: r,
+        end: moment(r)
+          .add(event.duration, "m")
+          .toDate()
+      };
+      axios
+        .post(`${API_URI}/lessons/add`, newEvent)
+        .then(res => console.log(res.data))
+        .catch(err => console.log(err));
+      console.log(newEvent);
+      setEvents([...events, newEvent]);
+    });
+  } else {
+    await axios
+      .post(`${API_URI}/lessons/add`, event)
+      .then(res => console.log(res.data))
+      .catch(err => console.log(err));
+    setEvents([...events, event]);
+  }
+  return getLessons(events, setEvents);
 };
 
 const addTeacher = async (teachers, newTeacher, setTeachers) => {
