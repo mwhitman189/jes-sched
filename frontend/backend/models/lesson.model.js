@@ -4,7 +4,6 @@ const Schema = mongoose.Schema;
 
 const lessonSchema = new Schema(
   {
-    groupId: { type: Number, required: true },
     title: { type: String, required: true },
     type: { type: String, required: true },
     start: { type: Date, required: true },

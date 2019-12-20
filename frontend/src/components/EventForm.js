@@ -19,6 +19,8 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import FormControl from "@material-ui/core/FormControl";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Switch from "@material-ui/core/Switch";
 
 import roomList from "../rooms";
 import lessonTypes from "../lessonTypes";
@@ -46,8 +48,11 @@ export default function EventForm(props) {
     event,
     setEvents,
     setSelectedEvent,
-    selectedTeacher
+    selectedTeacher,
+    isRecurring,
+    toggleIsRecurring
   } = props;
+
   // If a new start time was input, use it for the form input,
   // otherwise use the original event's start time
   const startDateTime = startTime ? startTime : event.start;
@@ -64,9 +69,6 @@ export default function EventForm(props) {
   const [room, updateRoom, resetRoom] = useInputState(event ? event.room : "");
   const [eventType, updateEventType, resetEventType] = useInputState(
     event ? event.type : ""
-  );
-  const [groupId, updateGroupId, resetGroupId] = useInputState(
-    event ? event.updateGroupId : ""
   );
 
   let teacherValidators = ["required"];
@@ -108,7 +110,6 @@ export default function EventForm(props) {
     e.preventDefault();
     const startTimeObj = new Date(startDateTime);
     addEvent({
-      groupId: 3,
       title: title,
       start: startTimeObj,
       end: moment(startTimeObj)
@@ -118,10 +119,9 @@ export default function EventForm(props) {
       duration: duration,
       resourceId: parseInt(selectedTeacher),
       type: eventType,
-      recur: true
+      isRecurring: isRecurring
     });
-    resetForm();
-    hideForm();
+    handleCancel();
   };
 
   const handleEditEvent = e => {
@@ -136,15 +136,25 @@ export default function EventForm(props) {
       room: room,
       duration: duration,
       resourceId: parseInt(resource),
-      type: eventType
+      type: eventType,
+      isRecurring: isRecurring
     };
     changeEvent(events, event, editedEvent, setEvents);
-    resetForm();
-    hideForm();
+    handleCancel();
   };
 
   const handleDeleteEvent = () => {
     deleteEvent(events, event, setEvents);
+    setSelectedEvent("");
+    handleCancel();
+  };
+
+  const handleToggleRecurrence = () => {
+    toggleIsRecurring(!isRecurring);
+  };
+
+  const handleCancel = () => {
+    resetForm();
     setSelectedEvent("");
     hideForm();
   };
@@ -159,6 +169,16 @@ export default function EventForm(props) {
         <DialogTitle id="form-dialog-title">New Lesson</DialogTitle>
         <DialogContent>
           <DialogContentText>Enter Lesson Info</DialogContentText>
+          <FormControlLabel
+            control={
+              <Switch
+                checked={isRecurring}
+                onChange={handleToggleRecurrence}
+                value={isRecurring}
+              />
+            }
+            label="Weekly lesson"
+          />
           <FormControl className={classes.formControl}>
             <TextValidator
               autoFocus
@@ -270,7 +290,7 @@ export default function EventForm(props) {
           <Button onClick={handleDeleteEvent} color="secondary">
             Delete Lesson
           </Button>
-          <Button onClick={hideForm} color="primary">
+          <Button onClick={handleCancel} color="primary">
             Cancel
           </Button>
           <Button type="submit" color="primary">

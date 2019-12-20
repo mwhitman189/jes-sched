@@ -82,7 +82,7 @@ const getLessons = async (events, setEvents) => {
 };
 
 const addLesson = async (events, event, setEvents) => {
-  if (event.recur === true) {
+  if (event.isRecurring === true) {
     const recurrences = getRecurrences(event)[1];
 
     console.log("recurrences: ", recurrences);

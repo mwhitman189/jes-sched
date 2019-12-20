@@ -8,7 +8,6 @@ router.get("/", (req, res) => {
 });
 
 router.post("/add", (req, res) => {
-  const groupId = req.body.groupId;
   const title = req.body.title;
   const type = req.body.type;
   const start = Date.parse(req.body.start);
@@ -20,7 +19,6 @@ router.post("/add", (req, res) => {
   const recur = req.body.recur;
 
   const newLesson = new Lesson({
-    groupId,
     title,
     type,
     start,
@@ -52,9 +50,6 @@ router.delete("/delete/:id", (req, res) => {
 
 router.put("/update/:id", (req, res) => {
   Lesson.findById(req.params.id).then(lesson => {
-    if (req.body.hasOwnProperty("groupId")) {
-      lesson.groupId = req.body.groupId;
-    }
     if (req.body.hasOwnProperty("title")) {
       lesson.title = req.body.title;
     }

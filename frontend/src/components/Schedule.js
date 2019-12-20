@@ -6,6 +6,7 @@ import TeacherForm from "./TeacherForm";
 import CustomizedSnackbars from "./CustomizedSnackbars";
 import useFormState from "../hooks/useInputState";
 import useToggle from "../hooks/useToggle";
+
 import { validateRoom, validateTeacher } from "../validators";
 import {
   addTeachingMins,
@@ -13,8 +14,7 @@ import {
   getLessons,
   addLesson,
   addTeacher,
-  changeEvent,
-  getRecurrences
+  changeEvent
 } from "../helperFunctions";
 
 import "react-big-calendar/lib/sass/styles.scss";
@@ -40,6 +40,7 @@ const Schedule = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [message, setMessage] = useState("");
   const [selectedTeacher, setSelectedTeacher] = useState("");
+  const [isRecurring, toggleIsRecurring] = useToggle(false);
 
   useEffect(() => {
     getLessons(events, setEvents);
@@ -84,7 +85,7 @@ const Schedule = () => {
 
   const handleAddEvent = newEvent => {
     addLesson(events, newEvent, setEvents);
-    setFormType("event");
+    setFormType("");
   };
 
   const handleSelect = ({ start, resourceId }) => {
@@ -97,7 +98,6 @@ const Schedule = () => {
     updateStartTime(event.start);
     setSelectedEvent(event);
     setFormType("event");
-    getRecurrences(event);
   };
 
   const handleAddTeacher = newTeacher => {
@@ -130,6 +130,8 @@ const Schedule = () => {
           setSelectedEvent={setSelectedEvent}
           setEvents={setEvents}
           selectedTeacher={selectedTeacher}
+          isRecurring={isRecurring}
+          toggleIsRecurring={toggleIsRecurring}
         />
       )}
       {formType === "teacher" && (
