@@ -85,7 +85,6 @@ const addLesson = async (events, event, setEvents) => {
   if (event.isRecurring === true) {
     const recurrences = getRecurrences(event)[1];
 
-    console.log("recurrences: ", recurrences);
     recurrences.map(r => {
       const newEvent = {
         ...event,
