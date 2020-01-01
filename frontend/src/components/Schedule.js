@@ -64,23 +64,26 @@ const Schedule = () => {
     if (
       !validateRoom(otherEvents, event.room, start, parseInt(event.duration))
     ) {
+      console.log("Bad Room");
       setSelectedEvent(event);
       handleToggleSnackbar("Room Conflict. Please choose another room or time");
-    } else if (
+      return 1;
+    }
+    if (
       !validateTeacher(otherEvents, resourceId, start, parseInt(event.duration))
     ) {
       setSelectedEvent(event);
       handleToggleSnackbar(
         "Teacher Conflict. Please choose another teacher or time"
       );
-    } else {
-      moveEvent({
-        event,
-        resourceId,
-        start,
-        end
-      });
+      return 1;
     }
+    moveEvent({
+      event,
+      resourceId,
+      start,
+      end
+    });
   };
 
   const handleAddEvent = newEvent => {
