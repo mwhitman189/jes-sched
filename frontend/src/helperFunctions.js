@@ -94,6 +94,7 @@ const getLessons = async (events, setEvents) => {
         });
         setEvents([...newEvents, events[0]]);
       }
+      console.log(events);
     })
     .catch(err => console.log(err));
 };
@@ -104,7 +105,6 @@ const addLesson = async (events, event, setEvents) => {
     .then(res => console.log(res.data))
     .catch(err => console.log(err));
   setEvents([...events, event]);
-  return getLessons(events, setEvents);
 };
 
 const addTeacher = async (teachers, newTeacher, setTeachers) => {
