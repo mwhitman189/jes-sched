@@ -119,7 +119,7 @@ export default function EventForm(props) {
       duration: duration,
       resourceId: parseInt(selectedTeacher),
       type: eventType,
-      isRecurring: isRecurring
+      recur: isRecurring
     });
     handleCancel();
   };
