@@ -89,12 +89,13 @@ const getLessons = async (events, setEvents) => {
               newEvents.push(newEvent);
               return newEvents;
             });
+          } else {
+            newEvents.push(event);
           }
           return newEvents;
         });
         setEvents([...newEvents, events[0]]);
       }
-      console.log(events);
     })
     .catch(err => console.log(err));
 };
@@ -104,7 +105,7 @@ const addLesson = async (events, event, setEvents) => {
     .post(`${API_URI}/lessons/add`, event)
     .then(res => console.log(res.data))
     .catch(err => console.log(err));
-  setEvents([...events, event]);
+  getLessons(events, setEvents);
 };
 
 const addTeacher = async (teachers, newTeacher, setTeachers) => {

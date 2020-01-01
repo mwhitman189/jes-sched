@@ -74,6 +74,9 @@ router.put("/update/:id", (req, res) => {
     if (req.body.hasOwnProperty("hide")) {
       lesson.hide = req.body.hide;
     }
+    if (req.body.hasOwnProperty("recur")) {
+      lesson.recur = req.body.recur;
+    }
 
     lesson
       .save()
