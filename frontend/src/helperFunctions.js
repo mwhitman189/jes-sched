@@ -9,7 +9,7 @@ const getRecurrences = event => {
   // Create start and end dates for the current month to calc
   // teaching minutes
   const month_start = new Date(now.getFullYear(), now.getMonth(), 1);
-  const month_end = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+  const month_end = new Date(now.getFullYear(), now.getMonth() + 2, 0);
   // Create an array of DateTimes for the recurrence of events.
   const rrule = new RRule({
     freq: RRule.WEEKLY,
@@ -17,9 +17,8 @@ const getRecurrences = event => {
     interval: 1,
     dtstart: new Date(event.start)
   });
-  const recurrences = rrule.all();
-  const monthRecurrences = rrule.between(month_start, month_end);
-  return [recurrences, monthRecurrences];
+  const twoMonthsRecurrences = rrule.between(month_start, month_end);
+  return twoMonthsRecurrences;
 };
 
 const addTeachingMins = (events, teachers, setTeachers) => {
@@ -77,7 +76,7 @@ const getLessons = async (events, setEvents) => {
           event.start = new Date(event.start);
           event.end = new Date(event.end);
           if (event.recur === true) {
-            const recurrences = getRecurrences(event)[0];
+            const recurrences = getRecurrences(event);
             recurrences.map(r => {
               const newEvent = {
                 ...event,
