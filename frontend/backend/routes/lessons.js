@@ -8,32 +8,34 @@ router.get("/", (req, res) => {
 });
 
 router.post("/add", (req, res) => {
-  const title = req.body.title;
-  const type = req.body.type;
-  const start = Date.parse(req.body.start);
-  const end = Date.parse(req.body.end);
-  const duration = Number(req.body.duration);
-  const resourceId = Number(req.body.resourceId);
-  const room = Number(req.body.room);
-  const hide = req.body.hide;
-  const recur = req.body.recur;
+  req.body.map(item => {
+    const title = item.title;
+    const type = item.type;
+    const start = Date.parse(item.start);
+    const end = Date.parse(item.end);
+    const duration = Number(item.duration);
+    const resourceId = Number(item.resourceId);
+    const room = Number(item.room);
+    const hide = item.hide;
+    const recur = item.recur;
 
-  const newLesson = new Lesson({
-    title,
-    type,
-    start,
-    end,
-    duration,
-    resourceId,
-    room,
-    hide,
-    recur
+    const newLesson = new Lesson({
+      title,
+      type,
+      start,
+      end,
+      duration,
+      resourceId,
+      room,
+      hide,
+      recur
+    });
+
+    return newLesson
+      .save()
+      .then(() => res.json("Lesson added!"))
+      .catch(err => res.status(400).json(`Error: ${err}`));
   });
-
-  newLesson
-    .save()
-    .then(() => res.json("Lesson added!"))
-    .catch(err => res.status(400).json(`Error: ${err}`));
 });
 
 router.get("/:id", (req, res) => {

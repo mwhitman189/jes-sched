@@ -71,40 +71,38 @@ const getLessons = async (events, setEvents) => {
     .get(`${API_URI}/lessons/`)
     .then(res => {
       if (res.data.length > 0) {
-        const newEvents = [];
         res.data.map(event => {
           event.start = new Date(event.start);
           event.end = new Date(event.end);
-          if (event.recur === true) {
-            const recurrences = getRecurrences(event);
-            recurrences.map(r => {
-              const newEvent = {
-                ...event,
-                start: r,
-                end: moment(r)
-                  .add(event.duration, "m")
-                  .toDate()
-              };
-              newEvents.push(newEvent);
-              return newEvents;
-            });
-          } else {
-            newEvents.push(event);
-          }
-          return newEvents;
         });
-        setEvents([...newEvents, events[0]]);
+        setEvents([...res.data, events[0]]);
       }
     })
     .catch(err => console.log(err));
 };
 
 const addLesson = async (events, event, setEvents) => {
+  const newEvents = [];
+  if (event.recur === true) {
+    const recurrences = getRecurrences(event);
+    recurrences.map(r => {
+      const newEvent = {
+        ...event,
+        start: r,
+        end: moment(r)
+          .add(event.duration, "m")
+          .toDate()
+      };
+      newEvents.push(newEvent);
+      return newEvents;
+    });
+  }
+  newEvents.push(event);
   await axios
-    .post(`${API_URI}/lessons/add`, event)
+    .post(`${API_URI}/lessons/add`, newEvents)
     .then(res => console.log(res.data))
     .catch(err => console.log(err));
-  getLessons(events, setEvents);
+  return getLessons(events, setEvents);
 };
 
 const addTeacher = async (teachers, newTeacher, setTeachers) => {
