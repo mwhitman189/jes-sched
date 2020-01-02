@@ -57,14 +57,13 @@ const Schedule = () => {
   };
 
   // Add validation to a move upon dropping an event with drag and drop
-  // If there is a conflict, bring up the event form to fix the conflict
+  // If there is a conflict, prevent the move and flash a conflict snackbar
   const handleMove = ({ event, resourceId, start, end }) => {
     const idx = events.indexOf(event);
     const otherEvents = [...events.slice(0, idx), ...events.slice(idx + 1)];
     if (
       !validateRoom(otherEvents, event.room, start, parseInt(event.duration))
     ) {
-      console.log("Bad Room");
       setSelectedEvent(event);
       handleToggleSnackbar("Room Conflict. Please choose another room or time");
       return 1;
@@ -84,6 +83,7 @@ const Schedule = () => {
       start,
       end
     });
+    return 0;
   };
 
   const handleAddEvent = newEvent => {

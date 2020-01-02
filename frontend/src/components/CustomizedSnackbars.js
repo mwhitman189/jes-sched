@@ -91,6 +91,7 @@ const useStyles2 = makeStyles(theme => ({
 export default function CustomizedSnackbars(props) {
   const classes = useStyles2();
   const { isOpen, setIsOpen, msg, variant } = props;
+  console.log(isOpen);
 
   const handleClose = () => {
     setIsOpen(false);
@@ -105,7 +106,6 @@ export default function CustomizedSnackbars(props) {
         }}
         open={isOpen}
         autoHideDuration={6000}
-        onClose={handleClose}
       >
         <MySnackbarContentWrapper
           onClose={handleClose}
