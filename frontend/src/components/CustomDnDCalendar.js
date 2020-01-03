@@ -5,6 +5,7 @@ import moment from "moment";
 
 import { WorkWeek } from "./CustomView";
 import LessonEvent from "./LessonEvent";
+import CustomToolbar from "./CustomToolbar";
 
 const localizer = momentLocalizer(moment);
 const DragAndDropCalendar = withDragAndDrop(Calendar);
@@ -14,6 +15,7 @@ const CustomDnDCalendar = props => {
     handleMove,
     handleSelect,
     handleDoubleClick,
+    handleBtnClick,
     events,
     teachers
   } = props;
@@ -125,7 +127,8 @@ const CustomDnDCalendar = props => {
       max={maxTime}
       onSelectSlot={handleSelect}
       components={{
-        day: { event: LessonEvent }
+        day: { event: LessonEvent },
+        toolbar: CustomToolbar({ handleBtnClick })
       }}
       resizableAccessor={() => false}
     />

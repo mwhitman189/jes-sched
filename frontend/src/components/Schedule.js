@@ -146,12 +146,6 @@ const Schedule = () => {
           teachers={teachers}
         />
       )}
-      <button
-        style={{ position: "absolute", top: "0px", left: "45%" }}
-        onClick={handleBtnClick}
-      >
-        New Teacher
-      </button>
       <CustomizedSnackbars
         isOpen={isOpen}
         setIsOpen={setIsOpen}
@@ -164,6 +158,7 @@ const Schedule = () => {
         handleDoubleClick={handleDoubleClick}
         events={events}
         teachers={teachers}
+        handleBtnClick={handleBtnClick}
       />
     </div>
   );
