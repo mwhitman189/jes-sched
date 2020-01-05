@@ -12,10 +12,13 @@ const WorkWeek = props => {
 
 WorkWeek.range = date => {
   // Set start date to the current work week's Monday
-  let start = date;
   let gotDate = date.getDate();
-  // Check the current date's day as integer from 1(Mon) to 7(Sun)
+  // Check the current date's day as integer from 0(Sun) to 6(Sat)
   switch (date.getDay()) {
+    case 0:
+      date.setDate(gotDate + 1);
+      break;
+
     case 2:
       date.setDate(gotDate - 1);
       break;
@@ -36,14 +39,11 @@ WorkWeek.range = date => {
       date.setDate(gotDate - 5);
       break;
 
-    case 7:
-      date.setDate(gotDate - 6);
-      break;
-
     default:
       break;
   }
 
+  let start = date;
   let end = dates.add(start, 5, "day");
   let current = start;
   let range = [];
