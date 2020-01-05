@@ -19,6 +19,10 @@ WorkWeek.range = date => {
       date.setDate(gotDate + 1);
       break;
 
+    case 1:
+      date.setDate(gotDate);
+      break;
+
     case 2:
       date.setDate(gotDate - 1);
       break;

@@ -121,6 +121,8 @@ export default function EventForm(props) {
       type: eventType,
       recur: isRecurring
     });
+    resetForm();
+    setSelectedEvent("");
   };
 
   const handleEditEvent = e => {
@@ -139,6 +141,9 @@ export default function EventForm(props) {
       isRecurring: isRecurring
     };
     changeEvent(events, event, editedEvent, setEvents);
+    resetForm();
+    setSelectedEvent("");
+    hideForm();
   };
 
   const handleDeleteEvent = () => {

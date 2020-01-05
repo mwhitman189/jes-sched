@@ -110,7 +110,7 @@ const CustomDnDCalendar = props => {
       style={{ width: "100vw", maxHeight: "100vh" }}
       localizer={localizer}
       views={{ week: WorkWeek, day: true }}
-      defaultView="day"
+      defaultView="week"
       events={events}
       onEventDrop={handleMove}
       startAccessor="start"
