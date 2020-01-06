@@ -149,6 +149,7 @@ export default function EventForm(props) {
   const handleDeleteEvent = () => {
     deleteEvent(events, event, setEvents);
     setSelectedEvent("");
+    hideForm();
   };
 
   const handleToggleRecurrence = () => {
