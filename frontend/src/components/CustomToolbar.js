@@ -1,4 +1,5 @@
 import React from "react";
+import moment from "moment";
 
 import "react-big-calendar/lib/sass/toolbar.scss";
 
@@ -44,7 +45,9 @@ const CustomToolbar = ({ handleBtnClick }) => props => {
           />
         </IconButton>
         <span className="today-label" onClick={() => props.onNavigate("TODAY")}>
-          {props.date.toLocaleString()}
+          {moment(props.date)
+            .format("dddd MM/DD")
+            .toLocaleString()}
         </span>
         <IconButton
           className="toolbar-navigation-button"

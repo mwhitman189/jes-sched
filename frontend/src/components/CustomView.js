@@ -2,15 +2,6 @@ import React from "react";
 import { Navigate } from "react-big-calendar";
 import TimeGrid from "react-big-calendar/lib/TimeGrid";
 import * as dates from "date-arithmetic";
-import { momentLocalizer } from "react-big-calendar";
-import moment from "moment";
-
-moment.locale("jp", {
-  week: {
-    dow: 1
-  }
-});
-const localizer = momentLocalizer(moment);
 
 const WorkWeek = props => {
   let { date } = props;
@@ -20,6 +11,8 @@ const WorkWeek = props => {
 };
 
 WorkWeek.range = date => {
+  // Set the date object's time to 0:00 so all events for the day will be displayed
+  // on the first day of the calendar week regardless of time of day
   date.setHours(0, 0, 0, 0);
   // Set start date to the current work week's Monday
   let gotDate = date.getDate();
@@ -66,7 +59,6 @@ WorkWeek.range = date => {
     range.push(current);
     current = dates.add(current, 1, "day");
   }
-  console.log(range);
   return range;
 };
 
