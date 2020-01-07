@@ -8,7 +8,7 @@ const LessonEvent = ({ event }) => (
       flexDirection: "column",
       justifyContent: "space-between",
       fontSize: ".6rem",
-      padding: "1px",
+      padding: "2px",
       height: "100%",
       width: "100%"
     }}
@@ -24,7 +24,9 @@ const LessonEvent = ({ event }) => (
       }}
     >
       <div>{event.title}</div>
-      <span style={{ color: "#1b1c1c", paddingLeft: ".1rem" }}>
+      <span
+        style={{ fontSize: ".8rem", color: "#1b1c1c", paddingLeft: ".1rem" }}
+      >
         {event.room}
       </span>
     </div>
