@@ -7,7 +7,7 @@ const LessonEvent = ({ event }) => (
       display: "flex",
       flexDirection: "column",
       justifyContent: "space-between",
-      fontSize: ".5rem",
+      fontSize: ".6rem",
       padding: "1px",
       height: "100%",
       width: "100%"
@@ -28,7 +28,7 @@ const LessonEvent = ({ event }) => (
         {event.room}
       </span>
     </div>
-    <div style={{ fontSize: ".5rem" }}>{moment(event.end).format("LT")}</div>
+    <div>{moment(event.end).format("LT")}</div>
   </div>
 );
 export default LessonEvent;
