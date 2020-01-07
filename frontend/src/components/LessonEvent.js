@@ -2,7 +2,17 @@ import React from "react";
 import moment from "moment";
 
 const LessonEvent = ({ event }) => (
-  <div style={{ fontSize: ".5rem", padding: "1px" }}>
+  <div
+    style={{
+      display: "flex",
+      flexDirection: "column",
+      justifyContent: "space-between",
+      fontSize: ".5rem",
+      padding: "1px",
+      height: "100%",
+      width: "100%"
+    }}
+  >
     <div>{moment(event.start).format("LT")}</div>
     <div
       style={{
