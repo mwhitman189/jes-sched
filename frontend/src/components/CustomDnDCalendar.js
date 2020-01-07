@@ -132,7 +132,7 @@ const CustomDnDCalendar = props => {
       max={maxTime}
       onSelectSlot={handleSelect}
       components={{
-        day: { event: LessonEvent },
+        event: LessonEvent,
         toolbar: CustomToolbar({ handleBtnClick })
       }}
       resizableAccessor={() => false}
