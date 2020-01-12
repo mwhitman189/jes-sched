@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 
 import CustomDnDCalendar from "./CustomDnDCalendar";
 import EventForm from "./EventForm";
@@ -6,6 +6,7 @@ import TeacherForm from "./TeacherForm";
 import CustomizedSnackbars from "./CustomizedSnackbars";
 import useFormState from "../hooks/useInputState";
 import useToggle from "../hooks/useToggle";
+import TeachersContext from "../context/TeachersContext";
 
 import { validateRoom, validateTeacher } from "../validators";
 import {
@@ -34,7 +35,8 @@ const Schedule = () => {
       hide: true
     }
   ]);
-  const [teachers, setTeachers] = useState([]);
+
+  const { teachers, setTeachers } = useContext(TeachersContext);
   const [startTime, updateStartTime, resetStartTime] = useFormState(new Date());
   const [selectedEvent, setSelectedEvent] = useState("");
   const [isOpen, setIsOpen] = useState(false);
