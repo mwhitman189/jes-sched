@@ -28,7 +28,9 @@ export default function EventForm(props) {
 
   const [givenName, updateGivenName] = useInputState("");
   const [familyName, updateFamilyName] = useInputState("");
-  const [otThreshold, updateOtThreshold] = useInputState("");
+  const [otThresholdHours, updateOtThresholdHours] = useInputState("");
+  const [contractType, updateContractType] = useInputState("");
+  const [dependentsNum, updateDependentsNum] = useInputState("");
 
   const handleAddTeacher = e => {
     e.preventDefault();
@@ -45,11 +47,13 @@ export default function EventForm(props) {
 
     addTeacher({
       resourceId: bigResourceId,
-      resourceTitle: `${givenName} 0`,
+      resourceTitle: givenName,
       name: givenName,
       familyName: familyName,
       teachingMins: 0,
-      otThreshold: parseInt(otThreshold)
+      otThreshold: parseInt(otThresholdHours * 60),
+      contractType: contractType,
+      dependentsNum: dependentsNum
     });
   };
 
@@ -62,9 +66,9 @@ export default function EventForm(props) {
       aria-labelledby="form-dialog-title"
     >
       <ValidatorForm onSubmit={handleAddTeacher}>
-        <DialogTitle id="form-dialog-title">New Lesson</DialogTitle>
+        <DialogTitle id="form-dialog-title">New Teacher</DialogTitle>
         <DialogContent>
-          <DialogContentText>Enter Lesson Info</DialogContentText>
+          <DialogContentText>Enter Teacher Info</DialogContentText>
           <FormControl className={classes.formControl}>
             <TextValidator
               autoFocus
@@ -97,12 +101,41 @@ export default function EventForm(props) {
           <FormControl className={classes.formControl}>
             <TextValidator
               margin="dense"
+              id="contractType"
+              label="Contract Type"
+              type="text"
+              value={contractType}
+              onChange={updateContractType}
+              fullWidth
+              validators={["required"]}
+              errorMessages={["Select a contract type"]}
+              required
+            />
+          </FormControl>
+          <FormControl className={classes.formControl}>
+            <TextValidator
+              margin="dense"
               id="otThreshold"
               label="Overtime threshold (hours)"
               type="text"
               pattern="[0-9]*"
-              value={otThreshold}
-              onChange={updateOtThreshold}
+              value={otThresholdHours}
+              onChange={updateOtThresholdHours}
+              fullWidth
+              validators={["required"]}
+              errorMessages={["Set first OT threshold"]}
+              required
+            />
+          </FormControl>
+          <FormControl className={classes.formControl}>
+            <TextValidator
+              margin="dense"
+              id="dependentsNum"
+              label="Number of dependents"
+              type="text"
+              pattern="[0-9]*"
+              value={dependentsNum}
+              onChange={updateDependentsNum}
               fullWidth
               required
             />

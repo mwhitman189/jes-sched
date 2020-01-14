@@ -32,7 +32,8 @@ const addTeachingMins = (events, teachers, setTeachers) => {
     // Reset teaching minutes to "0", then add all teaching minutes to the corresponding instructor
     teachers.forEach(teacher => {
       teacher.teachingMins = 0;
-      teacher.resourceTitle = `${teacher.name} ${teacher.teachingMins}`;
+      teacher.overThresholdOneMins = 0;
+      teacher.overThresholdTwoMins = 0;
     });
 
     events.forEach(e => {
@@ -41,14 +42,23 @@ const addTeachingMins = (events, teachers, setTeachers) => {
           teacher => teacher.resourceId === e.resourceId
         );
         teachers[idx].teachingMins += parseInt(e.duration);
+
+        // Update displayed teaching minutes
         setTeachers([...teachers]);
-        teachers[
-          idx
-        ].resourceTitle = `${teachers[idx].name} ${teachers[idx].teachingMins}`;
       }
     });
-
+    // Set the time difference from the first to second thresholds
+    const secondThreshold = 10 * 60;
     teachers.forEach(teacher => {
+      if (teacher.teachingMins >= teacher.otThreshold + secondThreshold) {
+        teacher.overThresholdTwoMins +=
+          teacher.teachingMins - (teacher.otThreshold + secondThreshold);
+        teacher.overThresholdOneMins += secondThreshold;
+      } else if (teacher.teachingMins >= teacher.otThreshold) {
+        console.log(teacher.otThreshold);
+        teacher.overThresholdOneMins +=
+          teacher.teachingMins - teacher.otThreshold;
+      }
       updateTeacher(teacher);
     });
   }
@@ -84,7 +94,7 @@ const getLessons = async (events, setEvents) => {
 const addLesson = async (events, event, setEvents) => {
   const newEvents = [];
   if (event.recur === true) {
-    const recurrences = getRecurrences(event);
+    const recurrences = getRecurrences(event).slice(1);
     recurrences.map(r => {
       const newEvent = {
         ...event,
@@ -120,7 +130,9 @@ const updateTeacher = async teacher => {
     name: teacher.name,
     familyName: teacher.familyName,
     teachingMins: teacher.teachingMins,
-    otThreshold: teacher.otThreshold
+    otThreshold: teacher.otThreshold,
+    overThresholdOneMins: teacher.overThresholdOneMins,
+    overThresholdTwoMins: teacher.overThresholdTwoMins
   };
   return await axios
     .put(`${API_URI}/teachers/update/${teacher._id}`, updatedTeacher)

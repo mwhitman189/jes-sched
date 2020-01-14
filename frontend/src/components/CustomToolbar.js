@@ -16,17 +16,10 @@ const CustomToolbar = ({ handleBtnClick }) => {
 
       render() {
         const { classes } = this.props;
-
         const { teachers } = this.context;
+
         return (
-          <div
-            className="rbc-toolbar"
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center"
-            }}
-          >
+          <div className="rbc-toolbar">
             <div className="rbc-btn-group">
               <button
                 className="toolbar-navigation-button"
@@ -78,11 +71,11 @@ const CustomToolbar = ({ handleBtnClick }) => {
                 {teachers.map(t => (
                   <li
                     className={
-                      t.teachingMins < 400
-                        ? classes.listItem
-                        : t.teachingMins < 600
+                      t.overThresholdTwoMins > 0
+                        ? classes.listItemRed
+                        : t.overThresholdOneMins > 0
                         ? classes.listItemYellow
-                        : classes.listItemRed
+                        : classes.listItem
                     }
                     key={t.resourceId}
                   >{`${t.name}: ${t.teachingMins}`}</li>

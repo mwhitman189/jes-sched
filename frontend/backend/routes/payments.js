@@ -11,17 +11,15 @@ router.post("/add", (req, res) => {
   const resourceId = req.body.resourceId;
   const paymentPeriodStart = req.body.paymentPeriodStart;
   const paymentPeriodEnd = req.body.paymentPeriodEnd;
-  const otThresholdOne = req.body.otThresholdOne;
-  const otThresholdTwo = req.body.otThresholdTwo;
-  const totalTeachingMins = req.body.totalTeachingMins;
+  const totalTeachingHours = req.body.totalTeachingHours;
   const paidVacationDays = req.body.paidVacationDays;
   const unpaidVacationDays = req.body.unpaidVacationDays;
   const paidSickDays = req.body.paidSickDays;
   const unpaidSickDays = req.body.unpaidSickDays;
-  const overThresholdOneMins = req.body.overThresholdOneMins;
-  const overThresholdTwoMins = req.body.overThresholdTwoMins;
-  const outsideDutyTimeMins = req.body.outsideDutyTimeMins;
-  const holidayMins = req.body.holidayMins;
+  const overThresholdOneHours = req.body.overThresholdOneHours;
+  const overThresholdTwoHours = req.body.overThresholdTwoHours;
+  const outsideDutyTimeHours = req.body.outsideDutyTimeHours;
+  const holidayHours = req.body.holidayHours;
   const healthInsur = req.body.healthInsur;
   const pension = req.body.pension;
   const employmentInsur = req.body.employmentInsur;
@@ -36,17 +34,15 @@ router.post("/add", (req, res) => {
     resourceId,
     paymentPeriodStart,
     paymentPeriodEnd,
-    otThresholdOne,
-    otThresholdTwo,
-    totalTeachingMins,
+    totalTeachingHours,
     paidVacationDays,
     unpaidVacationDays,
     paidSickDays,
     unpaidSickDays,
-    overThresholdOneMins,
-    overThresholdTwoMins,
-    outsideDutyTimeMins,
-    holidayMins,
+    overThresholdOneHours,
+    overThresholdTwoHours,
+    outsideDutyTimeHours,
+    holidayHours,
     healthInsur,
     pension,
     employmentInsur,
