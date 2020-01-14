@@ -28,6 +28,7 @@ export default function EventForm(props) {
 
   const [givenName, updateGivenName] = useInputState("");
   const [familyName, updateFamilyName] = useInputState("");
+  const [otThreshold, updateOtThreshold] = useInputState("");
 
   const handleAddTeacher = e => {
     e.preventDefault();
@@ -47,7 +48,8 @@ export default function EventForm(props) {
       resourceTitle: `${givenName} 0`,
       name: givenName,
       familyName: familyName,
-      teachingMins: 0
+      teachingMins: 0,
+      otThreshold: parseInt(otThreshold)
     });
   };
 
@@ -75,6 +77,7 @@ export default function EventForm(props) {
               fullWidth
               validators={["required"]}
               errorMessages={["Enter the Given Name"]}
+              required
             />
           </FormControl>
           <FormControl className={classes.formControl}>
@@ -88,6 +91,20 @@ export default function EventForm(props) {
               fullWidth
               validators={["required"]}
               errorMessages={["Enter the Last Name"]}
+              required
+            />
+          </FormControl>
+          <FormControl className={classes.formControl}>
+            <TextValidator
+              margin="dense"
+              id="otThreshold"
+              label="Overtime threshold (hours)"
+              type="text"
+              pattern="[0-9]*"
+              value={otThreshold}
+              onChange={updateOtThreshold}
+              fullWidth
+              required
             />
           </FormControl>
         </DialogContent>

@@ -1,5 +1,3 @@
-import { red } from "@material-ui/core/colors";
-
 const styles = {
   teacherListContainer: {
     maxWidth: "20%"

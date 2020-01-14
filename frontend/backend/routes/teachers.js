@@ -13,13 +13,15 @@ router.post("/add", (req, res) => {
   const name = req.body.name;
   const familyName = req.body.familyName;
   const teachingMins = req.body.teachingMins;
+  const otThreshold = req.body.otThreshold;
 
   const newTeacher = new Teacher({
     resourceId,
     resourceTitle,
     name,
     familyName,
-    teachingMins
+    teachingMins,
+    otThreshold
   });
 
   newTeacher

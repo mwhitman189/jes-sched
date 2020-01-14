@@ -3,12 +3,6 @@ import Schedule from "./components/Schedule";
 import { TeachersProvider } from "./context/TeachersContext";
 import "./App.css";
 
-// const teachers = [
-//   { name: "Miles", teachingMins: 75 },
-//   { name: "Tim", teachingMins: -40 },
-//   { name: "Martin", teachingMins: 120 }
-// ];
-
 function App() {
   const [teachers, setTeachers] = useState([]);
   return (

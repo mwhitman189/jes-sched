@@ -119,7 +119,8 @@ const updateTeacher = async teacher => {
     resourceTitle: teacher.resourceTitle,
     name: teacher.name,
     familyName: teacher.familyName,
-    teachingMins: teacher.teachingMins
+    teachingMins: teacher.teachingMins,
+    otThreshold: teacher.otThreshold
   };
   return await axios
     .put(`${API_URI}/teachers/update/${teacher._id}`, updatedTeacher)
