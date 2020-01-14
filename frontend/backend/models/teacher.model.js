@@ -9,7 +9,8 @@ const teacherSchema = new Schema(
     name: { type: String, required: true },
     familyName: { type: String, required: true },
     teachingMins: { type: Number, required: true },
-    otThreshold: { type: Number, required: true }
+    contract: { type: String, required: true },
+    dependents: { type: Number, required: true }
   },
   {
     timestamps: true

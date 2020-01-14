@@ -14,6 +14,8 @@ router.post("/add", (req, res) => {
   const familyName = req.body.familyName;
   const teachingMins = req.body.teachingMins;
   const otThreshold = req.body.otThreshold;
+  const contract = req.body.contract;
+  const dependents = req.body.dependents;
 
   const newTeacher = new Teacher({
     resourceId,
@@ -21,7 +23,9 @@ router.post("/add", (req, res) => {
     name,
     familyName,
     teachingMins,
-    otThreshold
+    otThreshold,
+    contract,
+    dependents
   });
 
   newTeacher
