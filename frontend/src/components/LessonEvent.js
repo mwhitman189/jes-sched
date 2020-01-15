@@ -1,36 +1,20 @@
 import React from "react";
 import moment from "moment";
+import useStyles from "../styles/LessonEventStyles";
 
-const LessonEvent = ({ event }) => (
-  <div
-    style={{
-      display: "flex",
-      flexDirection: "column",
-      justifyContent: "space-between",
-      fontSize: ".6rem",
-      padding: "2px",
-      height: "100%",
-      width: "100%"
-    }}
-  >
-    <div>{moment(event.start).format("LT")}</div>
-    <div
-      style={{
-        fontSize: ".7rem",
-        fontWeight: "600",
-        display: "flex",
-        justifyContent: "space-between",
-        padding: "0"
-      }}
-    >
-      <div>{event.title}</div>
-      <span
-        style={{ fontSize: ".8rem", color: "#1b1c1c", paddingLeft: ".1rem" }}
-      >
-        {event.room}
-      </span>
+const LessonEvent = ({ event }) => {
+  const classes = useStyles();
+  return (
+    <div className={classes.event}>
+      <div className={classes.group}>
+        <div>{moment(event.start).format("LT")}</div>
+        <div className={classes.innerGroup}>
+          <div className={classes.title}>{event.title}</div>
+          <span className={classes.room}>{event.room}</span>
+        </div>
+      </div>
+      <div>{moment(event.end).format("LT")}</div>
     </div>
-    <div>{moment(event.end).format("LT")}</div>
-  </div>
-);
+  );
+};
 export default LessonEvent;

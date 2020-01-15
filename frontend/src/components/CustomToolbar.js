@@ -19,36 +19,36 @@ const CustomToolbar = ({ handleBtnClick }) => {
         const { teachers } = this.context;
 
         return (
-          <div className="rbc-toolbar">
-            <div className="rbc-btn-group">
+          <div className={classes.toolbar}>
+            <div className={classes.btnGroup}>
               <button
-                className="toolbar-navigation-button"
+                className={classes.navBtn}
                 type="button"
                 onClick={() => this.props.onView("week")}
               >
                 Week
               </button>
               <button
-                className="toolbar-navigation-button"
+                className={classes.navBtn}
                 type="button"
                 onClick={() => this.props.onView("day")}
               >
                 Day
               </button>
             </div>
-            <div className="rbc-btn-group">
+            <div className={classes.btnGroup}>
               <IconButton
-                className="toolbar-navigation-button"
+                className={classes.navBtn}
                 type="button"
                 onClick={() => this.props.onNavigate("PREV")}
               >
                 <LeftArrowIcon
-                  className="navigate-icon"
+                  className={classes.navIcon}
                   icon={this.props.isRTL ? "chevron-right" : "chevron-left"}
                 />
               </IconButton>
               <span
-                className="today-label"
+                className={classes.todayLabel}
                 onClick={() => this.props.onNavigate("TODAY")}
               >
                 {moment(this.props.date)
@@ -56,12 +56,12 @@ const CustomToolbar = ({ handleBtnClick }) => {
                   .toLocaleString()}
               </span>
               <IconButton
-                className="toolbar-navigation-button"
+                className={classes.navBtn}
                 type="button"
                 onClick={() => this.props.onNavigate("NEXT")}
               >
                 <RightArrowIcon
-                  className="navigate-icon"
+                  className={classes.navIcon}
                   icon={this.props.isRTL ? "chevron-left" : "chevron-right"}
                 />
               </IconButton>
@@ -82,8 +82,10 @@ const CustomToolbar = ({ handleBtnClick }) => {
                 ))}
               </ul>
             </div>
-            <div className="rbc-btn-group">
-              <button onClick={handleBtnClick}>New Teacher</button>
+            <div className={classes.btnGroup}>
+              <button className={classes.navBtn} onClick={handleBtnClick}>
+                New Teacher
+              </button>
             </div>
           </div>
         );
