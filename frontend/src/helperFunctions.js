@@ -169,6 +169,13 @@ const changeEvent = async (events, event, editedEvent, setEvents) => {
     .catch(err => console.log(err));
 };
 
+const addPayment = async newPayment => {
+  return await axios
+    .post(`${API_URI}/payments/add`, newPayment)
+    .then(res => console.log(res.data))
+    .catch(err => console.log(err));
+};
+
 export {
   getRecurrences,
   addTeachingMins,
@@ -179,5 +186,6 @@ export {
   updateTeacher,
   deleteTeacher,
   deleteEvent,
-  changeEvent
+  changeEvent,
+  addPayment
 };

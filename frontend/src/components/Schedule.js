@@ -4,6 +4,7 @@ import CustomDnDCalendar from "./CustomDnDCalendar";
 import EventForm from "./EventForm";
 import TeacherForm from "./TeacherForm";
 import CustomizedSnackbars from "./CustomizedSnackbars";
+import Payroll from "./Payroll";
 import useFormState from "../hooks/useInputState";
 import useToggle from "../hooks/useToggle";
 import TeachersContext from "../context/TeachersContext";
@@ -119,6 +120,10 @@ const Schedule = () => {
     setIsOpen(true);
   };
 
+  const handlePayrollBtnClick = () => {
+    setFormType("payroll");
+  };
+
   return (
     <div>
       {formType === "event" && (
@@ -148,6 +153,7 @@ const Schedule = () => {
           teachers={teachers}
         />
       )}
+      {formType === "payroll" && <Payroll />}
       <CustomizedSnackbars
         isOpen={isOpen}
         setIsOpen={setIsOpen}
@@ -161,6 +167,7 @@ const Schedule = () => {
         events={events}
         teachers={teachers}
         handleBtnClick={handleBtnClick}
+        handlePayrollBtnClick={handlePayrollBtnClick}
       />
     </div>
   );

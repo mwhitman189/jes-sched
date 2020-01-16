@@ -23,6 +23,7 @@ class CustomDnDCalendar extends React.Component {
       handleSelect,
       handleDoubleClick,
       handleBtnClick,
+      handlePayrollBtnClick,
       events,
       teachers
     } = this.props;
@@ -135,7 +136,7 @@ class CustomDnDCalendar extends React.Component {
         onSelectSlot={handleSelect}
         components={{
           event: LessonEvent,
-          toolbar: CustomToolbar({ handleBtnClick, teachers })
+          toolbar: CustomToolbar({ handleBtnClick, handlePayrollBtnClick })
         }}
         resizableAccessor={() => false}
       />

@@ -9,7 +9,7 @@ import { withStyles } from "@material-ui/styles";
 import styles from "../styles/CustomToolbarStyles";
 import "react-big-calendar/lib/sass/toolbar.scss";
 
-const CustomToolbar = ({ handleBtnClick }) => {
+const CustomToolbar = ({ handleBtnClick, handlePayrollBtnClick }) => {
   return withStyles(styles)(
     class CustomToolbarClass extends Component {
       static contextType = TeachersContext;
@@ -85,6 +85,14 @@ const CustomToolbar = ({ handleBtnClick }) => {
             <div className={classes.btnGroup}>
               <button className={classes.navBtn} onClick={handleBtnClick}>
                 New Teacher
+              </button>
+            </div>
+            <div className={classes.btnGroup}>
+              <button
+                className={classes.navBtn}
+                onClick={handlePayrollBtnClick}
+              >
+                Payroll
               </button>
             </div>
           </div>
