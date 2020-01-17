@@ -36,16 +36,15 @@ const calcOutsideDutyMins = (start, end, duration) => {
       outsideDutyMins: outsideDutyMins
     };
   } else if (startDiff > 0 && endDiff > 0) {
-    outsideDutyMins = startDiff - endDiff;
     return {
-      teachingMins: duration,
-      outsideDutyMins: outsideDutyMins
+      teachingMins: 0,
+      outsideDutyMins: duration
     };
   } else {
-    outsideDutyMins = startDiff - endDiff;
+    const regularTeachingMins = duration - startDiff;
     return {
-      teachingMins: endDiff,
-      outsideDutyMins: outsideDutyMins
+      teachingMins: regularTeachingMins,
+      outsideDutyMins: startDiff
     };
   }
 };
