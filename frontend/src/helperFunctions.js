@@ -2,6 +2,8 @@ import axios from "axios";
 import { RRule } from "rrule";
 import moment from "moment";
 
+var JapaneseHolidays = require("japanese-holidays");
+
 const API_URI = "http://localhost:5000";
 
 const getRecurrences = event => {
@@ -19,6 +21,33 @@ const getRecurrences = event => {
   });
   const twoMonthsRecurrences = rrule.between(month_start, month_end);
   return twoMonthsRecurrences;
+};
+
+const calcOutsideDutyMins = (start, end, duration) => {
+  const dutyHoursStart = moment(new Date(start).setHours(12, 0, 0));
+  const startDiff = dutyHoursStart.diff(start, "minutes");
+  const endDiff = dutyHoursStart.diff(end, "minutes");
+
+  let outsideDutyMins;
+  if (startDiff <= 0) {
+    outsideDutyMins = 0;
+    return {
+      teachingMins: duration,
+      outsideDutyMins: outsideDutyMins
+    };
+  } else if (startDiff > 0 && endDiff > 0) {
+    outsideDutyMins = startDiff - endDiff;
+    return {
+      teachingMins: duration,
+      outsideDutyMins: outsideDutyMins
+    };
+  } else {
+    outsideDutyMins = startDiff - endDiff;
+    return {
+      teachingMins: endDiff,
+      outsideDutyMins: outsideDutyMins
+    };
+  }
 };
 
 const addTeachingMins = (events, teachers, setTeachers) => {
@@ -41,7 +70,17 @@ const addTeachingMins = (events, teachers, setTeachers) => {
         const idx = teachers.findIndex(
           teacher => teacher.resourceId === e.resourceId
         );
-        teachers[idx].teachingMins += parseInt(e.duration);
+        if (JapaneseHolidays.isHoliday(e.start)) {
+          teachers[idx].holidayMins += parseInt(e.duration);
+        } else {
+          const totalTeachingMins = calcOutsideDutyMins(
+            e.start,
+            e.end,
+            e.duration
+          );
+          teachers[idx].teachingMins += totalTeachingMins.teachingMins;
+          teachers[idx].outsideDutyMins += totalTeachingMins.outsideDutyMins;
+        }
 
         // Update displayed teaching minutes
         setTeachers([...teachers]);
@@ -55,7 +94,6 @@ const addTeachingMins = (events, teachers, setTeachers) => {
           teacher.teachingMins - (teacher.otThreshold + secondThreshold);
         teacher.overThresholdOneMins += secondThreshold;
       } else if (teacher.teachingMins >= teacher.otThreshold) {
-        console.log(teacher.otThreshold);
         teacher.overThresholdOneMins +=
           teacher.teachingMins - teacher.otThreshold;
       }
@@ -94,20 +132,39 @@ const getLessons = async (events, setEvents) => {
 const addLesson = async (events, event, setEvents) => {
   const newEvents = [];
   if (event.recur === true) {
-    const recurrences = getRecurrences(event).slice(1);
+    const recurrences = getRecurrences(event);
     recurrences.map(r => {
-      const newEvent = {
-        ...event,
-        start: r,
-        end: moment(r)
-          .add(event.duration, "m")
-          .toDate()
-      };
+      let newEvent;
+      if (JapaneseHolidays.isHoliday(r)) {
+        newEvent = {
+          ...event,
+          start: r,
+          end: moment(r)
+            .add(event.duration, "m")
+            .toDate(),
+          isHoliday: true
+        };
+      } else {
+        newEvent = {
+          ...event,
+          start: r,
+          end: moment(r)
+            .add(event.duration, "m")
+            .toDate(),
+          isHoliday: false
+        };
+      }
       newEvents.push(newEvent);
       return newEvents;
     });
+  } else {
+    if (JapaneseHolidays.isHoliday(event.start)) {
+      event = { ...event, isHoliday: true };
+    } else {
+      event = { ...event, isHoliday: false };
+    }
+    newEvents.push(event);
   }
-  newEvents.push(event);
   await axios
     .post(`${API_URI}/lessons/add`, newEvents)
     .then(res => console.log(res.data))

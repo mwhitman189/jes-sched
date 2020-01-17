@@ -12,7 +12,8 @@ const lessonSchema = new Schema(
     resourceId: { type: Number, required: true },
     room: { type: Number, required: true },
     hide: { type: Boolean, required: false },
-    recur: { type: Boolean, required: false }
+    recur: { type: Boolean, required: false },
+    isHoliday: { type: Boolean, required: true }
   },
   {
     timestamps: true

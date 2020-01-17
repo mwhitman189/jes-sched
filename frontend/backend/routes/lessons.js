@@ -18,6 +18,7 @@ router.post("/add", (req, res) => {
     const room = Number(item.room);
     const hide = item.hide;
     const recur = item.recur;
+    const isHoliday = item.isHoliday;
 
     const newLesson = new Lesson({
       title,
@@ -28,7 +29,8 @@ router.post("/add", (req, res) => {
       resourceId,
       room,
       hide,
-      recur
+      recur,
+      isHoliday
     });
 
     return newLesson
@@ -78,6 +80,9 @@ router.put("/update/:id", (req, res) => {
     }
     if (req.body.hasOwnProperty("recur")) {
       lesson.recur = req.body.recur;
+    }
+    if (req.body.hasOwnProperty("isHoliday")) {
+      lesson.isHoliday = req.body.isHoliday;
     }
 
     lesson
