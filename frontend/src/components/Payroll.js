@@ -26,10 +26,10 @@ const Payroll = props => {
   const { teachers } = useContext(TeachersContext);
   const [stage, setStage] = useState("teacherSelect");
   const [currentTeacher, setCurrentTeacher] = useState("");
+  const { events } = props;
 
   const showPayrollSheet = teacher => {
-    setCurrentTeacher(teacher.name);
-    console.log(teacher.name);
+    setCurrentTeacher(teacher.resourceId);
     setStage("payrollSheet");
   };
 
@@ -65,16 +65,7 @@ const Payroll = props => {
         </List>
       </Dialog>
       {stage === "payrollSheet" && (
-        <Dialog
-          onClose={hideForm}
-          aria-labelledby="payroll-sheet-dialog"
-          open={stage === "payrollSheet"}
-        >
-          <DialogTitle id="payroll-sheet-dialog">
-            Payroll for {currentTeacher}
-          </DialogTitle>
-          {currentTeacher}
-        </Dialog>
+        <PayrollSheet events={events} currentTeacher={currentTeacher} />
       )}
     </div>
   );

@@ -1,4 +1,7 @@
-import React from "react";
+import React, { useContext } from "react";
+import TeachersContext from "../context/TeachersContext";
+import { createPayPeriodData } from "../helperFunctions";
+
 import { makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import DialogTitle from "@material-ui/core/DialogTitle";
@@ -9,6 +12,7 @@ import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import { blue } from "@material-ui/core/colors";
+import moment from "moment";
 
 const useStyles = makeStyles({
   avatar: {
@@ -23,8 +27,8 @@ function createData(
   teachingHours,
   outsideDutyHours,
   holidayHours,
-  TravelAllowance,
-  TravelExpenses
+  travelAllowance,
+  travelExpenses
 ) {
   return {
     date,
@@ -32,29 +36,47 @@ function createData(
     teachingHours,
     outsideDutyHours,
     holidayHours,
-    TravelAllowance,
-    TravelExpenses
+    travelAllowance,
+    travelExpenses
   };
 }
-const now = new Date();
-const month_start = new Date(now.getFullYear(), now.getMonth(), 1);
-const month_end = new Date(now.getFullYear(), now.getMonth() + 2, 0);
-
-// const rows = days.map(d =>
-//   createData(
-//     d.date,
-//     d.month,
-//     d.teachingHours,
-//     d.outsideDutyHours,
-//     d.holidayHours,
-//     d.TravelAllowance,
-//     d.TravelExpenses
-//   )
-// );
 
 const PayrollSheet = props => {
   const classes = useStyles();
-  const { currentTeacher, stage, hideForm } = props;
+  const { teachers } = useContext(TeachersContext);
+  const { currentTeacher, stage, hideForm, events } = props;
+
+  const teacher = teachers.filter(t => t.resourceId === currentTeacher)[0];
+  const now = new Date();
+  const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+  const monthEnd = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+  const daysInMonth = moment(now).daysInMonth();
+  const teachingHoursByDate = createPayPeriodData(
+    events,
+    teacher,
+    monthStart,
+    monthEnd
+  );
+  console.log(teachingHoursByDate);
+
+  const rows = [];
+  for (let i = 1; i <= daysInMonth; i++) {
+    let newRow;
+    if (teachingHoursByDate[i]) {
+      newRow = createData(
+        i,
+        now.getMonth("MMM"),
+        teachingHoursByDate[i].teachingHours,
+        teachingHoursByDate[i].outsideDutyHours,
+        teachingHoursByDate[i].holidayHours,
+        teachingHoursByDate[i].travelAllowance,
+        teachingHoursByDate[i].travelExpenses
+      );
+    } else {
+      newRow = createData(i, now.getMonth("MMM"), 0, 0, 0, 0, 0);
+    }
+    rows.push(newRow);
+  }
 
   return (
     <Dialog

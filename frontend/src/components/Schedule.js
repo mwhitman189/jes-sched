@@ -153,12 +153,13 @@ const Schedule = () => {
           teachers={teachers}
         />
       )}
-      {formType === "payroll" && <Payroll />}
+      {formType === "payroll" && <Payroll events={events} />}
       <CustomizedSnackbars
         isOpen={isOpen}
         setIsOpen={setIsOpen}
         variant={"error"}
         msg={message}
+        events={events}
       />
       <CustomDnDCalendar
         handleMove={handleMove}

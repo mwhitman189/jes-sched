@@ -49,13 +49,113 @@ const calcOutsideDutyMins = (start, end, duration) => {
   }
 };
 
+const calcTeachingHours = (events, teacherId, date) => {
+  events.forEach(event => {
+    if (event.start.getDate() === date) {
+      if (event.resourceId === teacherId) {
+        let dayData;
+        let date;
+        let day;
+        let teachingHours;
+        let outsideDutyHours;
+        let holidayHours;
+        let travelAllowance;
+        let travelExpenses;
+
+        if (JapaneseHolidays.isHoliday(event.start)) {
+          holidayHours += parseInt(event.duration) / 60;
+        } else {
+          const totalTeachingMins = calcOutsideDutyMins(
+            event.start,
+            event.end,
+            event.duration
+          );
+          teachingHours += totalTeachingMins.teachingMins / 60;
+          outsideDutyHours += totalTeachingMins.outsideDutyMins / 60;
+        }
+        dayData = {
+          date: date,
+          day: day,
+          teachingHours: teachingHours,
+          outsideDutyHours: outsideDutyHours,
+          holidayHours: holidayHours,
+          travelAllowance: travelAllowance,
+          travelExpenses: travelExpenses
+        };
+        return dayData;
+      }
+    }
+  });
+};
+
+const createPayPeriodData = (events, teacher, monthStart, monthEnd) => {
+  const datesData = {};
+  events.forEach(e => {
+    if (moment(e.start).isBetween(monthStart, monthEnd, null, "[]")) {
+      if (e.resourceId === teacher.resourceId) {
+        const date = e.start.getDate();
+        const day = e.start.getDay();
+        const secondThreshold = 10 * 60;
+        if (JapaneseHolidays.isHoliday(e.start)) {
+          teacher.holidayMins += parseInt(e.duration);
+        } else {
+          const totalTeachingMins = calcOutsideDutyMins(
+            e.start,
+            e.end,
+            e.duration
+          );
+          teacher.teachingMins += totalTeachingMins.teachingMins;
+          teacher.outsideDutyMins += totalTeachingMins.outsideDutyMins;
+        }
+        if (teacher.teachingMins >= teacher.otThreshold + secondThreshold) {
+          teacher.overThresholdTwoMins +=
+            teacher.teachingMins - (teacher.otThreshold + secondThreshold);
+          teacher.overThresholdOneMins += secondThreshold;
+        } else if (teacher.teachingMins >= teacher.otThreshold) {
+          teacher.overThresholdOneMins +=
+            teacher.teachingMins - teacher.otThreshold;
+        }
+        // Teaching hours object to be added to hash table
+        const dateData = {
+          resourceId: teacher,
+          date: date,
+          day: day,
+          teachingHours: teacher.teachingMins / 60,
+          outsideDutyHours: teacher.outsideDutyMins / 60,
+          overThresholdOneHours: teacher.overThresholdOneMins / 60,
+          overThresholdTwoHours: teacher.overThresholdTwoMins / 60,
+          holidayHours: teacher.holidayMins / 60,
+          travelAllowance: 0,
+          travelExpenses: 0
+        };
+        // If date already in hash table, add teaching hours to existing keys, otherwise create
+        // a new date object
+        if (datesData[date]) {
+          datesData[date].teachingHours += dateData.teachingHours;
+          datesData[date].outsideDutyHours += dateData.outsideDutyHours;
+          datesData[date].overThresholdOneHours +=
+            dateData.overThresholdOneHours;
+          datesData[date].overThresholdTwoHours +=
+            dateData.overThresholdTwoHours;
+          datesData[date].holidayHours += dateData.holidayHours;
+          datesData[date].travelAllowance += dateData.travelAllowance;
+          datesData[date].travelExpenses += dateData.travelExpenses;
+        } else {
+          datesData[date] = dateData;
+        }
+      }
+    }
+  });
+  return datesData;
+};
+
 const addTeachingMins = (events, teachers, setTeachers) => {
   const now = new Date();
   // Create start and end dates for the current month to calc
   // teaching minutes
-  const month_start = new Date(now.getFullYear(), now.getMonth(), 1);
-  const month_end = new Date(now.getFullYear(), now.getMonth() + 1, 0);
-
+  const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+  const monthEnd = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+  const daysInMonth = moment(now).daysInMonth();
   if (teachers.length > 0) {
     // Reset teaching minutes to "0", then add all teaching minutes to the corresponding instructor
     teachers.forEach(teacher => {
@@ -63,40 +163,27 @@ const addTeachingMins = (events, teachers, setTeachers) => {
       teacher.overThresholdOneMins = 0;
       teacher.overThresholdTwoMins = 0;
     });
-
-    events.forEach(e => {
-      if (moment(e.start).isBetween(month_start, month_end, null, "[]")) {
-        const idx = teachers.findIndex(
-          teacher => teacher.resourceId === e.resourceId
-        );
-        if (JapaneseHolidays.isHoliday(e.start)) {
-          teachers[idx].holidayMins += parseInt(e.duration);
-        } else {
-          const totalTeachingMins = calcOutsideDutyMins(
-            e.start,
-            e.end,
-            e.duration
-          );
-          teachers[idx].teachingMins += totalTeachingMins.teachingMins;
-          teachers[idx].outsideDutyMins += totalTeachingMins.outsideDutyMins;
-        }
-
-        // Update displayed teaching minutes
-        setTeachers([...teachers]);
-      }
-    });
-    // Set the time difference from the first to second thresholds
-    const secondThreshold = 10 * 60;
     teachers.forEach(teacher => {
-      if (teacher.teachingMins >= teacher.otThreshold + secondThreshold) {
-        teacher.overThresholdTwoMins +=
-          teacher.teachingMins - (teacher.otThreshold + secondThreshold);
-        teacher.overThresholdOneMins += secondThreshold;
-      } else if (teacher.teachingMins >= teacher.otThreshold) {
-        teacher.overThresholdOneMins +=
-          teacher.teachingMins - teacher.otThreshold;
+      const teachingHours = createPayPeriodData(
+        events,
+        teacher,
+        monthStart,
+        monthEnd
+      );
+      for (let i = 1; i <= daysInMonth; i++) {
+        if (teachingHours[i]) {
+          teacher.teachingMins += Math.round(
+            teachingHours[i].teachingHours / 60
+          );
+          teacher.overThresholdOneMins += Math.round(
+            teachingHours[i].overThresholdOneHours / 60
+          );
+          teacher.overThresholdTwoMins += Math.round(
+            teachingHours[i].overThresholdTwoHours / 60
+          );
+        }
       }
-      updateTeacher(teacher);
+      updateTeacher(teacher, teachers, setTeachers);
     });
   }
 };
@@ -179,17 +266,25 @@ const addTeacher = async (teachers, newTeacher, setTeachers) => {
   return setTeachers([...teachers, newTeacher]);
 };
 
-const updateTeacher = async teacher => {
+const updateTeacher = async (teacher, teachers, setTeachers) => {
+  const idx = teachers.findIndex(t => t._id === teacher._id);
+  const updatedTeachers = [...teachers];
+
   const updatedTeacher = {
-    resourceId: teacher.resourceId,
+    ...teacher,
     resourceTitle: teacher.resourceTitle,
     name: teacher.name,
     familyName: teacher.familyName,
     teachingMins: teacher.teachingMins,
+    holidayHours: teacher.holidayHours,
+    outsideDutyHours: teacher.outsideDutyHours,
     otThreshold: teacher.otThreshold,
     overThresholdOneMins: teacher.overThresholdOneMins,
     overThresholdTwoMins: teacher.overThresholdTwoMins
   };
+  updatedTeachers.splice(idx, 1, updatedTeacher);
+
+  setTeachers(updatedTeachers);
   return await axios
     .put(`${API_URI}/teachers/update/${teacher._id}`, updatedTeacher)
     .then(res => console.log(res.data))
@@ -243,5 +338,7 @@ export {
   deleteTeacher,
   deleteEvent,
   changeEvent,
-  addPayment
+  addPayment,
+  calcTeachingHours,
+  createPayPeriodData
 };
