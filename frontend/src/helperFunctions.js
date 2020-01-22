@@ -49,36 +49,36 @@ const calcOutsideDutyMins = (start, end, duration) => {
   }
 };
 
-const calcTeachingHours = (events, teacherId, date) => {
+const calcTeachingMins = (events, teacherId, date) => {
   events.forEach(event => {
     if (event.start.getDate() === date) {
       if (event.resourceId === teacherId) {
         let dayData;
         let date;
         let day;
-        let teachingHours;
-        let outsideDutyHours;
-        let holidayHours;
+        let teachingMins;
+        let outsideDutyMins;
+        let holidayMins;
         let travelAllowance;
         let travelExpenses;
 
         if (JapaneseHolidays.isHoliday(event.start)) {
-          holidayHours += parseInt(event.duration) / 60;
+          holidayMins += parseInt(event.duration);
         } else {
           const totalTeachingMins = calcOutsideDutyMins(
             event.start,
             event.end,
             event.duration
           );
-          teachingHours += totalTeachingMins.teachingMins / 60;
-          outsideDutyHours += totalTeachingMins.outsideDutyMins / 60;
+          teachingMins += totalTeachingMins.teachingMins;
+          outsideDutyMins += totalTeachingMins.outsideDutyMins;
         }
         dayData = {
           date: date,
           day: day,
-          teachingHours: teachingHours,
-          outsideDutyHours: outsideDutyHours,
-          holidayHours: holidayHours,
+          teachingMins: teachingMins,
+          outsideDutyMins: outsideDutyMins,
+          holidayMins: holidayMins,
           travelAllowance: travelAllowance,
           travelExpenses: travelExpenses
         };
@@ -95,17 +95,24 @@ const createPayPeriodData = (events, teacher, monthStart, monthEnd) => {
       if (e.resourceId === teacher.resourceId) {
         const date = e.start.getDate();
         const day = e.start.getDay();
+        // Calculate number of minutes to add to first threshold to calc second threshold. (10 hours * 60 mins)
         const secondThreshold = 10 * 60;
+        let teachingMins;
+        let outsideDutyMins;
+        let holidayMins;
         if (JapaneseHolidays.isHoliday(e.start)) {
-          teacher.holidayMins += parseInt(e.duration);
+          holidayMins = parseInt(e.duration);
+          teacher.holidayMins += holidayMins;
         } else {
           const totalTeachingMins = calcOutsideDutyMins(
             e.start,
             e.end,
             e.duration
           );
-          teacher.teachingMins += totalTeachingMins.teachingMins;
-          teacher.outsideDutyMins += totalTeachingMins.outsideDutyMins;
+          teachingMins = totalTeachingMins.teachingMins;
+          teacher.teachingMins += teachingMins;
+          outsideDutyMins = totalTeachingMins.outsideDutyMins;
+          teacher.outsideDutyMins += outsideDutyMins;
         }
         if (teacher.teachingMins >= teacher.otThreshold + secondThreshold) {
           teacher.overThresholdTwoMins +=
@@ -115,29 +122,27 @@ const createPayPeriodData = (events, teacher, monthStart, monthEnd) => {
           teacher.overThresholdOneMins +=
             teacher.teachingMins - teacher.otThreshold;
         }
-        // Teaching hours object to be added to hash table
+        // Teaching minutes object to be added to hash table
         const dateData = {
           resourceId: teacher,
           date: date,
           day: day,
-          teachingHours: teacher.teachingMins / 60,
-          outsideDutyHours: teacher.outsideDutyMins / 60,
-          overThresholdOneHours: teacher.overThresholdOneMins / 60,
-          overThresholdTwoHours: teacher.overThresholdTwoMins / 60,
-          holidayHours: teacher.holidayMins / 60,
+          teachingMins: teachingMins,
+          outsideDutyMins: outsideDutyMins,
+          overThresholdOneMins: teacher.overThresholdOneMins,
+          overThresholdTwoMins: teacher.overThresholdTwoMins,
+          holidayMins: teacher.holidayMins,
           travelAllowance: 0,
           travelExpenses: 0
         };
-        // If date already in hash table, add teaching hours to existing keys, otherwise create
+        // If date already in hash table, add teaching minutes to existing keys, otherwise create
         // a new date object
         if (datesData[date]) {
-          datesData[date].teachingHours += dateData.teachingHours;
-          datesData[date].outsideDutyHours += dateData.outsideDutyHours;
-          datesData[date].overThresholdOneHours +=
-            dateData.overThresholdOneHours;
-          datesData[date].overThresholdTwoHours +=
-            dateData.overThresholdTwoHours;
-          datesData[date].holidayHours += dateData.holidayHours;
+          datesData[date].teachingMins += dateData.teachingMins;
+          datesData[date].outsideDutyMins += dateData.outsideDutyMins;
+          datesData[date].overThresholdOneMins += dateData.overThresholdOneMins;
+          datesData[date].overThresholdTwoMins += dateData.overThresholdTwoMins;
+          datesData[date].holidayMins += dateData.holidayMins;
           datesData[date].travelAllowance += dateData.travelAllowance;
           datesData[date].travelExpenses += dateData.travelExpenses;
         } else {
@@ -155,34 +160,18 @@ const addTeachingMins = (events, teachers, setTeachers) => {
   // teaching minutes
   const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
   const monthEnd = new Date(now.getFullYear(), now.getMonth() + 1, 0);
-  const daysInMonth = moment(now).daysInMonth();
   if (teachers.length > 0) {
     // Reset teaching minutes to "0", then add all teaching minutes to the corresponding instructor
     teachers.forEach(teacher => {
       teacher.teachingMins = 0;
+      teacher.outsideDutyMins = 0;
+      teacher.holidayMins = 0;
       teacher.overThresholdOneMins = 0;
       teacher.overThresholdTwoMins = 0;
     });
     teachers.forEach(teacher => {
-      const teachingHours = createPayPeriodData(
-        events,
-        teacher,
-        monthStart,
-        monthEnd
-      );
-      for (let i = 1; i <= daysInMonth; i++) {
-        if (teachingHours[i]) {
-          teacher.teachingMins += Math.round(
-            teachingHours[i].teachingHours / 60
-          );
-          teacher.overThresholdOneMins += Math.round(
-            teachingHours[i].overThresholdOneHours / 60
-          );
-          teacher.overThresholdTwoMins += Math.round(
-            teachingHours[i].overThresholdTwoHours / 60
-          );
-        }
-      }
+      createPayPeriodData(events, teacher, monthStart, monthEnd);
+
       updateTeacher(teacher, teachers, setTeachers);
     });
   }
@@ -276,8 +265,8 @@ const updateTeacher = async (teacher, teachers, setTeachers) => {
     name: teacher.name,
     familyName: teacher.familyName,
     teachingMins: teacher.teachingMins,
-    holidayHours: teacher.holidayHours,
-    outsideDutyHours: teacher.outsideDutyHours,
+    holidayMins: teacher.holidayMins,
+    outsideDutyMins: teacher.outsideDutyMins,
     otThreshold: teacher.otThreshold,
     overThresholdOneMins: teacher.overThresholdOneMins,
     overThresholdTwoMins: teacher.overThresholdTwoMins
@@ -339,6 +328,6 @@ export {
   deleteEvent,
   changeEvent,
   addPayment,
-  calcTeachingHours,
+  calcTeachingMins,
   createPayPeriodData
 };

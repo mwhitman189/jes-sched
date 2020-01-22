@@ -48,6 +48,7 @@ const Schedule = () => {
   useEffect(() => {
     getLessons(events, setEvents);
     getTeachers(events, teachers, setTeachers);
+    addTeachingMins(events, teachers, setTeachers);
   }, []);
 
   useEffect(() => {
