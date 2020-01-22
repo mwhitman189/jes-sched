@@ -21,6 +21,21 @@ const useStyles = makeStyles({
   avatar: {
     backgroundColor: blue[100],
     color: blue[600]
+  },
+  table: {
+    padding: "1rem",
+    maxWidth: "90vw"
+  },
+  btn: {
+    color: "#fff",
+    background: "rgb(20,71,207)",
+    background:
+      "linear-gradient(0deg, rgba(20,71,207,1) 7%, rgba(49,119,254,1) 100%)",
+    border: "none",
+    borderRadius: "5px",
+    padding: ".3rem .5rem",
+    minWidth: "4rem",
+    margin: "1rem auto"
   }
 });
 
@@ -60,6 +75,7 @@ const Payroll = props => {
 
   const showPayrollSheet = teacher => {
     setCurrentTeacher(teacher.resourceId);
+
     const teachingMinsByDate = createPayPeriodData(
       events,
       teacher,
@@ -125,15 +141,15 @@ const Payroll = props => {
         aria-labelledby="payroll-sheet-dialog"
         open={stage === "payrollSheet"}
       >
-        <ReactToPrint
-          trigger={() => <button>Print this out!</button>}
-          content={() => componentRef.current}
-        />
         <PayrollSheet
           classes={classes}
           rows={rows}
           currentTeacher={currentTeacher}
           ref={componentRef}
+        />
+        <ReactToPrint
+          trigger={() => <button className={classes.btn}>Print</button>}
+          content={() => componentRef.current}
         />
       </Dialog>
     </div>

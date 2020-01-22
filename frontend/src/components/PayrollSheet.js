@@ -10,11 +10,11 @@ class PayrollSheet extends Component {
   render() {
     const { classes, rows, currentTeacher } = this.props;
     return (
-      <div>
+      <div className={classes.table}>
         <DialogTitle id="payroll-sheet-dialog">
           Payroll for {currentTeacher}
         </DialogTitle>
-        <Table className={classes.table} aria-label="simple table">
+        <Table className={classes.table} size="small" aria-label="simple table">
           <TableHead>
             <TableRow>
               <TableCell>Date</TableCell>
