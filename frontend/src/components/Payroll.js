@@ -1,7 +1,9 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useRef } from "react";
 import moment from "moment";
+import ReactToPrint from "react-to-print";
 import TeachersContext from "../context/TeachersContext";
 import { createPayPeriodData } from "../helperFunctions";
+import PayrollSheet from "./PayrollSheet";
 import { makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import Avatar from "@material-ui/core/Avatar";
@@ -9,14 +11,10 @@ import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemAvatar from "@material-ui/core/ListItemAvatar";
 import ListItemText from "@material-ui/core/ListItemText";
-import DialogTitle from "@material-ui/core/DialogTitle";
 import Dialog from "@material-ui/core/Dialog";
 import PersonIcon from "@material-ui/icons/Person";
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
+import DialogTitle from "@material-ui/core/DialogTitle";
+
 import { blue } from "@material-ui/core/colors";
 
 const useStyles = makeStyles({
@@ -47,6 +45,7 @@ function createData(
 }
 
 const Payroll = props => {
+  const componentRef = useRef();
   const classes = useStyles();
 
   const { teachers } = useContext(TeachersContext);
@@ -126,37 +125,16 @@ const Payroll = props => {
         aria-labelledby="payroll-sheet-dialog"
         open={stage === "payrollSheet"}
       >
-        <DialogTitle id="payroll-sheet-dialog">
-          Payroll for {currentTeacher}
-        </DialogTitle>
-        <Table className={classes.table} aria-label="simple table">
-          <TableHead>
-            <TableRow>
-              <TableCell>Date</TableCell>
-              <TableCell align="right">Month</TableCell>
-              <TableCell align="right">Teaching Mins</TableCell>
-              <TableCell align="right">Outside DH</TableCell>
-              <TableCell align="right">Holiday Work</TableCell>
-              <TableCell align="right">Travel Allowance</TableCell>
-              <TableCell align="right">Travel Expenses</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {rows.map(row => (
-              <TableRow key={row.date}>
-                <TableCell component="th" scope="row">
-                  {row.date}
-                </TableCell>
-                <TableCell align="right">{row.month}</TableCell>
-                <TableCell align="right">{row.teachingHours}</TableCell>
-                <TableCell align="right">{row.outsideDutyHours}</TableCell>
-                <TableCell align="right">{row.holidayHours}</TableCell>
-                <TableCell align="right">{row.travelAllowance}</TableCell>
-                <TableCell align="right">{row.travelExpenses}</TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+        <ReactToPrint
+          trigger={() => <button>Print this out!</button>}
+          content={() => componentRef.current}
+        />
+        <PayrollSheet
+          classes={classes}
+          rows={rows}
+          currentTeacher={currentTeacher}
+          ref={componentRef}
+        />
       </Dialog>
     </div>
   );
