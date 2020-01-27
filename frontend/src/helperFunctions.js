@@ -71,49 +71,13 @@ const calcOutsideDutyMins = (
   }
 };
 
-const calcTeachingMins = (events, teacherId, date) => {
-  events.forEach(event => {
-    if (event.start.getDate() === date) {
-      if (event.resourceId === teacherId) {
-        let dayData;
-        let date;
-        let day;
-        let teachingMins;
-        let outsideDutyMins;
-        let holidayMins;
-        let travelAllowance;
-        let travelExpenses;
-
-        if (JapaneseHolidays.isHoliday(event.start)) {
-          holidayMins += parseInt(event.duration);
-        } else {
-          const totalTeachingMins = calcOutsideDutyMins(
-            event.start,
-            event.end,
-            event.duration,
-            12,
-            21
-          );
-          teachingMins += totalTeachingMins.teachingMins;
-          outsideDutyMins += totalTeachingMins.outsideDutyMins;
-        }
-        dayData = {
-          date: date,
-          day: day,
-          teachingMins: teachingMins,
-          outsideDutyMins: outsideDutyMins,
-          holidayMins: holidayMins,
-          travelAllowance: travelAllowance,
-          travelExpenses: travelExpenses
-        };
-        return dayData;
-      }
-    }
-  });
-};
-
 const createPayPeriodData = (events, teacher, monthStart, monthEnd) => {
   const datesData = {};
+  teacher.teachingMins = 0;
+  teacher.outsideDutyMins = 0;
+  teacher.holidayMins = 0;
+  teacher.overThresholdOneMins = 0;
+  teacher.overThresholdTwoMins = 0;
   events.forEach(e => {
     if (moment(e.start).isBetween(monthStart, monthEnd, null, "[]")) {
       if (e.resourceId === teacher.resourceId) {
@@ -121,10 +85,14 @@ const createPayPeriodData = (events, teacher, monthStart, monthEnd) => {
         const day = e.start.getDay();
         // Calculate number of minutes to add to first threshold to calc second threshold. (10 hours * 60 mins)
         const secondThreshold = 10 * 60;
-        let teachingMins;
-        let outsideDutyMins;
-        let holidayMins;
-        if (JapaneseHolidays.isHoliday(e.start)) {
+        let teachingMins = 0;
+        let outsideDutyMins = 0;
+        let holidayMins = 0;
+
+        if (
+          JapaneseHolidays.isHoliday(e.start) ||
+          e.start.getDay() === (0 || 1)
+        ) {
           holidayMins = parseInt(e.duration);
           teacher.holidayMins += holidayMins;
         } else {
@@ -157,7 +125,7 @@ const createPayPeriodData = (events, teacher, monthStart, monthEnd) => {
           outsideDutyMins: outsideDutyMins,
           overThresholdOneMins: teacher.overThresholdOneMins,
           overThresholdTwoMins: teacher.overThresholdTwoMins,
-          holidayMins: teacher.holidayMins,
+          holidayMins: holidayMins,
           travelAllowance: 0,
           travelExpenses: 0
         };
@@ -197,7 +165,6 @@ const addTeachingMins = (events, teachers, setTeachers) => {
     });
     teachers.forEach(teacher => {
       createPayPeriodData(events, teacher, monthStart, monthEnd);
-
       updateTeacher(teacher, teachers, setTeachers);
     });
   }
@@ -354,6 +321,5 @@ export {
   deleteEvent,
   changeEvent,
   addPayment,
-  calcTeachingMins,
   createPayPeriodData
 };
