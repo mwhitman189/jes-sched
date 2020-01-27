@@ -23,28 +23,50 @@ const getRecurrences = event => {
   return twoMonthsRecurrences;
 };
 
-const calcOutsideDutyMins = (start, end, duration) => {
-  const dutyHoursStart = moment(new Date(start).setHours(12, 0, 0));
-  const startDiff = dutyHoursStart.diff(start, "minutes");
-  const endDiff = dutyHoursStart.diff(end, "minutes");
+const calcOutsideDutyMins = (
+  eventStart,
+  eventEnd,
+  duration,
+  dhStart,
+  dhEnd
+) => {
+  // Set beginning of duty hours
+  const dutyHoursStart = moment(new Date(eventStart).setHours(dhStart, 0, 0));
+  // Calculate difference in hours between the duty hours start time and the lesson start time
+  const startDiff = dutyHoursStart.diff(eventStart, "minutes");
+  const endDiff = dutyHoursStart.diff(eventEnd, "minutes");
+  // Set end of duty hours
+  const dutyHoursEnd = moment(new Date(eventStart).setHours(dhEnd, 0, 0));
+  // Calculate difference in hours between the duty hours end time and the lesson end time
+  const afterDhEndDiff = -dutyHoursEnd.diff(eventEnd, "minutes");
+  const afterDhStartDiff = -dutyHoursEnd.diff(eventStart, "minutes");
 
   let outsideDutyMins;
-  if (startDiff <= 0) {
+  if (startDiff <= 0 && afterDhEndDiff <= 0) {
     outsideDutyMins = 0;
     return {
       teachingMins: duration,
       outsideDutyMins: outsideDutyMins
     };
-  } else if (startDiff > 0 && endDiff > 0) {
+  } else if (
+    (startDiff > 0 && endDiff > 0) ||
+    (afterDhEndDiff > 0 && afterDhStartDiff > 0)
+  ) {
     return {
       teachingMins: 0,
       outsideDutyMins: duration
     };
-  } else {
+  } else if (startDiff > 0) {
     const regularTeachingMins = duration - startDiff;
     return {
       teachingMins: regularTeachingMins,
       outsideDutyMins: startDiff
+    };
+  } else {
+    const regularTeachingMins = duration - afterDhEndDiff;
+    return {
+      teachingMins: regularTeachingMins,
+      outsideDutyMins: afterDhEndDiff
     };
   }
 };
@@ -68,7 +90,9 @@ const calcTeachingMins = (events, teacherId, date) => {
           const totalTeachingMins = calcOutsideDutyMins(
             event.start,
             event.end,
-            event.duration
+            event.duration,
+            12,
+            21
           );
           teachingMins += totalTeachingMins.teachingMins;
           outsideDutyMins += totalTeachingMins.outsideDutyMins;
@@ -107,7 +131,9 @@ const createPayPeriodData = (events, teacher, monthStart, monthEnd) => {
           const totalTeachingMins = calcOutsideDutyMins(
             e.start,
             e.end,
-            e.duration
+            e.duration,
+            12,
+            21
           );
           teachingMins = totalTeachingMins.teachingMins;
           teacher.teachingMins += teachingMins;

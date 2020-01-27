@@ -67,7 +67,7 @@ const Payroll = props => {
   const [stage, setStage] = useState("teacherSelect");
   const [rows, setRows] = useState([]);
   const [currentTeacher, setCurrentTeacher] = useState("");
-  const { events } = props;
+  const { events, setFormType } = props;
   const now = new Date();
   const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
   const monthEnd = new Date(now.getFullYear(), now.getMonth() + 1, 0);
@@ -107,6 +107,7 @@ const Payroll = props => {
 
   const hideForm = () => {
     setStage("");
+    setFormType("");
   };
 
   return (

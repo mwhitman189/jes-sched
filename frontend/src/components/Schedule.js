@@ -154,7 +154,9 @@ const Schedule = () => {
           teachers={teachers}
         />
       )}
-      {formType === "payroll" && <Payroll events={events} />}
+      {formType === "payroll" && (
+        <Payroll events={events} setFormType={setFormType} />
+      )}
       <CustomizedSnackbars
         isOpen={isOpen}
         setIsOpen={setIsOpen}
