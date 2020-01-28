@@ -72,6 +72,7 @@ const calcOutsideDutyMins = (
 };
 
 const createPayPeriodData = (events, teacher, monthStart, monthEnd) => {
+  // Creates an object of dates containing minutes worked, by work type
   const datesData = {};
   teacher.teachingMins = 0;
   teacher.outsideDutyMins = 0;

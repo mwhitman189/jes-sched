@@ -36,24 +36,31 @@ const useStyles = makeStyles({
     padding: ".3rem .5rem",
     minWidth: "4rem",
     margin: "1rem auto"
+  },
+  footerRows: {
+    width: "100%"
+  },
+  totals: {
+    color: "#21942a",
+    fontWeight: "800"
   }
 });
 
 function createData(
   date,
   month,
-  teachingHours,
-  outsideDutyHours,
-  holidayHours,
+  teachingMins,
+  outsideDutyMins,
+  holidayMins,
   travelAllowance,
   travelExpenses
 ) {
   return {
     date,
     month,
-    teachingHours,
-    outsideDutyHours,
-    holidayHours,
+    teachingMins,
+    outsideDutyMins,
+    holidayMins,
     travelAllowance,
     travelExpenses
   };
