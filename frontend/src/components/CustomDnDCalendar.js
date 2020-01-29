@@ -3,6 +3,7 @@ import { Calendar, momentLocalizer } from "react-big-calendar";
 import withDragAndDrop from "react-big-calendar/lib/addons/dragAndDrop";
 import moment from "moment";
 import "react-big-calendar/lib/sass/toolbar.scss";
+import { changeEvent } from "../helperFunctions";
 
 import { WorkWeek } from "./CustomView";
 import LessonEvent from "./LessonEvent";
@@ -25,7 +26,8 @@ class CustomDnDCalendar extends React.Component {
       handleBtnClick,
       handlePayrollBtnClick,
       events,
-      teachers
+      teachers,
+      setEvents
     } = this.props;
 
     // Limit displayed hours of the day
@@ -106,11 +108,21 @@ class CustomDnDCalendar extends React.Component {
         backgroundColor: backgroundColor,
         color: "white",
         border: 0,
-        display: "block"
+        display: "block",
+        boxShadow: ""
       };
+
+      if (event.isNewEvent) {
+        style.boxShadow = `0 0 4px 5px ${hexColor}`;
+      }
       return {
         style: style
       };
+    };
+
+    const handleSingleClick = event => {
+      const updatedEvent = { ...event, isNewEvent: false };
+      changeEvent(events, event, updatedEvent, setEvents);
     };
 
     return (
@@ -127,6 +139,7 @@ class CustomDnDCalendar extends React.Component {
         resourceIdAccessor="resourceId"
         resourceTitleAccessor="resourceTitle"
         selectable
+        onSelectEvent={handleSingleClick}
         onDoubleClickEvent={handleDoubleClick}
         eventPropGetter={eventStyleGetter}
         step={30}

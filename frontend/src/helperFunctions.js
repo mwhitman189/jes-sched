@@ -20,6 +20,7 @@ const getRecurrences = event => {
     dtstart: new Date(event.start)
   });
   const twoMonthsRecurrences = rrule.between(month_start, month_end);
+  twoMonthsRecurrences.shift();
   return twoMonthsRecurrences;
 };
 
@@ -203,37 +204,24 @@ const addLesson = async (events, event, setEvents) => {
   if (event.recur === true) {
     const recurrences = getRecurrences(event);
     recurrences.map(r => {
-      let newEvent;
+      const newEvent = {
+        ...event,
+        start: r,
+        end: moment(r)
+          .add(event.duration, "m")
+          .toDate()
+      };
       if (JapaneseHolidays.isHoliday(r)) {
-        newEvent = {
-          ...event,
-          start: r,
-          end: moment(r)
-            .add(event.duration, "m")
-            .toDate(),
-          isHoliday: true
-        };
-      } else {
-        newEvent = {
-          ...event,
-          start: r,
-          end: moment(r)
-            .add(event.duration, "m")
-            .toDate(),
-          isHoliday: false
-        };
+        newEvent.isHoliday = true;
       }
       newEvents.push(newEvent);
       return newEvents;
     });
-  } else {
-    if (JapaneseHolidays.isHoliday(event.start)) {
-      event = { ...event, isHoliday: true };
-    } else {
-      event = { ...event, isHoliday: false };
-    }
-    newEvents.push(event);
   }
+  if (JapaneseHolidays.isHoliday(event.start)) {
+    event = { ...event, isHoliday: true };
+  }
+  newEvents.push(event);
   await axios
     .post(`${API_URI}/lessons/add`, newEvents)
     .then(res => console.log(res.data))

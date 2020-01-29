@@ -10,10 +10,11 @@ const lessonSchema = new Schema(
     end: { type: Date, required: true },
     duration: { type: Number, required: true },
     resourceId: { type: Number, required: true },
-    room: { type: Number, required: true },
-    hide: { type: Boolean, required: false },
-    recur: { type: Boolean, required: false },
-    isHoliday: { type: Boolean, required: true }
+    room: { type: Number },
+    hide: { type: Boolean, default: false },
+    recur: { type: Boolean, default: false },
+    isHoliday: { type: Boolean, default: false },
+    isNewEvent: { type: Boolean, default: true }
   },
   {
     timestamps: true

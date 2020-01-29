@@ -169,6 +169,7 @@ const Schedule = () => {
         handleSelect={handleSelect}
         handleDoubleClick={handleDoubleClick}
         events={events}
+        setEvents={setEvents}
         teachers={teachers}
         handleBtnClick={handleBtnClick}
         handlePayrollBtnClick={handlePayrollBtnClick}

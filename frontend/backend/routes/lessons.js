@@ -54,6 +54,9 @@ router.delete("/delete/:id", (req, res) => {
 
 router.put("/update/:id", (req, res) => {
   Lesson.findById(req.params.id).then(lesson => {
+    if (req.body.hasOwnProperty("hide")) {
+      lesson.hide = req.body.hide;
+    }
     if (req.body.hasOwnProperty("title")) {
       lesson.title = req.body.title;
     }
@@ -75,14 +78,14 @@ router.put("/update/:id", (req, res) => {
     if (req.body.hasOwnProperty("room")) {
       lesson.room = Number(req.body.room);
     }
-    if (req.body.hasOwnProperty("hide")) {
-      lesson.hide = req.body.hide;
-    }
     if (req.body.hasOwnProperty("recur")) {
       lesson.recur = req.body.recur;
     }
     if (req.body.hasOwnProperty("isHoliday")) {
       lesson.isHoliday = req.body.isHoliday;
+    }
+    if (req.body.hasOwnProperty("isNewEvent")) {
+      lesson.isNewEvent = req.body.isNewEvent;
     }
 
     lesson
