@@ -19,6 +19,7 @@ router.post("/add", (req, res) => {
     const hide = item.hide;
     const recur = item.recur;
     const isHoliday = item.isHoliday;
+    const isNewEvent = item.isNewEvent;
 
     const newLesson = new Lesson({
       title,
@@ -30,7 +31,8 @@ router.post("/add", (req, res) => {
       room,
       hide,
       recur,
-      isHoliday
+      isHoliday,
+      isNewEvent
     });
 
     return newLesson
@@ -54,38 +56,10 @@ router.delete("/delete/:id", (req, res) => {
 
 router.put("/update/:id", (req, res) => {
   Lesson.findById(req.params.id).then(lesson => {
-    if (req.body.hasOwnProperty("hide")) {
-      lesson.hide = req.body.hide;
-    }
-    if (req.body.hasOwnProperty("title")) {
-      lesson.title = req.body.title;
-    }
-    if (req.body.hasOwnProperty("type")) {
-      lesson.type = req.body.type;
-    }
-    if (req.body.hasOwnProperty("start")) {
-      lesson.start = Date.parse(req.body.start);
-    }
-    if (req.body.hasOwnProperty("end")) {
-      lesson.end = Date.parse(req.body.end);
-    }
-    if (req.body.hasOwnProperty("duration")) {
-      lesson.duration = Number(req.body.duration);
-    }
-    if (req.body.hasOwnProperty("resourceId")) {
-      lesson.resourceId = Number(req.body.resourceId);
-    }
-    if (req.body.hasOwnProperty("room")) {
-      lesson.room = Number(req.body.room);
-    }
-    if (req.body.hasOwnProperty("recur")) {
-      lesson.recur = req.body.recur;
-    }
-    if (req.body.hasOwnProperty("isHoliday")) {
-      lesson.isHoliday = req.body.isHoliday;
-    }
-    if (req.body.hasOwnProperty("isNewEvent")) {
-      lesson.isNewEvent = req.body.isNewEvent;
+    for (let itemFromBodyIndex in req.body) {
+      if (req.body.hasOwnProperty(itemFromBodyIndex)) {
+        lesson[itemFromBodyIndex] = req.body[itemFromBodyIndex];
+      }
     }
 
     lesson

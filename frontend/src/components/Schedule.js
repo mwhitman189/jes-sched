@@ -23,6 +23,7 @@ import "react-big-calendar/lib/sass/styles.scss";
 import "react-big-calendar/lib/addons/dragAndDrop/styles.scss";
 
 const Schedule = () => {
+  const { teachers, setTeachers } = useContext(TeachersContext);
   const [formType, setFormType] = useState("");
   const [events, setEvents] = useState([
     {
@@ -36,8 +37,6 @@ const Schedule = () => {
       hide: true
     }
   ]);
-
-  const { teachers, setTeachers } = useContext(TeachersContext);
   const [startTime, updateStartTime, resetStartTime] = useFormState(new Date());
   const [selectedEvent, setSelectedEvent] = useState("");
   const [isOpen, setIsOpen] = useState(false);
@@ -53,7 +52,7 @@ const Schedule = () => {
 
   useEffect(() => {
     addTeachingMins(events, teachers, setTeachers);
-  }, [events]);
+  }, [events, setTeachers]);
 
   const moveEvent = ({ event, resourceId, start, end }) => {
     const updatedEvent = { ...event, resourceId, start, end };

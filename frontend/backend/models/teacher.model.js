@@ -8,7 +8,7 @@ const teacherSchema = new Schema(
     resourceTitle: { type: String, required: true },
     name: { type: String, required: true },
     familyName: { type: String, required: true },
-    otThreshold: { type: Number, required: true },
+    otThreshold: { type: Number },
     teachingMins: { type: Number, required: true, default: 0 },
     outsideDutyMins: { type: Number, required: true, default: 0 },
     holidayMins: { type: Number, required: true, default: 0 },
@@ -17,7 +17,8 @@ const teacherSchema = new Schema(
     overThresholdOneMins: { type: Number, required: true, default: 0 },
     overThresholdTwoMins: { type: Number, required: true, default: 0 },
     contractType: { type: String, required: true },
-    dependentsNum: { type: Number, required: true }
+    dependentsNum: { type: Number, default: 0 },
+    isPartTime: { type: Boolean, required: true, default: false }
   },
   {
     timestamps: true

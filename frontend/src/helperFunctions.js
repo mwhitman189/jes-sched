@@ -209,18 +209,19 @@ const addLesson = async (events, event, setEvents) => {
         start: r,
         end: moment(r)
           .add(event.duration, "m")
-          .toDate()
+          .toDate(),
+        isNewEvent: false
       };
       if (JapaneseHolidays.isHoliday(r)) {
         newEvent.isHoliday = true;
       }
       newEvents.push(newEvent);
-      return newEvents;
     });
   }
   if (JapaneseHolidays.isHoliday(event.start)) {
     event = { ...event, isHoliday: true };
   }
+  event = { ...event, isNewEvent: true };
   newEvents.push(event);
   await axios
     .post(`${API_URI}/lessons/add`, newEvents)

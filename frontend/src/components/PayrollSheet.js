@@ -30,7 +30,6 @@ class PayrollSheet extends Component {
     };
     const sums = sumTeachingMins();
 
-    console.log(sums);
     return (
       <div className={classes.table}>
         <DialogTitle id="payroll-sheet-dialog">

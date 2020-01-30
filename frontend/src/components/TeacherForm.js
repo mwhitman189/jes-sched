@@ -2,6 +2,7 @@ import React from "react";
 import { ValidatorForm, TextValidator } from "react-material-ui-form-validator";
 
 import useInputState from "../hooks/useInputState";
+import useToggle from "../hooks/useToggle";
 
 import { makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
@@ -11,6 +12,8 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import FormControl from "@material-ui/core/FormControl";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Switch from "@material-ui/core/Switch";
 
 const useStyles = makeStyles(theme => ({
   formControl: {
@@ -31,6 +34,7 @@ export default function EventForm(props) {
   const [otThresholdHours, updateOtThresholdHours] = useInputState("");
   const [contractType, updateContractType] = useInputState("");
   const [dependentsNum, updateDependentsNum] = useInputState("");
+  const [isPartTime, toggleIsPartTime] = useToggle(false);
 
   const handleAddTeacher = e => {
     e.preventDefault();
@@ -53,7 +57,8 @@ export default function EventForm(props) {
       teachingMins: 0,
       otThreshold: parseInt(otThresholdHours * 60),
       contractType: contractType,
-      dependentsNum: dependentsNum
+      dependentsNum: dependentsNum,
+      isPartTime: isPartTime
     });
   };
 
@@ -69,6 +74,16 @@ export default function EventForm(props) {
         <DialogTitle id="form-dialog-title">New Teacher</DialogTitle>
         <DialogContent>
           <DialogContentText>Enter Teacher Info</DialogContentText>
+          <FormControlLabel
+            control={
+              <Switch
+                checked={isPartTime}
+                onChange={toggleIsPartTime}
+                value={isPartTime}
+              />
+            }
+            label="Part-Time Teacher"
+          />
           <FormControl className={classes.formControl}>
             <TextValidator
               autoFocus
@@ -112,34 +127,38 @@ export default function EventForm(props) {
               required
             />
           </FormControl>
-          <FormControl className={classes.formControl}>
-            <TextValidator
-              margin="dense"
-              id="otThreshold"
-              label="Overtime threshold (hours)"
-              type="text"
-              pattern="[0-9]*"
-              value={otThresholdHours}
-              onChange={updateOtThresholdHours}
-              fullWidth
-              validators={["required"]}
-              errorMessages={["Set first OT threshold"]}
-              required
-            />
-          </FormControl>
-          <FormControl className={classes.formControl}>
-            <TextValidator
-              margin="dense"
-              id="dependentsNum"
-              label="Number of dependents"
-              type="text"
-              pattern="[0-9]*"
-              value={dependentsNum}
-              onChange={updateDependentsNum}
-              fullWidth
-              required
-            />
-          </FormControl>
+          {!isPartTime && (
+            <FormControl className={classes.formControl}>
+              <TextValidator
+                margin="dense"
+                id="otThreshold"
+                label="Overtime threshold (hours)"
+                type="text"
+                pattern="[0-9]*"
+                value={otThresholdHours}
+                onChange={updateOtThresholdHours}
+                fullWidth
+                validators={["required"]}
+                errorMessages={["Set first OT threshold"]}
+                required
+              />
+            </FormControl>
+          )}
+          {!isPartTime && (
+            <FormControl className={classes.formControl}>
+              <TextValidator
+                margin="dense"
+                id="dependentsNum"
+                label="Number of dependents"
+                type="text"
+                pattern="[0-9]*"
+                value={dependentsNum}
+                onChange={updateDependentsNum}
+                fullWidth
+                required
+              />
+            </FormControl>
+          )}
         </DialogContent>
         <DialogActions>
           <Button onClick={hideForm} color="primary">
