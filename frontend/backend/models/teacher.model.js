@@ -18,7 +18,7 @@ const teacherSchema = new Schema(
     overThresholdTwoMins: { type: Number, required: true, default: 0 },
     contractType: { type: String, required: true },
     dependentsNum: { type: Number, default: 0 },
-    isPartTime: { type: Boolean, required: true, default: false }
+    isPartTime: { type: Boolean, required: true }
   },
   {
     timestamps: true
