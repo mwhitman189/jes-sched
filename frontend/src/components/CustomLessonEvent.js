@@ -14,7 +14,6 @@ const CustomLessonEvent = ({ event }) => {
     class CustomToolbarClass extends Component {
       render() {
         const { classes } = this.props;
-        console.log(event);
         return (
           <div className={classes.event}>
             <div>{event.title}</div>

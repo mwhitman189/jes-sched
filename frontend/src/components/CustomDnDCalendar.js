@@ -34,7 +34,7 @@ class CustomDnDCalendar extends React.Component {
     const minTime = new Date();
     minTime.setHours(9, 0, 0);
     const maxTime = new Date();
-    maxTime.setHours(21, 0, 0);
+    maxTime.setHours(20, 59, 59);
 
     // Style events based on event.type
     const eventStyleGetter = event => {
@@ -142,8 +142,8 @@ class CustomDnDCalendar extends React.Component {
         onSelectEvent={handleSingleClick}
         onDoubleClickEvent={handleDoubleClick}
         eventPropGetter={eventStyleGetter}
-        step={30}
-        timeslots={2}
+        step={5}
+        timeslots={12}
         min={minTime}
         max={maxTime}
         onSelectSlot={handleSelect}
