@@ -6,9 +6,9 @@ const path = require("path");
 // require("dotenv").config();
 
 const app = express();
+app.use(cors());
 const port = process.env.PORT || 5000;
 
-app.use(cors());
 app.use(express.json());
 
 const uri = require("./config/config").ATLAS_URI;
