@@ -56,8 +56,7 @@ const Schedule = () => {
 
   const moveEvent = ({ event, resourceId, start, end }) => {
     const updatedEvent = { ...event, resourceId, start, end };
-    handleDoubleClick(event);
-    changeEvent(events, event, updatedEvent, setEvents);
+    handleDoubleClick(updatedEvent);
   };
 
   // Add validation to a move upon dropping an event with drag and drop
