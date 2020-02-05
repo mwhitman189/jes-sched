@@ -4,8 +4,6 @@ import moment from "moment";
 
 var JapaneseHolidays = require("japanese-holidays");
 
-const API_URI = "http://localhost:5000";
-
 const getRecurrences = event => {
   const now = new Date();
   // Create start and end dates for the current month to calc
@@ -174,7 +172,7 @@ const addTeachingMins = (events, teachers, setTeachers) => {
 
 const getTeachers = async (events, teachers, setTeachers) => {
   return await axios
-    .get(`${API_URI}/teachers/`)
+    .get("/teachers/")
     .then(res => {
       if (res.data.length > 0) {
         setTeachers(res.data);
@@ -186,7 +184,7 @@ const getTeachers = async (events, teachers, setTeachers) => {
 
 const getLessons = async (events, setEvents) => {
   return await axios
-    .get(`${API_URI}/lessons/`)
+    .get("/lessons/")
     .then(res => {
       if (res.data.length > 0) {
         res.data.map(event => {
@@ -224,7 +222,7 @@ const addLesson = async (events, event, setEvents) => {
   event = { ...event, isNewEvent: true };
   newEvents.push(event);
   await axios
-    .post(`${API_URI}/lessons/add`, newEvents)
+    .post("/lessons/add", newEvents)
     .then(res => console.log(res.data))
     .catch(err => console.log(err));
   return getLessons(events, setEvents);
@@ -232,7 +230,7 @@ const addLesson = async (events, event, setEvents) => {
 
 const addTeacher = async (teachers, newTeacher, setTeachers) => {
   await axios
-    .post(`${API_URI}/teachers/add`, newTeacher)
+    .post("/teachers/add", newTeacher)
     .then(res => console.log(res.data))
     .catch(err => console.log(err));
   return setTeachers([...teachers, newTeacher]);
@@ -258,14 +256,14 @@ const updateTeacher = async (teacher, teachers, setTeachers) => {
 
   setTeachers(updatedTeachers);
   return await axios
-    .put(`${API_URI}/teachers/update/${teacher._id}`, updatedTeacher)
+    .put(`/teachers/update/${teacher._id}`, updatedTeacher)
     .then(res => console.log(res.data))
     .catch(err => console.log(err));
 };
 
 const deleteTeacher = async teacher => {
   return await axios
-    .delete(`${API_URI}/teachers/delete/${teacher._id}`)
+    .delete(`/teachers/delete/${teacher._id}`)
     .then(res => console.log(res.data))
     .catch(err => console.log(err));
 };
@@ -274,7 +272,7 @@ const deleteEvent = async (events, event, setEvents) => {
   const newEvents = events.filter(evt => evt._id !== event._id);
   setEvents(newEvents);
   return await axios
-    .delete(`${API_URI}/lessons/delete/${event._id}`)
+    .delete(`/lessons/delete/${event._id}`)
     .then(res => console.log(res.data))
     .catch(err => console.log(err));
 };
@@ -287,14 +285,14 @@ const changeEvent = async (events, event, editedEvent, setEvents) => {
   setEvents(nextEvents);
 
   return await axios
-    .put(`${API_URI}/lessons/update/${event._id}`, editedEvent)
+    .put(`/lessons/update/${event._id}`, editedEvent)
     .then(res => console.log(res.data))
     .catch(err => console.log(err));
 };
 
 const addPayment = async newPayment => {
   return await axios
-    .post(`${API_URI}/payments/add`, newPayment)
+    .post(`/payments/add`, newPayment)
     .then(res => console.log(res.data))
     .catch(err => console.log(err));
 };
