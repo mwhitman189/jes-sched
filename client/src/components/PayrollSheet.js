@@ -20,11 +20,16 @@ class PayrollSheet extends Component {
         totalTravelExpenses: 0
       };
       rows.forEach(r => {
-        sums.totalTeachingHours += r.teachingMins / 60;
-        sums.totalOutsideDutyHours += r.outsideDutyMins / 60;
-        sums.totalHolidayHours += r.holidayMins / 60;
-        sums.totalTravelAllowance += r.travelAllowance;
-        sums.totalTravelExpenses += r.travelExpenses;
+        sums.totalTeachingHours +=
+          Math.round((r.teachingMins / 60 + Number.EPSILON) * 100) / 100;
+        sums.totalOutsideDutyHours +=
+          Math.round((r.outsideDutyMins / 60 + Number.EPSILON) * 100) / 100;
+        sums.totalHolidayHours +=
+          Math.round((r.holidayMins / 60 + Number.EPSILON) * 100) / 100;
+        sums.totalTravelAllowance +=
+          Math.round((r.travelAllowance + Number.EPSILON) * 100) / 100;
+        sums.totalTravelExpenses +=
+          Math.round((r.travelExpenses + Number.EPSILON) * 100) / 100;
       });
       return sums;
     };

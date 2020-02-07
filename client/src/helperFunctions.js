@@ -141,7 +141,6 @@ const createPayPeriodData = (events, teacher, monthStart, monthEnd) => {
           holidayMins = parseInt(e.duration);
           teacher.holidayMins += holidayMins;
         } else {
-          console.log(dutyHoursByDate[date]);
           const totalTeachingMins = calcOutsideDutyMins(
             e.start,
             e.end,
