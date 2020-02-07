@@ -15,8 +15,7 @@ import {
   getTeachers,
   getLessons,
   addLesson,
-  addTeacher,
-  changeEvent
+  addTeacher
 } from "../helperFunctions";
 
 import "react-big-calendar/lib/sass/styles.scss";

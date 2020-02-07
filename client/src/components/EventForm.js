@@ -104,6 +104,7 @@ export default function EventForm(props) {
     resetResource();
     resetRoom();
     resetEventType();
+    toggleIsRecurring(false);
   };
 
   const handleAddEvent = e => {

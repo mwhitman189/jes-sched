@@ -22,20 +22,29 @@ const getRecurrences = event => {
   return twoMonthsRecurrences;
 };
 
+const calcDutyHours = (dutyHours, start) => {
+  if (moment(start) < dutyHours.startTime) {
+    dutyHours.startTime = moment(start);
+  }
+
+  // Add 9 hours to the DH start time to ensure a minimum of 9 DH
+  if (dutyHours.endTime.diff(dutyHours.startTime, "hours") < 9) {
+    dutyHours.endTime = moment(dutyHours.startTime).add(9, "hours");
+  }
+  return dutyHours;
+};
+
 const calcOutsideDutyMins = (
   eventStart,
   eventEnd,
   duration,
-  dhStart,
-  dhEnd
+  dutyHoursStart,
+  dutyHoursEnd
 ) => {
-  // Set beginning of duty hours
-  const dutyHoursStart = moment(new Date(eventStart).setHours(dhStart, 0, 0));
   // Calculate difference in hours between the duty hours start time and the lesson start time
   const startDiff = dutyHoursStart.diff(eventStart, "minutes");
   const endDiff = dutyHoursStart.diff(eventEnd, "minutes");
-  // Set end of duty hours
-  const dutyHoursEnd = moment(new Date(eventStart).setHours(dhEnd, 0, 0));
+
   // Calculate difference in hours between the duty hours end time and the lesson end time
   const afterDhEndDiff = -dutyHoursEnd.diff(eventEnd, "minutes");
   const afterDhStartDiff = -dutyHoursEnd.diff(eventStart, "minutes");
@@ -78,7 +87,41 @@ const createPayPeriodData = (events, teacher, monthStart, monthEnd) => {
   teacher.holidayMins = 0;
   teacher.overThresholdOneMins = 0;
   teacher.overThresholdTwoMins = 0;
-  events.forEach(e => {
+
+  const monthEvents = events.filter(e => {
+    return (
+      moment(e.start).isBetween(monthStart, monthEnd, null, "[]") &&
+      e.resourceId === teacher.resourceId
+    );
+  });
+
+  const dutyHoursByDate = {};
+
+  monthEvents.forEach(e => {
+    const date = e.start.getDate();
+    // Set the base duty hours to noon to ensure at least 9 duty hours
+    if (!dutyHoursByDate[date]) {
+      const baseDutyHours = {
+        startTime: moment(e.start)
+          .set("hour", 12)
+          .set("minutes", 0),
+        endTime: moment(e.start)
+          .set("hour", 12)
+          .set("minutes", 0)
+      };
+      // Set the duty hours for the event's date
+      dutyHoursByDate[date] = calcDutyHours(baseDutyHours, e.start, e.end);
+    } else {
+      // Set the duty hours for the event's date
+      dutyHoursByDate[date] = calcDutyHours(
+        dutyHoursByDate[date],
+        e.start,
+        e.end
+      );
+    }
+  });
+
+  monthEvents.forEach(e => {
     if (moment(e.start).isBetween(monthStart, monthEnd, null, "[]")) {
       if (e.resourceId === teacher.resourceId) {
         const date = e.start.getDate();
@@ -89,6 +132,8 @@ const createPayPeriodData = (events, teacher, monthStart, monthEnd) => {
         let outsideDutyMins = 0;
         let holidayMins = 0;
 
+        // If event falls on a national holiday, add the class duration to holiday minutes,
+        // otherwise, add to total teaching minutes
         if (
           JapaneseHolidays.isHoliday(e.start) ||
           e.start.getDay() === (0 || 1)
@@ -96,18 +141,22 @@ const createPayPeriodData = (events, teacher, monthStart, monthEnd) => {
           holidayMins = parseInt(e.duration);
           teacher.holidayMins += holidayMins;
         } else {
+          console.log(dutyHoursByDate[date]);
           const totalTeachingMins = calcOutsideDutyMins(
             e.start,
             e.end,
             e.duration,
-            12,
-            21
+            dutyHoursByDate[date].startTime,
+            dutyHoursByDate[date].endTime
           );
+
+          // Add total teaching minutes and outside duty minutes to teacher object
           teachingMins = totalTeachingMins.teachingMins;
           teacher.teachingMins += teachingMins;
           outsideDutyMins = totalTeachingMins.outsideDutyMins;
           teacher.outsideDutyMins += outsideDutyMins;
         }
+        // Calculate hours worked over monthly thresholds one and two
         if (teacher.teachingMins >= teacher.otThreshold + secondThreshold) {
           teacher.overThresholdTwoMins +=
             teacher.teachingMins - (teacher.otThreshold + secondThreshold);
