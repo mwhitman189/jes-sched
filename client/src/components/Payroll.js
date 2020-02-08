@@ -5,7 +5,6 @@ import TeachersContext from "../context/TeachersContext";
 import { createPayPeriodData } from "../helperFunctions";
 import PayrollSheet from "./PayrollSheet";
 import { makeStyles } from "@material-ui/core/styles";
-import Button from "@material-ui/core/Button";
 import Avatar from "@material-ui/core/Avatar";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
@@ -48,8 +47,10 @@ const useStyles = makeStyles({
 
 function createData(
   date,
-  month,
+  day,
   teachingMins,
+  overThresholdOneMins,
+  overThresholdTwoMins,
   outsideDutyMins,
   holidayMins,
   travelAllowance,
@@ -57,8 +58,10 @@ function createData(
 ) {
   return {
     date,
-    month,
+    day,
     teachingMins,
+    overThresholdOneMins,
+    overThresholdTwoMins,
     outsideDutyMins,
     holidayMins,
     travelAllowance,
@@ -81,7 +84,7 @@ const Payroll = props => {
   const daysInMonth = moment(now).daysInMonth();
 
   const showPayrollSheet = teacher => {
-    setCurrentTeacher(teacher.resourceId);
+    setCurrentTeacher(teacher);
 
     const teachingMinsByDate = createPayPeriodData(
       events,
@@ -96,15 +99,31 @@ const Payroll = props => {
       if (teachingMinsByDate[i]) {
         newRow = createData(
           i,
-          now.getMonth("MMM"),
+          moment(new Date(now.getFullYear(), now.getMonth()))
+            .set("date", i)
+            .format("ddd"),
           teachingMinsByDate[i].teachingMins,
+          teachingMinsByDate[i].overThresholdOneMins,
+          teachingMinsByDate[i].overThresholdTwoMins,
           teachingMinsByDate[i].outsideDutyMins,
           teachingMinsByDate[i].holidayMins,
           teachingMinsByDate[i].travelAllowance,
           teachingMinsByDate[i].travelExpenses
         );
       } else {
-        newRow = createData(i, now.getMonth("MMM"), 0, 0, 0, 0, 0);
+        newRow = createData(
+          i,
+          moment(new Date(now.getFullYear(), now.getMonth()))
+            .set("date", i)
+            .format("ddd"),
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        );
       }
       rows.push(newRow);
     }
