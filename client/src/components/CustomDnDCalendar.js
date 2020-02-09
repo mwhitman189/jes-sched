@@ -113,7 +113,7 @@ class CustomDnDCalendar extends Component {
       };
 
       if (event.isNewEvent) {
-        style.boxShadow = `0 0 4px 5px ${hexColor}`;
+        style.boxShadow = "2px 2px 2px 2px rgba(74,73,74,0.35)";
       }
       return {
         style: style
