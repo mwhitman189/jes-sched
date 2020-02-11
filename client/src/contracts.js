@@ -7,9 +7,10 @@ export default {
     otThreshold: 80 * 60,
     paidVacationDays: 5,
     paidSickDays: 5,
-    healthInsur: false,
-    pension: false,
-    employmentInsur: false
+    healthInsur: 0,
+    pension: 0,
+    employmentInsur: 0,
+    taxRate: 0.15
   },
   IB: {
     baseSalary: 290000,
@@ -19,9 +20,10 @@ export default {
     otThreshold: 80 * 60,
     paidVacationDays: 10,
     paidSickDays: 5,
-    healthInsur: false,
-    pension: false,
-    employmentInsur: false
+    healthInsur: 0,
+    pension: 0,
+    employmentInsur: 0,
+    taxRate: 0.15
   },
   IIA: {
     baseSalary: 280000,
@@ -31,9 +33,23 @@ export default {
     otThreshold: 80 * 60,
     paidVacationDays: 15,
     paidSickDays: 10,
-    healthInsur: false,
-    pension: false,
-    employmentInsur: false
+    healthInsur: 15150,
+    pension: 27450,
+    employmentInsur: 964,
+    taxRate: 0.15
+  },
+  IIB: {
+    baseSalary: 280000,
+    wage: 0,
+    otWageOne: 2500,
+    otWageTwo: 3500,
+    otThreshold: 80 * 60,
+    paidVacationDays: 15,
+    paidSickDays: 10,
+    healthInsur: 15150,
+    pension: 27450,
+    employmentInsur: 964,
+    taxRate: 0.15
   },
   IIIA: {
     baseSalary: 0,
@@ -43,9 +59,10 @@ export default {
     otThreshold: 0,
     paidVacationDays: 0,
     paidSickDays: 0,
-    healthInsur: true,
-    pension: true,
-    employmentInsur: true
+    healthInsur: 27450,
+    pension: 27450,
+    employmentInsur: 964,
+    taxRate: 0.15
   },
   IIIB: {
     baseSalary: 0,
@@ -56,6 +73,7 @@ export default {
     paidSickDays: 0,
     healthInsur: false,
     pension: false,
-    employmentInsur: false
+    employmentInsur: false,
+    taxRate: 0.15
   }
 };

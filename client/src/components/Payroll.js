@@ -173,6 +173,15 @@ const Payroll = props => {
           rows={rows}
           currentTeacher={currentTeacher}
           ref={componentRef}
+          payPeriodStart={monthStart}
+          payPeriodEnd={monthEnd}
+          paidVacationDays={0}
+          unpaidVacationDays={0}
+          paidSickDays={0}
+          unpaidSickDays={0}
+          taxRefund={0}
+          travelAllowance={0}
+          travelExpenses={0}
         />
         <ReactToPrint
           trigger={() => <button className={classes.btn}>Print</button>}

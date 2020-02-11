@@ -16,10 +16,10 @@ router.post("/add", (req, res) => {
   const unpaidVacationDays = req.body.unpaidVacationDays;
   const paidSickDays = req.body.paidSickDays;
   const unpaidSickDays = req.body.unpaidSickDays;
-  const overThresholdOneHours = req.body.overThresholdOneHours;
-  const overThresholdTwoHours = req.body.overThresholdTwoHours;
-  const outsideDutyTimeHours = req.body.outsideDutyTimeHours;
-  const holidayHours = req.body.holidayHours;
+  const overThresholdOneAllowance = req.body.overThresholdOneAllowance;
+  const overThresholdTwoAllowance = req.body.overThresholdTwoAllowance;
+  const outsideDutyHoursAllowance = req.body.outsideDutyHoursAllowance;
+  const holidayAllowance = req.body.holidayAllowance;
   const healthInsur = req.body.healthInsur;
   const pension = req.body.pension;
   const employmentInsur = req.body.employmentInsur;
@@ -39,10 +39,10 @@ router.post("/add", (req, res) => {
     unpaidVacationDays,
     paidSickDays,
     unpaidSickDays,
-    overThresholdOneHours,
-    overThresholdTwoHours,
-    outsideDutyTimeHours,
-    holidayHours,
+    overThresholdOneAllowance,
+    overThresholdTwoAllowance,
+    outsideDutyHoursAllowance,
+    holidayAllowance,
     healthInsur,
     pension,
     employmentInsur,

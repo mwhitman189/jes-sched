@@ -7,10 +7,22 @@ import TableRow from "@material-ui/core/TableRow";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import { TableFooter } from "@material-ui/core";
 import contracts from "../contracts";
+import { addPayment } from "../helperFunctions";
 
 class PayrollSheet extends Component {
   render() {
-    const { classes, rows, currentTeacher } = this.props;
+    const {
+      classes,
+      rows,
+      currentTeacher,
+      paymentPeriodStart,
+      paymentPeriodEnd,
+      taxRefund,
+      paidVacationDays,
+      unpaidVacationDays,
+      paidSickDays,
+      unpaidSickDays
+    } = this.props;
     const contract = contracts[currentTeacher.contractType];
 
     const sumTeachingMins = () => {
@@ -40,7 +52,6 @@ class PayrollSheet extends Component {
             contract.otWageTwo;
         }
         if (r.outsideDutyMins > 0) {
-          console.log(r.outsideDutyMins);
           sums.totalOutsideDutyHoursAllowance +=
             (Math.round((r.outsideDutyMins / 60 + Number.EPSILON) * 100) /
               100) *
@@ -57,6 +68,53 @@ class PayrollSheet extends Component {
       return sums;
     };
     const sums = sumTeachingMins();
+
+    const grossPayment =
+      contract.baseSalary +
+      sums.overThresholdOneAllowance +
+      sums.overThresholdTwoAllowance +
+      sums.totalOutsideDutyHoursAllowance +
+      sums.totalHolidayAllowance +
+      sums.totalTravelAllowance +
+      sums.totalTravelExpenses;
+
+    const incomeTaxReservation = Math.round(grossPayment * contract.taxRate);
+
+    const payroll =
+      grossPayment +
+      taxRefund -
+      (contract.healthInsur +
+        contract.pension +
+        contract.employmentInsur +
+        incomeTaxReservation);
+    console.log(grossPayment);
+
+    const submitPayrollData = () => {
+      const newPayment = {
+        resourceId: currentTeacher.resourceId,
+        paymentPeriodStart: paymentPeriodStart,
+        paymentPeriodEnd: paymentPeriodEnd,
+        totalTeachingHours: sums.totalTeachingHours,
+        paidVacationDays: paidVacationDays,
+        unpaidVacationDays: unpaidVacationDays,
+        paidSickDays: paidSickDays,
+        unpaidSickDays: unpaidSickDays,
+        overThresholdOneAllowance: sums.overThresholdOneAllowance,
+        overThresholdTwoAllowance: sums.overThresholdTwoAllowance,
+        outsideDutyHoursAllowance: sums.totalOutsideDutyHoursAllowance,
+        holidayAllowance: sums.totalHolidayAllowance,
+        healthInsur: contract.healthInsur,
+        pension: contract.pension,
+        employmentInsur: contract.employmentInsur,
+        travelAllowance: sums.travelAllowance,
+        travelExpenses: sums.travelExpenses,
+        incomeTaxReservation: incomeTaxReservation,
+        taxRefund: taxRefund,
+        grossPayment: grossPayment,
+        payroll: payroll
+      };
+      addPayment(newPayment);
+    };
 
     return (
       <div className={classes.table}>
@@ -125,6 +183,12 @@ class PayrollSheet extends Component {
               <TableCell size="medium">Holiday Work Allowance:</TableCell>
               <TableCell className={classes.totals}>
                 ¥{sums.totalHolidayAllowance.toLocaleString()}
+              </TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell size="medium">Payroll:</TableCell>
+              <TableCell className={classes.totals}>
+                ¥{payroll.toLocaleString()}
               </TableCell>
             </TableRow>
           </TableFooter>

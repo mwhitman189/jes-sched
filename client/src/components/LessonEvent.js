@@ -7,13 +7,13 @@ const LessonEvent = ({ event }) => {
   return (
     <div className={classes.event}>
       <div className={classes.group}>
-        <div>{moment(event.start).format("LT")}</div>
+        <div>{moment(event.start).format("HH:mm")}</div>
         <div className={classes.innerGroup}>
           <div className={classes.title}>{event.title}</div>
           <span className={classes.room}>{event.room}</span>
         </div>
       </div>
-      <div>{moment(event.end).format("LT")}</div>
+      <div>{moment(event.end).format("HH:mm")}</div>
     </div>
   );
 };

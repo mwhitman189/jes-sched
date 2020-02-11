@@ -1,7 +1,6 @@
 import axios from "axios";
 import { RRule } from "rrule";
 import moment from "moment";
-import contracts from "./contracts";
 
 var JapaneseHolidays = require("japanese-holidays");
 
