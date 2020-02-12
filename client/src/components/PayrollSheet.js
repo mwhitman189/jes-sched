@@ -17,6 +17,8 @@ class PayrollSheet extends Component {
       currentTeacher,
       paymentPeriodStart,
       paymentPeriodEnd,
+      travelAllowance,
+      travelExpenses,
       taxRefund,
       paidVacationDays,
       unpaidVacationDays,
@@ -87,7 +89,6 @@ class PayrollSheet extends Component {
         contract.pension +
         contract.employmentInsur +
         incomeTaxReservation);
-    console.log(grossPayment);
 
     const submitPayrollData = () => {
       const newPayment = {
@@ -106,13 +107,14 @@ class PayrollSheet extends Component {
         healthInsur: contract.healthInsur,
         pension: contract.pension,
         employmentInsur: contract.employmentInsur,
-        travelAllowance: sums.travelAllowance,
-        travelExpenses: sums.travelExpenses,
+        travelAllowance: sums.totalTravelAllowance,
+        travelExpenses: sums.totalTravelExpenses,
         incomeTaxReservation: incomeTaxReservation,
         taxRefund: taxRefund,
         grossPayment: grossPayment,
         payroll: payroll
       };
+      console.log(newPayment);
       addPayment(newPayment);
     };
 
@@ -193,6 +195,9 @@ class PayrollSheet extends Component {
             </TableRow>
           </TableFooter>
         </Table>
+        <button className={classes.btn} onClick={submitPayrollData}>
+          Save Payment Data
+        </button>
       </div>
     );
   }

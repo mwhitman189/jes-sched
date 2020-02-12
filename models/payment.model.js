@@ -30,9 +30,6 @@ const paymentSchema = new Schema(
     timestamps: true
   }
 );
-paymentSchema.createIndex({
-  expire_at: { type: Date, default: Date.now, expires: 2628000 }
-});
 
 const Payment = mongoose.model("Payment", paymentSchema);
 

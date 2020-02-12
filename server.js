@@ -25,10 +25,12 @@ connection.once("open", () => {
 const usersRouter = require("./routes/users");
 const teachersRouter = require("./routes/teachers");
 const lessonsRouter = require("./routes/lessons");
+const paymentsRouter = require("./routes/payments");
 
 app.use("/users", usersRouter);
 app.use("/teachers", teachersRouter);
 app.use("/lessons", lessonsRouter);
+app.use("/payments", paymentsRouter);
 
 // Serve static assets if in production
 if (process.env.NODE_ENV === "production") {

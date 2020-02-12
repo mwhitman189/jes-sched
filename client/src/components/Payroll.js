@@ -173,8 +173,8 @@ const Payroll = props => {
           rows={rows}
           currentTeacher={currentTeacher}
           ref={componentRef}
-          payPeriodStart={monthStart}
-          payPeriodEnd={monthEnd}
+          paymentPeriodStart={monthStart}
+          paymentPeriodEnd={monthEnd}
           paidVacationDays={0}
           unpaidVacationDays={0}
           paidSickDays={0}

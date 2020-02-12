@@ -5,7 +5,7 @@ import moment from "moment";
 import "react-big-calendar/lib/sass/toolbar.scss";
 import { changeEvent } from "../helperFunctions";
 
-import { WorkWeek } from "./CustomView";
+import { WorkWeek } from "./CustomViews";
 import LessonEvent from "./LessonEvent";
 import CustomToolbar from "./CustomToolbar";
 
