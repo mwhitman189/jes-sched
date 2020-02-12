@@ -3,10 +3,9 @@ const cors = require("cors");
 const mongoose = require("mongoose");
 const path = require("path");
 
-// require("dotenv").config();
-
 const app = express();
 const port = process.env.PORT || 5000;
+const jwt = process.env.JWT_SECRET;
 
 app.use(cors());
 app.use(express.json());
@@ -26,11 +25,13 @@ const usersRouter = require("./routes/users");
 const teachersRouter = require("./routes/teachers");
 const lessonsRouter = require("./routes/lessons");
 const paymentsRouter = require("./routes/payments");
+const authRouter = require("./routes/auth");
 
 app.use("/users", usersRouter);
 app.use("/teachers", teachersRouter);
 app.use("/lessons", lessonsRouter);
 app.use("/payments", paymentsRouter);
+app.use("/auth", authRouter);
 
 // Serve static assets if in production
 if (process.env.NODE_ENV === "production") {
