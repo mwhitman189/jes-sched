@@ -1,13 +1,14 @@
 const router = require("express").Router();
-let Lesson = require("../models/lesson.model");
+const Lesson = require("../models/lesson.model");
+const auth = require("../middleware/auth");
 
-router.get("/", (req, res) => {
+router.get("/", auth, (req, res) => {
   Lesson.find()
     .then(lessons => res.json(lessons))
     .catch(err => res.status(400).json(`Error: ${err}`));
 });
 
-router.post("/add", (req, res) => {
+router.post("/add", auth, (req, res) => {
   req.body.map(item => {
     const title = item.title;
     const type = item.type;
@@ -42,19 +43,19 @@ router.post("/add", (req, res) => {
   });
 });
 
-router.get("/:id", (req, res) => {
+router.get("/:id", auth, (req, res) => {
   Lesson.findById(req.params.id)
     .then(lesson => res.json(lesson))
     .catch(err => res.status(400).json(`Error: ${err}`));
 });
 
-router.delete("/delete/:id", (req, res) => {
+router.delete("/delete/:id", auth, (req, res) => {
   Lesson.findByIdAndDelete(req.params.id)
     .then(() => res.json("Lesson deleted"))
     .catch(err => res.status(400).json(`Error: ${err}`));
 });
 
-router.put("/update/:id", (req, res) => {
+router.put("/update/:id", auth, (req, res) => {
   Lesson.findById(req.params.id).then(lesson => {
     for (let itemFromBodyIndex in req.body) {
       if (req.body.hasOwnProperty(itemFromBodyIndex)) {

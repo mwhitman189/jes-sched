@@ -4,10 +4,9 @@ import { TeachersProvider } from "./context/TeachersContext";
 import "./App.css";
 
 function App() {
-  const [teachers, setTeachers] = useState([]);
   return (
     <div className="App">
-      <TeachersProvider value={{ teachers, setTeachers }}>
+      <TeachersProvider>
         <Schedule />
       </TeachersProvider>
     </div>

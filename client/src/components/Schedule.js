@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useContext } from "react";
-
 import CustomDnDCalendar from "./CustomDnDCalendar";
 import EventForm from "./EventForm";
 import TeacherForm from "./TeacherForm";
@@ -7,8 +6,7 @@ import CustomizedSnackbars from "./CustomizedSnackbars";
 import Payroll from "./Payroll";
 import useFormState from "../hooks/useInputState";
 import useToggle from "../hooks/useToggle";
-import TeachersContext from "../context/TeachersContext";
-
+import { TeachersContext } from "../context/TeachersContext";
 import { validateRoom, validateTeacher } from "../validators";
 import {
   addTeachingMins,
@@ -17,7 +15,6 @@ import {
   addLesson,
   addTeacher
 } from "../helperFunctions";
-
 import "react-big-calendar/lib/sass/styles.scss";
 import "react-big-calendar/lib/addons/dragAndDrop/styles.scss";
 

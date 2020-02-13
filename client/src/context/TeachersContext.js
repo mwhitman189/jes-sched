@@ -1,7 +1,12 @@
 import React, { useState, createContext } from "react";
 
-const TeachersContext = createContext({});
+export const TeachersContext = createContext({});
 
-export const TeachersProvider = TeachersContext.Provider;
-export const TeachersConsumer = TeachersContext.Consumer;
-export default TeachersContext;
+export function TeachersProvider(props) {
+  const [teachers, setTeachers] = useState([]);
+  return (
+    <TeachersContext.Provider value={{ teachers, setTeachers }}>
+      {props.children}
+    </TeachersContext.Provider>
+  );
+}

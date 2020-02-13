@@ -1,7 +1,7 @@
 import React, { useState, useContext, useRef } from "react";
 import moment from "moment";
 import ReactToPrint from "react-to-print";
-import TeachersContext from "../context/TeachersContext";
+import { TeachersContext } from "../context/TeachersContext";
 import { createPayPeriodData } from "../helperFunctions";
 import PayrollSheet from "./PayrollSheet";
 import { makeStyles } from "@material-ui/core/styles";

@@ -2,6 +2,7 @@ const router = require("express").Router();
 const bcrypt = require("bcryptjs");
 const User = require("../models/user.model");
 const jwt = require("jsonwebtoken");
+const auth = require("../middleware/auth");
 
 const jwt_secret =
   process.env.JWT_SECRET || require("../config/config").JWT_SECRET;
@@ -16,7 +17,8 @@ router.post("/", (req, res) => {
       if (!user) return res.status(400).json({ msg: "User does not exist" });
 
       bcrypt.compare(password, user.password).then(isMatch => {
-        if (!isMatch) return res.status(400).json({ msg: "Invalid password" });
+        if (!isMatch)
+          return res.status(400).json({ msg: "Invalid username or password" });
 
         jwt.sign(
           { id: user.id },
@@ -42,6 +44,12 @@ router.post("/", (req, res) => {
     })
 
     .catch(err => res.status(400).json(`Error: ${err}`));
+});
+
+router.get("/user", auth, (req, res) => {
+  User.findById(req.user.id)
+    .select("-password")
+    .then(user => res.json(user));
 });
 
 module.exports = router;

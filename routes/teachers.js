@@ -1,13 +1,14 @@
 const router = require("express").Router();
 let Teacher = require("../models/teacher.model");
+const auth = require("../middleware/auth");
 
-router.get("/", (req, res) => {
+router.get("/", auth, (req, res) => {
   Teacher.find()
     .then(teachers => res.json(teachers))
     .catch(err => res.status(400).json(`Error: ${err}`));
 });
 
-router.post("/add", (req, res) => {
+router.post("/add", auth, (req, res) => {
   const resourceId = req.body.resourceId;
   const resourceTitle = req.body.resourceTitle;
   const name = req.body.name;
@@ -34,19 +35,19 @@ router.post("/add", (req, res) => {
     .catch(err => res.status(400).json(`Error: ${err}`));
 });
 
-router.get("/:id", (req, res) => {
+router.get("/:id", auth, (req, res) => {
   Teacher.findById(req.params.id)
     .then(teacher => res.json(teacher))
     .catch(err => res.status(400).json(`Error: ${err}`));
 });
 
-router.delete("/delete/:id", (req, res) => {
+router.delete("/delete/:id", auth, (req, res) => {
   Teacher.findByIdAndDelete(req.params.id)
     .then(() => res.json("Teacher deleted"))
     .catch(err => res.status(400).json(`Error: ${err}`));
 });
 
-router.put("/update/:id", (req, res) => {
+router.put("/update/:id", auth, (req, res) => {
   Teacher.findById(req.params.id)
     .then(teacher => {
       for (let itemFromBodyIndex in req.body) {

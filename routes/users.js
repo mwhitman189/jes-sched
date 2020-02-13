@@ -1,10 +1,11 @@
 const router = require("express").Router();
 const bcrypt = require("bcryptjs");
 const User = require("../models/user.model");
+const auth = require("../middleware/auth");
 
 const jwt = process.env.JWT_SECRET || require("../config/config").JWT_SECRET;
 
-router.get("/", (req, res) => {
+router.get("/", auth, (req, res) => {
   User.find()
     .then(users => res.json(users))
     .catch(err => res.status(400).json(`Error: ${err}`));
@@ -75,7 +76,7 @@ router.post("/register", (req, res) => {
     .catch(err => res.status(400).json(`Error: ${err}`));
 });
 
-router.delete("/delete/:id", (req, res) => {
+router.delete("/delete/:id", auth, (req, res) => {
   User.findByIdAndDelete(req.params.id)
     .then(() => res.json("User deleted"))
     .catch(err => res.status(400).json(`Error: ${err}`));

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import moment from "moment";
-import TeachersContext from "../context/TeachersContext";
+import { TeachersContext } from "../context/TeachersContext";
 
 import IconButton from "@material-ui/core/IconButton";
 import RightArrowIcon from "@material-ui/icons/ChevronRight";
