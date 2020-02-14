@@ -2,13 +2,13 @@ const router = require("express").Router();
 let Payment = require("../models/payment.model");
 const auth = require("../middleware/auth");
 
-router.get("/", auth, (req, res) => {
+router.get("/", (req, res) => {
   Payment.find()
     .then(payments => res.json(payments))
     .catch(err => res.status(400).json(`Error: ${err}`));
 });
 
-router.post("/add", auth, (req, res) => {
+router.post("/add", (req, res) => {
   const resourceId = req.body.resourceId;
   const paymentPeriodStart = req.body.paymentPeriodStart;
   const paymentPeriodEnd = req.body.paymentPeriodEnd;
@@ -61,19 +61,19 @@ router.post("/add", auth, (req, res) => {
     .catch(err => res.status(400).json(`Error: ${err}`));
 });
 
-router.get("/:id", auth, (req, res) => {
+router.get("/:id", (req, res) => {
   Payment.findById(req.params.id)
     .then(payment => res.json(payment))
     .catch(err => res.status(400).json(`Error: ${err}`));
 });
 
-router.delete("/delete/:id", auth, (req, res) => {
+router.delete("/delete/:id", (req, res) => {
   Payment.findByIdAndDelete(req.params.id)
     .then(() => res.json("Payment deleted"))
     .catch(err => res.status(400).json(`Error: ${err}`));
 });
 
-router.put("/update/:id", auth, (req, res) => {
+router.put("/update/:id", (req, res) => {
   Payment.findById(req.params.id)
     .then(payment => {
       for (let itemFromBodyIndex in req.body) {

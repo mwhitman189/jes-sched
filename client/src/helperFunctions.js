@@ -2,7 +2,7 @@ import axios from "axios";
 import { RRule } from "rrule";
 import moment from "moment";
 
-var JapaneseHolidays = require("japanese-holidays");
+const JapaneseHolidays = require("japanese-holidays");
 
 const getRecurrences = event => {
   const now = new Date();
@@ -230,52 +230,6 @@ const getTeachers = async (events, teachers, setTeachers) => {
     .catch(err => console.log(err));
 };
 
-const getLessons = async (events, setEvents) => {
-  return await axios
-    .get("/lessons/")
-    .then(res => {
-      if (res.data.length > 0) {
-        res.data.map(event => {
-          event.start = new Date(event.start);
-          event.end = new Date(event.end);
-        });
-        setEvents([...res.data, events[0]]);
-      }
-    })
-    .catch(err => console.log(err));
-};
-
-const addLesson = async (events, event, setEvents) => {
-  const newEvents = [];
-  if (event.recur === true) {
-    const recurrences = getRecurrences(event);
-    recurrences.map(r => {
-      const newEvent = {
-        ...event,
-        start: r,
-        end: moment(r)
-          .add(event.duration, "m")
-          .toDate(),
-        isNewEvent: false
-      };
-      if (JapaneseHolidays.isHoliday(r)) {
-        newEvent.isHoliday = true;
-      }
-      newEvents.push(newEvent);
-    });
-  }
-  if (JapaneseHolidays.isHoliday(event.start)) {
-    event = { ...event, isHoliday: true };
-  }
-  event = { ...event, isNewEvent: true };
-  newEvents.push(event);
-  await axios
-    .post("/lessons/add", newEvents)
-    .then(res => console.log(res.data))
-    .catch(err => console.log(err));
-  return getLessons(events, setEvents);
-};
-
 const addTeacher = async (teachers, newTeacher, setTeachers) => {
   await axios
     .post("/teachers/add", newTeacher)
@@ -316,28 +270,6 @@ const deleteTeacher = async teacher => {
     .catch(err => console.log(err));
 };
 
-const deleteEvent = async (events, event, setEvents) => {
-  const newEvents = events.filter(evt => evt._id !== event._id);
-  setEvents(newEvents);
-  return await axios
-    .delete(`/lessons/delete/${event._id}`)
-    .then(res => console.log(res.data))
-    .catch(err => console.log(err));
-};
-
-const changeEvent = async (events, event, editedEvent, setEvents) => {
-  const idx = events.findIndex(e => e._id === event._id);
-  const nextEvents = [...events];
-
-  nextEvents.splice(idx, 1, editedEvent);
-  setEvents(nextEvents);
-
-  return await axios
-    .put(`/lessons/update/${event._id}`, editedEvent)
-    .then(res => console.log(res.data))
-    .catch(err => console.log(err));
-};
-
 const addPayment = async newPayment => {
   return await axios
     .post(`/payments/add`, newPayment)
@@ -349,13 +281,9 @@ export {
   getRecurrences,
   addTeachingMins,
   getTeachers,
-  getLessons,
-  addLesson,
   addTeacher,
   updateTeacher,
   deleteTeacher,
-  deleteEvent,
-  changeEvent,
   addPayment,
   createPayPeriodData
 };

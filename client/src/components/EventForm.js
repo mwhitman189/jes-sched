@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useContext } from "react";
 import {
   ValidatorForm,
   TextValidator,
@@ -8,7 +8,7 @@ import moment from "moment";
 
 import useInputState from "../hooks/useInputState";
 import { validateRoom, validateTeacher } from "../validators";
-import { changeEvent, deleteEvent } from "../helperFunctions";
+import { EventsContext } from "../context/EventsContext";
 
 import { makeStyles } from "@material-ui/core/styles";
 import MenuItem from "@material-ui/core/MenuItem";
@@ -36,17 +36,17 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function EventForm(props) {
+  const { events, addEvent, editEvent, deleteEvent } = useContext(
+    EventsContext
+  );
   const classes = useStyles();
   const {
-    addEvent,
     formType,
     setFormType,
-    events,
     teachers,
     startTime,
     updateStartTime,
     event,
-    setEvents,
     setSelectedEvent,
     selectedTeacher,
     isRecurring,
@@ -141,14 +141,14 @@ export default function EventForm(props) {
       type: eventType,
       isRecurring: isRecurring
     };
-    changeEvent(events, event, editedEvent, setEvents);
+    editEvent(event, editedEvent);
     resetForm();
     setSelectedEvent("");
     hideForm();
   };
 
   const handleDeleteEvent = () => {
-    deleteEvent(events, event, setEvents);
+    deleteEvent(event);
     setSelectedEvent("");
     hideForm();
   };

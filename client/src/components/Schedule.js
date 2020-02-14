@@ -8,31 +8,16 @@ import useFormState from "../hooks/useInputState";
 import useToggle from "../hooks/useToggle";
 import { TeachersContext } from "../context/TeachersContext";
 import { validateRoom, validateTeacher } from "../validators";
-import {
-  addTeachingMins,
-  getTeachers,
-  getLessons,
-  addLesson,
-  addTeacher
-} from "../helperFunctions";
+import { EventsContext } from "../context/EventsContext";
+import { addTeachingMins, getTeachers, addTeacher } from "../helperFunctions";
 import "react-big-calendar/lib/sass/styles.scss";
 import "react-big-calendar/lib/addons/dragAndDrop/styles.scss";
 
 const Schedule = () => {
   const { teachers, setTeachers } = useContext(TeachersContext);
+  const { events, setEvents, getEvents, addEvent } = useContext(EventsContext);
+
   const [formType, setFormType] = useState("");
-  const [events, setEvents] = useState([
-    {
-      id: 1,
-      title: "Dummy Event to fix drag and drop bug",
-      start: new Date(),
-      end: new Date(),
-      room: 2,
-      duration: 0,
-      resourceId: 1,
-      hide: true
-    }
-  ]);
   const [startTime, updateStartTime, resetStartTime] = useFormState(new Date());
   const [selectedEvent, setSelectedEvent] = useState("");
   const [isOpen, setIsOpen] = useState(false);
@@ -41,7 +26,7 @@ const Schedule = () => {
   const [isRecurring, toggleIsRecurring] = useToggle(false);
 
   useEffect(() => {
-    getLessons(events, setEvents);
+    getEvents(events, setEvents);
     getTeachers(events, teachers, setTeachers);
     addTeachingMins(events, teachers, setTeachers);
   }, []);
@@ -86,7 +71,7 @@ const Schedule = () => {
   };
 
   const handleAddEvent = newEvent => {
-    addLesson(events, newEvent, setEvents);
+    addEvent(events, newEvent, setEvents);
     setFormType("");
   };
 

@@ -1,14 +1,17 @@
-import React, { useState } from "react";
+import React from "react";
 import Schedule from "./components/Schedule";
 import { TeachersProvider } from "./context/TeachersContext";
+import { EventsProvider } from "./context/EventsContext";
 import "./App.css";
 
 function App() {
   return (
     <div className="App">
-      <TeachersProvider>
-        <Schedule />
-      </TeachersProvider>
+      <EventsProvider>
+        <TeachersProvider>
+          <Schedule />
+        </TeachersProvider>
+      </EventsProvider>
     </div>
   );
 }
