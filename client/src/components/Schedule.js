@@ -9,12 +9,17 @@ import useToggle from "../hooks/useToggle";
 import { TeachersContext } from "../context/TeachersContext";
 import { validateRoom, validateTeacher } from "../validators";
 import { EventsContext } from "../context/EventsContext";
-import { addTeachingMins, getTeachers, addTeacher } from "../helperFunctions";
 import "react-big-calendar/lib/sass/styles.scss";
 import "react-big-calendar/lib/addons/dragAndDrop/styles.scss";
 
 const Schedule = () => {
-  const { teachers, setTeachers } = useContext(TeachersContext);
+  const {
+    teachers,
+    setTeachers,
+    getTeachers,
+    addTeacher,
+    addTeachingMins
+  } = useContext(TeachersContext);
   const { events, setEvents, getEvents, addEvent } = useContext(EventsContext);
 
   const [formType, setFormType] = useState("");
@@ -26,13 +31,13 @@ const Schedule = () => {
   const [isRecurring, toggleIsRecurring] = useToggle(false);
 
   useEffect(() => {
-    getEvents(events, setEvents);
-    getTeachers(events, teachers, setTeachers);
-    addTeachingMins(events, teachers, setTeachers);
+    getEvents();
+    getTeachers(events);
+    addTeachingMins(events);
   }, []);
 
   useEffect(() => {
-    addTeachingMins(events, teachers, setTeachers);
+    addTeachingMins(events);
   }, [events, setTeachers]);
 
   const moveEvent = ({ event, resourceId, start, end }) => {

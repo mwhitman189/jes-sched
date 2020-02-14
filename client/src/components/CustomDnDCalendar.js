@@ -4,7 +4,7 @@ import withDragAndDrop from "react-big-calendar/lib/addons/dragAndDrop";
 import moment from "moment";
 import "react-big-calendar/lib/sass/toolbar.scss";
 import { EventsContext } from "../context/EventsContext";
-
+import { TeachersContext } from "../context/TeachersContext";
 import { WorkWeek } from "./CustomViews";
 import LessonEvent from "./LessonEvent";
 import CustomToolbar from "./CustomToolbar";
@@ -19,13 +19,14 @@ const DragAndDropCalendar = withDragAndDrop(Calendar);
 
 function CustomDnDCalendar(props) {
   const { events, editEvent } = useContext(EventsContext);
+  const { teachers } = useContext(TeachersContext);
+
   const {
     handleMove,
     handleSelect,
     handleDoubleClick,
     handleBtnClick,
-    handlePayrollBtnClick,
-    teachers
+    handlePayrollBtnClick
   } = props;
 
   // Limit displayed hours of the day
