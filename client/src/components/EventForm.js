@@ -117,13 +117,14 @@ export default function EventForm(props) {
         .add(duration, "m")
         .toDate(),
       room: room,
-      duration: duration,
+      duration: parseInt(duration),
       resourceId: parseInt(selectedTeacher),
       type: eventType,
       recur: isRecurring
     });
     resetForm();
     setSelectedEvent("");
+    hideForm();
   };
 
   const handleEditEvent = e => {

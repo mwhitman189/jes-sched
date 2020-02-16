@@ -21,6 +21,7 @@ router.post("/add", (req, res) => {
     const recur = item.recur;
     const isHoliday = item.isHoliday;
     const isNewEvent = item.isNewEvent;
+    const isLast = item.isLast;
 
     const newLesson = new Lesson({
       title,
@@ -33,7 +34,8 @@ router.post("/add", (req, res) => {
       hide,
       recur,
       isHoliday,
-      isNewEvent
+      isNewEvent,
+      isLast
     });
 
     return newLesson

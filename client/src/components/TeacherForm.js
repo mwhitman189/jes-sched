@@ -1,9 +1,8 @@
-import React from "react";
+import React, { useContext } from "react";
 import { ValidatorForm, TextValidator } from "react-material-ui-form-validator";
-
 import useInputState from "../hooks/useInputState";
 import useToggle from "../hooks/useToggle";
-
+import { TeachersContext } from "../context/TeachersContext";
 import { makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
@@ -27,7 +26,8 @@ const useStyles = makeStyles(theme => ({
 
 export default function EventForm(props) {
   const classes = useStyles();
-  const { formType, setFormType, addTeacher, teachers } = props;
+  const { formType, setFormType } = props;
+  const { addTeacher, teachers } = useContext(TeachersContext);
 
   const [givenName, updateGivenName] = useInputState("");
   const [familyName, updateFamilyName] = useInputState("");
@@ -60,6 +60,7 @@ export default function EventForm(props) {
       dependentsNum: dependentsNum,
       isPartTime: isPartTime
     });
+    hideForm();
   };
 
   const hideForm = () => setFormType("");

@@ -20,7 +20,7 @@ const Schedule = () => {
     addTeacher,
     addTeachingMins
   } = useContext(TeachersContext);
-  const { events, setEvents, getEvents, addEvent } = useContext(EventsContext);
+  const { events, setEvents, addEvent, getEvents } = useContext(EventsContext);
 
   const [formType, setFormType] = useState("");
   const [startTime, updateStartTime, resetStartTime] = useFormState(new Date());
@@ -31,7 +31,7 @@ const Schedule = () => {
   const [isRecurring, toggleIsRecurring] = useToggle(false);
 
   useEffect(() => {
-    getEvents();
+    getEvents(new Date().getTime());
     getTeachers(events);
     addTeachingMins(events);
   }, []);
@@ -76,7 +76,8 @@ const Schedule = () => {
   };
 
   const handleAddEvent = newEvent => {
-    addEvent(events, newEvent, setEvents);
+    addEvent(newEvent);
+    setEvents(getEvents());
     setFormType("");
   };
 

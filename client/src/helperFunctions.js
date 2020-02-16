@@ -8,8 +8,8 @@ const getRecurrences = event => {
   const now = new Date();
   // Create start and end dates for the current month to calc
   // teaching minutes
-  const month_start = new Date(now.getFullYear(), now.getMonth(), 1);
-  const month_end = new Date(now.getFullYear(), now.getMonth() + 2, 0);
+  const months_start = new Date(now.getFullYear(), now.getMonth(), 1);
+  const months_end = new Date(now.getFullYear(), now.getMonth() + 2, 0);
   // Create an array of DateTimes for the recurrence of events.
   const rrule = new RRule({
     freq: RRule.WEEKLY,
@@ -17,7 +17,7 @@ const getRecurrences = event => {
     interval: 1,
     dtstart: new Date(event.start)
   });
-  const twoMonthsRecurrences = rrule.between(month_start, month_end);
+  const twoMonthsRecurrences = rrule.between(months_start, months_end);
   twoMonthsRecurrences.shift();
   return twoMonthsRecurrences;
 };
@@ -138,7 +138,7 @@ const createPayPeriodData = (events, teacher, monthStart, monthEnd) => {
           JapaneseHolidays.isHoliday(e.start) ||
           e.start.getDay() === (0 || 1)
         ) {
-          holidayMins = parseInt(e.duration);
+          holidayMins = e.duration;
           teacher.holidayMins += holidayMins;
         } else {
           const totalTeachingMins = calcOutsideDutyMins(
@@ -196,6 +196,36 @@ const createPayPeriodData = (events, teacher, monthStart, monthEnd) => {
   return datesData;
 };
 
+const addNewEvent = event => {
+  const newEvents = [];
+  if (event.recur === true) {
+    const recurrences = getRecurrences(event);
+    recurrences.map(r => {
+      const newEvent = {
+        ...event,
+        start: r,
+        end: moment(r)
+          .add(event.duration, "m")
+          .toDate(),
+        isNewEvent: false,
+        isLast: false
+      };
+      if (JapaneseHolidays.isHoliday(r)) {
+        newEvent.isHoliday = true;
+      }
+      newEvents.push(newEvent);
+    });
+    newEvents[newEvents.length - 1].isLast = true;
+  }
+  if (JapaneseHolidays.isHoliday(event.start)) {
+    event = { ...event, isHoliday: true };
+  }
+  event = { ...event, isNewEvent: true };
+  newEvents.unshift(event);
+
+  return newEvents;
+};
+
 const addPayment = async newPayment => {
   return await axios
     .post(`/payments/add`, newPayment)
@@ -203,4 +233,4 @@ const addPayment = async newPayment => {
     .catch(err => console.log(err));
 };
 
-export { getRecurrences, addPayment, createPayPeriodData };
+export { getRecurrences, addNewEvent, addPayment, createPayPeriodData };

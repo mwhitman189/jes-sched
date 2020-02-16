@@ -1,15 +1,13 @@
 import { useState } from "react";
 import axios from "axios";
-import moment from "moment";
-import { getRecurrences } from "../helperFunctions";
+import { addNewEvent } from "../helperFunctions";
 
-export default initialEvents => {
+export default function(initialEvents) {
   const [events, setEvents] = useState(initialEvents);
-  const JapaneseHolidays = require("japanese-holidays");
 
-  return {
+  const testObj = {
     events,
-    getEvents: async () => {
+    getEvents: async function(dateTime) {
       return await axios
         .get("/lessons/")
         .then(res => {
@@ -17,43 +15,26 @@ export default initialEvents => {
             res.data.map(event => {
               event.start = new Date(event.start);
               event.end = new Date(event.end);
+              // Check if last recurrence, and if so, create two more months of recurrences
+              if (event.isLast) {
+                if (dateTime >= event.start.getTime()) {
+                  addNewEvent(event);
+                }
+              }
             });
             setEvents([...res.data, events[0]]);
           }
         })
         .catch(err => console.log(err));
     },
-    addEvent: async event => {
-      const newEvents = [];
-      if (event.recur === true) {
-        const recurrences = getRecurrences(event);
-        recurrences.map(r => {
-          const newEvent = {
-            ...event,
-            start: r,
-            end: moment(r)
-              .add(event.duration, "m")
-              .toDate(),
-            isNewEvent: false
-          };
-          if (JapaneseHolidays.isHoliday(r)) {
-            newEvent.isHoliday = true;
-          }
-          newEvents.push(newEvent);
-        });
-      }
-      if (JapaneseHolidays.isHoliday(event.start)) {
-        event = { ...event, isHoliday: true };
-      }
-      event = { ...event, isNewEvent: true };
-      newEvents.push(event);
+    addEvent: async function(event) {
+      const newEvents = addNewEvent(event);
       await axios
         .post("/lessons/add", newEvents)
         .then(res => console.log(res.data))
         .catch(err => console.log(err));
-      return this.getEvents(events, setEvents);
     },
-    deleteEvent: async event => {
+    deleteEvent: async function(event) {
       const newEvents = events.filter(evt => evt._id !== event._id);
       setEvents(newEvents);
       return await axios
@@ -61,7 +42,7 @@ export default initialEvents => {
         .then(res => console.log(res.data))
         .catch(err => console.log(err));
     },
-    editEvent: async (event, editedEvent) => {
+    editEvent: async function(event, editedEvent) {
       const idx = events.findIndex(e => e._id === event._id);
       const nextEvents = [...events];
 
@@ -74,4 +55,6 @@ export default initialEvents => {
         .catch(err => console.log(err));
     }
   };
-};
+
+  return testObj;
+}

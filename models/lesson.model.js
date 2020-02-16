@@ -14,7 +14,8 @@ const lessonSchema = new Schema(
     hide: { type: Boolean, default: false },
     recur: { type: Boolean, default: false },
     isHoliday: { type: Boolean, default: false },
-    isNewEvent: { type: Boolean, default: false }
+    isNewEvent: { type: Boolean, default: false },
+    isLast: { type: Boolean, default: false }
   },
   {
     timestamps: true
