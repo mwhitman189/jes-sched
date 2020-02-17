@@ -28,7 +28,6 @@ const Schedule = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [message, setMessage] = useState("");
   const [selectedTeacher, setSelectedTeacher] = useState("");
-  const [isRecurring, toggleIsRecurring] = useToggle(false);
 
   useEffect(() => {
     getEvents(new Date().getTime());
@@ -125,10 +124,7 @@ const Schedule = () => {
           resetStartTime={resetStartTime}
           event={selectedEvent}
           setSelectedEvent={setSelectedEvent}
-          setEvents={setEvents}
           selectedTeacher={selectedTeacher}
-          isRecurring={isRecurring}
-          toggleIsRecurring={toggleIsRecurring}
         />
       )}
       {formType === "teacher" && (

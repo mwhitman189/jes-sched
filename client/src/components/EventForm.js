@@ -5,11 +5,10 @@ import {
   SelectValidator
 } from "react-material-ui-form-validator";
 import moment from "moment";
-
 import useInputState from "../hooks/useInputState";
+import useToggle from "../hooks/useToggle";
 import { validateRoom, validateTeacher } from "../validators";
 import { EventsContext } from "../context/EventsContext";
-
 import { makeStyles } from "@material-ui/core/styles";
 import MenuItem from "@material-ui/core/MenuItem";
 import Button from "@material-ui/core/Button";
@@ -21,7 +20,6 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import FormControl from "@material-ui/core/FormControl";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Switch from "@material-ui/core/Switch";
-
 import roomList from "../rooms";
 import lessonTypes from "../lessonTypes";
 
@@ -48,9 +46,7 @@ export default function EventForm(props) {
     updateStartTime,
     event,
     setSelectedEvent,
-    selectedTeacher,
-    isRecurring,
-    toggleIsRecurring
+    selectedTeacher
   } = props;
 
   // If a new start time was input, use it for the form input,
@@ -70,6 +66,7 @@ export default function EventForm(props) {
   const [eventType, updateEventType, resetEventType] = useInputState(
     event ? event.type : ""
   );
+  const [isRecurring, toggleIsRecurring] = useToggle(false);
 
   let teacherValidators = ["required"];
   let teacherValMsgs = ["Teacher Required"];
@@ -118,7 +115,7 @@ export default function EventForm(props) {
         .toDate(),
       room: room,
       duration: parseInt(duration),
-      resourceId: parseInt(selectedTeacher),
+      resourceId: resource,
       type: eventType,
       recur: isRecurring
     });
