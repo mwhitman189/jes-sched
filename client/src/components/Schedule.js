@@ -62,19 +62,22 @@ const Schedule = () => {
       );
       return 1;
     }
+    return 0;
   };
 
   // Add validation to a move upon dropping an event with drag and drop
   // If there is a conflict, prevent the move and flash a conflict snackbar
   const handleMove = ({ event, resourceId, start, end }) => {
-    validateRoomAndResource(event, resourceId, start);
-    moveEvent({
-      event,
-      resourceId,
-      start,
-      end
-    });
-    return 0;
+    if (validateRoomAndResource(event, resourceId, start) === 0) {
+      moveEvent({
+        event,
+        resourceId,
+        start,
+        end
+      });
+      return 0;
+    }
+    return 1;
   };
 
   const handleAddEvent = newEvent => {

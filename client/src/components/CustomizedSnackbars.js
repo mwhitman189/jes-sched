@@ -105,12 +105,9 @@ export default function CustomizedSnackbars(props) {
         }}
         open={isOpen}
         autoHideDuration={6000}
+        onClose={handleClose}
       >
-        <MySnackbarContentWrapper
-          onClose={handleClose}
-          variant={variant}
-          message={msg}
-        />
+        <MySnackbarContentWrapper variant={variant} message={msg} />
       </Snackbar>
     </div>
   );
