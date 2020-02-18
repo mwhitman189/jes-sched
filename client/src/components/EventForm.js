@@ -8,6 +8,7 @@ import moment from "moment";
 import useInputState from "../hooks/useInputState";
 import useToggle from "../hooks/useToggle";
 import { validateRoom, validateTeacher } from "../validators";
+import { TeachersContext } from "../context/TeachersContext";
 import { EventsContext } from "../context/EventsContext";
 import { makeStyles } from "@material-ui/core/styles";
 import MenuItem from "@material-ui/core/MenuItem";
@@ -34,14 +35,14 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function EventForm(props) {
+  const classes = useStyles();
   const { events, addEvent, editEvent, deleteEvent } = useContext(
     EventsContext
   );
-  const classes = useStyles();
+  const { teachers } = useContext(TeachersContext);
   const {
     formType,
     setFormType,
-    teachers,
     startTime,
     updateStartTime,
     event,

@@ -19,7 +19,7 @@ const variantIcon = {
   info: InfoIcon
 };
 
-const useStyles1 = makeStyles(theme => ({
+const useStyles = makeStyles(theme => ({
   success: {
     backgroundColor: green[600]
   },
@@ -46,7 +46,7 @@ const useStyles1 = makeStyles(theme => ({
 }));
 
 function MySnackbarContentWrapper(props) {
-  const classes = useStyles1();
+  const classes = useStyles();
   const { className, message, onClose, variant, ...other } = props;
   const Icon = variantIcon[variant];
 
@@ -82,14 +82,7 @@ MySnackbarContentWrapper.propTypes = {
   variant: PropTypes.oneOf(["error", "info", "success", "warning"]).isRequired
 };
 
-const useStyles2 = makeStyles(theme => ({
-  margin: {
-    margin: theme.spacing(1)
-  }
-}));
-
 export default function CustomizedSnackbars(props) {
-  const classes = useStyles2();
   const { isOpen, setIsOpen, msg, variant } = props;
 
   const handleClose = () => {

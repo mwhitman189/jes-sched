@@ -15,6 +15,7 @@ import PersonIcon from "@material-ui/icons/Person";
 import DialogTitle from "@material-ui/core/DialogTitle";
 
 import { blue } from "@material-ui/core/colors";
+import { EventsContext } from "../context/EventsContext";
 
 const useStyles = makeStyles({
   avatar: {
@@ -74,10 +75,12 @@ const Payroll = props => {
   const classes = useStyles();
 
   const { teachers } = useContext(TeachersContext);
+  const { events } = useContext(EventsContext);
   const [stage, setStage] = useState("teacherSelect");
   const [rows, setRows] = useState([]);
   const [currentTeacher, setCurrentTeacher] = useState("");
-  const { events, setFormType } = props;
+  const { setFormType } = props;
+
   const now = new Date();
   const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
   const monthEnd = new Date(now.getFullYear(), now.getMonth() + 1, 0);

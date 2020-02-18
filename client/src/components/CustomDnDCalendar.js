@@ -13,7 +13,7 @@ const localizer = momentLocalizer(moment);
 const DragAndDropCalendar = withDragAndDrop(Calendar);
 
 function CustomDnDCalendar(props) {
-  const { events, editEvent } = useContext(EventsContext);
+  const { events, setEvents, editEvent } = useContext(EventsContext);
   const { teachers } = useContext(TeachersContext);
 
   const {

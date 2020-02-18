@@ -122,9 +122,6 @@ const Schedule = () => {
         <EventForm
           formType={formType}
           setFormType={setFormType}
-          addEvent={handleAddEvent}
-          events={events}
-          teachers={teachers}
           startTime={startTime}
           updateStartTime={updateStartTime}
           resetStartTime={resetStartTime}
@@ -135,31 +132,19 @@ const Schedule = () => {
         />
       )}
       {formType === "teacher" && (
-        <TeacherForm
-          formType={formType}
-          setFormType={setFormType}
-          addTeacher={handleAddTeacher}
-          setTeachers={setTeachers}
-          teachers={teachers}
-        />
+        <TeacherForm formType={formType} setFormType={setFormType} />
       )}
-      {formType === "payroll" && (
-        <Payroll events={events} setFormType={setFormType} />
-      )}
+      {formType === "payroll" && <Payroll setFormType={setFormType} />}
       <CustomizedSnackbars
         isOpen={isOpen}
         setIsOpen={setIsOpen}
         variant={"error"}
         msg={message}
-        events={events}
       />
       <CustomDnDCalendar
         handleMove={handleMove}
         handleSelect={handleSelect}
         handleDoubleClick={handleDoubleClick}
-        events={events}
-        setEvents={setEvents}
-        teachers={teachers}
         handleBtnClick={handleBtnClick}
         handlePayrollBtnClick={handlePayrollBtnClick}
       />
