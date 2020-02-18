@@ -16,5 +16,8 @@ export default [
   { name: "Connect 2", shortName: "Conn 2", type: "ct2" },
   { name: "Connect 3", shortName: "Conn 3", type: "ct3" },
   { name: "Private", shortName: "Pvt", type: "pvt" },
-  { name: "Premium", shortName: "Prem", type: "prm" }
+  { name: "Premium", shortName: "Prem", type: "prm" },
+  { name: "High School", shortName: "HS", type: "hs" },
+  { name: "Company", shortName: "Comp", type: "comp" },
+  { name: "Other", shortName: "Other", type: "other" }
 ];

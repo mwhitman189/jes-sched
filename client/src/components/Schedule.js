@@ -5,7 +5,6 @@ import TeacherForm from "./TeacherForm";
 import CustomizedSnackbars from "./CustomizedSnackbars";
 import Payroll from "./Payroll";
 import useFormState from "../hooks/useInputState";
-import useToggle from "../hooks/useToggle";
 import { TeachersContext } from "../context/TeachersContext";
 import { validateRoom, validateTeacher } from "../validators";
 import { EventsContext } from "../context/EventsContext";
@@ -44,9 +43,7 @@ const Schedule = () => {
     handleDoubleClick(updatedEvent);
   };
 
-  // Add validation to a move upon dropping an event with drag and drop
-  // If there is a conflict, prevent the move and flash a conflict snackbar
-  const handleMove = ({ event, resourceId, start, end }) => {
+  const validateRoomAndResource = (event, resourceId, start) => {
     const idx = events.indexOf(event);
     const otherEvents = [...events.slice(0, idx), ...events.slice(idx + 1)];
     if (
@@ -65,6 +62,12 @@ const Schedule = () => {
       );
       return 1;
     }
+  };
+
+  // Add validation to a move upon dropping an event with drag and drop
+  // If there is a conflict, prevent the move and flash a conflict snackbar
+  const handleMove = ({ event, resourceId, start, end }) => {
+    validateRoomAndResource(event, resourceId, start);
     moveEvent({
       event,
       resourceId,
@@ -125,6 +128,7 @@ const Schedule = () => {
           event={selectedEvent}
           setSelectedEvent={setSelectedEvent}
           selectedTeacher={selectedTeacher}
+          validateRoomAndResource={validateRoomAndResource}
         />
       )}
       {formType === "teacher" && (

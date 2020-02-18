@@ -9,11 +9,6 @@ import { WorkWeek } from "./CustomViews";
 import LessonEvent from "./LessonEvent";
 import CustomToolbar from "./CustomToolbar";
 
-moment.locale("jp", {
-  week: {
-    dow: 1
-  }
-});
 const localizer = momentLocalizer(moment);
 const DragAndDropCalendar = withDragAndDrop(Calendar);
 

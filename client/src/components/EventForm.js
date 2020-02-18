@@ -46,7 +46,8 @@ export default function EventForm(props) {
     updateStartTime,
     event,
     setSelectedEvent,
-    selectedTeacher
+    selectedTeacher,
+    validateRoomAndResource
   } = props;
 
   // If a new start time was input, use it for the form input,
@@ -79,21 +80,30 @@ export default function EventForm(props) {
     roomValMsgs.push("Room unavailable");
   }
 
-  useEffect(() => {
-    // If an event does not exist, check whether the selected room is
-    // available at the specified time
-    ValidatorForm.addValidationRule("teacherIsAvailable", teacher => {
-      return validateTeacher(events, teacher, startTime, duration);
-    });
-
-    // If an event does not exist, check whether the selected room is
-    // available at the specified time
-    ValidatorForm.addValidationRule("roomIsAvailable", room => {
-      return validateRoom(events, room, startTime, duration);
-    });
+  // If an event does not exist, check whether the selected room is
+  // available at the specified time
+  ValidatorForm.addValidationRule("teacherIsAvailable", teacher => {
+    return validateTeacher(events, teacher, startTime, duration);
   });
 
-  const hideForm = () => setFormType("");
+  // If an event does not exist, check whether the selected room is
+  // available at the specified time
+  ValidatorForm.addValidationRule("roomIsAvailable", room => {
+    return validateRoom(events, room, startTime, duration);
+  });
+
+  const handleUpdateResource = e => {
+    updateResource(e);
+  };
+
+  const handleUpdateRoom = e => {
+    updateRoom(e);
+  };
+
+  const hideForm = () => {
+    resetForm();
+    setFormType("");
+  };
 
   const resetForm = () => {
     resetTitle();
@@ -102,6 +112,7 @@ export default function EventForm(props) {
     resetRoom();
     resetEventType();
     toggleIsRecurring(false);
+    setSelectedEvent("");
   };
 
   const handleAddEvent = e => {
@@ -119,14 +130,13 @@ export default function EventForm(props) {
       type: eventType,
       recur: isRecurring
     });
-    resetForm();
-    setSelectedEvent("");
     hideForm();
   };
 
   const handleEditEvent = e => {
     e.preventDefault();
     const startTimeObj = new Date(startDateTime);
+    validateRoomAndResource(e, resource, startTimeObj);
     const editedEvent = {
       title: title,
       start: startTimeObj,
@@ -140,25 +150,16 @@ export default function EventForm(props) {
       isRecurring: isRecurring
     };
     editEvent(event, editedEvent);
-    resetForm();
-    setSelectedEvent("");
     hideForm();
   };
 
   const handleDeleteEvent = () => {
     deleteEvent(event);
-    setSelectedEvent("");
     hideForm();
   };
 
   const handleToggleRecurrence = () => {
     toggleIsRecurring(!isRecurring);
-  };
-
-  const handleCancel = () => {
-    resetForm();
-    setSelectedEvent("");
-    hideForm();
   };
 
   return (
@@ -232,7 +233,7 @@ export default function EventForm(props) {
               fullWidth
               id="resource"
               value={resource}
-              onChange={updateResource}
+              onChange={handleUpdateResource}
               name="resource"
               validators={teacherValidators}
               errorMessages={teacherValMsgs}
@@ -254,7 +255,7 @@ export default function EventForm(props) {
               fullWidth
               id="room"
               value={room}
-              onChange={updateRoom}
+              onChange={handleUpdateRoom}
               name="room"
               validators={roomValidators}
               errorMessages={roomValMsgs}
@@ -292,7 +293,7 @@ export default function EventForm(props) {
           <Button onClick={handleDeleteEvent} color="secondary">
             Delete Lesson
           </Button>
-          <Button onClick={handleCancel} color="primary">
+          <Button onClick={hideForm} color="primary">
             Cancel
           </Button>
           <Button type="submit" color="primary">
