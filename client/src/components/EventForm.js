@@ -36,24 +36,29 @@ const useStyles = makeStyles(theme => ({
 
 export default function EventForm(props) {
   const classes = useStyles();
-  const { events, addEvent, editEvent, deleteEvent } = useContext(
-    EventsContext
-  );
+  const { events, editEvent, deleteEvent } = useContext(EventsContext);
   const { teachers } = useContext(TeachersContext);
   const {
     formType,
     setFormType,
     startTime,
-    updateStartTime,
     event,
     setSelectedEvent,
     selectedTeacher,
-    validateRoomAndResource
+    updateStartTime,
+    validateRoomAndResource,
+    addEvent
   } = props;
 
   // If a new start time was input, use it for the form input,
   // otherwise use the original event's start time
-  const startDateTime = startTime ? startTime : event.start;
+  const startDate = startTime ? startTime : event.start;
+
+  const [start, updateStart, resetStart] = useInputState(
+    startTime
+      ? moment(startTime).format("kk:mm")
+      : moment(event.start).format("kk:mm")
+  );
 
   const [title, updateTitle, resetTitle] = useInputState(
     event ? event.title : ""
@@ -118,7 +123,7 @@ export default function EventForm(props) {
 
   const handleAddEvent = e => {
     e.preventDefault();
-    const startTimeObj = new Date(startDateTime);
+    const startTimeObj = startTime;
     addEvent({
       title: title,
       start: startTimeObj,
@@ -136,7 +141,7 @@ export default function EventForm(props) {
 
   const handleEditEvent = e => {
     e.preventDefault();
-    const startTimeObj = new Date(startDateTime);
+    const startTimeObj = startTime;
     validateRoomAndResource(e, resource, startTimeObj);
     const editedEvent = {
       title: title,
@@ -161,6 +166,17 @@ export default function EventForm(props) {
 
   const handleToggleRecurrence = () => {
     toggleIsRecurring(!isRecurring);
+  };
+
+  const handleUpdateStartTime = e => {
+    updateStart(e.target.value);
+    updateStartTime(
+      new Date(
+        new Date(
+          new Date(startDate).setHours(parseInt(e.target.value.slice(0, 2)))
+        ).setMinutes(parseInt(e.target.value.slice(3, 5)))
+      )
+    );
   };
 
   return (
@@ -202,10 +218,16 @@ export default function EventForm(props) {
               autoFocus
               margin="dense"
               id="startTime"
-              label="Start Time"
-              type="text"
-              value={startDateTime}
-              onChange={updateStartTime}
+              label="Lesson Start Time"
+              type="time"
+              value={start}
+              onChange={handleUpdateStartTime}
+              InputLabelProps={{
+                shrink: true
+              }}
+              inputProps={{
+                step: 300 // 5 min
+              }}
               fullWidth
               validators={["required"]}
               errorMessages={["Enter the Start Time"]}
@@ -234,7 +256,7 @@ export default function EventForm(props) {
               fullWidth
               id="resource"
               value={resource}
-              onChange={handleUpdateResource}
+              onChange={updateResource}
               name="resource"
               validators={teacherValidators}
               errorMessages={teacherValMsgs}
@@ -256,7 +278,7 @@ export default function EventForm(props) {
               fullWidth
               id="room"
               value={room}
-              onChange={handleUpdateRoom}
+              onChange={updateRoom}
               name="room"
               validators={roomValidators}
               errorMessages={roomValMsgs}

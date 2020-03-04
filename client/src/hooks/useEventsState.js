@@ -12,7 +12,7 @@ export default function(initialEvents) {
         .get("/lessons/")
         .then(res => {
           if (res.data.length > 0) {
-            res.data.map(event => {
+            res.data.forEach(event => {
               event.start = new Date(event.start);
               event.end = new Date(event.end);
               // Check if last recurrence, and if so, create two more months of recurrences
@@ -22,13 +22,14 @@ export default function(initialEvents) {
                 }
               }
             });
-            setEvents([...res.data, events[0]]);
+            return setEvents([...res.data, events[0]]);
           }
         })
         .catch(err => console.log(err));
     },
     addEvent: async function(event) {
       const newEvents = addNewEvent(event);
+      setEvents([...events, ...newEvents]);
       await axios
         .post("/lessons/add", newEvents)
         .then(res => console.log(res.data))
@@ -48,7 +49,6 @@ export default function(initialEvents) {
 
       nextEvents.splice(idx, 1, editedEvent);
       setEvents(nextEvents);
-
       return await axios
         .put(`/lessons/update/${event._id}`, editedEvent)
         .then(res => console.log(res.data))

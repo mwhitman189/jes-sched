@@ -26,8 +26,8 @@ const useStyles = makeStyles(theme => ({
 
 export default function EventForm(props) {
   const classes = useStyles();
-  const { formType, setFormType } = props;
-  const { addTeacher, teachers, setTeachers } = useContext(TeachersContext);
+  const { addTeacher, formType, setFormType } = props;
+  const { teachers } = useContext(TeachersContext);
 
   const [givenName, updateGivenName] = useInputState("");
   const [familyName, updateFamilyName] = useInputState("");

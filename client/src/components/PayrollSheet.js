@@ -17,8 +17,6 @@ class PayrollSheet extends Component {
       currentTeacher,
       paymentPeriodStart,
       paymentPeriodEnd,
-      travelAllowance,
-      travelExpenses,
       taxRefund,
       paidVacationDays,
       unpaidVacationDays,

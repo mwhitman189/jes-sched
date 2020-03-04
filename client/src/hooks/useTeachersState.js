@@ -70,6 +70,7 @@ export default initialTeachers => {
           teacher.overThresholdOneMins = 0;
           teacher.overThresholdTwoMins = 0;
         });
+        console.log("Hello");
 
         teachers.forEach(teacher => {
           createPayPeriodData(events, teacher, monthStart, monthEnd);

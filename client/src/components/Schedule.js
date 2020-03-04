@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useLayoutEffect, useContext } from "react";
 import CustomDnDCalendar from "./CustomDnDCalendar";
 import EventForm from "./EventForm";
 import TeacherForm from "./TeacherForm";
@@ -19,7 +19,7 @@ const Schedule = () => {
     addTeacher,
     addTeachingMins
   } = useContext(TeachersContext);
-  const { events, setEvents, addEvent, getEvents } = useContext(EventsContext);
+  const { events, addEvent, getEvents } = useContext(EventsContext);
 
   const [formType, setFormType] = useState("");
   const [startTime, updateStartTime, resetStartTime] = useFormState(new Date());
@@ -29,9 +29,10 @@ const Schedule = () => {
   const [selectedTeacher, setSelectedTeacher] = useState("");
 
   useEffect(() => {
+    // Pass current dateTime to compare to recurrence events to check if a new batch of recurrences
+    // is needed
     getEvents(new Date().getTime());
     getTeachers(events);
-    addTeachingMins(events);
   }, []);
 
   useEffect(() => {
@@ -82,7 +83,6 @@ const Schedule = () => {
 
   const handleAddEvent = newEvent => {
     addEvent(newEvent);
-    setEvents(getEvents());
     setFormType("");
   };
 
@@ -122,6 +122,7 @@ const Schedule = () => {
         <EventForm
           formType={formType}
           setFormType={setFormType}
+          addEvent={handleAddEvent}
           startTime={startTime}
           updateStartTime={updateStartTime}
           resetStartTime={resetStartTime}
@@ -132,7 +133,11 @@ const Schedule = () => {
         />
       )}
       {formType === "teacher" && (
-        <TeacherForm formType={formType} setFormType={setFormType} />
+        <TeacherForm
+          formType={formType}
+          setFormType={setFormType}
+          addTeacher={handleAddTeacher}
+        />
       )}
       {formType === "payroll" && <Payroll setFormType={setFormType} />}
       <CustomizedSnackbars
