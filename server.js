@@ -24,13 +24,13 @@ const usersRouter = require("./routes/users");
 const teachersRouter = require("./routes/teachers");
 const lessonsRouter = require("./routes/lessons");
 const paymentsRouter = require("./routes/payments");
-const authRouter = require("./routes/auth");
+// const authRouter = require("./routes/auth");
 
 app.use("/users", usersRouter);
 app.use("/teachers", teachersRouter);
 app.use("/lessons", lessonsRouter);
 app.use("/payments", paymentsRouter);
-app.use("/auth", authRouter);
+// app.use("/auth", authRouter);
 
 // Serve static assets if in production
 if (process.env.NODE_ENV === "production") {

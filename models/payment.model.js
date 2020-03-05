@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const Schema = mongoose.Schema;
 
-const paymentSchema = new Schema(
+const PaymentSchema = new Schema(
   {
     resourceId: { type: Number, required: true },
     paymentPeriodStart: { type: Date, required: true },
@@ -31,6 +31,6 @@ const paymentSchema = new Schema(
   }
 );
 
-const Payment = mongoose.model("Payment", paymentSchema);
+const Payment = mongoose.model("Payment", PaymentSchema);
 
 module.exports = Payment;

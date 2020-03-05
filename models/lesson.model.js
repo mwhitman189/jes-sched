@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const Schema = mongoose.Schema;
 
-const lessonSchema = new Schema(
+const LessonSchema = new Schema(
   {
     title: { type: String, required: true },
     type: { type: String, required: true },
@@ -22,6 +22,6 @@ const lessonSchema = new Schema(
   }
 );
 
-const Lesson = mongoose.model("Lesson", lessonSchema);
+const Lesson = mongoose.model("Lesson", LessonSchema);
 
 module.exports = Lesson;
