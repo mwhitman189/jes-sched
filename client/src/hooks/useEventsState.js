@@ -8,7 +8,7 @@ export default function(initialEvents) {
   const testObj = {
     events,
     getEvents: async function(dateTime) {
-      return await axios
+      await axios
         .get("/lessons/")
         .then(res => {
           if (res.data.length > 0) {
@@ -22,7 +22,7 @@ export default function(initialEvents) {
                 }
               }
             });
-            return setEvents([...res.data, events[0]]);
+            return setEvents(res.data);
           }
         })
         .catch(err => console.log(err));
@@ -38,7 +38,7 @@ export default function(initialEvents) {
     deleteEvent: async function(event) {
       const newEvents = events.filter(evt => evt._id !== event._id);
       setEvents(newEvents);
-      return await axios
+      await axios
         .delete(`/lessons/delete/${event._id}`)
         .then(res => console.log(res.data))
         .catch(err => console.log(err));
@@ -49,7 +49,7 @@ export default function(initialEvents) {
 
       nextEvents.splice(idx, 1, editedEvent);
       setEvents(nextEvents);
-      return await axios
+      await axios
         .put(`/lessons/update/${event._id}`, editedEvent)
         .then(res => console.log(res.data))
         .catch(err => console.log(err));

@@ -24,7 +24,7 @@ export default initialTeachers => {
     updatedTeachers.splice(idx, 1, updatedTeacher);
 
     setTeachers(updatedTeachers);
-    return await axios
+    await axios
       .put(`/teachers/update/${teacher._id}`, updatedTeacher)
       .then(res => console.log(res.data))
       .catch(err => console.log(err));
@@ -32,8 +32,8 @@ export default initialTeachers => {
 
   return {
     teachers,
-    getTeachers: async events => {
-      return await axios
+    getTeachers: async () => {
+      await axios
         .get("/teachers/")
         .then(res => {
           if (res.data.length > 0) {
@@ -50,7 +50,7 @@ export default initialTeachers => {
       return setTeachers([...teachers, newTeacher]);
     },
     deleteTeacher: async teacher => {
-      return await axios
+      await axios
         .delete(`/teachers/delete/${teacher._id}`)
         .then(res => console.log(res.data))
         .catch(err => console.log(err));
@@ -70,7 +70,6 @@ export default initialTeachers => {
           teacher.overThresholdOneMins = 0;
           teacher.overThresholdTwoMins = 0;
         });
-        console.log("Hello");
 
         teachers.forEach(teacher => {
           createPayPeriodData(events, teacher, monthStart, monthEnd);
