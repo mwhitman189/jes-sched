@@ -13,18 +13,13 @@ import ListItemText from "@material-ui/core/ListItemText";
 import Dialog from "@material-ui/core/Dialog";
 import PersonIcon from "@material-ui/icons/Person";
 import DialogTitle from "@material-ui/core/DialogTitle";
-
-import { blue } from "@material-ui/core/colors";
 import { EventsContext } from "../context/EventsContext";
+import { blue } from "@material-ui/core/colors";
 
-const useStyles = makeStyles({
+const useStyles = makeStyles(theme => ({
   avatar: {
     backgroundColor: blue[100],
     color: blue[600]
-  },
-  table: {
-    padding: "1rem",
-    maxWidth: "90vw"
   },
   btn: {
     color: "#fff",
@@ -35,16 +30,9 @@ const useStyles = makeStyles({
     borderRadius: "5px",
     padding: ".3rem .5rem",
     minWidth: "4rem",
-    margin: "1rem auto"
-  },
-  footerRows: {
-    width: "100%"
-  },
-  totals: {
-    color: "#21942a",
-    fontWeight: "800"
+    margin: ".2rem auto .1rem"
   }
-});
+}));
 
 function createData(
   date,
@@ -185,6 +173,7 @@ const Payroll = props => {
           taxRefund={0}
           travelAllowance={0}
           travelExpenses={0}
+          setFormType={setFormType}
         />
         <ReactToPrint
           trigger={() => <button className={classes.btn}>Print</button>}

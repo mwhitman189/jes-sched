@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { withStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
@@ -8,6 +9,50 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import { TableFooter } from "@material-ui/core";
 import contracts from "../contracts";
 import { addPayment } from "../helperFunctions";
+import { blue } from "@material-ui/core/colors";
+
+const styles = theme => ({
+  table: {
+    padding: "1rem",
+    maxWidth: "90vw",
+    overflow: "visible",
+    height: "auto",
+    "& th, td": {
+      fontSize: ".7rem",
+      padding: "0.1rem"
+    }
+  },
+  title: {
+    padding: 0,
+    "& h2": {
+      fontSize: ".7rem",
+      margin: 0,
+      padding: 0
+    }
+  },
+  avatar: {
+    backgroundColor: blue[100],
+    color: blue[600]
+  },
+  btn: {
+    color: "#fff",
+    background: "rgb(20,71,207)",
+    background:
+      "linear-gradient(0deg, rgba(20,71,207,1) 7%, rgba(49,119,254,1) 100%)",
+    border: "none",
+    borderRadius: "5px",
+    padding: ".3rem .5rem",
+    minWidth: "4rem",
+    margin: "1rem auto"
+  },
+  footerRows: {
+    width: "100%"
+  },
+  totals: {
+    color: "#21942a",
+    fontWeight: "800"
+  }
+});
 
 class PayrollSheet extends Component {
   render() {
@@ -21,7 +66,8 @@ class PayrollSheet extends Component {
       paidVacationDays,
       unpaidVacationDays,
       paidSickDays,
-      unpaidSickDays
+      unpaidSickDays,
+      setFormType
     } = this.props;
     const contract = contracts[currentTeacher.contractType];
 
@@ -112,13 +158,13 @@ class PayrollSheet extends Component {
         grossPayment: grossPayment,
         payroll: payroll
       };
-      console.log(newPayment);
       addPayment(newPayment);
+      setFormType("");
     };
 
     return (
       <div className={classes.table}>
-        <DialogTitle id="payroll-sheet-dialog">
+        <DialogTitle className={classes.title} id="payroll-sheet-dialog">
           Payroll for {currentTeacher.name}
         </DialogTitle>
         <Table className={classes.table} size="small" aria-label="simple table">
@@ -200,4 +246,4 @@ class PayrollSheet extends Component {
     );
   }
 }
-export default PayrollSheet;
+export default withStyles(styles)(PayrollSheet);

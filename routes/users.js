@@ -1,9 +1,11 @@
 const router = require("express").Router();
 const bcrypt = require("bcryptjs");
 const User = require("../models/user.model");
+const jwt = require("jsonwebtoken");
 const auth = require("../middleware/auth");
 
-const jwt = process.env.JWT_SECRET || require("../config/config").JWT_SECRET;
+const jwt_secret =
+  process.env.JWT_SECRET || require("../config/config").JWT_SECRET;
 
 router.get("/", (req, res) => {
   User.find()
@@ -39,7 +41,6 @@ router.post("/register", (req, res) => {
     email,
     password
   });
-
   // Create salt & hash
   bcrypt.genSalt(10, (err, salt) => {
     bcrypt.hash(newUser.password, salt, (err, hash) => {
@@ -48,21 +49,20 @@ router.post("/register", (req, res) => {
       newUser.save().then(user => {
         jwt.sign(
           { id: user.id },
-          config.get("JWT_SECRET"),
+          jwt_secret,
           {
             expiresIn: 86400
           },
           (err, token) => {
             if (err) throw err;
-            const newUser = {
-              id: user.id,
-              username: user.username,
-              email: user.email,
-              is_admin: user.is_admin
-            };
             res.json({
               token,
-              user: newUser
+              user: {
+                id: user.id,
+                username: user.username,
+                email: user.email,
+                is_admin: user.is_admin
+              }
             });
           }
         );
@@ -76,7 +76,7 @@ router.post("/register", (req, res) => {
     .catch(err => res.status(400).json(`Error: ${err}`));
 });
 
-router.delete("/delete/:id", (req, res) => {
+router.delete("/delete/:id", auth, (req, res) => {
   User.findByIdAndDelete(req.params.id)
     .then(() => res.json("User deleted"))
     .catch(err => res.status(400).json(`Error: ${err}`));
