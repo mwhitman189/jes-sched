@@ -11,6 +11,8 @@ import { validateRoom, validateTeacher } from "../validators";
 import { TeachersContext } from "../context/TeachersContext";
 import { EventsContext } from "../context/EventsContext";
 import { makeStyles } from "@material-ui/core/styles";
+import { TimePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
+import MomentUtils from "@date-io/moment";
 import MenuItem from "@material-ui/core/MenuItem";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
@@ -50,15 +52,7 @@ export default function EventForm(props) {
     addEvent
   } = props;
 
-  // If a new start time was input, use it for the form input,
-  // otherwise use the original event's start time
-  const startDate = startTime ? startTime : event.start;
-
-  const [start, updateStart, resetStart] = useInputState(
-    startTime
-      ? moment(startTime).format("kk:mm")
-      : moment(event.start).format("kk:mm")
-  );
+  const [start, updateStart, resetStart] = useInputState(startTime);
 
   const [title, updateTitle, resetTitle] = useInputState(
     event ? event.title : ""
@@ -98,14 +92,6 @@ export default function EventForm(props) {
     return validateRoom(events, room, startTime, duration);
   });
 
-  const handleUpdateResource = e => {
-    updateResource(e);
-  };
-
-  const handleUpdateRoom = e => {
-    updateRoom(e);
-  };
-
   const hideForm = () => {
     resetForm();
     setFormType("");
@@ -123,11 +109,10 @@ export default function EventForm(props) {
 
   const handleAddEvent = e => {
     e.preventDefault();
-    const startTimeObj = startTime;
     addEvent({
       title: title,
-      start: startTimeObj,
-      end: moment(startTimeObj)
+      start: startTime,
+      end: moment(startTime)
         .add(duration, "m")
         .toDate(),
       room: room,
@@ -141,12 +126,11 @@ export default function EventForm(props) {
 
   const handleEditEvent = e => {
     e.preventDefault();
-    const startTimeObj = startTime;
-    validateRoomAndResource(e, resource, startTimeObj);
+    validateRoomAndResource(e, resource, startTime);
     const editedEvent = {
       title: title,
-      start: startTimeObj,
-      end: moment(startTimeObj)
+      start: startTime,
+      end: moment(startTime)
         .add(duration, "m")
         .toDate(),
       room: room,
@@ -168,22 +152,13 @@ export default function EventForm(props) {
     toggleIsRecurring(!isRecurring);
   };
 
-  const handleUpdateStartTime = e => {
-    updateStart(e.target.value);
-    updateStartTime(
-      new Date(
-        new Date(
-          new Date(startDate).setHours(parseInt(e.target.value.slice(0, 2)))
-        ).setMinutes(parseInt(e.target.value.slice(3, 5)))
-      )
-    );
-  };
-
   return (
     <Dialog
       open={formType === "event"}
       onClose={hideForm}
       aria-labelledby="form-dialog-title"
+      // Allow TimePicker component to gain focus, preventing stack overflow
+      disableEnforceFocus
     >
       <ValidatorForm onSubmit={event ? handleEditEvent : handleAddEvent}>
         <DialogTitle id="form-dialog-title">New Lesson</DialogTitle>
@@ -214,24 +189,16 @@ export default function EventForm(props) {
             />
           </FormControl>
           <FormControl className={classes.formControl}>
-            <TextValidator
-              autoFocus
-              margin="dense"
-              id="startTime"
-              label="Lesson Start Time"
-              type="time"
-              value={start}
-              onChange={handleUpdateStartTime}
-              InputLabelProps={{
-                shrink: true
-              }}
-              inputProps={{
-                step: 300 // 5 min
-              }}
-              fullWidth
-              validators={["required"]}
-              errorMessages={["Enter the Start Time"]}
-            />
+            <MuiPickersUtilsProvider
+              className={classes.formControl}
+              utils={MomentUtils}
+            >
+              <TimePicker
+                value={start}
+                onChange={updateStart}
+                minutesStep={5}
+              />
+            </MuiPickersUtilsProvider>
           </FormControl>
           <FormControl className={classes.formControl}>
             <TextValidator
