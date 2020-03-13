@@ -23,14 +23,14 @@ const getRecurrences = event => {
 };
 
 const calcDutyHours = (dutyHours, start) => {
+  // Check whether the current event is earliest lesson
   if (moment(start) < dutyHours.startTime) {
     dutyHours.startTime = moment(start);
-  }
 
-  // Add 9 hours to the DH start time to ensure a minimum of 9 DH
-  if (dutyHours.endTime.diff(dutyHours.startTime, "hours") < 9) {
+    // Add 9 hours to the DH start time to ensure a minimum of 9 DH
     dutyHours.endTime = moment(dutyHours.startTime).add(9, "hours");
   }
+
   return dutyHours;
 };
 
@@ -106,11 +106,12 @@ const createPayPeriodData = (events, teacher, monthStart, monthEnd) => {
           .set("hour", 12)
           .set("minutes", 0),
         endTime: moment(e.start)
-          .set("hour", 12)
+          .set("hour", 21)
           .set("minutes", 0)
       };
       // Set the duty hours for the event's date
       dutyHoursByDate[date] = calcDutyHours(baseDutyHours, e.start, e.end);
+      console.log(e, dutyHoursByDate[date]);
     } else {
       // Set the duty hours for the event's date
       dutyHoursByDate[date] = calcDutyHours(
@@ -118,6 +119,7 @@ const createPayPeriodData = (events, teacher, monthStart, monthEnd) => {
         e.start,
         e.end
       );
+      console.log(e, dutyHoursByDate[date]);
     }
   });
 
