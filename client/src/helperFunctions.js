@@ -111,7 +111,6 @@ const createPayPeriodData = (events, teacher, monthStart, monthEnd) => {
       };
       // Set the duty hours for the event's date
       dutyHoursByDate[date] = calcDutyHours(baseDutyHours, e.start, e.end);
-      console.log(e, dutyHoursByDate[date]);
     } else {
       // Set the duty hours for the event's date
       dutyHoursByDate[date] = calcDutyHours(
@@ -119,7 +118,6 @@ const createPayPeriodData = (events, teacher, monthStart, monthEnd) => {
         e.start,
         e.end
       );
-      console.log(e, dutyHoursByDate[date]);
     }
   });
 
