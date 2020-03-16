@@ -18,7 +18,6 @@ import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
-import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import FormControl from "@material-ui/core/FormControl";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
@@ -29,10 +28,25 @@ import lessonTypes from "../lessonTypes";
 const useStyles = makeStyles(theme => ({
   formControl: {
     margin: theme.spacing(1),
-    minWidth: 120
+    minWidth: 120,
+    display: "inline",
+    "& .MuiFormControl-root": {
+      margin: "10px",
+      width: "110px"
+    }
+  },
+  recurSwitch: {
+    position: "absolute",
+    right: "1rem",
+    top: "1rem"
   },
   selectEmpty: {
     marginTop: theme.spacing(2)
+  },
+  timePickerContainer: {
+    display: "flex",
+    justifyContent: "center",
+    width: "100%"
   }
 }));
 
@@ -47,7 +61,6 @@ export default function EventForm(props) {
     event,
     setSelectedEvent,
     selectedTeacher,
-    updateStartTime,
     validateRoomAndResource,
     addEvent
   } = props;
@@ -163,8 +176,8 @@ export default function EventForm(props) {
       <ValidatorForm onSubmit={event ? handleEditEvent : handleAddEvent}>
         <DialogTitle id="form-dialog-title">New Lesson</DialogTitle>
         <DialogContent>
-          <DialogContentText>Enter Lesson Info</DialogContentText>
           <FormControlLabel
+            className={classes.recurSwitch}
             control={
               <Switch
                 checked={isRecurring}
@@ -174,6 +187,21 @@ export default function EventForm(props) {
             }
             label="Weekly lesson"
           />
+          <FormControl
+            className={[classes.formControl, classes.timePickerContainer].join(
+              " "
+            )}
+            style={{ flexDirection: "row" }}
+          >
+            <MuiPickersUtilsProvider utils={MomentUtils}>
+              <TimePicker
+                value={start}
+                onChange={updateStart}
+                minutesStep={5}
+                margin="dense"
+              />
+            </MuiPickersUtilsProvider>
+          </FormControl>
           <FormControl className={classes.formControl}>
             <TextValidator
               autoFocus
@@ -189,22 +217,10 @@ export default function EventForm(props) {
             />
           </FormControl>
           <FormControl className={classes.formControl}>
-            <MuiPickersUtilsProvider
-              className={classes.formControl}
-              utils={MomentUtils}
-            >
-              <TimePicker
-                value={start}
-                onChange={updateStart}
-                minutesStep={5}
-              />
-            </MuiPickersUtilsProvider>
-          </FormControl>
-          <FormControl className={classes.formControl}>
             <TextValidator
               margin="dense"
               id="duration"
-              label="Lesson Duration"
+              label="Duration"
               type="text"
               pattern="[0-9]*"
               value={duration}
