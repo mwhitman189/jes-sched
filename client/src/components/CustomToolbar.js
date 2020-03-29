@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import moment from "moment";
 import { TeachersContext } from "../context/TeachersContext";
-import AuthAPI from "../utils/AuthAPI";
+import { UserContext } from "../context/UserContext";
 import IconButton from "@material-ui/core/IconButton";
 import RightArrowIcon from "@material-ui/icons/ChevronRight";
 import LeftArrowIcon from "@material-ui/icons/ChevronLeft";
@@ -20,11 +20,11 @@ const CustomToolbar = withStyles(theme => styles)(props => {
     handlePayrollNav
   } = props;
   const { teachers } = useContext(TeachersContext);
-  const authAPI = useContext(AuthAPI);
+  const { dispatch } = useContext(UserContext);
 
   const handleLogout = e => {
     e.preventDefault();
-    authAPI.setAuth(false);
+    dispatch({ type: "LOGOUT_SUCCESS" });
     console.log("Logged out");
   };
 

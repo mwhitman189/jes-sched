@@ -1,11 +1,4 @@
-const initialState = {
-  token: localStorage.getItem("token"),
-  isAuthenticated: null,
-  isLoading: false,
-  user: null
-};
-
-export default function(state = initialState, action) {
+function authReducer(state, action) {
   switch (action.type) {
     case "USER_LOADING":
       return {
@@ -42,3 +35,5 @@ export default function(state = initialState, action) {
       return state;
   }
 }
+
+export default authReducer;
