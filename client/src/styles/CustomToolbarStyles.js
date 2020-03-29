@@ -50,6 +50,17 @@ const styles = {
   listItemRed: {
     marginRight: "1rem",
     color: "red"
+  },
+  logoutBtn: {
+    color: "#fff",
+    background: "#f50057",
+    background:
+      "linear-gradient(0deg, rgba(186, 4, 68,1) 7%, rgba(245, 0, 86,1) 100%)",
+    border: "none",
+    borderRadius: "5px",
+    padding: ".3rem .5rem",
+    marginRight: ".5rem",
+    minWidth: "4rem"
   }
 };
 export default styles;

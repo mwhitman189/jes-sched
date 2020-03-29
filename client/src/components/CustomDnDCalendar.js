@@ -20,8 +20,8 @@ function CustomDnDCalendar(props) {
     handleMove,
     handleSelect,
     handleDoubleClick,
-    handleBtnClick,
-    handlePayrollBtnClick
+    handleAddTeacherNav,
+    handlePayrollNav
   } = props;
 
   // Limit displayed hours of the day
@@ -143,7 +143,12 @@ function CustomDnDCalendar(props) {
       onSelectSlot={handleSelect}
       components={{
         event: LessonEvent,
-        toolbar: CustomToolbar({ handleBtnClick, handlePayrollBtnClick })
+        toolbar: props => (
+          <CustomToolbar
+            handleBtnClick={handleAddTeacherNav}
+            handlePayrollBtnClick={handlePayrollNav}
+          />
+        )
       }}
       resizableAccessor={() => false}
     />

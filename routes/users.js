@@ -19,7 +19,7 @@ function validateEmail(email) {
   return re.test(String(email).toLowerCase());
 }
 
-router.post("/register", (req, res) => {
+router.post("/signup", (req, res) => {
   const { username, email, password } = req.body;
 
   // Validation
@@ -74,6 +74,49 @@ router.post("/register", (req, res) => {
     .save()
     .then(() => res.json("User registered!"))
     .catch(err => res.status(400).json(`Error: ${err}`));
+});
+
+router.post("/signin", (req, res) => {
+  const { email, password } = req.body;
+
+  // Validation
+  if (!email || !password) {
+    return res.status(400).json({ msg: "Please enter all fields" });
+  }
+
+  if (!validateEmail(email)) {
+    return res.status(400).json({ msg: "Please enter a valid email" });
+  }
+
+  // Check for existing user
+  User.findOne({ email }).then(user => {
+    if (!user) return res.status(400).json({ msg: "User does not exist" });
+
+    // Validate password
+    bcrypt.compare(password, user.password).then(isMatch => {
+      if (!isMatch) return res.status(400).json({ msg: "Invalid credentials" });
+
+      jwt.sign(
+        { id: user.id },
+        jwt_secret,
+        {
+          expiresIn: 86400
+        },
+        (err, token) => {
+          if (err) throw err;
+          res.json({
+            token,
+            user: {
+              id: user.id,
+              username: user.username,
+              email: user.email,
+              is_admin: user.is_admin
+            }
+          });
+        }
+      );
+    });
+  });
 });
 
 router.delete("/delete/:id", auth, (req, res) => {

@@ -103,7 +103,7 @@ const Schedule = () => {
     setFormType("");
   };
 
-  const handleBtnClick = () => {
+  const handleAddTeacherNav = () => {
     setFormType("teacher");
   };
 
@@ -112,7 +112,7 @@ const Schedule = () => {
     setIsOpen(true);
   };
 
-  const handlePayrollBtnClick = () => {
+  const handlePayrollNav = () => {
     setFormType("payroll");
   };
 
@@ -149,8 +149,8 @@ const Schedule = () => {
         handleMove={handleMove}
         handleSelect={handleSelect}
         handleDoubleClick={handleDoubleClick}
-        handleBtnClick={handleBtnClick}
-        handlePayrollBtnClick={handlePayrollBtnClick}
+        handleBtnClick={handleAddTeacherNav}
+        handlePayrollBtnClick={handlePayrollNav}
       />
     </div>
   );

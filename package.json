@@ -20,6 +20,7 @@
     "moment": "^2.24.0",
     "mongoose": "^5.8.11",
     "node-sass": "^4.13.1",
+    "react-router-dom": "^5.1.2",
     "react-time-picker": "^3.9.0"
   },
   "scripts": {
