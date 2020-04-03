@@ -34,7 +34,7 @@ export default initialTeachers => {
     teachers,
     getTeachers: async () => {
       await axios
-        .get("/teachers/")
+        .get("/teachers")
         .then(res => {
           if (res.data.length > 0) {
             setTeachers(res.data);

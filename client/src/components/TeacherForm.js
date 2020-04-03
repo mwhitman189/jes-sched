@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { ValidatorForm, TextValidator } from "react-material-ui-form-validator";
 import useInputState from "../hooks/useInputState";
-import useToggle from "../hooks/useToggle";
+import useToggleState from "../hooks/useToggleState";
 import { TeachersContext } from "../context/TeachersContext";
 import { makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
@@ -34,7 +34,7 @@ export default function EventForm(props) {
   const [otThresholdHours, updateOtThresholdHours] = useInputState("");
   const [contractType, updateContractType] = useInputState("");
   const [dependentsNum, updateDependentsNum] = useInputState("");
-  const [isPartTime, toggleIsPartTime] = useToggle(false);
+  const [isPartTime, toggleIsPartTime] = useToggleState(false);
 
   const handleAddTeacher = e => {
     e.preventDefault();

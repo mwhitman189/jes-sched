@@ -1,22 +1,25 @@
-function authReducer(state, action) {
+const authReducer = (state, action) => {
   switch (action.type) {
-    case "USER_LOADING":
+    case "USER_AUTHENTICATING":
       return {
         ...state,
-        isLoading: true
+        isLoading: true,
+        isAuthenticated: false
       };
     case "USER_LOADED":
       return {
         ...state,
+        ...action.payload,
+        user: action.payload.user,
         isAuthenticated: true,
-        isLoading: false,
-        user: action.payload
+        isLoading: false
       };
     case "LOGIN_SUCCESS":
     case "REGISTER_SUCCESS":
       return {
         ...state,
         ...action.payload,
+        user: action.payload.user,
         isAuthenticated: true,
         isLoading: false
       };
@@ -34,6 +37,6 @@ function authReducer(state, action) {
     default:
       return state;
   }
-}
+};
 
 export default authReducer;

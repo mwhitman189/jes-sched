@@ -1,4 +1,8 @@
 import React, { useContext } from "react";
+import axios from "axios";
+import { UserContext } from "../context/UserContext";
+import useInputState from "../hooks/useInputState";
+import useToggleState from "../hooks/useToggleState";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -12,14 +16,13 @@ import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
-import { UserContext } from "../context/UserContext";
 
 function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
       {"Copyright © "}
       <Link color="inherit" href="https://material-ui.com/">
-        Your Website
+        Whitman Solutions
       </Link>{" "}
       {new Date().getFullYear()}
       {"."}
@@ -48,14 +51,31 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function Login() {
+  const classes = useStyles();
   const { dispatch } = useContext(UserContext);
-  const handleLogin = e => {
+
+  const [email, updateEmail] = useInputState("");
+  const [password, updatePassword] = useInputState("");
+  const [isLoading, toggleIsLoading] = useToggleState(false);
+
+  const handleLogin = async e => {
     e.preventDefault();
-    dispatch({ type: "LOGIN_SUCCESS" });
+    const user = {
+      email: email,
+      password: password
+    };
+    dispatch({ type: "USER_LOADING" });
+    await axios
+      .post("/users/login", user)
+      .then(res => {
+        dispatch({
+          type: "LOGIN_SUCCESS",
+          payload: res.data
+        });
+      })
+      .catch(err => console.log(err));
     return console.log("Success! Logged In");
   };
-
-  const classes = useStyles();
 
   return (
     <Container component="main" maxWidth="xs">
@@ -67,9 +87,10 @@ export default function Login() {
         <Typography component="h1" variant="h5">
           Login
         </Typography>
-        <form className={classes.form} noValidate>
+        <form className={classes.form} noValidate onSubmit={handleLogin}>
           <TextField
             variant="outlined"
+            value={email}
             margin="normal"
             required
             fullWidth
@@ -77,10 +98,12 @@ export default function Login() {
             label="Email Address"
             name="email"
             autoComplete="email"
+            onChange={updateEmail}
             autoFocus
           />
           <TextField
             variant="outlined"
+            value={password}
             margin="normal"
             required
             fullWidth
@@ -89,6 +112,7 @@ export default function Login() {
             type="password"
             id="password"
             autoComplete="current-password"
+            onChange={updatePassword}
           />
           <FormControlLabel
             control={<Checkbox value="remember" color="primary" />}

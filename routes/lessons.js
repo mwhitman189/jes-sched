@@ -64,7 +64,6 @@ router.put("/update/:id", (req, res) => {
         lesson[itemFromBodyIndex] = req.body[itemFromBodyIndex];
       }
     }
-
     lesson
       .save()
       .then(() => res.json("Lesson updated!"))

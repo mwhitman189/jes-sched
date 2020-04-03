@@ -8,6 +8,7 @@ const jwt_secret =
   process.env.JWT_SECRET || require("../config/config").JWT_SECRET;
 
 router.get("/", (req, res) => {
+  console.log(res);
   User.find()
     .then(users => res.json(users))
     .catch(err => res.status(400).json(`Error: ${err}`));
@@ -20,10 +21,10 @@ function validateEmail(email) {
 }
 
 router.post("/signup", (req, res) => {
-  const { username, email, password } = req.body;
+  const { givenName, familyName, email, password } = req.body;
 
   // Validation
-  if (!username || !email || !password) {
+  if (!givenName || !familyName || !email || !password) {
     return res.status(400).json({ msg: "Please enter all fields" });
   }
 
@@ -37,7 +38,8 @@ router.post("/signup", (req, res) => {
   });
 
   const newUser = new User({
-    username,
+    givenName,
+    familyName,
     email,
     password
   });
@@ -46,37 +48,37 @@ router.post("/signup", (req, res) => {
     bcrypt.hash(newUser.password, salt, (err, hash) => {
       if (err) throw err;
       newUser.password = hash;
-      newUser.save().then(user => {
-        jwt.sign(
-          { id: user.id },
-          jwt_secret,
-          {
-            expiresIn: 86400
-          },
-          (err, token) => {
-            if (err) throw err;
-            res.json({
-              token,
-              user: {
-                id: user.id,
-                username: user.username,
-                email: user.email,
-                is_admin: user.is_admin
-              }
-            });
-          }
-        );
-      });
+      newUser
+        .save()
+        .then(user => {
+          jwt.sign(
+            { id: user.id },
+            jwt_secret,
+            {
+              expiresIn: 86400
+            },
+            (err, token) => {
+              if (err) throw err;
+              res.json({
+                token,
+                user: {
+                  id: user.id,
+                  givenName: user.givenName,
+                  familyName: user.familyName,
+                  email: user.email,
+                  is_admin: user.is_admin
+                }
+              });
+            }
+          );
+        })
+        .then(() => res.json("User registered!"))
+        .catch(err => res.status(400).json(`Error: ${err}`));
     });
   });
-
-  newUser
-    .save()
-    .then(() => res.json("User registered!"))
-    .catch(err => res.status(400).json(`Error: ${err}`));
 });
 
-router.post("/signin", (req, res) => {
+router.post("/login", (req, res) => {
   const { email, password } = req.body;
 
   // Validation
@@ -108,7 +110,8 @@ router.post("/signin", (req, res) => {
             token,
             user: {
               id: user.id,
-              username: user.username,
+              givenName: user.givenName,
+              familyName: user.familyName,
               email: user.email,
               is_admin: user.is_admin
             }

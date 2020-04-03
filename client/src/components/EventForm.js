@@ -6,7 +6,7 @@ import {
 } from "react-material-ui-form-validator";
 import moment from "moment";
 import useInputState from "../hooks/useInputState";
-import useToggle from "../hooks/useToggle";
+import useToggleState from "../hooks/useToggleState";
 import { validateRoom, validateTeacher } from "../validators";
 import { TeachersContext } from "../context/TeachersContext";
 import { EventsContext } from "../context/EventsContext";
@@ -80,7 +80,7 @@ export default function EventForm(props) {
   const [eventType, updateEventType, resetEventType] = useInputState(
     event ? event.type : ""
   );
-  const [isRecurring, toggleIsRecurring] = useToggle(false);
+  const [isRecurring, toggleIsRecurring] = useToggleState(false);
 
   let teacherValidators = ["required"];
   let teacherValMsgs = ["Teacher Required"];

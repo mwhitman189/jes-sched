@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { Switch, Route, Redirect } from "react-router-dom";
 import Login from "../components/Login";
-import SignUp from "../components/SignUp";
+import SignUp from "../components/SignUpForm";
 import Schedule from "../components/Schedule";
 import { UserContext } from "../context/UserContext";
 
