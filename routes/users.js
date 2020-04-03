@@ -66,7 +66,7 @@ router.post("/signup", (req, res) => {
                   givenName: user.givenName,
                   familyName: user.familyName,
                   email: user.email,
-                  is_admin: user.is_admin
+                  status: user.status
                 }
               });
             }

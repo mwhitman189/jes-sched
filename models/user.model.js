@@ -30,9 +30,9 @@ const userSchema = new Schema(
       required: true,
       trim: true
     },
-    is_admin: {
-      type: Boolean,
-      default: false
+    status: {
+      type: String,
+      default: teacher
     }
   },
   {
