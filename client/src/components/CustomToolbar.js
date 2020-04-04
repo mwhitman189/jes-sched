@@ -50,7 +50,7 @@ const CustomToolbar = withStyles(theme => styles)(props => {
         <IconButton
           className={classes.navBtn}
           type="button"
-          onClick={() => onNavigate("PREV")}
+          onClick={props => onNavigate("PREV")}
         >
           <LeftArrowIcon
             className={classes.navIcon}

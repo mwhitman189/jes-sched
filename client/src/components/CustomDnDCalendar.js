@@ -121,7 +121,7 @@ function CustomDnDCalendar(props) {
 
   return (
     <DragAndDropCalendar
-      style={{ width: "100vw", maxHeight: "100vh" }}
+      style={{ width: "100vw", maxHeight: "96vh" }}
       localizer={localizer}
       views={{ week: WorkWeek, day: true }}
       defaultView="week"
@@ -145,8 +145,9 @@ function CustomDnDCalendar(props) {
         event: LessonEvent,
         toolbar: props => (
           <CustomToolbar
-            handleBtnClick={handleAddTeacherNav}
-            handlePayrollBtnClick={handlePayrollNav}
+            {...props}
+            handleAddTeacherNav={handleAddTeacherNav}
+            handlePayrollNav={handlePayrollNav}
           />
         )
       }}

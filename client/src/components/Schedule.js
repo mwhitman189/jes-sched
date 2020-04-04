@@ -4,6 +4,7 @@ import EventForm from "./EventForm";
 import TeacherForm from "./TeacherForm";
 import CustomizedSnackbars from "./CustomizedSnackbars";
 import Payroll from "./Payroll";
+import Footer from "./Footer";
 import useFormState from "../hooks/useInputState";
 import { TeachersContext } from "../context/TeachersContext";
 import { validateRoom, validateTeacher } from "../validators";
@@ -149,9 +150,10 @@ const Schedule = () => {
         handleMove={handleMove}
         handleSelect={handleSelect}
         handleDoubleClick={handleDoubleClick}
-        handleBtnClick={handleAddTeacherNav}
-        handlePayrollBtnClick={handlePayrollNav}
+        handleAddTeacherNav={handleAddTeacherNav}
+        handlePayrollNav={handlePayrollNav}
       />
+      <Footer />
     </div>
   );
 };
