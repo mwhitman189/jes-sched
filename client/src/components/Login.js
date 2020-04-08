@@ -1,5 +1,6 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import axios from "axios";
+import loadUser from "../reducers/loadUserReducer";
 import { UserContext } from "../context/UserContext";
 import useInputState from "../hooks/useInputState";
 import useToggleState from "../hooks/useToggleState";
@@ -30,50 +31,45 @@ function Copyright() {
   );
 }
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   paper: {
     marginTop: theme.spacing(8),
     display: "flex",
     flexDirection: "column",
-    alignItems: "center"
+    alignItems: "center",
   },
   avatar: {
     margin: theme.spacing(1),
-    backgroundColor: theme.palette.secondary.main
+    backgroundColor: theme.palette.secondary.main,
   },
   form: {
     width: "100%", // Fix IE 11 issue.
-    marginTop: theme.spacing(1)
+    marginTop: theme.spacing(1),
   },
   submit: {
-    margin: theme.spacing(3, 0, 2)
-  }
+    margin: theme.spacing(3, 0, 2),
+  },
 }));
 
 export default function Login() {
   const classes = useStyles();
-  const { dispatch } = useContext(UserContext);
+  const { user, dispatch } = useContext(UserContext);
 
   const [email, updateEmail] = useInputState("");
   const [password, updatePassword] = useInputState("");
   const [isLoading, toggleIsLoading] = useToggleState(false);
 
-  const handleLogin = async e => {
+  useEffect(() => {
+    loadUser(user, dispatch);
+  }, []);
+
+  const handleLogin = async (e) => {
     e.preventDefault();
     const user = {
       email: email,
-      password: password
+      password: password,
     };
-    dispatch({ type: "USER_LOADING" });
-    await axios
-      .post("/users/login", user)
-      .then(res => {
-        dispatch({
-          type: "LOGIN_SUCCESS",
-          payload: res.data
-        });
-      })
-      .catch(err => console.log(err));
+    // Send through axios
     return console.log("Success! Logged In");
   };
 

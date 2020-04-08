@@ -9,34 +9,36 @@ const userSchema = new Schema(
       required: true,
       unique: true,
       trim: true,
-      minlength: 3
+      minlength: 3,
     },
     familyName: {
       type: String,
       required: true,
       unique: true,
       trim: true,
-      minlength: 3
+      minlength: 3,
     },
     email: {
       type: String,
       required: true,
       unique: true,
       trim: true,
-      minlength: 3
+      minlength: 3,
     },
     password: {
       type: String,
       required: true,
-      trim: true
+      trim: true,
     },
-    status: {
+    role: {
       type: String,
-      default: "teacher"
-    }
+      default: "teacher",
+      trim: true,
+      required: true,
+    },
   },
   {
-    timestamps: true
+    timestamps: true,
   }
 );
 

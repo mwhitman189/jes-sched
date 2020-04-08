@@ -14,24 +14,24 @@ import Container from "@material-ui/core/Container";
 import Link from "@material-ui/core/Link";
 import Typography from "@material-ui/core/Typography";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   paper: {
     marginTop: theme.spacing(8),
     display: "flex",
     flexDirection: "column",
-    alignItems: "center"
+    alignItems: "center",
   },
   avatar: {
     margin: theme.spacing(1),
-    backgroundColor: theme.palette.secondary.main
+    backgroundColor: theme.palette.secondary.main,
   },
   form: {
     width: "100%", // Fix IE 11 issue.
-    marginTop: theme.spacing(3)
+    marginTop: theme.spacing(3),
   },
   submit: {
-    margin: theme.spacing(3, 0, 2)
-  }
+    margin: theme.spacing(3, 0, 2),
+  },
 }));
 
 export default function SignUpForm() {
@@ -44,24 +44,24 @@ export default function SignUpForm() {
   const [password, updatePassword] = useInputState("");
   const [isLoading, toggleIsLoading] = useToggleState(false);
 
-  const handleSignUp = async e => {
+  const handleSignUp = async (e) => {
     e.preventDefault();
     const user = {
       givenName: givenName,
       familyName: familyName,
       email: email,
-      password: password
+      password: password,
     };
     dispatch({ type: "USER_LOADING" });
     await axios
       .post("/users/signup", user)
-      .then(res => {
+      .then((res) => {
         dispatch({
           type: "LOGIN_SUCCESS",
-          payload: res.data
+          payload: res.data,
         });
       })
-      .catch(err => console.log(err));
+      .catch((err) => console.log(err));
   };
 
   return (

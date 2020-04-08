@@ -3,11 +3,15 @@ const cors = require("cors");
 const mongoose = require("mongoose");
 const path = require("path");
 const app = express();
+const cookieParser = require("cookie-parser");
+const helmet = require("helmet");
 
 const port = process.env.PORT || 5000;
 
 app.use(cors());
 app.use(express.json());
+app.use(cookieParser("05047dsf$16*60"));
+app.use(helmet());
 
 const uri = process.env.MONGODB_URI || require("./config/config").ATLAS_URI;
 mongoose.connect(uri, {
@@ -20,15 +24,17 @@ connection.once("open", () => {
   console.log("MongoDB connected...");
 });
 
-const usersRouter = require("./routes/users");
-const teachersRouter = require("./routes/teachers");
-const lessonsRouter = require("./routes/lessons");
-const paymentsRouter = require("./routes/payments");
+const usersRouter = require("./routes/api/users");
+const authRouter = require("./routes/api/auth");
+const teachersRouter = require("./routes/api/teachers");
+const lessonsRouter = require("./routes/api/lessons");
+const paymentsRouter = require("./routes/api/payments");
 
-app.use("/users", usersRouter);
-app.use("/teachers", teachersRouter);
-app.use("/lessons", lessonsRouter);
-app.use("/payments", paymentsRouter);
+app.use("/api/users", usersRouter);
+app.use("/api/auth", authRouter);
+app.use("/api/teachers", teachersRouter);
+app.use("/api/lessons", lessonsRouter);
+app.use("/api/payments", paymentsRouter);
 
 // Serve static assets if in production
 if (process.env.NODE_ENV === "production") {

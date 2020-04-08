@@ -1,5 +1,6 @@
 import React, { useContext } from "react";
 import moment from "moment";
+import { useCookies } from "react-cookie";
 import { TeachersContext } from "../context/TeachersContext";
 import { UserContext } from "../context/UserContext";
 import IconButton from "@material-ui/core/IconButton";
@@ -19,11 +20,13 @@ const CustomToolbar = withStyles(theme => styles)(props => {
     handleAddTeacherNav,
     handlePayrollNav
   } = props;
+  const [cookies, setCookie, removeCookie] = useCookies(["token"]);
   const { teachers } = useContext(TeachersContext);
   const { dispatch } = useContext(UserContext);
 
   const handleLogout = e => {
     e.preventDefault();
+    removeCookie("token");
     dispatch({ type: "LOGOUT_SUCCESS" });
     console.log("Logged out");
   };
@@ -50,7 +53,7 @@ const CustomToolbar = withStyles(theme => styles)(props => {
         <IconButton
           className={classes.navBtn}
           type="button"
-          onClick={props => onNavigate("PREV")}
+          onClick={() => onNavigate("PREV")}
         >
           <LeftArrowIcon
             className={classes.navIcon}

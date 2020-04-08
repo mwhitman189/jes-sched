@@ -17,6 +17,7 @@ function Routes() {
 
 const RouteRegistration = ({ component: Component, ...rest }) => {
   const { user } = useContext(UserContext);
+
   return (
     <Route
       {...rest}
