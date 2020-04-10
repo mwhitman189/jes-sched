@@ -1,18 +1,21 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import axios from "axios";
 import { addNewEvent } from "../helperFunctions";
+import { UserContext } from "../context/UserContext";
+import { tokenConfig } from "../reducers/loadUserReducer";
 
-export default function(initialEvents) {
+export default function (initialEvents) {
+  const { user } = useContext(UserContext);
   const [events, setEvents] = useState(initialEvents);
 
   const testObj = {
     events,
-    getEvents: async function(dateTime) {
+    getEvents: async function (dateTime) {
       await axios
-        .get("/lessons/")
-        .then(res => {
+        .get("/api/lessons", tokenConfig(user))
+        .then((res) => {
           if (res.data.length > 0) {
-            res.data.forEach(event => {
+            res.data.forEach((event) => {
               event.start = new Date(event.start);
               event.end = new Date(event.end);
               // Check if last recurrence, and if so, create two more months of recurrences
@@ -25,35 +28,35 @@ export default function(initialEvents) {
             return setEvents(res.data);
           }
         })
-        .catch(err => console.log(err));
+        .catch((err) => console.log(err));
     },
-    addEvent: async function(event) {
+    addEvent: async function (event) {
       const newEvents = addNewEvent(event);
       setEvents([...events, ...newEvents]);
       await axios
-        .post("/lessons/add", newEvents)
-        .then(res => console.log(res.data))
-        .catch(err => console.log(err));
+        .post("/api/lessons/add", newEvents, tokenConfig(user))
+        .then((res) => console.log(res.data))
+        .catch((err) => console.log(err));
     },
-    deleteEvent: async function(event) {
-      const newEvents = events.filter(evt => evt._id !== event._id);
+    deleteEvent: async function (event) {
+      const newEvents = events.filter((evt) => evt._id !== event._id);
       setEvents(newEvents);
       await axios
-        .delete(`/lessons/delete/${event._id}`)
-        .then(res => console.log(res.data))
-        .catch(err => console.log(err));
+        .delete(`/api/lessons/delete/${event._id}`, tokenConfig(user))
+        .then((res) => console.log(res.data))
+        .catch((err) => console.log(err));
     },
-    editEvent: async function(event, editedEvent) {
-      const idx = events.findIndex(e => e._id === event._id);
+    editEvent: async function (event, editedEvent) {
+      const idx = events.findIndex((e) => e._id === event._id);
       const nextEvents = [...events];
 
       nextEvents.splice(idx, 1, editedEvent);
       setEvents(nextEvents);
       await axios
-        .put(`/lessons/update/${event._id}`, editedEvent)
-        .then(res => console.log(res.data))
-        .catch(err => console.log(err));
-    }
+        .put(`/api/lessons/update/${event._id}`, editedEvent, tokenConfig(user))
+        .then((res) => console.log(res.data))
+        .catch((err) => console.log(err));
+    },
   };
 
   return testObj;

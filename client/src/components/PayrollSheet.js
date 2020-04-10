@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import contracts from "../contracts";
 import { withStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -7,11 +8,10 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import { TableFooter } from "@material-ui/core";
-import contracts from "../contracts";
 import { addPayment } from "../helperFunctions";
 import { blue } from "@material-ui/core/colors";
 
-const styles = theme => ({
+const styles = (theme) => ({
   table: {
     padding: "1rem",
     maxWidth: "90vw",
@@ -19,20 +19,20 @@ const styles = theme => ({
     height: "auto",
     "& th, td": {
       fontSize: ".7rem",
-      padding: "0.1rem"
-    }
+      padding: "0.1rem",
+    },
   },
   title: {
     padding: 0,
     "& h2": {
       fontSize: ".7rem",
       margin: 0,
-      padding: 0
-    }
+      padding: 0,
+    },
   },
   avatar: {
     backgroundColor: blue[100],
-    color: blue[600]
+    color: blue[600],
   },
   btn: {
     color: "#fff",
@@ -43,15 +43,15 @@ const styles = theme => ({
     borderRadius: "5px",
     padding: ".3rem .5rem",
     minWidth: "4rem",
-    margin: "1rem auto"
+    margin: "1rem auto",
   },
   footerRows: {
-    width: "100%"
+    width: "100%",
   },
   totals: {
     color: "#21942a",
-    fontWeight: "800"
-  }
+    fontWeight: "800",
+  },
 });
 
 class PayrollSheet extends Component {
@@ -67,7 +67,7 @@ class PayrollSheet extends Component {
       unpaidVacationDays,
       paidSickDays,
       unpaidSickDays,
-      setFormType
+      setFormType,
     } = this.props;
     const contract = contracts[currentTeacher.contractType];
 
@@ -79,10 +79,10 @@ class PayrollSheet extends Component {
         totalOutsideDutyHoursAllowance: 0,
         totalHolidayAllowance: 0,
         totalTravelAllowance: 0,
-        totalTravelExpenses: 0
+        totalTravelExpenses: 0,
       };
 
-      rows.forEach(r => {
+      rows.forEach((r) => {
         sums.totalTeachingHours +=
           Math.round((r.teachingMins / 60 + Number.EPSILON) * 100) / 100;
         if (r.overThresholdOneMins > 0) {
@@ -156,7 +156,7 @@ class PayrollSheet extends Component {
         incomeTaxReservation: incomeTaxReservation,
         taxRefund: taxRefund,
         grossPayment: grossPayment,
-        payroll: payroll
+        payroll: payroll,
       };
       addPayment(newPayment);
       setFormType("");
@@ -180,7 +180,7 @@ class PayrollSheet extends Component {
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.map(row => (
+            {rows.map((row) => (
               <TableRow key={row.date}>
                 <TableCell component="th" scope="row">
                   {row.date}

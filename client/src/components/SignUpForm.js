@@ -1,15 +1,16 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import axios from "axios";
-import { UserContext } from "../context/UserContext";
+import loadUser from "../reducers/loadUserReducer";
 import useInputState from "../hooks/useInputState";
 import useToggleState from "../hooks/useToggleState";
+import { UserContext } from "../context/UserContext";
+import { makeStyles } from "@material-ui/core/styles";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import TextField from "@material-ui/core/TextField";
 import Grid from "@material-ui/core/Grid";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
-import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import Link from "@material-ui/core/Link";
 import Typography from "@material-ui/core/Typography";
@@ -36,7 +37,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function SignUpForm() {
   const classes = useStyles();
-  const { dispatch } = useContext(UserContext);
+  const { user, dispatch } = useContext(UserContext);
 
   const [givenName, updateGivenName] = useInputState("");
   const [familyName, updateFamilyName] = useInputState("");
@@ -44,7 +45,11 @@ export default function SignUpForm() {
   const [password, updatePassword] = useInputState("");
   const [isLoading, toggleIsLoading] = useToggleState(false);
 
-  const handleSignUp = async (e) => {
+  useEffect(() => {
+    loadUser(user, dispatch);
+  }, [user]);
+
+  const handleSignup = async (e) => {
     e.preventDefault();
     const user = {
       givenName: givenName,
@@ -52,16 +57,16 @@ export default function SignUpForm() {
       email: email,
       password: password,
     };
-    dispatch({ type: "USER_LOADING" });
     await axios
-      .post("/users/signup", user)
+      .post("/api/users/signup", user)
       .then((res) => {
         dispatch({
-          type: "LOGIN_SUCCESS",
+          type: "REGISTER_SUCCESS",
           payload: res.data,
         });
       })
-      .catch((err) => console.log(err));
+      .catch((err) => dispatch({ type: "REGISTER_FAIL" }));
+    return console.log("Success! Logged In");
   };
 
   return (
@@ -74,7 +79,7 @@ export default function SignUpForm() {
         <Typography component="h1" variant="h5">
           Sign up
         </Typography>
-        <form className={classes.form} noValidate onSubmit={handleSignUp}>
+        <form className={classes.form} noValidate onSubmit={handleSignup}>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
               <TextField
@@ -86,7 +91,6 @@ export default function SignUpForm() {
                 fullWidth
                 id="givenName"
                 label="Given Name"
-                autoComplete="fname"
                 onChange={updateGivenName}
                 autoFocus
               />

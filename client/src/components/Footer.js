@@ -10,7 +10,6 @@ function Footer() {
         Whitman Solutions
       </Link>{" "}
       {new Date().getFullYear()}
-      {"."}
     </Typography>
   );
 }

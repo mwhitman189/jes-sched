@@ -1,14 +1,14 @@
-import React, { useState, useEffect, useLayoutEffect, useContext } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import CustomDnDCalendar from "./CustomDnDCalendar";
+import { validateRoom, validateTeacher } from "../validators";
+import { TeachersContext } from "../context/TeachersContext";
+import { EventsContext } from "../context/EventsContext";
+import useFormState from "../hooks/useInputState";
 import EventForm from "./EventForm";
 import TeacherForm from "./TeacherForm";
 import CustomizedSnackbars from "./CustomizedSnackbars";
 import Payroll from "./Payroll";
 import Footer from "./Footer";
-import useFormState from "../hooks/useInputState";
-import { TeachersContext } from "../context/TeachersContext";
-import { validateRoom, validateTeacher } from "../validators";
-import { EventsContext } from "../context/EventsContext";
 import "react-big-calendar/lib/sass/styles.scss";
 import "react-big-calendar/lib/addons/dragAndDrop/styles.scss";
 
@@ -18,12 +18,12 @@ const Schedule = () => {
     setTeachers,
     getTeachers,
     addTeacher,
-    addTeachingMins
+    addTeachingMins,
   } = useContext(TeachersContext);
   const { events, addEvent, getEvents } = useContext(EventsContext);
 
   const [formType, setFormType] = useState("");
-  const [startTime, updateStartTime, resetStartTime] = useFormState(new Date());
+  const [startTime, updateStartTime] = useFormState(new Date());
   const [selectedEvent, setSelectedEvent] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const [message, setMessage] = useState("");
@@ -75,14 +75,14 @@ const Schedule = () => {
         event,
         resourceId,
         start,
-        end
+        end,
       });
       return 0;
     }
     return 1;
   };
 
-  const handleAddEvent = newEvent => {
+  const handleAddEvent = (newEvent) => {
     addEvent(newEvent);
     setFormType("");
   };
@@ -93,13 +93,13 @@ const Schedule = () => {
     setFormType("event");
   };
 
-  const handleDoubleClick = event => {
+  const handleDoubleClick = (event) => {
     updateStartTime(event.start);
     setSelectedEvent(event);
     setFormType("event");
   };
 
-  const handleAddTeacher = newTeacher => {
+  const handleAddTeacher = (newTeacher) => {
     addTeacher(teachers, newTeacher, setTeachers);
     setFormType("");
   };
@@ -108,7 +108,7 @@ const Schedule = () => {
     setFormType("teacher");
   };
 
-  const handleToggleSnackbar = msg => {
+  const handleToggleSnackbar = (msg) => {
     setMessage(msg);
     setIsOpen(true);
   };
@@ -146,6 +146,7 @@ const Schedule = () => {
         variant={"error"}
         msg={message}
       />
+
       <CustomDnDCalendar
         handleMove={handleMove}
         handleSelect={handleSelect}

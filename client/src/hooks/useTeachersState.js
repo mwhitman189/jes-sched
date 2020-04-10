@@ -1,12 +1,15 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import axios from "axios";
 import { createPayPeriodData } from "../helperFunctions";
+import { tokenConfig } from "../reducers/loadUserReducer";
+import { UserContext } from "../context/UserContext";
 
-export default initialTeachers => {
+export default (initialTeachers) => {
+  const { user } = useContext(UserContext);
   const [teachers, setTeachers] = useState(initialTeachers);
 
-  const updateTeacher = async teacher => {
-    const idx = teachers.findIndex(t => t._id === teacher._id);
+  const updateTeacher = async (teacher) => {
+    const idx = teachers.findIndex((t) => t._id === teacher._id);
     const updatedTeachers = [...teachers];
 
     const updatedTeacher = {
@@ -19,43 +22,47 @@ export default initialTeachers => {
       outsideDutyMins: teacher.outsideDutyMins,
       otThreshold: teacher.otThreshold,
       overThresholdOneMins: teacher.overThresholdOneMins,
-      overThresholdTwoMins: teacher.overThresholdTwoMins
+      overThresholdTwoMins: teacher.overThresholdTwoMins,
     };
     updatedTeachers.splice(idx, 1, updatedTeacher);
 
     setTeachers(updatedTeachers);
     await axios
-      .put(`/teachers/update/${teacher._id}`, updatedTeacher)
-      .then(res => console.log(res.data))
-      .catch(err => console.log(err));
+      .put(
+        `/api/teachers/update/${teacher._id}`,
+        updatedTeacher,
+        tokenConfig(user)
+      )
+      .then((res) => console.log(res.data))
+      .catch((err) => console.log(err));
   };
 
   return {
     teachers,
     getTeachers: async () => {
       await axios
-        .get("/teachers")
-        .then(res => {
+        .get("/api/teachers", tokenConfig(user))
+        .then((res) => {
           if (res.data.length > 0) {
             setTeachers(res.data);
           }
         })
-        .catch(err => console.log(err));
+        .catch((err) => console.log(err));
     },
-    addTeacher: async newTeacher => {
+    addTeacher: async (newTeacher) => {
       await axios
-        .post("/teachers/add", newTeacher)
-        .then(res => console.log(res.data))
-        .catch(err => console.log(err));
+        .post("/api/teachers/add", newTeacher, tokenConfig(user))
+        .then((res) => console.log(res.data))
+        .catch((err) => console.log(err));
       return setTeachers([...teachers, newTeacher]);
     },
-    deleteTeacher: async teacher => {
+    deleteTeacher: async (teacher) => {
       await axios
-        .delete(`/teachers/delete/${teacher._id}`)
-        .then(res => console.log(res.data))
-        .catch(err => console.log(err));
+        .delete(`/api/teachers/delete/${teacher._id}`, tokenConfig(user))
+        .then((res) => console.log(res.data))
+        .catch((err) => console.log(err));
     },
-    addTeachingMins: events => {
+    addTeachingMins: (events) => {
       const now = new Date();
       // Create start and end dates for the current month to calc
       // teaching minutes
@@ -63,7 +70,7 @@ export default initialTeachers => {
       const monthEnd = new Date(now.getFullYear(), now.getMonth() + 1, 0);
       if (teachers.length > 0) {
         // Reset teaching minutes to "0", then add all teaching minutes to the corresponding instructor
-        teachers.forEach(teacher => {
+        teachers.forEach((teacher) => {
           teacher.teachingMins = 0;
           teacher.outsideDutyMins = 0;
           teacher.holidayMins = 0;
@@ -71,11 +78,11 @@ export default initialTeachers => {
           teacher.overThresholdTwoMins = 0;
         });
 
-        teachers.forEach(teacher => {
+        teachers.forEach((teacher) => {
           createPayPeriodData(events, teacher, monthStart, monthEnd);
           updateTeacher(teacher);
         });
       }
-    }
+    },
   };
 };

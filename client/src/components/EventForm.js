@@ -1,18 +1,20 @@
 import React, { useContext } from "react";
+import moment from "moment";
+import MomentUtils from "@date-io/moment";
 import {
   ValidatorForm,
   TextValidator,
-  SelectValidator
+  SelectValidator,
 } from "react-material-ui-form-validator";
-import moment from "moment";
 import useInputState from "../hooks/useInputState";
 import useToggleState from "../hooks/useToggleState";
 import { validateRoom, validateTeacher } from "../validators";
 import { TeachersContext } from "../context/TeachersContext";
 import { EventsContext } from "../context/EventsContext";
+import roomList from "../rooms";
+import lessonTypes from "../lessonTypes";
 import { makeStyles } from "@material-ui/core/styles";
 import { TimePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
-import MomentUtils from "@date-io/moment";
 import MenuItem from "@material-ui/core/MenuItem";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
@@ -22,32 +24,30 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import FormControl from "@material-ui/core/FormControl";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Switch from "@material-ui/core/Switch";
-import roomList from "../rooms";
-import lessonTypes from "../lessonTypes";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   formControl: {
     margin: theme.spacing(1),
     minWidth: 120,
     display: "inline",
     "& .MuiFormControl-root": {
       margin: "10px",
-      width: "110px"
-    }
+      width: "110px",
+    },
   },
   recurSwitch: {
     position: "absolute",
     right: "1rem",
-    top: "1rem"
+    top: "1rem",
   },
   selectEmpty: {
-    marginTop: theme.spacing(2)
+    marginTop: theme.spacing(2),
   },
   timePickerContainer: {
     display: "flex",
     justifyContent: "center",
-    width: "100%"
-  }
+    width: "100%",
+  },
 }));
 
 export default function EventForm(props) {
@@ -62,10 +62,10 @@ export default function EventForm(props) {
     setSelectedEvent,
     selectedTeacher,
     validateRoomAndResource,
-    addEvent
+    addEvent,
   } = props;
 
-  const [start, updateStart, resetStart] = useInputState(startTime);
+  const [start, updateStart] = useInputState(startTime);
 
   const [title, updateTitle, resetTitle] = useInputState(
     event ? event.title : ""
@@ -95,13 +95,13 @@ export default function EventForm(props) {
 
   // If an event does not exist, check whether the selected room is
   // available at the specified time
-  ValidatorForm.addValidationRule("teacherIsAvailable", teacher => {
+  ValidatorForm.addValidationRule("teacherIsAvailable", (teacher) => {
     return validateTeacher(events, teacher, startTime, duration);
   });
 
   // If an event does not exist, check whether the selected room is
   // available at the specified time
-  ValidatorForm.addValidationRule("roomIsAvailable", room => {
+  ValidatorForm.addValidationRule("roomIsAvailable", (room) => {
     return validateRoom(events, room, startTime, duration);
   });
 
@@ -120,37 +120,33 @@ export default function EventForm(props) {
     setSelectedEvent("");
   };
 
-  const handleAddEvent = e => {
+  const handleAddEvent = (e) => {
     e.preventDefault();
     addEvent({
       title: title,
       start: startTime,
-      end: moment(startTime)
-        .add(duration, "m")
-        .toDate(),
+      end: moment(startTime).add(duration, "m").toDate(),
       room: room,
       duration: parseInt(duration),
       resourceId: resource,
       type: eventType,
-      recur: isRecurring
+      recur: isRecurring,
     });
     hideForm();
   };
 
-  const handleEditEvent = e => {
+  const handleEditEvent = (e) => {
     e.preventDefault();
     validateRoomAndResource(e, resource, startTime);
     const editedEvent = {
       title: title,
       start: startTime,
-      end: moment(startTime)
-        .add(duration, "m")
-        .toDate(),
+      end: moment(startTime).add(duration, "m").toDate(),
       room: room,
-      duration: duration,
+      duration: parseInt(duration),
       resourceId: parseInt(resource),
       type: eventType,
-      isRecurring: isRecurring
+      isRecurring: isRecurring,
     };
     editEvent(event, editedEvent);
     hideForm();
@@ -245,7 +241,7 @@ export default function EventForm(props) {
               errorMessages={teacherValMsgs}
             >
               <MenuItem value="" />
-              {teachers.map(t => (
+              {teachers.map((t) => (
                 <MenuItem key={`teacher-${t.resourceId}`} value={t.resourceId}>
                   {t.name}
                 </MenuItem>
@@ -267,7 +263,7 @@ export default function EventForm(props) {
               errorMessages={roomValMsgs}
             >
               <MenuItem value="" />
-              {roomList.map(r => (
+              {roomList.map((r) => (
                 <MenuItem key={`room-${r}`} value={r}>
                   {r}
                 </MenuItem>
@@ -287,7 +283,7 @@ export default function EventForm(props) {
               name="type"
             >
               <MenuItem value="" />
-              {lessonTypes.map(t => (
+              {lessonTypes.map((t) => (
                 <MenuItem key={`type-${t.shortName}`} value={t.type}>
                   {t.name}
                 </MenuItem>

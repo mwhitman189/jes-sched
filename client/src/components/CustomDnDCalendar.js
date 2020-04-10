@@ -1,13 +1,13 @@
 import React, { useContext } from "react";
+import moment from "moment";
 import { Calendar, momentLocalizer } from "react-big-calendar";
 import withDragAndDrop from "react-big-calendar/lib/addons/dragAndDrop";
-import moment from "moment";
-import "react-big-calendar/lib/sass/toolbar.scss";
 import { EventsContext } from "../context/EventsContext";
 import { TeachersContext } from "../context/TeachersContext";
 import { WorkWeek } from "./CustomViews";
 import LessonEvent from "./LessonEvent";
 import CustomToolbar from "./CustomToolbar";
+import "react-big-calendar/lib/sass/toolbar.scss";
 
 const localizer = momentLocalizer(moment);
 const DragAndDropCalendar = withDragAndDrop(Calendar);
@@ -21,7 +21,7 @@ function CustomDnDCalendar(props) {
     handleSelect,
     handleDoubleClick,
     handleAddTeacherNav,
-    handlePayrollNav
+    handlePayrollNav,
   } = props;
 
   // Limit displayed hours of the day
@@ -31,7 +31,7 @@ function CustomDnDCalendar(props) {
   maxTime.setHours(20, 59, 59);
 
   // Style events based on event.type
-  const eventStyleGetter = event => {
+  const eventStyleGetter = (event) => {
     // Hide a dummy event that fixes drag and drop bug
     if (event.hide) {
       return { style: { display: "none" } };
@@ -103,18 +103,18 @@ function CustomDnDCalendar(props) {
       color: "white",
       border: 0,
       display: "block",
-      boxShadow: ""
+      boxShadow: "",
     };
 
     if (event.isNewEvent) {
       style.boxShadow = "2px 2px 2px 2px rgba(74,73,74,0.35)";
     }
     return {
-      style: style
+      style: style,
     };
   };
 
-  const handleSingleClick = event => {
+  const handleSingleClick = (event) => {
     const updatedEvent = { ...event, isNewEvent: false };
     editEvent(event, updatedEvent);
   };
@@ -143,13 +143,13 @@ function CustomDnDCalendar(props) {
       onSelectSlot={handleSelect}
       components={{
         event: LessonEvent,
-        toolbar: props => (
+        toolbar: (props) => (
           <CustomToolbar
             {...props}
             handleAddTeacherNav={handleAddTeacherNav}
             handlePayrollNav={handlePayrollNav}
           />
-        )
+        ),
       }}
       resizableAccessor={() => false}
     />

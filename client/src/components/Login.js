@@ -1,9 +1,9 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext } from "react";
 import axios from "axios";
-import loadUser from "../reducers/loadUserReducer";
-import { UserContext } from "../context/UserContext";
 import useInputState from "../hooks/useInputState";
 import useToggleState from "../hooks/useToggleState";
+import { UserContext } from "../context/UserContext";
+import { makeStyles } from "@material-ui/core/styles";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -15,7 +15,6 @@ import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
-import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 
 function Copyright() {
@@ -26,7 +25,6 @@ function Copyright() {
         Whitman Solutions
       </Link>{" "}
       {new Date().getFullYear()}
-      {"."}
     </Typography>
   );
 }
@@ -53,23 +51,30 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Login() {
   const classes = useStyles();
-  const { user, dispatch } = useContext(UserContext);
+  const { dispatch } = useContext(UserContext);
 
   const [email, updateEmail] = useInputState("");
   const [password, updatePassword] = useInputState("");
   const [isLoading, toggleIsLoading] = useToggleState(false);
 
-  useEffect(() => {
-    loadUser(user, dispatch);
-  }, []);
-
   const handleLogin = async (e) => {
     e.preventDefault();
-    const user = {
+    const userToLogIn = {
       email: email,
       password: password,
     };
-    // Send through axios
+
+    await axios
+      .post("/api/auth", userToLogIn)
+      .then((res) => {
+        dispatch({
+          type: "USER_LOADED",
+          payload: res.data,
+        });
+      })
+      .catch((err) => {
+        dispatch({ type: "AUTH_ERROR" });
+      });
     return console.log("Success! Logged In");
   };
 

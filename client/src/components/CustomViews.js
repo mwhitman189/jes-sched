@@ -3,14 +3,14 @@ import { Navigate } from "react-big-calendar";
 import TimeGrid from "react-big-calendar/lib/TimeGrid";
 import * as dates from "date-arithmetic";
 
-const WorkWeek = props => {
+const WorkWeek = (props) => {
   let { date } = props;
   let range = WorkWeek.range(date);
 
   return <TimeGrid {...props} range={range} />;
 };
 
-WorkWeek.range = date => {
+WorkWeek.range = (date) => {
   // Set the date object's time to 0:00 so all events for the day will be displayed
   // on the first day of the calendar week regardless of time of day
   date.setHours(0, 0, 0, 0);
@@ -76,7 +76,7 @@ WorkWeek.navigate = (date, action) => {
   }
 };
 
-WorkWeek.title = date => {
+WorkWeek.title = (date) => {
   return `${date.toLocaleDateString()}`;
 };
 

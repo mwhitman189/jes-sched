@@ -3,23 +3,23 @@ const authReducer = (state, action) => {
     case "USER_AUTHENTICATING":
       return {
         ...state,
-        isLoading: true,
         isAuthenticated: false,
+        isLoading: true,
       };
     case "USER_LOADED":
+      localStorage.setItem("token", action.payload.token);
       return {
         ...state,
         ...action.payload,
-        user: action.payload.user,
         isAuthenticated: true,
         isLoading: false,
       };
     case "LOGIN_SUCCESS":
     case "REGISTER_SUCCESS":
+      localStorage.setItem("token", action.payload.token);
       return {
         ...state,
         ...action.payload,
-        user: action.payload.user,
         isAuthenticated: true,
         isLoading: false,
       };

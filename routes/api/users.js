@@ -56,29 +56,21 @@ router.post("/signup", (req, res) => {
             { id: user.id },
             jwt_secret,
             {
-              expiresIn: 86400,
+              expiresIn: 3600,
             },
             (err, token) => {
               if (err) throw err;
-              res
-                .json({
-                  token,
-                  user: {
-                    id: user.id,
-                    givenName: user.givenName,
-                    familyName: user.familyName,
-                    email: user.email,
-                    role: user.role,
-                    is_admin: user.is_admin,
-                  },
-                })
-                .then(() => {
-                  res.cookie("token", token, {
-                    httpOnly: true,
-                    maxAge: 1000000000,
-                    signed: true,
-                  });
-                });
+              res.json({
+                token,
+                user: {
+                  id: user.id,
+                  givenName: user.givenName,
+                  familyName: user.familyName,
+                  email: user.email,
+                  role: user.role,
+                  is_admin: user.is_admin,
+                },
+              });
             }
           );
         })

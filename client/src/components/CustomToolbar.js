@@ -1,6 +1,5 @@
 import React, { useContext } from "react";
 import moment from "moment";
-import { useCookies } from "react-cookie";
 import { TeachersContext } from "../context/TeachersContext";
 import { UserContext } from "../context/UserContext";
 import IconButton from "@material-ui/core/IconButton";
@@ -10,7 +9,7 @@ import { withStyles } from "@material-ui/styles";
 import styles from "../styles/CustomToolbarStyles";
 import "react-big-calendar/lib/sass/toolbar.scss";
 
-const CustomToolbar = withStyles(theme => styles)(props => {
+const CustomToolbar = withStyles((theme) => styles)((props) => {
   const {
     classes,
     onNavigate,
@@ -18,17 +17,14 @@ const CustomToolbar = withStyles(theme => styles)(props => {
     isRTL,
     date,
     handleAddTeacherNav,
-    handlePayrollNav
+    handlePayrollNav,
   } = props;
-  const [cookies, setCookie, removeCookie] = useCookies(["token"]);
   const { teachers } = useContext(TeachersContext);
   const { dispatch } = useContext(UserContext);
 
-  const handleLogout = e => {
+  const handleLogout = (e) => {
     e.preventDefault();
-    removeCookie("token");
     dispatch({ type: "LOGOUT_SUCCESS" });
-    console.log("Logged out");
   };
 
   return (
@@ -64,9 +60,7 @@ const CustomToolbar = withStyles(theme => styles)(props => {
           className={classes.todayLabel}
           onClick={() => onNavigate("TODAY")}
         >
-          {moment(date)
-            .format("dddd MM/DD")
-            .toLocaleString()}
+          {moment(date).format("dddd MM/DD").toLocaleString()}
         </span>
         <IconButton
           className={classes.navBtn}
@@ -81,7 +75,7 @@ const CustomToolbar = withStyles(theme => styles)(props => {
       </div>
       <div>
         <ul className={classes.teacherList}>
-          {teachers.map(t => (
+          {teachers.map((t) => (
             <li
               className={
                 t.overThresholdTwoMins > 0

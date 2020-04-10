@@ -1,6 +1,7 @@
 import React, { useState, useContext, useRef } from "react";
 import moment from "moment";
 import ReactToPrint from "react-to-print";
+import { EventsContext } from "../context/EventsContext";
 import { TeachersContext } from "../context/TeachersContext";
 import { createPayPeriodData } from "../helperFunctions";
 import PayrollSheet from "./PayrollSheet";
@@ -13,13 +14,12 @@ import ListItemText from "@material-ui/core/ListItemText";
 import Dialog from "@material-ui/core/Dialog";
 import PersonIcon from "@material-ui/icons/Person";
 import DialogTitle from "@material-ui/core/DialogTitle";
-import { EventsContext } from "../context/EventsContext";
 import { blue } from "@material-ui/core/colors";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   avatar: {
     backgroundColor: blue[100],
-    color: blue[600]
+    color: blue[600],
   },
   btn: {
     color: "#fff",
@@ -30,8 +30,8 @@ const useStyles = makeStyles(theme => ({
     borderRadius: "5px",
     padding: ".3rem .5rem",
     minWidth: "4rem",
-    margin: ".2rem auto .1rem"
-  }
+    margin: ".2rem auto .1rem",
+  },
 }));
 
 function createData(
@@ -54,11 +54,11 @@ function createData(
     outsideDutyMins,
     holidayMins,
     travelAllowance,
-    travelExpenses
+    travelExpenses,
   };
 }
 
-const Payroll = props => {
+const Payroll = (props) => {
   const componentRef = useRef();
   const classes = useStyles();
 
@@ -74,7 +74,7 @@ const Payroll = props => {
   const monthEnd = new Date(now.getFullYear(), now.getMonth() + 1, 0);
   const daysInMonth = moment(now).daysInMonth();
 
-  const showPayrollSheet = teacher => {
+  const showPayrollSheet = (teacher) => {
     setCurrentTeacher(teacher);
 
     const teachingMinsByDate = createPayPeriodData(
@@ -138,7 +138,7 @@ const Payroll = props => {
           Payroll: Select a teacher
         </DialogTitle>
         <List>
-          {teachers.map(t => (
+          {teachers.map((t) => (
             <ListItem
               button
               onClick={() => showPayrollSheet(t)}

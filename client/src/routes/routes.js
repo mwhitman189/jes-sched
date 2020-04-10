@@ -1,16 +1,16 @@
 import React, { useContext } from "react";
 import { Switch, Route, Redirect } from "react-router-dom";
+import { UserContext } from "../context/UserContext";
 import Login from "../components/Login";
 import SignUp from "../components/SignUpForm";
 import Schedule from "../components/Schedule";
-import { UserContext } from "../context/UserContext";
 
 function Routes() {
   return (
     <Switch>
       <RouteRegistration path="/signup" exact component={SignUp} />
-      <RouteProtected path="/schedule" exact component={Schedule} />
-      <RouteRegistration path="/" component={Login} />
+      <RouteRegistration path="/login" exact component={Login} />
+      <RouteProtected path="/" component={Schedule} />
     </Switch>
   );
 }
@@ -21,7 +21,7 @@ const RouteRegistration = ({ component: Component, ...rest }) => {
   return (
     <Route
       {...rest}
-      render={props =>
+      render={(props) =>
         !user.isAuthenticated ? (
           <Component {...props} />
         ) : (
@@ -37,7 +37,7 @@ const RouteProtected = ({ component: Component, ...rest }) => {
   return (
     <Route
       {...rest}
-      render={props =>
+      render={(props) =>
         user.isAuthenticated ? (
           <Component {...props} />
         ) : (
