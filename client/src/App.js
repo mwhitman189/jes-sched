@@ -1,8 +1,8 @@
 import React from "react";
+import { BrowserRouter as Router } from "react-router-dom";
 import { TeachersProvider } from "./context/TeachersContext";
 import { EventsProvider } from "./context/EventsContext";
 import { UserProvider } from "./context/UserContext";
-import { BrowserRouter as Router } from "react-router-dom";
 import Routes from "./routes/routes";
 import "./App.css";
 

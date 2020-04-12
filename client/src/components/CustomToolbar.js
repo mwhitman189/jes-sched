@@ -22,7 +22,7 @@ const CustomToolbar = (props) => {
   const { user, dispatch } = useContext(UserContext);
 
   const teacher = teachers.find((t) => t.email === user.user.email);
-  console.log(teacher);
+
   const handleLogout = (e) => {
     e.preventDefault();
     dispatch({ type: "LOGOUT_SUCCESS" });
@@ -90,13 +90,9 @@ const CustomToolbar = (props) => {
         <button className={classes.navBtn} onClick={handleAddTeacherNav}>
           New Teacher
         </button>
-      </div>
-      <div className={classes.btnGroup}>
         <button className={classes.navBtn} onClick={handlePayrollNav}>
           Payroll
         </button>
-      </div>
-      <div className={classes.btnGroup}>
         <button className={classes.logoutBtn} onClick={handleLogout}>
           Logout
         </button>

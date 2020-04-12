@@ -4,6 +4,7 @@ import { Calendar, momentLocalizer } from "react-big-calendar";
 import withDragAndDrop from "react-big-calendar/lib/addons/dragAndDrop";
 import { EventsContext } from "../context/EventsContext";
 import { TeachersContext } from "../context/TeachersContext";
+import { UserContext } from "../context/UserContext";
 import { WorkWeek } from "./CustomViews";
 import LessonEvent from "./LessonEvent";
 import CustomToolbar from "./CustomToolbar";
@@ -13,9 +14,6 @@ const localizer = momentLocalizer(moment);
 const DragAndDropCalendar = withDragAndDrop(Calendar);
 
 function CustomDnDCalendar(props) {
-  const { events, editEvent } = useContext(EventsContext);
-  const { teachers } = useContext(TeachersContext);
-
   const {
     handleMove,
     handleSelect,
@@ -23,6 +21,11 @@ function CustomDnDCalendar(props) {
     handleAddTeacherNav,
     handlePayrollNav,
   } = props;
+  const { events, editEvent } = useContext(EventsContext);
+  const { teachers } = useContext(TeachersContext);
+  const { user } = useContext(UserContext);
+
+  const teacher = teachers.find((t) => t.email === user.user.email);
 
   // Limit displayed hours of the day
   const minTime = new Date();
@@ -129,7 +132,7 @@ function CustomDnDCalendar(props) {
       onEventDrop={handleMove}
       startAccessor="start"
       endAccessor="end"
-      resources={teachers}
+      resources={teacher ? [teacher] : teachers}
       resourceIdAccessor="resourceId"
       resourceTitleAccessor="resourceTitle"
       selectable

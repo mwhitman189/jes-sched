@@ -1,18 +1,20 @@
 const styles = (theme) => ({
   toolbar: {
     display: "flex",
-    [theme.breakpoints.down("sm")]: {
-      flexDirection: "column",
-    },
-    justifyContent: "space-around",
-    alignContent: "space-around",
+    justifyContent: "space-between",
     alignItems: "center",
     height: "40px",
     padding: 0,
+    width: "100vw",
   },
   btnGroup: {
     display: "inline-block",
     whiteSpace: "nowrap",
+    padding: ".3rem .5rem",
+    [theme.breakpoints.down("md")]: {
+      padding: ".2rem .2rem",
+      margin: 0,
+    },
   },
   navBtn: {
     color: "#fff",
@@ -22,11 +24,20 @@ const styles = (theme) => ({
     border: "none",
     borderRadius: "5px",
     padding: ".3rem .5rem",
-    marginRight: ".5rem",
-    minWidth: "4rem",
+    [theme.breakpoints.down("md")]: {
+      padding: ".2rem .2rem",
+      margin: "0 .1rem",
+    },
+    margin: "0 .5rem",
+    [theme.breakpoints.up("lg")]: {
+      minWidth: "4rem",
+    },
   },
   navIcon: {
     fontSize: "1.5rem",
+    [theme.breakpoints.down("md")]: {
+      fontSize: "1rem",
+    },
   },
   todayLabel: {
     color: "rgba(68, 68, 68, .7)",
@@ -61,9 +72,13 @@ const styles = (theme) => ({
       "linear-gradient(0deg, rgba(186, 4, 68,1) 7%, rgba(245, 0, 86,1) 100%)",
     border: "none",
     borderRadius: "5px",
-    padding: ".3rem .5rem",
     marginRight: ".5rem",
     minWidth: "4rem",
+    padding: ".3rem .5rem",
+    [theme.breakpoints.down("md")]: {
+      padding: ".2rem .2rem",
+      margin: "0 .1rem",
+    },
   },
 });
 export default styles;
