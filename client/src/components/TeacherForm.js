@@ -14,14 +14,14 @@ import FormControl from "@material-ui/core/FormControl";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Switch from "@material-ui/core/Switch";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   formControl: {
     margin: theme.spacing(1),
-    minWidth: 120
+    minWidth: 120,
   },
   selectEmpty: {
-    marginTop: theme.spacing(2)
-  }
+    marginTop: theme.spacing(2),
+  },
 }));
 
 export default function EventForm(props) {
@@ -34,13 +34,14 @@ export default function EventForm(props) {
   const [otThresholdHours, updateOtThresholdHours] = useInputState("");
   const [contractType, updateContractType] = useInputState("");
   const [dependentsNum, updateDependentsNum] = useInputState("");
+  const [email, updateEmail] = useInputState("");
   const [isPartTime, toggleIsPartTime] = useToggleState(false);
 
-  const handleAddTeacher = e => {
+  const handleAddTeacher = (e) => {
     e.preventDefault();
     let bigResourceId = 1;
     if (teachers) {
-      teachers.forEach(t => {
+      teachers.forEach((t) => {
         if (t.resourceId > bigResourceId) {
           bigResourceId = t.resourceId + 1;
         } else {
@@ -58,7 +59,7 @@ export default function EventForm(props) {
       otThreshold: parseInt(otThresholdHours * 60),
       contractType: contractType,
       dependentsNum: dependentsNum,
-      isPartTime: isPartTime
+      isPartTime: isPartTime,
     });
     hideForm();
   };
@@ -111,6 +112,21 @@ export default function EventForm(props) {
               fullWidth
               validators={["required"]}
               errorMessages={["Enter the Last Name"]}
+              required
+            />
+          </FormControl>
+          <FormControl className={classes.formControl}>
+            <TextValidator
+              autoFocus
+              margin="dense"
+              id="email"
+              label="Email"
+              type="email"
+              value={email}
+              onChange={updateEmail}
+              fullWidth
+              validators={["required"]}
+              errorMessages={["Enter a valid email"]}
               required
             />
           </FormControl>

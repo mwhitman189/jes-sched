@@ -1,15 +1,18 @@
-const styles = {
+const styles = (theme) => ({
   toolbar: {
     display: "flex",
+    [theme.breakpoints.down("sm")]: {
+      flexDirection: "column",
+    },
     justifyContent: "space-around",
     alignContent: "space-around",
     alignItems: "center",
     height: "40px",
-    padding: 0
+    padding: 0,
   },
   btnGroup: {
     display: "inline-block",
-    whiteSpace: "nowrap"
+    whiteSpace: "nowrap",
   },
   navBtn: {
     color: "#fff",
@@ -20,36 +23,36 @@ const styles = {
     borderRadius: "5px",
     padding: ".3rem .5rem",
     marginRight: ".5rem",
-    minWidth: "4rem"
+    minWidth: "4rem",
   },
   navIcon: {
-    fontSize: "1.5rem"
+    fontSize: "1.5rem",
   },
   todayLabel: {
     color: "rgba(68, 68, 68, .7)",
-    marginRight: ".5rem"
+    marginRight: ".5rem",
   },
   teacherListContainer: {
     maxWidth: "20%",
-    overflow: "scroll"
+    overflow: "scroll",
   },
   teacherList: {
     display: "flex",
     justifyContent: "flex-start",
     listStyle: "none",
-    fontWeight: 600
+    fontWeight: 600,
   },
   listItem: {
     marginRight: "1rem",
-    color: "green"
+    color: "green",
   },
   listItemYellow: {
     marginRight: "1rem",
-    color: "#fcad03"
+    color: "#fcad03",
   },
   listItemRed: {
     marginRight: "1rem",
-    color: "red"
+    color: "red",
   },
   logoutBtn: {
     color: "#fff",
@@ -60,7 +63,7 @@ const styles = {
     borderRadius: "5px",
     padding: ".3rem .5rem",
     marginRight: ".5rem",
-    minWidth: "4rem"
-  }
-};
+    minWidth: "4rem",
+  },
+});
 export default styles;

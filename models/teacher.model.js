@@ -4,24 +4,41 @@ const Schema = mongoose.Schema;
 
 const TeacherSchema = new Schema(
   {
-    resourceId: { type: Number, required: true },
-    resourceTitle: { type: String, required: true },
-    name: { type: String, required: true },
-    familyName: { type: String, required: true },
-    otThreshold: { type: Number },
-    teachingMins: { type: Number, required: true, default: 0 },
-    outsideDutyMins: { type: Number, required: true, default: 0 },
-    holidayMins: { type: Number, required: true, default: 0 },
-    travelAllowance: { type: Number, required: true, default: 0 },
-    travelExpenses: { type: Number, required: true, default: 0 },
-    overThresholdOneMins: { type: Number, required: true, default: 0 },
-    overThresholdTwoMins: { type: Number, required: true, default: 0 },
-    contractType: { type: String, required: true },
-    dependentsNum: { type: Number, default: 0 },
-    isPartTime: { type: Boolean, required: true }
+    resourceId: { type: Number, trim: true, required: true },
+    resourceTitle: { type: String, trim: true, required: true },
+    name: { type: String, trim: true, required: true },
+    familyName: { type: String, trim: true, required: true },
+    email: {
+      type: String,
+      unique: true,
+      trim: true,
+      minlength: 3,
+      required: true,
+    },
+    otThreshold: { type: Number, trim: true },
+    teachingMins: { type: Number, trim: true, required: true, default: 0 },
+    outsideDutyMins: { type: Number, trim: true, required: true, default: 0 },
+    holidayMins: { type: Number, trim: true, required: true, default: 0 },
+    travelAllowance: { type: Number, trim: true, required: true, default: 0 },
+    travelExpenses: { type: Number, trim: true, required: true, default: 0 },
+    overThresholdOneMins: {
+      type: Number,
+      trim: true,
+      required: true,
+      default: 0,
+    },
+    overThresholdTwoMins: {
+      type: Number,
+      trim: true,
+      required: true,
+      default: 0,
+    },
+    contractType: { type: String, trim: true, required: true },
+    dependentsNum: { type: Number, trim: true, default: 0 },
+    isPartTime: { type: Boolean, trim: true, required: true },
   },
   {
-    timestamps: true
+    timestamps: true,
   }
 );
 

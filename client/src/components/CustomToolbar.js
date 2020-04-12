@@ -2,26 +2,27 @@ import React, { useContext } from "react";
 import moment from "moment";
 import { TeachersContext } from "../context/TeachersContext";
 import { UserContext } from "../context/UserContext";
+import { withStyles } from "@material-ui/core/styles";
 import IconButton from "@material-ui/core/IconButton";
 import RightArrowIcon from "@material-ui/icons/ChevronRight";
 import LeftArrowIcon from "@material-ui/icons/ChevronLeft";
-import { withStyles } from "@material-ui/styles";
 import styles from "../styles/CustomToolbarStyles";
 import "react-big-calendar/lib/sass/toolbar.scss";
 
-const CustomToolbar = withStyles((theme) => styles)((props) => {
+const CustomToolbar = (props) => {
   const {
     classes,
     onNavigate,
-    onView,
     isRTL,
     date,
     handleAddTeacherNav,
     handlePayrollNav,
   } = props;
   const { teachers } = useContext(TeachersContext);
-  const { dispatch } = useContext(UserContext);
+  const { user, dispatch } = useContext(UserContext);
 
+  const teacher = teachers.find((t) => t.email === user.user.email);
+  console.log(teacher);
   const handleLogout = (e) => {
     e.preventDefault();
     dispatch({ type: "LOGOUT_SUCCESS" });
@@ -29,22 +30,6 @@ const CustomToolbar = withStyles((theme) => styles)((props) => {
 
   return (
     <div className={classes.toolbar}>
-      <div className={classes.btnGroup}>
-        <button
-          className={classes.navBtn}
-          type="button"
-          onClick={() => onView("week")}
-        >
-          Week
-        </button>
-        <button
-          className={classes.navBtn}
-          type="button"
-          onClick={() => onView("day")}
-        >
-          Day
-        </button>
-      </div>
       <div className={classes.btnGroup}>
         <IconButton
           className={classes.navBtn}
@@ -75,18 +60,30 @@ const CustomToolbar = withStyles((theme) => styles)((props) => {
       </div>
       <div>
         <ul className={classes.teacherList}>
-          {teachers.map((t) => (
+          {teacher ? (
             <li
               className={
-                t.overThresholdTwoMins > 0
+                teacher.overThresholdTwoMins > 0
                   ? classes.listItemRed
-                  : t.overThresholdOneMins > 0
+                  : teacher.overThresholdOneMins > 0
                   ? classes.listItemYellow
                   : classes.listItem
               }
-              key={t.resourceId}
-            >{`${t.name}: ${t.teachingMins}`}</li>
-          ))}
+            >{`${teacher.name}: ${teacher.teachingMins}`}</li>
+          ) : (
+            teachers.map((t) => (
+              <li
+                className={
+                  t.overThresholdTwoMins > 0
+                    ? classes.listItemRed
+                    : t.overThresholdOneMins > 0
+                    ? classes.listItemYellow
+                    : classes.listItem
+                }
+                key={t.resourceId}
+              >{`${t.name}: ${t.teachingMins}`}</li>
+            ))
+          )}
         </ul>
       </div>
       <div className={classes.btnGroup}>
@@ -106,6 +103,6 @@ const CustomToolbar = withStyles((theme) => styles)((props) => {
       </div>
     </div>
   );
-});
+};
 
-export default CustomToolbar;
+export default withStyles(styles)(CustomToolbar);

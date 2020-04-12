@@ -17,6 +17,7 @@ export default (initialTeachers) => {
       resourceTitle: teacher.resourceTitle,
       name: teacher.name,
       familyName: teacher.familyName,
+      email: teacher.email,
       teachingMins: teacher.teachingMins,
       holidayMins: teacher.holidayMins,
       outsideDutyMins: teacher.outsideDutyMins,
