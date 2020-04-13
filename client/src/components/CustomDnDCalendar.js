@@ -25,7 +25,10 @@ function CustomDnDCalendar(props) {
   const { teachers } = useContext(TeachersContext);
   const { user } = useContext(UserContext);
 
-  const teacher = teachers.find((t) => t.email === user.user.email);
+  // Search for user in teachers. If user is teacher, return teacher object
+  // for use in conditional rendering of teaching minutes
+  const teacher =
+    user.user !== null && teachers.find((t) => t.email === user.user.email);
 
   // Limit displayed hours of the day
   const minTime = new Date();

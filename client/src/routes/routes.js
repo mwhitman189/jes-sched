@@ -10,11 +10,13 @@ function Routes() {
     <Switch>
       <RouteRegistration path="/signup" exact component={SignUp} />
       <RouteRegistration path="/login" exact component={Login} />
-      <RouteProtected path="/" component={Schedule} />
+      {/* <RouteProtected path="/" component={Schedule} /> */}
+      <Route path="/" component={Schedule} />
     </Switch>
   );
 }
 
+// Route successful registration or login requests to schedule page
 const RouteRegistration = ({ component: Component, ...rest }) => {
   const { user } = useContext(UserContext);
 
@@ -32,6 +34,8 @@ const RouteRegistration = ({ component: Component, ...rest }) => {
   );
 };
 
+// Create protected route for component. If not authenticated, user is
+// redirected to login page
 const RouteProtected = ({ component: Component, ...rest }) => {
   const { user } = useContext(UserContext);
   return (

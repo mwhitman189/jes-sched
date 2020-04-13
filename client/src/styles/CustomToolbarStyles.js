@@ -4,8 +4,11 @@ const styles = (theme) => ({
     justifyContent: "space-between",
     alignItems: "center",
     height: "40px",
-    padding: 0,
+    padding: "1rem",
     width: "100vw",
+    listStyle: "none",
+    margin: 0,
+    padding: 0,
   },
   btnGroup: {
     display: "inline-block",
@@ -13,7 +16,7 @@ const styles = (theme) => ({
     padding: ".3rem .5rem",
     [theme.breakpoints.down("md")]: {
       padding: ".2rem .2rem",
-      margin: 0,
+      margin: "0 .5rem",
     },
   },
   navBtn: {
