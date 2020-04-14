@@ -160,24 +160,22 @@ const CustomToolbar = (props) => {
       >
         <div style={{ display: "flex" }}>
           <StyledMenuItem
-            className={classes.navBtn}
+            className={classes.navBtnNav}
             type="button"
             onClick={() => onNavigate("PREV")}
           >
-            <ListItemIcon>
+            <ListItemIcon style={{ minWidth: 0 }}>
               <LeftArrowIcon fontSize="large" />
             </ListItemIcon>
-            <ListItemText primary="Last Week" />
           </StyledMenuItem>
           <StyledMenuItem
-            className={classes.navBtn}
+            className={classes.navBtnNav}
             type="button"
             onClick={() => onNavigate("NEXT")}
           >
-            <ListItemIcon>
+            <ListItemIcon style={{ minWidth: 0 }}>
               <RightArrowIcon fontSize="large" />
             </ListItemIcon>
-            <ListItemText primary="Next Week" />
           </StyledMenuItem>
         </div>
 
@@ -186,19 +184,27 @@ const CustomToolbar = (props) => {
           onClick={handleAddTeacherNav}
         >
           <ListItemIcon>
-            <InboxIcon fontSize="large" />
+            <InboxIcon fontSize="small" />
           </ListItemIcon>
           <ListItemText primary="New Teacher" />
         </StyledMenuItem>
         <StyledMenuItem className={classes.navBtn} onClick={handlePayrollNav}>
           <ListItemIcon>
-            <InboxIcon fontSize="large" />
+            <InboxIcon fontSize="small" />
           </ListItemIcon>
           <ListItemText primary="Payroll" />
         </StyledMenuItem>
-        <StyledMenuItem className={classes.logoutBtn} onClick={handleLogout}>
+        <StyledMenuItem
+          style={{
+            background: "#f50057",
+            background:
+              "linear-gradient(0deg, rgba(186, 4, 68,1) 7%, rgba(245, 0, 86,1) 100%)",
+          }}
+          className={classes.navBtn}
+          onClick={handleLogout}
+        >
           <ListItemIcon>
-            <InboxIcon fontSize="large" />
+            <InboxIcon fontSize="small" />
           </ListItemIcon>
           <ListItemText primary="Logout" />
         </StyledMenuItem>
@@ -273,13 +279,20 @@ const CustomToolbar = (props) => {
         <button className={classes.navBtn} onClick={handlePayrollNav}>
           Payroll
         </button>
-        <button className={classes.logoutBtn} onClick={handleLogout}>
+        <button
+          style={{
+            background: "#f50057",
+            background:
+              "linear-gradient(0deg, rgba(186, 4, 68,1) 7%, rgba(245, 0, 86,1) 100%)",
+          }}
+          className={classes.navBtn}
+          onClick={handleLogout}
+        >
           Logout
         </button>
       </div>
     </ul>
   );
-  console.log(dimensions);
 
   return dimensions.width < 750 ? collapseToolbar : fullSizeToolbar;
 };
