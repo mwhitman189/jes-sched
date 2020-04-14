@@ -149,7 +149,7 @@ const CustomToolbar = (props) => {
         color="primary"
         onClick={handleClick}
       >
-        Open Menu
+        Menu
       </Button>
       <StyledMenu
         id="customized-menu"

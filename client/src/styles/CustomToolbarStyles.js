@@ -30,7 +30,7 @@ const styles = (theme) => ({
       "linear-gradient(0deg, rgba(20,71,207,1) 7%, rgba(49,119,254,1) 100%)",
     border: "none",
     borderRadius: "5px",
-    padding: ".3rem .5rem",
+    padding: ".5rem",
     minWidth: "4rem",
     [theme.breakpoints.down("lg")]: {
       margin: ".2rem",
