@@ -179,21 +179,28 @@ const CustomToolbar = (props) => {
           </StyledMenuItem>
         </div>
 
-        <StyledMenuItem
-          className={classes.navBtn}
-          onClick={handleAddTeacherNav}
-        >
-          <ListItemIcon>
-            <InboxIcon fontSize="small" />
-          </ListItemIcon>
-          <ListItemText primary="New Teacher" />
-        </StyledMenuItem>
-        <StyledMenuItem className={classes.navBtn} onClick={handlePayrollNav}>
-          <ListItemIcon>
-            <InboxIcon fontSize="small" />
-          </ListItemIcon>
-          <ListItemText primary="Payroll" />
-        </StyledMenuItem>
+        {user.user.role !== "teacher" && (
+          <>
+            <StyledMenuItem
+              className={classes.navBtn}
+              onClick={handleAddTeacherNav}
+            >
+              <ListItemIcon>
+                <InboxIcon fontSize="small" />
+              </ListItemIcon>
+              <ListItemText primary="New Teacher" />
+            </StyledMenuItem>
+            <StyledMenuItem
+              className={classes.navBtn}
+              onClick={handlePayrollNav}
+            >
+              <ListItemIcon>
+                <InboxIcon fontSize="small" />
+              </ListItemIcon>
+              <ListItemText primary="Payroll" />
+            </StyledMenuItem>
+          </>
+        )}
         <StyledMenuItem
           style={{
             background: "#f50057",

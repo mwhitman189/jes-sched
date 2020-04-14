@@ -34,6 +34,7 @@ const styles = (theme) => ({
     minWidth: "4rem",
     [theme.breakpoints.down("lg")]: {
       margin: ".2rem",
+      minWidth: "3rem",
     },
   },
   navBtnNav: {
