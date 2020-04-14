@@ -273,12 +273,17 @@ const CustomToolbar = (props) => {
         }
       </ul>
       <div className={classes.btnGroup}>
-        <button className={classes.navBtn} onClick={handleAddTeacherNav}>
-          New Teacher
-        </button>
-        <button className={classes.navBtn} onClick={handlePayrollNav}>
-          Payroll
-        </button>
+        {user.user.role !== "teacher" && (
+          <>
+            <button className={classes.navBtn} onClick={handleAddTeacherNav}>
+              New Teacher
+            </button>
+            <button className={classes.navBtn} onClick={handlePayrollNav}>
+              Payroll
+            </button>
+          </>
+        )}
+
         <button
           style={{
             background: "#f50057",

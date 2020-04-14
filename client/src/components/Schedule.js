@@ -1,8 +1,10 @@
 import React, { useState, useEffect, useContext } from "react";
 import CustomDnDCalendar from "./CustomDnDCalendar";
+import { protectAction } from "../helperFunctions";
 import { validateRoom, validateTeacher } from "../validators";
 import { TeachersContext } from "../context/TeachersContext";
 import { EventsContext } from "../context/EventsContext";
+import { UserContext } from "../context/UserContext";
 import useFormState from "../hooks/useInputState";
 import EventForm from "./EventForm";
 import TeacherForm from "./TeacherForm";
@@ -21,6 +23,7 @@ const Schedule = () => {
     addTeachingMins,
   } = useContext(TeachersContext);
   const { events, addEvent, getEvents } = useContext(EventsContext);
+  const { user, dispatch } = useContext(UserContext);
 
   const [formType, setFormType] = useState("");
   const [startTime, updateStartTime] = useFormState(new Date());
@@ -148,11 +151,11 @@ const Schedule = () => {
       />
 
       <CustomDnDCalendar
-        handleMove={handleMove}
-        handleSelect={handleSelect}
-        handleDoubleClick={handleDoubleClick}
-        handleAddTeacherNav={handleAddTeacherNav}
-        handlePayrollNav={handlePayrollNav}
+        handleMove={protectAction(user, handleMove)}
+        handleSelect={protectAction(user, handleSelect)}
+        handleDoubleClick={protectAction(user, handleDoubleClick)}
+        handleAddTeacherNav={protectAction(user, handleAddTeacherNav)}
+        handlePayrollNav={protectAction(user, handlePayrollNav)}
       />
       <Footer />
     </div>

@@ -4,7 +4,7 @@ import moment from "moment";
 
 const JapaneseHolidays = require("japanese-holidays");
 
-const getRecurrences = event => {
+const getRecurrences = (event) => {
   const now = new Date();
   // Create start and end dates for the current month to calc
   // teaching minutes
@@ -15,7 +15,7 @@ const getRecurrences = event => {
     freq: RRule.WEEKLY,
     count: 26,
     interval: 1,
-    dtstart: new Date(event.start)
+    dtstart: new Date(event.start),
   });
   const twoMonthsRecurrences = rrule.between(months_start, months_end);
   twoMonthsRecurrences.shift();
@@ -54,7 +54,7 @@ const calcOutsideDutyMins = (
     outsideDutyMins = 0;
     return {
       teachingMins: duration,
-      outsideDutyMins: outsideDutyMins
+      outsideDutyMins: outsideDutyMins,
     };
   } else if (
     (startDiff > 0 && endDiff > 0) ||
@@ -62,19 +62,19 @@ const calcOutsideDutyMins = (
   ) {
     return {
       teachingMins: 0,
-      outsideDutyMins: duration
+      outsideDutyMins: duration,
     };
   } else if (startDiff > 0) {
     const regularTeachingMins = duration - startDiff;
     return {
       teachingMins: regularTeachingMins,
-      outsideDutyMins: startDiff
+      outsideDutyMins: startDiff,
     };
   } else {
     const regularTeachingMins = duration - afterDhEndDiff;
     return {
       teachingMins: regularTeachingMins,
-      outsideDutyMins: afterDhEndDiff
+      outsideDutyMins: afterDhEndDiff,
     };
   }
 };
@@ -88,7 +88,7 @@ const createPayPeriodData = (events, teacher, monthStart, monthEnd) => {
   teacher.overThresholdOneMins = 0;
   teacher.overThresholdTwoMins = 0;
 
-  const monthEvents = events.filter(e => {
+  const monthEvents = events.filter((e) => {
     return (
       moment(e.start).isBetween(monthStart, monthEnd, null, "[]") &&
       e.resourceId === teacher.resourceId
@@ -97,17 +97,13 @@ const createPayPeriodData = (events, teacher, monthStart, monthEnd) => {
 
   const dutyHoursByDate = {};
 
-  monthEvents.forEach(e => {
+  monthEvents.forEach((e) => {
     const date = e.start.getDate();
     // Set the base duty hours to noon to ensure at least 9 duty hours
     if (!dutyHoursByDate[date]) {
       const baseDutyHours = {
-        startTime: moment(e.start)
-          .set("hour", 12)
-          .set("minutes", 0),
-        endTime: moment(e.start)
-          .set("hour", 21)
-          .set("minutes", 0)
+        startTime: moment(e.start).set("hour", 12).set("minutes", 0),
+        endTime: moment(e.start).set("hour", 21).set("minutes", 0),
       };
       // Set the duty hours for the event's date
       dutyHoursByDate[date] = calcDutyHours(baseDutyHours, e.start, e.end);
@@ -121,7 +117,7 @@ const createPayPeriodData = (events, teacher, monthStart, monthEnd) => {
     }
   });
 
-  monthEvents.forEach(e => {
+  monthEvents.forEach((e) => {
     if (moment(e.start).isBetween(monthStart, monthEnd, null, "[]")) {
       if (e.resourceId === teacher.resourceId) {
         const date = e.start.getDate();
@@ -175,7 +171,7 @@ const createPayPeriodData = (events, teacher, monthStart, monthEnd) => {
           overThresholdTwoMins: teacher.overThresholdTwoMins,
           holidayMins: holidayMins,
           travelAllowance: 0,
-          travelExpenses: 0
+          travelExpenses: 0,
         };
         // If date already in hash table, add teaching minutes to existing keys, otherwise create
         // a new date object
@@ -196,19 +192,17 @@ const createPayPeriodData = (events, teacher, monthStart, monthEnd) => {
   return datesData;
 };
 
-const addNewEvent = event => {
+const addNewEvent = (event) => {
   const newEvents = [];
   if (event.recur === true) {
     const recurrences = getRecurrences(event);
-    recurrences.map(r => {
+    recurrences.map((r) => {
       const newEvent = {
         ...event,
         start: r,
-        end: moment(r)
-          .add(event.duration, "m")
-          .toDate(),
+        end: moment(r).add(event.duration, "m").toDate(),
         isNewEvent: false,
-        isLast: false
+        isLast: false,
       };
       if (JapaneseHolidays.isHoliday(r)) {
         newEvent.isHoliday = true;
@@ -226,11 +220,24 @@ const addNewEvent = event => {
   return newEvents;
 };
 
-const addPayment = async newPayment => {
+const addPayment = async (newPayment) => {
   return await axios
     .post(`/payments/add`, newPayment)
-    .then(res => console.log(res.data))
-    .catch(err => console.log(err));
+    .then((res) => console.log(res.data))
+    .catch((err) => console.log(err));
 };
 
-export { getRecurrences, addNewEvent, addPayment, createPayPeriodData };
+const protectAction = (user, action) => {
+  if (!user.role === "teacher") {
+    return action;
+  }
+  return console.log("Not gonna do it. Wouldn't be prudent.");
+};
+
+export {
+  getRecurrences,
+  addNewEvent,
+  addPayment,
+  createPayPeriodData,
+  protectAction,
+};
