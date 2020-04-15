@@ -228,7 +228,7 @@ const addPayment = async (newPayment) => {
 };
 
 const protectAction = (user, action) => {
-  if (!user.role === "teacher") {
+  if (user.role !== "teacher") {
     return action;
   }
   return console.log("Not gonna do it. Wouldn't be prudent.");

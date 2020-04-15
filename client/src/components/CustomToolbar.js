@@ -11,7 +11,6 @@ import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
-import InboxIcon from "@material-ui/icons/MoveToInbox";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import AttachMoneyIcon from "@material-ui/icons/AttachMoney";
 import PersonAddIcon from "@material-ui/icons/PersonAdd";
@@ -73,7 +72,8 @@ const CustomToolbar = (props) => {
   // Search for user in teachers. If user is teacher, return teacher object
   // for use in conditional rendering of teaching minutes
   const teacher =
-    user.user !== null && teachers.find((t) => t.email === user.user.email);
+    user.user.role === "teacher" &&
+    teachers.find((t) => t.email === user.user.email);
 
   const handleLogout = (e) => {
     e.preventDefault();

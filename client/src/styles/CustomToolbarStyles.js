@@ -17,7 +17,8 @@ const styles = (theme) => ({
     display: "flex",
     whiteSpace: "nowrap",
     padding: ".3rem .5rem",
-    [theme.breakpoints.down("md")]: {
+    alignItems: "center",
+    [theme.breakpoints.down("sm")]: {
       padding: ".2rem .2rem",
       margin: "0 .5rem",
     },
@@ -32,7 +33,7 @@ const styles = (theme) => ({
     borderRadius: "5px",
     padding: ".5rem",
     minWidth: "4rem",
-    [theme.breakpoints.down("md")]: {
+    [theme.breakpoints.down("sm")]: {
       margin: ".2rem",
       minWidth: "3rem",
     },
@@ -47,7 +48,7 @@ const styles = (theme) => ({
     padding: ".3rem .5rem",
     minWidth: "4rem",
     justifyContent: "center",
-    [theme.breakpoints.down("md")]: {
+    [theme.breakpoints.down("sm")]: {
       padding: "0 .2rem",
       margin: ".2rem",
       minWidth: 0,
@@ -56,7 +57,7 @@ const styles = (theme) => ({
   },
   navIcon: {
     fontSize: "1.5rem",
-    [theme.breakpoints.down("md")]: {
+    [theme.breakpoints.down("sm")]: {
       fontSize: "1rem",
     },
   },
@@ -65,7 +66,7 @@ const styles = (theme) => ({
   },
   todayLabel: {
     color: "rgba(68, 68, 68, .7)",
-    marginRight: ".5rem",
+    margin: "0 .2rem",
   },
   teacherList: {
     fontSize: "1rem",
@@ -74,7 +75,7 @@ const styles = (theme) => ({
     listStyle: "none",
     fontWeight: 600,
     margin: "0 .3rem",
-    [theme.breakpoints.down("md")]: {
+    [theme.breakpoints.down("sm")]: {
       fontSize: "2rem",
     },
   },
@@ -100,7 +101,7 @@ const styles = (theme) => ({
     marginRight: ".5rem",
     minWidth: "4rem",
     padding: ".3rem .5rem",
-    [theme.breakpoints.down("md")]: {
+    [theme.breakpoints.down("sm")]: {
       padding: ".2rem .2rem",
       margin: "0 .1rem",
     },
