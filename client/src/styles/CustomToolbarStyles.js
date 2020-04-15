@@ -16,10 +16,9 @@ const styles = (theme) => ({
   btnGroup: {
     display: "flex",
     whiteSpace: "nowrap",
-    padding: ".3rem .5rem",
     alignItems: "center",
     [theme.breakpoints.down("sm")]: {
-      padding: ".2rem .2rem",
+      padding: "0 .2rem",
       margin: "0 .5rem",
     },
   },
@@ -33,9 +32,10 @@ const styles = (theme) => ({
     borderRadius: "5px",
     padding: ".5rem",
     minWidth: "4rem",
+    margin: "0 .2rem",
     [theme.breakpoints.down("sm")]: {
-      margin: ".2rem",
       minWidth: "3rem",
+      margin: ".2rem",
     },
   },
   navBtnNav: {
@@ -50,7 +50,7 @@ const styles = (theme) => ({
     justifyContent: "center",
     [theme.breakpoints.down("sm")]: {
       padding: "0 .2rem",
-      margin: ".2rem",
+      margin: "0 .2rem",
       minWidth: 0,
       flexGrow: 0.5,
     },
@@ -75,9 +75,6 @@ const styles = (theme) => ({
     listStyle: "none",
     fontWeight: 600,
     margin: "0 .3rem",
-    [theme.breakpoints.down("sm")]: {
-      fontSize: "2rem",
-    },
   },
   listItem: {
     marginRight: "1rem",
@@ -103,7 +100,7 @@ const styles = (theme) => ({
     padding: ".3rem .5rem",
     [theme.breakpoints.down("sm")]: {
       padding: ".2rem .2rem",
-      margin: "0 .1rem",
+      margin: "0 .2rem",
     },
   },
 });
