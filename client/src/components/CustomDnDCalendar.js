@@ -30,6 +30,7 @@ function CustomDnDCalendar(props) {
   const teacher =
     user.user.role === "teacher" &&
     teachers.find((t) => t.email === user.user.email);
+  console.log(teacher);
 
   // Limit displayed hours of the day
   const minTime = new Date();
