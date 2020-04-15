@@ -12,8 +12,9 @@ import MenuItem from "@material-ui/core/MenuItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import InboxIcon from "@material-ui/icons/MoveToInbox";
-import DraftsIcon from "@material-ui/icons/Drafts";
-import SendIcon from "@material-ui/icons/Send";
+import ExitToAppIcon from "@material-ui/icons/ExitToApp";
+import AttachMoneyIcon from "@material-ui/icons/AttachMoney";
+import PersonAddIcon from "@material-ui/icons/PersonAdd";
 import styles from "../styles/CustomToolbarStyles";
 import "react-big-calendar/lib/sass/toolbar.scss";
 
@@ -111,8 +112,9 @@ const CustomToolbar = (props) => {
   }))(MenuItem);
 
   const collapseToolbar = (
-    <div style={{ justifyContent: "flex-end" }} className={classes.toolbar}>
-      <ul className={classes.teacherList}>
+    <div className={classes.toolbar}>
+      <div></div>
+      <ul style={{ padding: 0 }} className={classes.teacherList}>
         {
           // If teacher is defined because user is a teacher, list user's teaching mins.
           // Otherwise, list all teachers' teaching mins
@@ -165,7 +167,7 @@ const CustomToolbar = (props) => {
             onClick={() => onNavigate("PREV")}
           >
             <ListItemIcon style={{ minWidth: 0 }}>
-              <LeftArrowIcon fontSize="large" />
+              <LeftArrowIcon fontSize="small" />
             </ListItemIcon>
           </StyledMenuItem>
           <StyledMenuItem
@@ -174,7 +176,7 @@ const CustomToolbar = (props) => {
             onClick={() => onNavigate("NEXT")}
           >
             <ListItemIcon style={{ minWidth: 0 }}>
-              <RightArrowIcon fontSize="large" />
+              <RightArrowIcon fontSize="small" />
             </ListItemIcon>
           </StyledMenuItem>
         </div>
@@ -186,7 +188,7 @@ const CustomToolbar = (props) => {
               onClick={handleAddTeacherNav}
             >
               <ListItemIcon>
-                <InboxIcon fontSize="small" />
+                <PersonAddIcon fontSize="small" />
               </ListItemIcon>
               <ListItemText primary="New Teacher" />
             </StyledMenuItem>
@@ -195,7 +197,7 @@ const CustomToolbar = (props) => {
               onClick={handlePayrollNav}
             >
               <ListItemIcon>
-                <InboxIcon fontSize="small" />
+                <AttachMoneyIcon fontSize="small" />
               </ListItemIcon>
               <ListItemText primary="Payroll" />
             </StyledMenuItem>
@@ -211,7 +213,7 @@ const CustomToolbar = (props) => {
           onClick={handleLogout}
         >
           <ListItemIcon>
-            <InboxIcon fontSize="small" />
+            <ExitToAppIcon fontSize="small" />
           </ListItemIcon>
           <ListItemText primary="Logout" />
         </StyledMenuItem>
@@ -236,7 +238,7 @@ const CustomToolbar = (props) => {
           className={classes.todayLabel}
           onClick={() => onNavigate("TODAY")}
         >
-          {moment(date).format("dddd MM/DD").toLocaleString()}
+          {moment(date).format("MM/DD").toLocaleString()}
         </span>
         <IconButton
           className={classes.navBtn}
@@ -283,9 +285,11 @@ const CustomToolbar = (props) => {
         {user.user.role !== "teacher" && (
           <>
             <button className={classes.navBtn} onClick={handleAddTeacherNav}>
+              <PersonAddIcon className={classes.icon} fontSize="small" />
               New Teacher
             </button>
             <button className={classes.navBtn} onClick={handlePayrollNav}>
+              <AttachMoneyIcon className={classes.icon} fontSize="small" />
               Payroll
             </button>
           </>
@@ -300,6 +304,7 @@ const CustomToolbar = (props) => {
           className={classes.navBtn}
           onClick={handleLogout}
         >
+          <ExitToAppIcon className={classes.icon} fontSize="small" />
           Logout
         </button>
       </div>

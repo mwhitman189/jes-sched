@@ -1,7 +1,4 @@
 const styles = (theme) => ({
-  root: {
-    minHeight: 0,
-  },
   toolbar: {
     display: "flex",
     justifyContent: "space-between",
@@ -12,6 +9,9 @@ const styles = (theme) => ({
     listStyle: "none",
     margin: 0,
     padding: ".3rem .5rem",
+    "& ul": {
+      padding: 0,
+    },
   },
   btnGroup: {
     display: "flex",
@@ -32,7 +32,7 @@ const styles = (theme) => ({
     borderRadius: "5px",
     padding: ".5rem",
     minWidth: "4rem",
-    [theme.breakpoints.down("lg")]: {
+    [theme.breakpoints.down("md")]: {
       margin: ".2rem",
       minWidth: "3rem",
     },
@@ -47,7 +47,7 @@ const styles = (theme) => ({
     padding: ".3rem .5rem",
     minWidth: "4rem",
     justifyContent: "center",
-    [theme.breakpoints.down("lg")]: {
+    [theme.breakpoints.down("md")]: {
       padding: "0 .2rem",
       margin: ".2rem",
       minWidth: 0,
@@ -60,16 +60,23 @@ const styles = (theme) => ({
       fontSize: "1rem",
     },
   },
+  icon: {
+    margin: "0 .3rem",
+  },
   todayLabel: {
     color: "rgba(68, 68, 68, .7)",
     marginRight: ".5rem",
   },
   teacherList: {
+    fontSize: "1rem",
     display: "flex",
     justifyContent: "flex-start",
     listStyle: "none",
     fontWeight: 600,
     margin: "0 .3rem",
+    [theme.breakpoints.down("md")]: {
+      fontSize: "2rem",
+    },
   },
   listItem: {
     marginRight: "1rem",
