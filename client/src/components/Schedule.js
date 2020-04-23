@@ -15,15 +15,9 @@ import "react-big-calendar/lib/sass/styles.scss";
 import "react-big-calendar/lib/addons/dragAndDrop/styles.scss";
 
 const Schedule = () => {
-  const {
-    teachers,
-    setTeachers,
-    getTeachers,
-    addTeacher,
-    addTeachingMins,
-  } = useContext(TeachersContext);
+  const { getTeachers, addTeachingMins } = useContext(TeachersContext);
   const { events, addEvent, getEvents } = useContext(EventsContext);
-  const { user, dispatch } = useContext(UserContext);
+  const { user } = useContext(UserContext);
 
   const [formType, setFormType] = useState("");
   const [startTime, updateStartTime] = useFormState(new Date());
@@ -41,7 +35,7 @@ const Schedule = () => {
 
   useEffect(() => {
     addTeachingMins(events);
-  }, [events, setTeachers]);
+  }, [events]);
 
   const moveEvent = ({ event, resourceId, start, end }) => {
     const updatedEvent = { ...event, resourceId, start, end };
@@ -102,11 +96,6 @@ const Schedule = () => {
     setFormType("event");
   };
 
-  const handleAddTeacher = (newTeacher) => {
-    addTeacher(teachers, newTeacher, setTeachers);
-    setFormType("");
-  };
-
   const handleAddTeacherNav = () => {
     setFormType("teacher");
   };
@@ -136,11 +125,7 @@ const Schedule = () => {
         />
       )}
       {formType === "teacher" && (
-        <TeacherForm
-          formType={formType}
-          setFormType={setFormType}
-          addTeacher={handleAddTeacher}
-        />
+        <TeacherForm formType={formType} setFormType={setFormType} />
       )}
       {formType === "payroll" && <Payroll setFormType={setFormType} />}
       <CustomizedSnackbars

@@ -4,12 +4,12 @@ const auth = require("../../middleware/auth");
 
 router.get("/", auth, (req, res) => {
   Lesson.find()
-    .then(lessons => res.json(lessons))
-    .catch(err => res.status(400).json(`Error: ${err}`));
+    .then((lessons) => res.json(lessons))
+    .catch((err) => res.status(400).json(`Error: ${err}`));
 });
 
 router.post("/add", auth, (req, res) => {
-  req.body.map(item => {
+  req.body.map((item) => {
     const title = item.title;
     const type = item.type;
     const start = Date.parse(item.start);
@@ -35,30 +35,30 @@ router.post("/add", auth, (req, res) => {
       recur,
       isHoliday,
       isNewEvent,
-      isLast
+      isLast,
     });
 
     return newLesson
       .save()
       .then(() => res.json("Lesson added!"))
-      .catch(err => res.status(400).json(`Error: ${err}`));
+      .catch((err) => res.status(400).json(`Error: ${err}`));
   });
 });
 
 router.get("/:id", auth, (req, res) => {
   Lesson.findById(req.params.id)
-    .then(lesson => res.json(lesson))
-    .catch(err => res.status(400).json(`Error: ${err}`));
+    .then((lesson) => res.json(lesson))
+    .catch((err) => res.status(400).json(`Error: ${err}`));
 });
 
 router.delete("/delete/:id", auth, (req, res) => {
   Lesson.findByIdAndDelete(req.params.id)
     .then(() => res.json("Lesson deleted"))
-    .catch(err => res.status(400).json(`Error: ${err}`));
+    .catch((err) => res.status(400).json(`Error: ${err}`));
 });
 
 router.put("/update/:id", auth, (req, res) => {
-  Lesson.findById(req.params.id).then(lesson => {
+  Lesson.findById(req.params.id).then((lesson) => {
     for (let itemFromBodyIndex in req.body) {
       if (req.body.hasOwnProperty(itemFromBodyIndex)) {
         lesson[itemFromBodyIndex] = req.body[itemFromBodyIndex];
@@ -67,7 +67,7 @@ router.put("/update/:id", auth, (req, res) => {
     lesson
       .save()
       .then(() => res.json("Lesson updated!"))
-      .catch(err => res.status(400).json(`Error: ${err}`));
+      .catch((err) => res.status(400).json(`Error: ${err}`));
   });
 });
 

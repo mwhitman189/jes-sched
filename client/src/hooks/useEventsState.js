@@ -8,7 +8,7 @@ export default function (initialEvents) {
   const { user } = useContext(UserContext);
   const [events, setEvents] = useState(initialEvents);
 
-  const testObj = {
+  return {
     events,
     getEvents: async function (dateTime) {
       await axios
@@ -58,6 +58,4 @@ export default function (initialEvents) {
         .catch((err) => console.log(err));
     },
   };
-
-  return testObj;
 }

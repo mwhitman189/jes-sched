@@ -26,8 +26,8 @@ const useStyles = makeStyles((theme) => ({
 
 export default function EventForm(props) {
   const classes = useStyles();
-  const { addTeacher, formType, setFormType } = props;
-  const { teachers } = useContext(TeachersContext);
+  const { formType, setFormType } = props;
+  const { addTeacher, teachers } = useContext(TeachersContext);
 
   const [givenName, updateGivenName] = useInputState("");
   const [familyName, updateFamilyName] = useInputState("");
@@ -39,6 +39,7 @@ export default function EventForm(props) {
 
   const handleAddTeacher = (e) => {
     e.preventDefault();
+    // Incrementally add 1 to the teacher resource ID to ensure unique IDs
     let bigResourceId = 1;
     if (teachers) {
       teachers.forEach((t) => {
@@ -49,10 +50,10 @@ export default function EventForm(props) {
         }
       });
     }
-
     addTeacher({
       resourceId: bigResourceId,
       resourceTitle: givenName,
+      email: email,
       name: givenName,
       familyName: familyName,
       teachingMins: 0,

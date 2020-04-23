@@ -16,6 +16,7 @@ WorkWeek.range = (date) => {
   date.setHours(0, 0, 0, 0);
   // Set start date to the current work week's Monday
   let gotDate = date.getDate();
+
   // Check the current date's day as integer from 0(Sun) to 6(Sat)
   switch (date.getDay()) {
     case 0:

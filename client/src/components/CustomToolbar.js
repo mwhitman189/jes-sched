@@ -129,6 +129,7 @@ const CustomToolbar = (props) => {
               }
             >{`${teacher.name}: ${teacher.teachingMins}`}</li>
           ) : (
+            teachers &&
             teachers.map((t) => (
               <li
                 className={
@@ -266,6 +267,7 @@ const CustomToolbar = (props) => {
               }
             >{`${teacher.name}: ${teacher.teachingMins}`}</li>
           ) : (
+            teachers &&
             teachers.map((t) => (
               <li
                 className={

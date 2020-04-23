@@ -24,13 +24,11 @@ const TeacherSchema = new Schema(
     overThresholdOneMins: {
       type: Number,
       trim: true,
-      required: true,
       default: 0,
     },
     overThresholdTwoMins: {
       type: Number,
       trim: true,
-      required: true,
       default: 0,
     },
     contractType: { type: String, trim: true, required: true },

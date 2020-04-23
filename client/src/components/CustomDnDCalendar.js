@@ -30,7 +30,6 @@ function CustomDnDCalendar(props) {
   const teacher =
     user.user.role === "teacher" &&
     teachers.find((t) => t.email === user.user.email);
-  console.log(teacher);
 
   // Limit displayed hours of the day
   const minTime = new Date();
@@ -131,7 +130,7 @@ function CustomDnDCalendar(props) {
     <DragAndDropCalendar
       style={{ width: "100vw", maxHeight: "96vh" }}
       localizer={localizer}
-      views={{ week: WorkWeek, day: true }}
+      views={{ week: WorkWeek }}
       defaultView="week"
       events={events}
       onEventDrop={handleMove}
