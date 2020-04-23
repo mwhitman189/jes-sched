@@ -1,7 +1,8 @@
 const router = require("express").Router();
 const bcrypt = require("bcryptjs");
-const User = require("../../models/user.model");
 const jwt = require("jsonwebtoken");
+const User = require("../../models/user.model");
+const Teacher = require("../../models/teacher.model");
 const auth = require("../../middleware/auth");
 
 const jwt_secret =
@@ -16,6 +17,11 @@ function validateEmail(email) {
 router.post("/signup", (req, res) => {
   const { givenName, familyName, email, password } = req.body;
   let { role, is_admin } = req.body;
+
+  // Check for email in teachers. If not found, prevent signup
+  Teacher.findOne({ email }).then((teacher) => {
+    if (!teacher) return res.status(400).json({ msg: "Teacher not found" });
+  });
 
   // Validation
   if (!givenName || !familyName || !email || !password) {

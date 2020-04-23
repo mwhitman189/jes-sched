@@ -4,6 +4,7 @@ import loadUser from "../reducers/loadUserReducer";
 import useInputState from "../hooks/useInputState";
 import useToggleState from "../hooks/useToggleState";
 import { UserContext } from "../context/UserContext";
+import { ErrorsContext } from "../context/ErrorsContext";
 import { makeStyles } from "@material-ui/core/styles";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
@@ -38,6 +39,7 @@ const useStyles = makeStyles((theme) => ({
 export default function SignUpForm() {
   const classes = useStyles();
   const { user, dispatch } = useContext(UserContext);
+  const { errors, errorsDispatch } = useContext(ErrorsContext);
 
   const [givenName, updateGivenName] = useInputState("");
   const [familyName, updateFamilyName] = useInputState("");
@@ -60,6 +62,10 @@ export default function SignUpForm() {
     await axios
       .post("/api/users/signup", user)
       .then((res) => {
+        if (res.status !== 200) {
+          errorsDispatch({ type: "GET_ERRORS", msg: res.msg });
+          return console.log(errors);
+        }
         dispatch({
           type: "REGISTER_SUCCESS",
           payload: res.data,

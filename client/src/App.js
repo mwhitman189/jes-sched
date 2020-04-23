@@ -1,6 +1,7 @@
 import React from "react";
 import { BrowserRouter as Router } from "react-router-dom";
 import { TeachersProvider } from "./context/TeachersContext";
+import { ErrorsProvider } from "./context/ErrorsContext";
 import { EventsProvider } from "./context/EventsContext";
 import { UserProvider } from "./context/UserContext";
 import Routes from "./routes/routes";
@@ -12,9 +13,11 @@ function App() {
       <UserProvider>
         <EventsProvider>
           <TeachersProvider>
-            <Router>
-              <Routes />
-            </Router>
+            <ErrorsProvider>
+              <Router>
+                <Routes />
+              </Router>
+            </ErrorsProvider>
           </TeachersProvider>
         </EventsProvider>
       </UserProvider>
