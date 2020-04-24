@@ -15,10 +15,12 @@ const LessonSchema = new Schema(
     recur: { type: Boolean, default: false },
     isHoliday: { type: Boolean, default: false },
     isNewEvent: { type: Boolean, default: false },
-    isLast: { type: Boolean, default: false }
+    isLast: { type: Boolean, default: false },
+    cancelled: { type: Boolean, default: false },
+    sameDayCancellation: { type: Boolean, default: false },
   },
   {
-    timestamps: true
+    timestamps: true,
   }
 );
 

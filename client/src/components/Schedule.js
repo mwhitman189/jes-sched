@@ -30,8 +30,11 @@ const Schedule = () => {
     // Pass current dateTime to compare to recurrence events to check if a new batch of recurrences
     // is needed
     getEvents(new Date().getTime());
-    getTeachers(events);
   }, []);
+
+  useEffect(() => {
+    getTeachers(events);
+  }, [events]);
 
   useEffect(() => {
     addTeachingMins(events);

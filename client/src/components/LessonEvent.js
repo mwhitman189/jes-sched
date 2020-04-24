@@ -1,11 +1,22 @@
 import React from "react";
 import moment from "moment";
 import useStyles from "../styles/LessonEventStyles";
+import CloseIcon from "@material-ui/icons/Close";
 
 const LessonEvent = ({ event }) => {
   const classes = useStyles();
   return (
     <div className={classes.event}>
+      {event.sameDayCancellation ? (
+        <CloseIcon className={classes.cancelledIcon} />
+      ) : (
+        event.cancelled && (
+          <>
+            <p>SD</p>
+            <CloseIcon className={classes.cancelledIcon} />
+          </>
+        )
+      )}
       <div className={classes.group}>
         <div>{moment(event.start).format("HH:mm")}</div>
         <div className={classes.innerGroup}>

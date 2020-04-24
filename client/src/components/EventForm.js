@@ -11,6 +11,7 @@ import useToggleState from "../hooks/useToggleState";
 import { validateRoom, validateTeacher } from "../validators";
 import { TeachersContext } from "../context/TeachersContext";
 import { EventsContext } from "../context/EventsContext";
+import { checkForSameDate } from "../helperFunctions";
 import roomList from "../rooms";
 import lessonTypes from "../lessonTypes";
 import { makeStyles } from "@material-ui/core/styles";
@@ -147,6 +148,18 @@ export default function EventForm(props) {
       resourceId: parseInt(resource),
       type: eventType,
       isRecurring: isRecurring,
+    };
+    editEvent(event, editedEvent);
+    hideForm();
+  };
+
+  const handleCancelEvent = (e) => {
+    e.preventDefault();
+    let sdCancellation = checkForSameDate(event.start);
+    const editedEvent = {
+      ...event,
+      cancelled: true,
+      sameDayCancellation: sdCancellation,
     };
     editEvent(event, editedEvent);
     hideForm();
@@ -295,8 +308,11 @@ export default function EventForm(props) {
           <Button onClick={handleDeleteEvent} color="secondary">
             Delete Lesson
           </Button>
+          <Button onClick={handleCancelEvent} color="secondary">
+            Cancel Lesson
+          </Button>
           <Button onClick={hideForm} color="primary">
-            Cancel
+            Back
           </Button>
           <Button type="submit" color="primary">
             {event ? "Confirm Change" : "Add Lesson"}

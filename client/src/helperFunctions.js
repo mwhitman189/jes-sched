@@ -34,6 +34,11 @@ const calcDutyHours = (dutyHours, start) => {
   return dutyHours;
 };
 
+const checkForSameDate = (eventStart) => {
+  const todaysDate = new Date();
+  return eventStart.getDate() === todaysDate.getDate();
+};
+
 const calcOutsideDutyMins = (
   eventStart,
   eventEnd,
@@ -240,4 +245,5 @@ export {
   addPayment,
   createPayPeriodData,
   protectAction,
+  checkForSameDate,
 };

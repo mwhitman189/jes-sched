@@ -8,7 +8,7 @@ const errorsReducer = (state, action) => {
       };
     case "CLEAR_ERRORS":
       return {
-        msg: {},
+        msg: null,
         status: null,
         id: null,
       };
