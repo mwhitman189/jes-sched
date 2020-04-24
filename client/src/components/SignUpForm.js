@@ -31,6 +31,17 @@ const useStyles = makeStyles((theme) => ({
     width: "100%", // Fix IE 11 issue.
     marginTop: theme.spacing(3),
   },
+  formGreeting: {
+    fontSize: "1.5rem",
+    margin: 0,
+    padding: ".2rem",
+  },
+  formErrors: {
+    color: "red",
+    fontSize: "1rem",
+    margin: 0,
+    padding: ".2rem",
+  },
   submit: {
     margin: theme.spacing(3, 0, 2),
   },
@@ -62,17 +73,20 @@ export default function SignUpForm() {
     await axios
       .post("/api/users/signup", user)
       .then((res) => {
-        if (res.status !== 200) {
-          errorsDispatch({ type: "GET_ERRORS", msg: res.msg });
-          return console.log(errors);
-        }
         dispatch({
           type: "REGISTER_SUCCESS",
           payload: res.data,
         });
+        return console.log("Success! Logged In");
       })
-      .catch((err) => dispatch({ type: "REGISTER_FAIL" }));
-    return console.log("Success! Logged In");
+      .catch((err) => {
+        dispatch({ type: "REGISTER_FAIL" });
+        errorsDispatch({
+          type: "GET_ERRORS",
+          msg: err.response.data.msg,
+        });
+        return console.log(errors.msg);
+      });
   };
 
   return (
@@ -82,9 +96,24 @@ export default function SignUpForm() {
         <Avatar className={classes.avatar}>
           <LockOutlinedIcon />
         </Avatar>
-        <Typography component="h1" variant="h5">
-          Sign up
-        </Typography>
+        {errors.msg ? (
+          <Typography
+            className={classes.formErrors}
+            component="h1"
+            variant="h5"
+          >
+            {errors.msg}
+          </Typography>
+        ) : (
+          <Typography
+            className={classes.formGreeting}
+            component="h1"
+            variant="h5"
+          >
+            Sign up
+          </Typography>
+        )}
+
         <form className={classes.form} noValidate onSubmit={handleSignup}>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
@@ -100,6 +129,7 @@ export default function SignUpForm() {
                 onChange={updateGivenName}
                 autoFocus
               />
+              <p className={classes.error}></p>
             </Grid>
             <Grid item xs={12} sm={6}>
               <TextField

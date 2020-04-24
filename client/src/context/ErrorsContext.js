@@ -2,7 +2,7 @@ import React, { useReducer, createContext } from "react";
 import errorsReducer from "../reducers/errorsReducer";
 
 const initialState = {
-  msg: {},
+  msg: null,
   status: null,
   id: null,
 };
