@@ -3,6 +3,7 @@ import axios from "axios";
 import useInputState from "../hooks/useInputState";
 import useToggleState from "../hooks/useToggleState";
 import { UserContext } from "../context/UserContext";
+import { ErrorsContext } from "../context/ErrorsContext";
 import { makeStyles } from "@material-ui/core/styles";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
@@ -44,6 +45,17 @@ const useStyles = makeStyles((theme) => ({
     width: "100%", // Fix IE 11 issue.
     marginTop: theme.spacing(1),
   },
+  formGreeting: {
+    fontSize: "1.5rem",
+    margin: 0,
+    padding: ".2rem",
+  },
+  formErrors: {
+    color: "red",
+    fontSize: "1rem",
+    margin: 0,
+    padding: ".2rem",
+  },
   submit: {
     margin: theme.spacing(3, 0, 2),
   },
@@ -52,6 +64,7 @@ const useStyles = makeStyles((theme) => ({
 export default function Login() {
   const classes = useStyles();
   const { dispatch } = useContext(UserContext);
+  const { errors, errorsDispatch } = useContext(ErrorsContext);
 
   const [email, updateEmail] = useInputState("");
   const [password, updatePassword] = useInputState("");
@@ -73,7 +86,11 @@ export default function Login() {
         });
       })
       .catch((err) => {
-        dispatch({ type: "AUTH_ERROR" });
+        dispatch({ type: "LOGIN_FAILURE" });
+        errorsDispatch({
+          type: "GET_ERRORS",
+          msg: err.response.data.msg,
+        });
       });
     return console.log("Success! Logged In");
   };
@@ -85,9 +102,23 @@ export default function Login() {
         <Avatar className={classes.avatar}>
           <LockOutlinedIcon />
         </Avatar>
-        <Typography component="h1" variant="h5">
-          Login
-        </Typography>
+        {errors.msg ? (
+          <Typography
+            className={classes.formErrors}
+            component="h1"
+            variant="h5"
+          >
+            {errors.msg}
+          </Typography>
+        ) : (
+          <Typography
+            className={classes.formGreeting}
+            component="h1"
+            variant="h5"
+          >
+            Login
+          </Typography>
+        )}
         <form className={classes.form} noValidate onSubmit={handleLogin}>
           <TextField
             variant="outlined"

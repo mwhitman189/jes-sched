@@ -8,14 +8,12 @@ const LessonEvent = ({ event }) => {
   return (
     <div className={classes.event}>
       {event.sameDayCancellation ? (
-        <CloseIcon className={classes.cancelledIcon} />
+        <div className={classes.cancelled}>
+          <CloseIcon />
+          <p>当日</p>
+        </div>
       ) : (
-        event.cancelled && (
-          <>
-            <p>SD</p>
-            <CloseIcon className={classes.cancelledIcon} />
-          </>
-        )
+        event.cancelled && <CloseIcon className={classes.cancelled} />
       )}
       <div className={classes.group}>
         <div>{moment(event.start).format("HH:mm")}</div>

@@ -34,6 +34,7 @@ const calcDutyHours = (dutyHours, start) => {
   return dutyHours;
 };
 
+// Check whether a cancellation took place on the same day of the class
 const checkForSameDate = (eventStart) => {
   const todaysDate = new Date();
   return eventStart.getDate() === todaysDate.getDate();
@@ -123,73 +124,77 @@ const createPayPeriodData = (events, teacher, monthStart, monthEnd) => {
   });
 
   monthEvents.forEach((e) => {
-    if (moment(e.start).isBetween(monthStart, monthEnd, null, "[]")) {
-      if (e.resourceId === teacher.resourceId) {
-        const date = e.start.getDate();
-        const day = e.start.getDay();
-        // Calculate number of minutes to add to first threshold to calc second threshold. (10 hours * 60 mins)
-        const secondThreshold = 10 * 60;
-        let teachingMins = 0;
-        let outsideDutyMins = 0;
-        let holidayMins = 0;
+    if (!e.cancelled || e.sameDayCancellation) {
+      if (moment(e.start).isBetween(monthStart, monthEnd, null, "[]")) {
+        if (e.resourceId === teacher.resourceId) {
+          const date = e.start.getDate();
+          const day = e.start.getDay();
+          // Calculate number of minutes to add to first threshold to calc second threshold. (10 hours * 60 mins)
+          const secondThreshold = 10 * 60;
+          let teachingMins = 0;
+          let outsideDutyMins = 0;
+          let holidayMins = 0;
 
-        // If event falls on a national holiday, add the class duration to holiday minutes,
-        // otherwise, add to total teaching minutes
-        if (
-          JapaneseHolidays.isHoliday(e.start) ||
-          e.start.getDay() === (0 || 1)
-        ) {
-          holidayMins = e.duration;
-          teacher.holidayMins += holidayMins;
-        } else {
-          const totalTeachingMins = calcOutsideDutyMins(
-            e.start,
-            e.end,
-            e.duration,
-            dutyHoursByDate[date].startTime,
-            dutyHoursByDate[date].endTime
-          );
+          // If event falls on a national holiday, add the class duration to holiday minutes,
+          // otherwise, add to total teaching minutes
+          if (
+            JapaneseHolidays.isHoliday(e.start) ||
+            e.start.getDay() === (0 || 1)
+          ) {
+            holidayMins = e.duration;
+            teacher.holidayMins += holidayMins;
+          } else {
+            const totalTeachingMins = calcOutsideDutyMins(
+              e.start,
+              e.end,
+              e.duration,
+              dutyHoursByDate[date].startTime,
+              dutyHoursByDate[date].endTime
+            );
 
-          // Add total teaching minutes and outside duty minutes to teacher object
-          teachingMins = totalTeachingMins.teachingMins;
-          teacher.teachingMins += teachingMins;
-          outsideDutyMins = totalTeachingMins.outsideDutyMins;
-          teacher.outsideDutyMins += outsideDutyMins;
-        }
-        // Calculate hours worked over monthly thresholds one and two
-        if (teacher.teachingMins >= teacher.otThreshold + secondThreshold) {
-          teacher.overThresholdTwoMins +=
-            teacher.teachingMins - (teacher.otThreshold + secondThreshold);
-          teacher.overThresholdOneMins += secondThreshold;
-        } else if (teacher.teachingMins >= teacher.otThreshold) {
-          teacher.overThresholdOneMins +=
-            teacher.teachingMins - teacher.otThreshold;
-        }
-        // Teaching minutes object to be added to hash table
-        const dateData = {
-          resourceId: teacher,
-          date: date,
-          day: day,
-          teachingMins: teachingMins,
-          outsideDutyMins: outsideDutyMins,
-          overThresholdOneMins: teacher.overThresholdOneMins,
-          overThresholdTwoMins: teacher.overThresholdTwoMins,
-          holidayMins: holidayMins,
-          travelAllowance: 0,
-          travelExpenses: 0,
-        };
-        // If date already in hash table, add teaching minutes to existing keys, otherwise create
-        // a new date object
-        if (datesData[date]) {
-          datesData[date].teachingMins += dateData.teachingMins;
-          datesData[date].outsideDutyMins += dateData.outsideDutyMins;
-          datesData[date].overThresholdOneMins += dateData.overThresholdOneMins;
-          datesData[date].overThresholdTwoMins += dateData.overThresholdTwoMins;
-          datesData[date].holidayMins += dateData.holidayMins;
-          datesData[date].travelAllowance += dateData.travelAllowance;
-          datesData[date].travelExpenses += dateData.travelExpenses;
-        } else {
-          datesData[date] = dateData;
+            // Add total teaching minutes and outside duty minutes to teacher object
+            teachingMins = totalTeachingMins.teachingMins;
+            teacher.teachingMins += teachingMins;
+            outsideDutyMins = totalTeachingMins.outsideDutyMins;
+            teacher.outsideDutyMins += outsideDutyMins;
+          }
+          // Calculate hours worked over monthly thresholds one and two
+          if (teacher.teachingMins >= teacher.otThreshold + secondThreshold) {
+            teacher.overThresholdTwoMins +=
+              teacher.teachingMins - (teacher.otThreshold + secondThreshold);
+            teacher.overThresholdOneMins += secondThreshold;
+          } else if (teacher.teachingMins >= teacher.otThreshold) {
+            teacher.overThresholdOneMins +=
+              teacher.teachingMins - teacher.otThreshold;
+          }
+          // Teaching minutes object to be added to hash table
+          const dateData = {
+            resourceId: teacher,
+            date: date,
+            day: day,
+            teachingMins: teachingMins,
+            outsideDutyMins: outsideDutyMins,
+            overThresholdOneMins: teacher.overThresholdOneMins,
+            overThresholdTwoMins: teacher.overThresholdTwoMins,
+            holidayMins: holidayMins,
+            travelAllowance: 0,
+            travelExpenses: 0,
+          };
+          // If date already in hash table, add teaching minutes to existing keys, otherwise create
+          // a new date object
+          if (datesData[date]) {
+            datesData[date].teachingMins += dateData.teachingMins;
+            datesData[date].outsideDutyMins += dateData.outsideDutyMins;
+            datesData[date].overThresholdOneMins +=
+              dateData.overThresholdOneMins;
+            datesData[date].overThresholdTwoMins +=
+              dateData.overThresholdTwoMins;
+            datesData[date].holidayMins += dateData.holidayMins;
+            datesData[date].travelAllowance += dateData.travelAllowance;
+            datesData[date].travelExpenses += dateData.travelExpenses;
+          } else {
+            datesData[date] = dateData;
+          }
         }
       }
     }

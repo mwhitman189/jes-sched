@@ -33,9 +33,14 @@ const useStyles = makeStyles({
     color: "#1b1c1c",
     paddingLeft: ".1rem",
   },
-  cancelledIcon: {
+  cancelled: {
+    display: "flex",
     color: "red",
-    position: "absolute",
+    position: "relative",
+    fontWeight: "800",
+    fontSize: "1.1rem",
+    margin: 0,
+    padding: 0,
   },
 });
 export default useStyles;
