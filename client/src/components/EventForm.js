@@ -58,7 +58,6 @@ export default function EventForm(props) {
   const {
     formType,
     setFormType,
-    startTime,
     event,
     setSelectedEvent,
     selectedTeacher,
@@ -66,7 +65,7 @@ export default function EventForm(props) {
     addEvent,
   } = props;
 
-  const [start, updateStart] = useInputState(startTime);
+  const [start, updateStart] = useInputState(event.start);
 
   const [title, updateTitle, resetTitle] = useInputState(
     event ? event.title : ""
@@ -97,15 +96,20 @@ export default function EventForm(props) {
   // If an event does not exist, check whether the selected room is
   // available at the specified time
   ValidatorForm.addValidationRule("teacherIsAvailable", (teacher) => {
-    return validateTeacher(events, teacher, startTime, duration);
+    return validateTeacher(events, teacher, start, duration);
   });
 
   // If an event does not exist, check whether the selected room is
   // available at the specified time
   ValidatorForm.addValidationRule("roomIsAvailable", (room) => {
-    return validateRoom(events, room, startTime, duration);
+    return validateRoom(events, room, start, duration);
   });
 
+  const handleTimeChange = (date) => {
+    updateStart(date._d);
+  };
+
+  console.log(event.start, start);
   const hideForm = () => {
     resetForm();
     setFormType("");
@@ -125,8 +129,8 @@ export default function EventForm(props) {
     e.preventDefault();
     addEvent({
       title: title,
-      start: startTime,
-      end: moment(startTime).add(duration, "m").toDate(),
+      start: start,
+      end: moment(start).add(duration, "m").toDate(),
       room: room,
       duration: parseInt(duration),
       resourceId: resource,
@@ -138,16 +142,17 @@ export default function EventForm(props) {
 
   const handleEditEvent = (e) => {
     e.preventDefault();
-    validateRoomAndResource(e, resource, startTime);
+    validateRoomAndResource(e, resource, start);
     const editedEvent = {
       title: title,
-      start: startTime,
-      end: moment(startTime).add(duration, "m").toDate(),
+      start: start,
+      end: moment(start).add(duration, "m").toDate(),
       room: room,
       duration: parseInt(duration),
       resourceId: parseInt(resource),
       type: eventType,
       isRecurring: isRecurring,
+      isNewEvent: true,
     };
     editEvent(event, editedEvent);
     hideForm();
@@ -205,7 +210,7 @@ export default function EventForm(props) {
             <MuiPickersUtilsProvider utils={MomentUtils}>
               <TimePicker
                 value={start}
-                onChange={updateStart}
+                onChange={handleTimeChange}
                 minutesStep={5}
                 margin="dense"
               />

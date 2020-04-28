@@ -129,7 +129,6 @@ export default function SignUpForm() {
                 onChange={updateGivenName}
                 autoFocus
               />
-              <p className={classes.error}></p>
             </Grid>
             <Grid item xs={12} sm={6}>
               <TextField

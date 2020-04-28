@@ -48,12 +48,13 @@ const Schedule = () => {
   const validateRoomAndResource = (event, resourceId, start) => {
     const idx = events.indexOf(event);
     const otherEvents = [...events.slice(0, idx), ...events.slice(idx + 1)];
+
     if (
       !validateRoom(otherEvents, event.room, start, parseInt(event.duration))
     ) {
       setSelectedEvent(event);
       handleToggleSnackbar("Room Conflict. Please choose another room or time");
-      return 1;
+      return false;
     }
     if (
       !validateTeacher(otherEvents, resourceId, start, parseInt(event.duration))
@@ -62,24 +63,24 @@ const Schedule = () => {
       handleToggleSnackbar(
         "Teacher Conflict. Please choose another teacher or time"
       );
-      return 1;
+      return false;
     }
-    return 0;
+    return true;
   };
 
   // Add validation to a move upon dropping an event with drag and drop
   // If there is a conflict, prevent the move and flash a conflict snackbar
   const handleMove = ({ event, resourceId, start, end }) => {
-    if (validateRoomAndResource(event, resourceId, start) === 0) {
+    if (validateRoomAndResource(event, resourceId, start)) {
       moveEvent({
         event,
         resourceId,
         start,
         end,
       });
-      return 0;
+      return true;
     }
-    return 1;
+    return false;
   };
 
   const handleAddEvent = (newEvent) => {

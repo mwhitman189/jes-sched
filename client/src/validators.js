@@ -1,17 +1,13 @@
 import moment from "moment";
 
 function validateRoom(events, room, start, duration) {
-  return events.every(event => {
+  return events.every((event) => {
     if (
       testDateOverlap(
         [event.start, event.end],
         [
           moment(new Date(start)),
-          moment(
-            moment(new Date(start))
-              .add(duration, "m")
-              .toDate()
-          )
+          moment(moment(new Date(start)).add(duration, "m").toDate()),
         ]
       )
     ) {
@@ -21,22 +17,23 @@ function validateRoom(events, room, start, duration) {
   });
 }
 
-function validateTeacher(events, teacher, start, duration) {
-  return events.every(event => {
+function validateTeacher(
+  otherEvents,
+  eventResourceId,
+  eventStart,
+  eventDuration
+) {
+  return otherEvents.every((otherEvent) => {
     if (
       testDateOverlap(
-        [event.start, event.end],
+        [otherEvent.start, otherEvent.end],
         [
-          moment(new Date(start)),
-          moment(
-            moment(new Date(start))
-              .add(duration, "m")
-              .toDate()
-          )
+          moment(new Date(eventStart)),
+          moment(moment(new Date(eventStart)).add(eventDuration, "m").toDate()),
         ]
       )
     ) {
-      return parseInt(event.resourceId) !== parseInt(teacher);
+      return parseInt(otherEvent.resourceId) !== parseInt(eventResourceId);
     }
     return true;
   });
