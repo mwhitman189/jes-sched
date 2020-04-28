@@ -59,13 +59,14 @@ export default function EventForm(props) {
     formType,
     setFormType,
     event,
+    startTime,
     setSelectedEvent,
     selectedTeacher,
     validateRoomAndResource,
     addEvent,
   } = props;
 
-  const [start, updateStart] = useInputState(event.start);
+  const [start, updateStart] = useInputState(startTime);
 
   const [title, updateTitle, resetTitle] = useInputState(
     event ? event.title : ""
