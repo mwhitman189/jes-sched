@@ -29,31 +29,31 @@ export default function (initialEvents) {
         })
         .catch((err) => console.log(err));
     },
-    addEvent: function (event) {
-      const newEvents = addNewEvent(event);
-      const updatedEvents = [...events, newEvents];
-      axios
+    addEvent: async function (event) {
+      await axios
         .post("/api/lessons/add", newEvents, tokenConfig(user))
         .then((res) => console.log(res.data))
         .catch((err) => console.log(err));
+      const newEvents = addNewEvent(event);
+      const updatedEvents = [...events, newEvents];
       setEvents(updatedEvents);
     },
-    deleteEvent: function (event) {
-      const updatedEvents = events.filter((evt) => evt._id !== event._id);
-      axios
+    deleteEvent: async function (event) {
+      await axios
         .delete(`/api/lessons/delete/${event._id}`, tokenConfig(user))
         .then((res) => console.log(res.data))
         .catch((err) => console.log(err));
+      const updatedEvents = events.filter((evt) => evt._id !== event._id);
       setEvents(updatedEvents);
     },
-    editEvent: function (event, editedEvent) {
-      const idx = events.findIndex((evt) => evt._id === event._id);
-      const updatedEvents = [...events];
-      events.splice(idx, 0, editedEvent);
-      axios
+    editEvent: async function (event, editedEvent) {
+      await axios
         .put(`/api/lessons/update/${event._id}`, editedEvent, tokenConfig(user))
         .then((res) => console.log(res.data))
         .catch((err) => console.log(err));
+      const idx = events.findIndex((evt) => evt._id === event._id);
+      const updatedEvents = [...events];
+      updatedEvents.splice(idx, 1, editedEvent);
       setEvents(updatedEvents);
     },
   };

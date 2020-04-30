@@ -140,7 +140,7 @@ export default function EventForm(props) {
       type: eventType,
       recur: isRecurring,
     });
-    getEvents(today);
+    // getEvents(today);
     hideForm();
   };
 
@@ -159,7 +159,7 @@ export default function EventForm(props) {
       isNewEvent: true,
     };
     editEvent(event, editedEvent);
-    getEvents(today);
+    // getEvents(today);
     hideForm();
   };
 
@@ -172,13 +172,13 @@ export default function EventForm(props) {
       sameDayCancellation: sdCancellation,
     };
     editEvent(event, editedEvent);
-    getEvents(today);
+    // getEvents(today);
     hideForm();
   };
 
   const handleDeleteEvent = () => {
     deleteEvent(event);
-    getEvents(today);
+    // getEvents(today);
     hideForm();
   };
 
