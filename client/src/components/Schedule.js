@@ -16,7 +16,7 @@ import "react-big-calendar/lib/addons/dragAndDrop/styles.scss";
 
 const Schedule = () => {
   const { getTeachers, addTeachingMins } = useContext(TeachersContext);
-  const { events, addEvent, getEvents } = useContext(EventsContext);
+  const { events, getEvents } = useContext(EventsContext);
   const { user } = useContext(UserContext);
 
   const [formType, setFormType] = useState("");
@@ -83,11 +83,6 @@ const Schedule = () => {
     return false;
   };
 
-  const handleAddEvent = (newEvent) => {
-    addEvent(newEvent);
-    setFormType("");
-  };
-
   const handleSelect = ({ start, resourceId }) => {
     updateStartTime(start);
     setSelectedTeacher(resourceId);
@@ -119,7 +114,6 @@ const Schedule = () => {
         <EventForm
           formType={formType}
           setFormType={setFormType}
-          addEvent={handleAddEvent}
           startTime={startTime}
           updateStartTime={updateStartTime}
           event={selectedEvent}

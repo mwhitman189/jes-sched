@@ -3,7 +3,7 @@ import { RRule } from "rrule";
 import moment from "moment";
 
 const JapaneseHolidays = require("japanese-holidays");
-
+// TODO: Edit months_start and months_end to accomodate renewal of recurrences.
 const getRecurrences = (event) => {
   const now = new Date();
   // Create start and end dates for the current month to calc

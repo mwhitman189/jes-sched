@@ -53,7 +53,9 @@ const useStyles = makeStyles((theme) => ({
 
 export default function EventForm(props) {
   const classes = useStyles();
-  const { events, editEvent, deleteEvent } = useContext(EventsContext);
+  const { events, addEvent, getEvents, editEvent, deleteEvent } = useContext(
+    EventsContext
+  );
   const { teachers } = useContext(TeachersContext);
   const {
     formType,
@@ -63,7 +65,6 @@ export default function EventForm(props) {
     setSelectedEvent,
     selectedTeacher,
     validateRoomAndResource,
-    addEvent,
   } = props;
 
   const [start, updateStart] = useInputState(startTime);
@@ -94,6 +95,8 @@ export default function EventForm(props) {
     roomValMsgs.push("Room unavailable");
   }
 
+  const today = new Date().getTime();
+
   // If an event does not exist, check whether the selected room is
   // available at the specified time
   ValidatorForm.addValidationRule("teacherIsAvailable", (teacher) => {
@@ -110,7 +113,6 @@ export default function EventForm(props) {
     updateStart(date._d);
   };
 
-  console.log(event.start, start);
   const hideForm = () => {
     resetForm();
     setFormType("");
@@ -138,6 +140,7 @@ export default function EventForm(props) {
       type: eventType,
       recur: isRecurring,
     });
+    getEvents(today);
     hideForm();
   };
 
@@ -156,6 +159,7 @@ export default function EventForm(props) {
       isNewEvent: true,
     };
     editEvent(event, editedEvent);
+    getEvents(today);
     hideForm();
   };
 
@@ -168,11 +172,13 @@ export default function EventForm(props) {
       sameDayCancellation: sdCancellation,
     };
     editEvent(event, editedEvent);
+    getEvents(today);
     hideForm();
   };
 
   const handleDeleteEvent = () => {
     deleteEvent(event);
+    getEvents(today);
     hideForm();
   };
 
