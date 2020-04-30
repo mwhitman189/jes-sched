@@ -9,7 +9,7 @@ router.get("/", auth, (req, res) => {
 });
 
 router.post("/add", auth, (req, res) => {
-  const newStaff = new Staff({});
+  const newStaff = new Staff({ role: "staff" });
   for (let itemFromBodyIndex in req.body) {
     newStaff[itemFromBodyIndex] = req.body[itemFromBodyIndex];
   }

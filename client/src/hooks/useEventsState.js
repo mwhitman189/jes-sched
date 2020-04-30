@@ -30,12 +30,12 @@ export default function (initialEvents) {
         .catch((err) => console.log(err));
     },
     addEvent: async function (event) {
+      const newEvents = addNewEvent(event);
+      const updatedEvents = [...events, newEvents];
       await axios
         .post("/api/lessons/add", newEvents, tokenConfig(user))
         .then((res) => console.log(res.data))
         .catch((err) => console.log(err));
-      const newEvents = addNewEvent(event);
-      const updatedEvents = [...events, newEvents];
       setEvents(updatedEvents);
     },
     deleteEvent: async function (event) {
