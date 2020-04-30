@@ -37,6 +37,7 @@ const CustomToolbar = (props) => {
     date,
     handleAddTeacherNav,
     handlePayrollNav,
+    handleAddStaffNav,
   } = props;
   const { teachers } = useContext(TeachersContext);
   const { user, dispatch } = useContext(UserContext);
@@ -289,6 +290,10 @@ const CustomToolbar = (props) => {
             <button className={classes.navBtn} onClick={handleAddTeacherNav}>
               <PersonAddIcon className={classes.icon} fontSize="small" />
               New Teacher
+            </button>
+            <button className={classes.navBtn} onClick={handleAddStaffNav}>
+              <PersonAddIcon className={classes.icon} fontSize="small" />
+              New Staff
             </button>
             <button className={classes.navBtn} onClick={handlePayrollNav}>
               <AttachMoneyIcon className={classes.icon} fontSize="small" />

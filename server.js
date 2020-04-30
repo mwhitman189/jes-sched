@@ -16,7 +16,7 @@ app.use(helmet());
 const uri = process.env.MONGODB_URI || require("./config/config").ATLAS_URI;
 mongoose.connect(uri, {
   useNewUrlParser: true,
-  useCreateIndex: true
+  useCreateIndex: true,
   // useUnifiedTopology: true
 });
 const connection = mongoose.connection;
@@ -26,12 +26,14 @@ connection.once("open", () => {
 
 const usersRouter = require("./routes/api/users");
 const authRouter = require("./routes/api/auth");
+const staffRouter = require("./routes/api/staff");
 const teachersRouter = require("./routes/api/teachers");
 const lessonsRouter = require("./routes/api/lessons");
 const paymentsRouter = require("./routes/api/payments");
 
 app.use("/api/users", usersRouter);
 app.use("/api/auth", authRouter);
+app.use("./api/staff", staffRouter);
 app.use("/api/teachers", teachersRouter);
 app.use("/api/lessons", lessonsRouter);
 app.use("/api/payments", paymentsRouter);

@@ -20,7 +20,10 @@ router.post("/signup", (req, res) => {
 
   // Check for email in teachers. If not found, prevent signup
   Teacher.findOne({ email }).then((teacher) => {
-    if (!teacher) return res.status(400).json({ msg: "Teacher not found" });
+    if (!teacher)
+      return res
+        .status(400)
+        .json({ msg: "User not authorized to make account" });
   });
 
   // Validation

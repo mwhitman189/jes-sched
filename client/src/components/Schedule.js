@@ -7,6 +7,7 @@ import { EventsContext } from "../context/EventsContext";
 import { UserContext } from "../context/UserContext";
 import useFormState from "../hooks/useInputState";
 import EventForm from "./EventForm";
+import StaffForm from "./StaffForm";
 import TeacherForm from "./TeacherForm";
 import CustomizedSnackbars from "./CustomizedSnackbars";
 import Payroll from "./Payroll";
@@ -99,6 +100,11 @@ const Schedule = () => {
     setFormType("teacher");
   };
 
+  const handleAddStaffNav = () => {
+    setFormType("staff");
+    console.log("set form type: staff");
+  };
+
   const handleToggleSnackbar = (msg) => {
     setMessage(msg);
     setIsOpen(true);
@@ -125,6 +131,9 @@ const Schedule = () => {
       {formType === "teacher" && (
         <TeacherForm formType={formType} setFormType={setFormType} />
       )}
+      {formType === "staff" && (
+        <StaffForm formType={formType} setFormType={setFormType} />
+      )}
       {formType === "payroll" && <Payroll setFormType={setFormType} />}
       <CustomizedSnackbars
         isOpen={isOpen}
@@ -138,6 +147,7 @@ const Schedule = () => {
         handleSelect={protectAction(user, handleSelect)}
         handleDoubleClick={protectAction(user, handleDoubleClick)}
         handleAddTeacherNav={protectAction(user, handleAddTeacherNav)}
+        handleAddStaffNav={protectAction(user, handleAddStaffNav)}
         handlePayrollNav={protectAction(user, handlePayrollNav)}
       />
       <Footer />

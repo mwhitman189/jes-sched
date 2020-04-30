@@ -19,6 +19,7 @@ function CustomDnDCalendar(props) {
     handleSelect,
     handleDoubleClick,
     handleAddTeacherNav,
+    handleAddStaffNav,
     handlePayrollNav,
   } = props;
   const { events, editEvent } = useContext(EventsContext);
@@ -154,6 +155,7 @@ function CustomDnDCalendar(props) {
           <CustomToolbar
             {...props}
             handleAddTeacherNav={handleAddTeacherNav}
+            handleAddStaffNav={handleAddStaffNav}
             handlePayrollNav={handlePayrollNav}
           />
         ),
