@@ -3,6 +3,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const User = require("../../models/user.model");
 const Teacher = require("../../models/teacher.model");
+const Staff = require("../../models/staff.model");
 const auth = require("../../middleware/auth");
 
 const jwt_secret =
@@ -18,19 +19,6 @@ router.post("/signup", (req, res) => {
   const { givenName, familyName, email, password } = req.body;
   let { role, is_admin } = req.body;
 
-  // Check for email in teachers. If not found, prevent signup
-  Teacher.findOne({ email }).then((teacher) => {
-    if (!teacher) {
-      Staff.findOne({ email }).then((staff) => {
-        if (!staff) {
-          return res
-            .status(400)
-            .json({ msg: "User not authorized to make account" });
-        }
-      });
-    }
-  });
-
   // Validation
   if (!givenName || !familyName || !email || !password) {
     return res.status(400).json({ msg: "Please enter all fields" });
@@ -40,9 +28,23 @@ router.post("/signup", (req, res) => {
     return res.status(400).json({ msg: "Please enter a valid email" });
   }
 
-  if (role === undefined) role = "teacher";
-
-  if (is_admin === undefined) is_admin = false;
+  // Check for email in teachers and staff tables. If not found, prevent signup
+  Teacher.findOne({ email }).then((teacher) => {
+    if (!teacher) {
+      return res
+        .status(400)
+        .json({ msg: "User not authorized to make account" });
+    }
+  });
+  Staff.findOne({ email }).then((staff) => {
+    if (!staff) {
+      return res
+        .status(400)
+        .json({ msg: "User not authorized to make account" });
+    }
+    role = "staff";
+    is_admin = false;
+  });
 
   // Check for existing user
   User.findOne({ email }).then((user) => {

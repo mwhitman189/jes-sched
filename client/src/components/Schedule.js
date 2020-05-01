@@ -102,7 +102,6 @@ const Schedule = () => {
 
   const handleAddStaffNav = () => {
     setFormType("staff");
-    console.log("set form type: staff");
   };
 
   const handleToggleSnackbar = (msg) => {
