@@ -53,7 +53,8 @@ const useStyles = makeStyles((theme) => ({
 
 export default function EventForm(props) {
   const classes = useStyles();
-  const { events, addEvent, getEvents, editEvent, deleteEvent } = useContext(
+  const { addTeachingMins } = useContext(TeachersContext);
+  const { events, addEvent, editEvent, deleteEvent } = useContext(
     EventsContext
   );
   const { teachers } = useContext(TeachersContext);
@@ -140,7 +141,7 @@ export default function EventForm(props) {
       type: eventType,
       recur: isRecurring,
     });
-    // getEvents(today);
+    addTeachingMins(events);
     hideForm();
   };
 
@@ -159,7 +160,7 @@ export default function EventForm(props) {
       isNewEvent: true,
     };
     editEvent(event, editedEvent);
-    // getEvents(today);
+    addTeachingMins(events);
     hideForm();
   };
 
@@ -172,13 +173,13 @@ export default function EventForm(props) {
       sameDayCancellation: sdCancellation,
     };
     editEvent(event, editedEvent);
-    // getEvents(today);
+    addTeachingMins(events);
     hideForm();
   };
 
   const handleDeleteEvent = () => {
     deleteEvent(event);
-    // getEvents(today);
+    addTeachingMins(events);
     hideForm();
   };
 

@@ -62,6 +62,7 @@ export default (initialTeachers) => {
         .delete(`/api/teachers/delete/${teacher._id}`, tokenConfig(user))
         .then((res) => console.log(res.data))
         .catch((err) => console.log(err));
+      return setTeachers(teachers.filter((t) => t._id !== teacher._id));
     },
     addTeachingMins: (events) => {
       const now = new Date();
@@ -71,13 +72,6 @@ export default (initialTeachers) => {
       const monthEnd = new Date(now.getFullYear(), now.getMonth() + 1, 0);
       if (teachers.length > 0) {
         // Reset teaching minutes to "0", then add all teaching minutes to the corresponding instructor
-        teachers.forEach((teacher) => {
-          teacher.teachingMins = 0;
-          teacher.outsideDutyMins = 0;
-          teacher.holidayMins = 0;
-          teacher.overThresholdOneMins = 0;
-          teacher.overThresholdTwoMins = 0;
-        });
 
         teachers.forEach((teacher) => {
           createPayPeriodData(events, teacher, monthStart, monthEnd);

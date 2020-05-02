@@ -25,6 +25,7 @@ const styles = (theme) => ({
   navBtn: {
     display: "flex",
     color: "#fff",
+    cursor: "pointer",
     background: "rgb(20,71,207)",
     background:
       "linear-gradient(0deg, rgba(20,71,207,1) 7%, rgba(49,119,254,1) 100%)",
@@ -40,6 +41,7 @@ const styles = (theme) => ({
   },
   navBtnNav: {
     color: "#fff",
+    cursor: "pointer",
     background: "rgb(20,71,207)",
     background:
       "linear-gradient(0deg, rgba(20,71,207,1) 7%, rgba(49,119,254,1) 100%)",
