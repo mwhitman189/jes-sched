@@ -1,6 +1,6 @@
 import { useState, useContext } from "react";
 import axios from "axios";
-import { addNewEvent, getRecurrences } from "../helperFunctions";
+import { addNewEvent } from "../helperFunctions";
 import { UserContext } from "../context/UserContext";
 import { tokenConfig } from "../reducers/loadUserReducer";
 
@@ -31,7 +31,7 @@ export default function (initialEvents) {
     },
     addEvent: async function (event) {
       const newEvents = addNewEvent(event);
-      const updatedEvents = [...events, newEvents];
+      const updatedEvents = [...events, ...newEvents];
       await axios
         .post("/api/lessons/add", newEvents, tokenConfig(user))
         .then((res) => console.log(res.data))
