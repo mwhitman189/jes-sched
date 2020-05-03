@@ -96,8 +96,6 @@ export default function EventForm(props) {
     roomValMsgs.push("Room unavailable");
   }
 
-  const today = new Date().getTime();
-
   // If an event does not exist, check whether the selected room is
   // available at the specified time
   ValidatorForm.addValidationRule("teacherIsAvailable", (teacher) => {

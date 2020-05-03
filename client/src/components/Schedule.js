@@ -26,16 +26,17 @@ const Schedule = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [message, setMessage] = useState("");
   const [selectedTeacher, setSelectedTeacher] = useState("");
+  const now = new Date();
 
   useEffect(() => {
     // Pass current dateTime to compare to recurrence events to check if a new batch of recurrences
     // is needed
-    getEvents(new Date().getTime());
+    getEvents(now.getTime());
     getTeachers(events);
   }, []);
 
   useEffect(() => {
-    addTeachingMins(events);
+    addTeachingMins(events, now);
   }, [events]);
 
   const moveEvent = ({ event, resourceId, start, end }) => {
