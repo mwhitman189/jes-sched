@@ -64,6 +64,9 @@ function CustomDnDCalendar(props) {
       case "adv":
         hexColor = "#04593c";
         break;
+      case "bny":
+        hexColor = "#e18fff";
+        break;
       case "lb":
         hexColor = "#97dd1a";
         break;
