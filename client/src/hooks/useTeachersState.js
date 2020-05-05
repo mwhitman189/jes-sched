@@ -64,8 +64,7 @@ export default (initialTeachers) => {
         .catch((err) => console.log(err));
       return setTeachers(teachers.filter((t) => t._id !== teacher._id));
     },
-    addTeachingMins: (events) => {
-      const now = new Date();
+    addTeachingMins: (events, now) => {
       // Create start and end dates for the current month to calc
       // teaching minutes
       const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);

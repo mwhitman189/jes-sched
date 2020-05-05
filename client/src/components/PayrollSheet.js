@@ -204,7 +204,7 @@ class PayrollSheet extends Component {
             <TableRow>
               <TableCell size="medium">Total Teaching Hours:</TableCell>
               <TableCell className={classes.totals}>
-                {sums.totalTeachingHours}
+                {sums.totalTeachingHours.toLocaleString()}
               </TableCell>
             </TableRow>
             <TableRow>

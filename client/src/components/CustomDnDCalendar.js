@@ -46,7 +46,7 @@ function CustomDnDCalendar(props) {
     }
     let hexColor;
     switch (event.type) {
-      case "pl":
+      case "pvt":
         hexColor = "#e6ba1f";
         break;
       case "beg":
@@ -100,6 +100,10 @@ function CustomDnDCalendar(props) {
       case "prm":
         hexColor = "#7d190b";
         break;
+      case "hs":
+        hexColor = "#22c1d7";
+      case "comp":
+        hexColor = "#4c72a8";
       default:
         hexColor = "#7c9ae6";
         break;

@@ -59,9 +59,9 @@ export default {
     otThreshold: 0,
     paidVacationDays: 0,
     paidSickDays: 0,
-    healthInsur: 27450,
-    pension: 27450,
-    employmentInsur: 964,
+    healthInsur: false,
+    pension: false,
+    employmentInsur: false,
     taxRate: 0.15
   },
   IIIB: {
