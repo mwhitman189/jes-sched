@@ -102,16 +102,17 @@ function CustomDnDCalendar(props) {
         break;
       case "hs":
         hexColor = "#22c1d7";
+        break;
       case "comp":
-        hexColor = "#4c72a8";
+        hexColor = "#516a8c";
+        break;
       default:
         hexColor = "#7c9ae6";
         break;
     }
 
-    let backgroundColor = hexColor;
     let style = {
-      backgroundColor: backgroundColor,
+      backgroundColor: hexColor,
       color: "white",
       border: 0,
       display: "block",
