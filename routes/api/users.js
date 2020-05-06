@@ -31,19 +31,16 @@ router.post("/signup", (req, res) => {
   // Check for email in teachers and staff tables. If not found, prevent signup
   Teacher.findOne({ email }).then((teacher) => {
     if (!teacher) {
-      return res
-        .status(400)
-        .json({ msg: "User not authorized to make account" });
+      Staff.findOne({ email }).then((staff) => {
+        if (!staff) {
+          return res
+            .status(400)
+            .json({ msg: "User not authorized to make account" });
+        }
+        role = "staff";
+        is_admin = false;
+      });
     }
-  });
-  Staff.findOne({ email }).then((staff) => {
-    if (!staff) {
-      return res
-        .status(400)
-        .json({ msg: "User not authorized to make account" });
-    }
-    role = "staff";
-    is_admin = false;
   });
 
   // Check for existing user
