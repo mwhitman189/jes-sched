@@ -77,7 +77,6 @@ export default function SignUpForm() {
           type: "REGISTER_SUCCESS",
           payload: res.data,
         });
-        return console.log("Success! Logged In");
       })
       .catch((err) => {
         dispatch({ type: "REGISTER_FAIL" });
@@ -85,8 +84,8 @@ export default function SignUpForm() {
           type: "GET_ERRORS",
           msg: err.response.data.msg,
         });
-        return console.log(errors.msg);
       });
+    return console.log("Success! Logged In");
   };
 
   return (

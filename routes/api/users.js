@@ -15,34 +15,14 @@ function validateEmail(email) {
   return re.test(String(email).toLowerCase());
 }
 
-router.post("/signup", (req, res) => {
-  const { givenName, familyName, email, password } = req.body;
-  let { role, is_admin } = req.body;
-
-  // Validation
-  if (!givenName || !familyName || !email || !password) {
-    return res.status(400).json({ msg: "Please enter all fields" });
-  }
-
-  if (!validateEmail(email)) {
-    return res.status(400).json({ msg: "Please enter a valid email" });
-  }
-
-  // Check for email in teachers and staff tables. If not found, prevent signup
-  Teacher.findOne({ email }).then((teacher) => {
-    if (!teacher) {
-      Staff.findOne({ email }).then((staff) => {
-        if (!staff) {
-          return res
-            .status(400)
-            .json({ msg: "User not authorized to make account" });
-        }
-        role = "staff";
-        is_admin = false;
-      });
-    }
-  });
-
+function verifyRegistrant(
+  givenName,
+  familyName,
+  email,
+  password,
+  role,
+  is_admin
+) {
   // Check for existing user
   User.findOne({ email }).then((user) => {
     if (user) return res.status(400).json({ msg: "User already exists" });
@@ -90,6 +70,46 @@ router.post("/signup", (req, res) => {
         .then(() => res.json("User registered!"))
         .catch((err) => res.status(400).json(`Error: ${err}`));
     });
+  });
+}
+
+router.post("/signup", (req, res) => {
+  const { givenName, familyName, email, password } = req.body;
+  let { role, is_admin } = req.body;
+
+  // Validation
+  if (!givenName || !familyName || !email || !password) {
+    return res.status(400).json({ msg: "Please enter all fields" });
+  }
+
+  if (!validateEmail(email)) {
+    return res.status(400).json({ msg: "Please enter a valid email" });
+  }
+
+  // Check for email in teachers and staff tables. If not found, prevent signup
+  Teacher.findOne({ email }).then((teacher) => {
+    if (teacher) {
+      verifyRegistrant(givenName, familyName, email, password);
+    } else {
+      Staff.findOne({ email }).then((staff) => {
+        if (!staff) {
+          return res
+            .status(400)
+            .json({ msg: "User not authorized to make account" });
+        } else {
+          role = "staff";
+          is_admin = false;
+          verifyRegistrant(
+            givenName,
+            familyName,
+            email,
+            password,
+            role,
+            is_admin
+          );
+        }
+      });
+    }
   });
 });
 
