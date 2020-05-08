@@ -172,11 +172,11 @@ const createPayPeriodData = (events, teacher, monthStart, monthEnd) => {
             resourceId: teacher.resourceId,
             date: date,
             day: day,
-            teachingMins: teacher.teachingMins,
-            outsideDutyMins: teacher.outsideDutyMins,
+            teachingMins: teachingMins,
+            outsideDutyMins: outsideDutyMins,
             overThresholdOneMins: teacher.overThresholdOneMins,
             overThresholdTwoMins: teacher.overThresholdTwoMins,
-            holidayMins: teacher.holidayMins,
+            holidayMins: holidayMins,
             travelAllowance: 0,
             travelExpenses: 0,
           };
@@ -238,7 +238,7 @@ const addPayment = async (newPayment) => {
 };
 
 const protectAction = (user, action) => {
-  if (user.role === "staff") {
+  if (user.user.role === "staff") {
     return action;
   }
   return console.log("Not gonna do it. Wouldn't be prudent.");

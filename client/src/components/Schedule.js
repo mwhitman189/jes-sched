@@ -45,7 +45,6 @@ const Schedule = () => {
 
   useEffect(() => {
     addTeachingMins(events, now);
-    console.log(createPayPeriodData(events, teachers[0], monthStart, monthEnd));
   }, [events]);
 
   const moveEvent = ({ event, resourceId, start, end }) => {
