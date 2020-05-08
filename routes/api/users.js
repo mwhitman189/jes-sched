@@ -64,6 +64,7 @@ function registerUser(givenName, familyName, email, password, role, is_admin) {
         .catch((err) => res.status(400).json(`Error: ${err}`));
     });
   });
+<<<<<<< HEAD
 }
 
 router.post("/signup", (req, res) => {
@@ -98,6 +99,49 @@ router.post("/signup", (req, res) => {
       });
     }
   });
+||||||| 46e660394... fix: Prevent non-authorized clients from creating new users, and fix buttons on staff dashboard
+}
+
+router.post("/signup", (req, res) => {
+  const { givenName, familyName, email, password } = req.body;
+  let { role, is_admin } = req.body;
+
+  // Validation
+  if (!givenName || !familyName || !email || !password) {
+    return res.status(400).json({ msg: "Please enter all fields" });
+  }
+
+  if (!validateEmail(email)) {
+    return res.status(400).json({ msg: "Please enter a valid email" });
+  }
+
+  // Check for email in teachers and staff tables. If not found, prevent signup
+  Teacher.findOne({ email }).then((teacher) => {
+    if (teacher) {
+      verifyRegistrant(givenName, familyName, email, password);
+    } else {
+      Staff.findOne({ email }).then((staff) => {
+        if (!staff) {
+          return res
+            .status(400)
+            .json({ msg: "User not authorized to make account" });
+        } else {
+          role = "staff";
+          is_admin = false;
+          verifyRegistrant(
+            givenName,
+            familyName,
+            email,
+            password,
+            role,
+            is_admin
+          );
+        }
+      });
+    }
+  });
+=======
+>>>>>>> parent of 46e660394... fix: Prevent non-authorized clients from creating new users, and fix buttons on staff dashboard
 });
 
 router.delete("/delete/:id", auth, (req, res) => {
