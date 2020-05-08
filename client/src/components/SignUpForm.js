@@ -88,13 +88,8 @@ export default function SignUpForm() {
         });
         return console.log(errors.msg);
       });
-<<<<<<< HEAD
     toggleIsLoading(false);
     return console.log("Success! Logged In");
-||||||| 46e660394... fix: Prevent non-authorized clients from creating new users, and fix buttons on staff dashboard
-    return console.log("Success! Logged In");
-=======
->>>>>>> parent of 46e660394... fix: Prevent non-authorized clients from creating new users, and fix buttons on staff dashboard
   };
 
   return (
