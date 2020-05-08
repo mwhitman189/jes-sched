@@ -36,6 +36,7 @@ const styles = (theme) => ({
   },
   btn: {
     color: "#fff",
+    cursor: "pointer",
     background: "rgb(20,71,207)",
     background:
       "linear-gradient(0deg, rgba(20,71,207,1) 7%, rgba(49,119,254,1) 100%)",

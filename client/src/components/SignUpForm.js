@@ -64,6 +64,7 @@ export default function SignUpForm() {
 
   const handleSignup = async (e) => {
     e.preventDefault();
+    toggleIsLoading(true);
     const user = {
       givenName: givenName,
       familyName: familyName,
@@ -85,6 +86,7 @@ export default function SignUpForm() {
           msg: err.response.data.msg,
         });
       });
+    toggleIsLoading(false);
     return console.log("Success! Logged In");
   };
 

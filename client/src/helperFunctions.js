@@ -169,14 +169,14 @@ const createPayPeriodData = (events, teacher, monthStart, monthEnd) => {
           }
           // Teaching minutes object to be added to hash table
           const dateData = {
-            resourceId: teacher,
+            resourceId: teacher.resourceId,
             date: date,
             day: day,
-            teachingMins: teachingMins,
-            outsideDutyMins: outsideDutyMins,
+            teachingMins: teacher.teachingMins,
+            outsideDutyMins: teacher.outsideDutyMins,
             overThresholdOneMins: teacher.overThresholdOneMins,
             overThresholdTwoMins: teacher.overThresholdTwoMins,
-            holidayMins: holidayMins,
+            holidayMins: teacher.holidayMins,
             travelAllowance: 0,
             travelExpenses: 0,
           };

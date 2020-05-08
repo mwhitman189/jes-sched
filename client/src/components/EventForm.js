@@ -84,6 +84,7 @@ export default function EventForm(props) {
     event ? event.type : ""
   );
   const [isRecurring, toggleIsRecurring] = useToggleState(false);
+  const [isLoading, toggleIsLoading] = useToggleState(false);
 
   let teacherValidators = ["required"];
   let teacherValMsgs = ["Teacher Required"];
@@ -95,6 +96,8 @@ export default function EventForm(props) {
     roomValidators.push("roomIsAvailable");
     roomValMsgs.push("Room unavailable");
   }
+
+  const now = new Date();
 
   // If an event does not exist, check whether the selected room is
   // available at the specified time
@@ -129,6 +132,7 @@ export default function EventForm(props) {
 
   const handleAddEvent = (e) => {
     e.preventDefault();
+    toggleIsLoading(true);
     addEvent({
       title: title,
       start: start,
@@ -139,12 +143,14 @@ export default function EventForm(props) {
       type: eventType,
       recur: isRecurring,
     });
-    addTeachingMins(events);
+    addTeachingMins(events, now);
+    toggleIsLoading(false);
     hideForm();
   };
 
   const handleEditEvent = (e) => {
     e.preventDefault();
+    toggleIsLoading(true);
     validateRoomAndResource(e, resource, start);
     const editedEvent = {
       title: title,
@@ -158,12 +164,14 @@ export default function EventForm(props) {
       isNewEvent: true,
     };
     editEvent(event, editedEvent);
-    addTeachingMins(events);
+    addTeachingMins(events, now);
+    toggleIsLoading(false);
     hideForm();
   };
 
   const handleCancelEvent = (e) => {
     e.preventDefault();
+    toggleIsLoading(true);
     let sdCancellation = checkForSameDate(event.start);
     const editedEvent = {
       ...event,
@@ -171,13 +179,16 @@ export default function EventForm(props) {
       sameDayCancellation: sdCancellation,
     };
     editEvent(event, editedEvent);
-    addTeachingMins(events);
+    addTeachingMins(events, now);
+    toggleIsLoading(false);
     hideForm();
   };
 
   const handleDeleteEvent = () => {
+    toggleIsLoading(true);
     deleteEvent(event);
-    addTeachingMins(events);
+    addTeachingMins(events, now);
+    toggleIsLoading(false);
     hideForm();
   };
 

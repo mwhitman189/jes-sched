@@ -2,6 +2,7 @@ import React, { useContext } from "react";
 import axios from "axios";
 import { ValidatorForm, TextValidator } from "react-material-ui-form-validator";
 import useInputState from "../hooks/useInputState";
+import useToggleState from "../hooks/useToggleState";
 import { tokenConfig } from "../reducers/loadUserReducer";
 import { UserContext } from "../context/UserContext";
 import { makeStyles } from "@material-ui/core/styles";
@@ -31,6 +32,7 @@ export default function EventForm(props) {
   const [givenName, updateGivenName] = useInputState("");
   const [familyName, updateFamilyName] = useInputState("");
   const [email, updateEmail] = useInputState("");
+  const [isLoading, toggleIsLoading] = useToggleState(false);
 
   const addStaff = async (newStaff) => {
     await axios
@@ -41,11 +43,13 @@ export default function EventForm(props) {
 
   const handleAddStaff = (e) => {
     e.preventDefault();
+    toggleIsLoading(true);
     addStaff({
       name: givenName,
       familyName: familyName,
       email: email,
     });
+    toggleIsLoading(false);
     hideForm();
   };
 

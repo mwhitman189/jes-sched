@@ -1,6 +1,7 @@
 import React, { useState, useContext, useRef } from "react";
 import moment from "moment";
 import ReactToPrint from "react-to-print";
+import useToggleState from "../hooks/useToggleState";
 import { EventsContext } from "../context/EventsContext";
 import { TeachersContext } from "../context/TeachersContext";
 import { createPayPeriodData } from "../helperFunctions";
@@ -67,6 +68,7 @@ const Payroll = (props) => {
   const [stage, setStage] = useState("teacherSelect");
   const [rows, setRows] = useState([]);
   const [currentTeacher, setCurrentTeacher] = useState("");
+  const [isLoading, toggleIsLoading] = useToggleState(false);
   const { setFormType } = props;
 
   const now = new Date();
@@ -76,7 +78,7 @@ const Payroll = (props) => {
 
   const showPayrollSheet = (teacher) => {
     setCurrentTeacher(teacher);
-
+    toggleIsLoading(true);
     const teachingMinsByDate = createPayPeriodData(
       events,
       teacher,
@@ -120,6 +122,7 @@ const Payroll = (props) => {
     }
     setRows(rows);
     setStage("payrollSheet");
+    toggleIsLoading(false);
   };
 
   const hideForm = () => {

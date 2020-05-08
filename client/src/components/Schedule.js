@@ -1,10 +1,12 @@
 import React, { useState, useEffect, useContext } from "react";
 import CustomDnDCalendar from "./CustomDnDCalendar";
+import useToggleState from "../hooks/useToggleState";
 import { protectAction } from "../helperFunctions";
 import { validateRoom, validateTeacher } from "../validators";
 import { TeachersContext } from "../context/TeachersContext";
 import { EventsContext } from "../context/EventsContext";
 import { UserContext } from "../context/UserContext";
+import { createPayPeriodData } from "../helperFunctions";
 import useFormState from "../hooks/useInputState";
 import EventForm from "./EventForm";
 import StaffForm from "./StaffForm";
@@ -16,7 +18,9 @@ import "react-big-calendar/lib/sass/styles.scss";
 import "react-big-calendar/lib/addons/dragAndDrop/styles.scss";
 
 const Schedule = () => {
-  const { getTeachers, addTeachingMins } = useContext(TeachersContext);
+  const { teachers, getTeachers, addTeachingMins } = useContext(
+    TeachersContext
+  );
   const { events, getEvents } = useContext(EventsContext);
   const { user } = useContext(UserContext);
 
@@ -26,7 +30,11 @@ const Schedule = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [message, setMessage] = useState("");
   const [selectedTeacher, setSelectedTeacher] = useState("");
+  const [isLoading, toggleIsLoading] = useToggleState(false);
+
   const now = new Date();
+  const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+  const monthEnd = new Date(now.getFullYear(), now.getMonth() + 1, 0);
 
   useEffect(() => {
     // Pass current dateTime to compare to recurrence events to check if a new batch of recurrences
@@ -37,6 +45,7 @@ const Schedule = () => {
 
   useEffect(() => {
     addTeachingMins(events, now);
+    console.log(createPayPeriodData(events, teachers[0], monthStart, monthEnd));
   }, [events]);
 
   const moveEvent = ({ event, resourceId, start, end }) => {
@@ -70,6 +79,9 @@ const Schedule = () => {
   // Add validation to a move upon dropping an event with drag and drop
   // If there is a conflict, prevent the move and flash a conflict snackbar
   const handleMove = ({ event, resourceId, start, end }) => {
+    toggleIsLoading(true);
+    const newTeacher = teachers.filter((t) => t.resourceId === resourceId);
+    console.log(newTeacher);
     if (validateRoomAndResource(event, resourceId, start)) {
       moveEvent({
         event,
@@ -77,21 +89,27 @@ const Schedule = () => {
         start,
         end,
       });
+      toggleIsLoading(false);
       return true;
     }
+    toggleIsLoading(false);
     return false;
   };
 
   const handleSelect = ({ start, resourceId }) => {
+    toggleIsLoading(true);
     updateStartTime(start);
     setSelectedTeacher(resourceId);
     setFormType("event");
+    toggleIsLoading(false);
   };
 
   const handleDoubleClick = (event) => {
+    toggleIsLoading(true);
     updateStartTime(event.start);
     setSelectedEvent(event);
     setFormType("event");
+    toggleIsLoading(false);
   };
 
   const handleAddTeacherNav = () => {

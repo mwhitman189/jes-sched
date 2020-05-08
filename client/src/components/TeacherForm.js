@@ -36,9 +36,11 @@ export default function EventForm(props) {
   const [dependentsNum, updateDependentsNum] = useInputState("");
   const [email, updateEmail] = useInputState("");
   const [isPartTime, toggleIsPartTime] = useToggleState(false);
+  const [isLoading, toggleIsLoading] = useToggleState(false);
 
   const handleAddTeacher = (e) => {
     e.preventDefault();
+    toggleIsLoading(true);
     // Incrementally add 1 to the teacher resource ID to ensure unique IDs
     let bigResourceId = 1;
     if (teachers) {
@@ -61,7 +63,9 @@ export default function EventForm(props) {
       contractType: contractType,
       dependentsNum: dependentsNum,
       isPartTime: isPartTime,
+      minsByDate: {},
     });
+    toggleIsLoading(false);
     hideForm();
   };
 

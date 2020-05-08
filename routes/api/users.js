@@ -15,14 +15,7 @@ function validateEmail(email) {
   return re.test(String(email).toLowerCase());
 }
 
-function verifyRegistrant(
-  givenName,
-  familyName,
-  email,
-  password,
-  role,
-  is_admin
-) {
+function registerUser(givenName, familyName, email, password, role, is_admin) {
   // Check for existing user
   User.findOne({ email }).then((user) => {
     if (user) return res.status(400).json({ msg: "User already exists" });
@@ -87,9 +80,10 @@ router.post("/signup", (req, res) => {
   }
 
   // Check for email in teachers and staff tables. If not found, prevent signup
+  // in order to prevent unauthorized accounts
   Teacher.findOne({ email }).then((teacher) => {
     if (teacher) {
-      verifyRegistrant(givenName, familyName, email, password);
+      registerUser(givenName, familyName, email, password);
     } else {
       Staff.findOne({ email }).then((staff) => {
         if (!staff) {
@@ -99,14 +93,7 @@ router.post("/signup", (req, res) => {
         } else {
           role = "staff";
           is_admin = false;
-          verifyRegistrant(
-            givenName,
-            familyName,
-            email,
-            password,
-            role,
-            is_admin
-          );
+          registerUser(givenName, familyName, email, password, role, is_admin);
         }
       });
     }
