@@ -98,6 +98,8 @@ export default function EventForm(props) {
   }
 
   const now = new Date();
+  const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+  const monthEnd = new Date(now.getFullYear(), now.getMonth() + 1, 0);
 
   // If an event does not exist, check whether the selected room is
   // available at the specified time
@@ -143,7 +145,7 @@ export default function EventForm(props) {
       type: eventType,
       recur: isRecurring,
     });
-    addTeachingMins(events, now);
+    addTeachingMins(events, monthStart, monthEnd);
     toggleIsLoading(false);
     hideForm();
   };
@@ -164,7 +166,7 @@ export default function EventForm(props) {
       isNewEvent: true,
     };
     editEvent(event, editedEvent);
-    addTeachingMins(events, now);
+    addTeachingMins(events, monthStart, monthEnd);
     toggleIsLoading(false);
     hideForm();
   };
@@ -179,7 +181,7 @@ export default function EventForm(props) {
       sameDayCancellation: sdCancellation,
     };
     editEvent(event, editedEvent);
-    addTeachingMins(events, now);
+    addTeachingMins(events, monthStart, monthEnd);
     toggleIsLoading(false);
     hideForm();
   };
@@ -187,7 +189,7 @@ export default function EventForm(props) {
   const handleDeleteEvent = () => {
     toggleIsLoading(true);
     deleteEvent(event);
-    addTeachingMins(events, now);
+    addTeachingMins(events, monthStart, monthEnd);
     toggleIsLoading(false);
     hideForm();
   };

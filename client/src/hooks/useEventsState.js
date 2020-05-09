@@ -36,7 +36,6 @@ export default function (initialEvents) {
     },
     addEvent: async function (event) {
       const newEvents = addNewEvent(event);
-      // const updatedEvents = [...events, ...newEvents];
       await axios
         .post("/api/lessons/add", newEvents, tokenConfig(user))
         .then((res) => console.log(res.data))
@@ -48,7 +47,6 @@ export default function (initialEvents) {
         .delete(`/api/lessons/delete/${event._id}`, tokenConfig(user))
         .then((res) => console.log(res.data))
         .catch((err) => console.log(err));
-      // const updatedEvents = events.filter((evt) => evt._id !== event._id);
       getEvents(todaysDate);
     },
     editEvent: async function (event, editedEvent) {
@@ -56,9 +54,6 @@ export default function (initialEvents) {
         .put(`/api/lessons/update/${event._id}`, editedEvent, tokenConfig(user))
         .then((res) => console.log(res.data))
         .catch((err) => console.log(err));
-      // const idx = events.findIndex((evt) => evt._id === event._id);
-      // const updatedEvents = [...events];
-      // updatedEvents.splice(idx, 1, editedEvent);
       getEvents(todaysDate);
     },
   };

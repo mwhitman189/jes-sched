@@ -18,7 +18,7 @@ import "react-big-calendar/lib/sass/styles.scss";
 import "react-big-calendar/lib/addons/dragAndDrop/styles.scss";
 
 const Schedule = () => {
-  const { teachers, getTeachers, addTeachingMins } = useContext(
+  const { teachers, setTeachers, getTeachers, addTeachingMins } = useContext(
     TeachersContext
   );
   const { events, getEvents } = useContext(EventsContext);
@@ -44,7 +44,7 @@ const Schedule = () => {
   }, []);
 
   useEffect(() => {
-    addTeachingMins(events, now);
+    addTeachingMins(events, monthStart, monthEnd);
   }, [events]);
 
   const moveEvent = ({ event, resourceId, start, end }) => {
@@ -79,8 +79,6 @@ const Schedule = () => {
   // If there is a conflict, prevent the move and flash a conflict snackbar
   const handleMove = ({ event, resourceId, start, end }) => {
     toggleIsLoading(true);
-    const newTeacher = teachers.filter((t) => t.resourceId === resourceId);
-    console.log(newTeacher);
     if (validateRoomAndResource(event, resourceId, start)) {
       moveEvent({
         event,

@@ -40,6 +40,7 @@ export default (initialTeachers) => {
 
   return {
     teachers,
+    setTeachers,
     getTeachers: async () => {
       await axios
         .get("/api/teachers", tokenConfig(user))
@@ -64,14 +65,8 @@ export default (initialTeachers) => {
         .catch((err) => console.log(err));
       return setTeachers(teachers.filter((t) => t._id !== teacher._id));
     },
-    addTeachingMins: (events, now) => {
-      // Create start and end dates for the current month to calc
-      // teaching minutes
-      const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
-      const monthEnd = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+    addTeachingMins: (events, monthStart, monthEnd) => {
       if (teachers.length > 0) {
-        // Reset teaching minutes to "0", then add all teaching minutes to the corresponding instructor
-
         teachers.forEach((teacher) => {
           createPayPeriodData(events, teacher, monthStart, monthEnd);
           updateTeacher(teacher);
