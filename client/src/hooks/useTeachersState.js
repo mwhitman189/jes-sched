@@ -68,7 +68,12 @@ export default (initialTeachers) => {
     addTeachingMins: (events, monthStart, monthEnd) => {
       if (teachers.length > 0) {
         teachers.forEach((teacher) => {
-          createPayPeriodData(events, teacher, monthStart, monthEnd);
+          teacher.minsByDate = createPayPeriodData(
+            events,
+            teacher,
+            monthStart,
+            monthEnd
+          );
           updateTeacher(teacher);
         });
       }
