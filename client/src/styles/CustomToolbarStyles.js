@@ -3,7 +3,7 @@ const styles = (theme) => ({
     display: "flex",
     justifyContent: "space-between",
     alignItems: "center",
-    height: "45px",
+    height: "40px",
     width: "100vw",
     listStyle: "none",
     margin: 0,
@@ -30,7 +30,7 @@ const styles = (theme) => ({
       "linear-gradient(0deg, rgba(20,71,207,1) 7%, rgba(49,119,254,1) 100%)",
     border: "none",
     borderRadius: "5px",
-    padding: ".5rem",
+    padding: ".3rem .5rem",
     minWidth: "4rem",
     margin: "0 .2rem",
     [theme.breakpoints.down("sm")]: {
