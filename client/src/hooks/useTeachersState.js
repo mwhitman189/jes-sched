@@ -24,6 +24,7 @@ export default (initialTeachers) => {
       otThreshold: teacher.otThreshold,
       overThresholdOneMins: teacher.overThresholdOneMins,
       overThresholdTwoMins: teacher.overThresholdTwoMins,
+      minsByDate: teacher.minsByDate,
     };
     updatedTeachers.splice(idx, 1, updatedTeacher);
 
@@ -68,12 +69,23 @@ export default (initialTeachers) => {
     addTeachingMins: (events, monthStart, monthEnd) => {
       if (teachers.length > 0) {
         teachers.forEach((teacher) => {
-          teacher.minsByDate = createPayPeriodData(
+          const datesData = createPayPeriodData(
             events,
             teacher,
             monthStart,
             monthEnd
           );
+          for (let i = 1; i < 32; i++) {
+            if (JSON.stringify(teacher.minsByDate)) {
+              teacher.minsByDate[i] = datesData[i] ? datesData[i] : 0;
+            }
+          }
+          // teacher.minsByDate = createPayPeriodData(
+          //   events,
+          //   teacher,
+          //   monthStart,
+          //   monthEnd
+          // );
           updateTeacher(teacher);
         });
       }
