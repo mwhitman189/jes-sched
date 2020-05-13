@@ -12,6 +12,7 @@ import TeacherForm from "./TeacherForm";
 import CustomizedSnackbars from "./CustomizedSnackbars";
 import Payroll from "./Payroll";
 import Footer from "./Footer";
+import EventPopper from "./EventPopper";
 import "react-big-calendar/lib/sass/styles.scss";
 import "react-big-calendar/lib/addons/dragAndDrop/styles.scss";
 
@@ -28,6 +29,7 @@ const Schedule = () => {
   const [selectedTeacher, setSelectedTeacher] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isDetailView, setIsDetailView] = useState(false);
+  const [anchorEl, setAnchorEl] = useState(false);
 
   const now = new Date();
   const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
@@ -123,16 +125,20 @@ const Schedule = () => {
     setFormType("payroll");
   };
 
-  const handleSingleClick = (event) => {
+  const handleSingleClick = (event, target) => {
     if (user.user.role === "teacher") {
       const updatedEvent = { ...event, isNewEvent: false };
       editEvent(event, updatedEvent);
     }
-    setIsDetailView(true);
+    setIsDetailView(!isDetailView);
+    setAnchorEl(target.currentTarget);
   };
 
   return (
     <div>
+      {isDetailView && (
+        <EventPopper isOpen={isDetailView} anchorEl={anchorEl} />
+      )}
       {formType === "event" && (
         <EventForm
           formType={formType}
