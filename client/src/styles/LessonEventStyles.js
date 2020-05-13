@@ -9,6 +9,7 @@ const useStyles = makeStyles({
     padding: "2px",
     height: "100%",
     width: "100%",
+    overflow: "hidden",
   },
   group: {
     display: "flex",
