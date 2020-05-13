@@ -1,12 +1,10 @@
 import React, { useState, useEffect, useContext } from "react";
 import CustomDnDCalendar from "./CustomDnDCalendar";
-import useToggleState from "../hooks/useToggleState";
 import { protectAction } from "../helperFunctions";
 import { validateRoom, validateTeacher } from "../validators";
 import { TeachersContext } from "../context/TeachersContext";
 import { EventsContext } from "../context/EventsContext";
 import { UserContext } from "../context/UserContext";
-import { createPayPeriodData } from "../helperFunctions";
 import useFormState from "../hooks/useInputState";
 import EventForm from "./EventForm";
 import StaffForm from "./StaffForm";
@@ -18,10 +16,8 @@ import "react-big-calendar/lib/sass/styles.scss";
 import "react-big-calendar/lib/addons/dragAndDrop/styles.scss";
 
 const Schedule = () => {
-  const { teachers, setTeachers, getTeachers, addTeachingMins } = useContext(
-    TeachersContext
-  );
-  const { events, getEvents } = useContext(EventsContext);
+  const { getTeachers, addTeachingMins } = useContext(TeachersContext);
+  const { events, editEvent, getEvents } = useContext(EventsContext);
   const { user } = useContext(UserContext);
 
   const [formType, setFormType] = useState("");
@@ -30,7 +26,8 @@ const Schedule = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [message, setMessage] = useState("");
   const [selectedTeacher, setSelectedTeacher] = useState("");
-  const [isLoading, toggleIsLoading] = useToggleState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isDetailView, setIsDetailView] = useState(false);
 
   const now = new Date();
   const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
@@ -78,7 +75,7 @@ const Schedule = () => {
   // Add validation to a move upon dropping an event with drag and drop
   // If there is a conflict, prevent the move and flash a conflict snackbar
   const handleMove = ({ event, resourceId, start, end }) => {
-    toggleIsLoading(true);
+    setIsLoading(true);
     if (validateRoomAndResource(event, resourceId, start)) {
       moveEvent({
         event,
@@ -86,27 +83,27 @@ const Schedule = () => {
         start,
         end,
       });
-      toggleIsLoading(false);
+      setIsLoading(false);
       return true;
     }
-    toggleIsLoading(false);
+    setIsLoading(false);
     return false;
   };
 
   const handleSelect = ({ start, resourceId }) => {
-    toggleIsLoading(true);
+    setIsLoading(true);
     updateStartTime(start);
     setSelectedTeacher(resourceId);
     setFormType("event");
-    toggleIsLoading(false);
+    setIsLoading(false);
   };
 
   const handleDoubleClick = (event) => {
-    toggleIsLoading(true);
+    setIsLoading(true);
     updateStartTime(event.start);
     setSelectedEvent(event);
     setFormType("event");
-    toggleIsLoading(false);
+    setIsLoading(false);
   };
 
   const handleAddTeacherNav = () => {
@@ -124,6 +121,14 @@ const Schedule = () => {
 
   const handlePayrollNav = () => {
     setFormType("payroll");
+  };
+
+  const handleSingleClick = (event) => {
+    if (user.user.role === "teacher") {
+      const updatedEvent = { ...event, isNewEvent: false };
+      editEvent(event, updatedEvent);
+    }
+    setIsDetailView(true);
   };
 
   return (
@@ -153,7 +158,6 @@ const Schedule = () => {
         variant={"error"}
         msg={message}
       />
-
       <CustomDnDCalendar
         handleMove={protectAction(user, handleMove)}
         handleSelect={protectAction(user, handleSelect)}
@@ -161,6 +165,7 @@ const Schedule = () => {
         handleAddTeacherNav={protectAction(user, handleAddTeacherNav)}
         handleAddStaffNav={protectAction(user, handleAddStaffNav)}
         handlePayrollNav={protectAction(user, handlePayrollNav)}
+        handleOpenDetailView={handleSingleClick}
       />
       <Footer />
     </div>

@@ -21,8 +21,9 @@ function CustomDnDCalendar(props) {
     handleAddTeacherNav,
     handleAddStaffNav,
     handlePayrollNav,
+    handleOpenDetailView,
   } = props;
-  const { events, editEvent } = useContext(EventsContext);
+  const { events } = useContext(EventsContext);
   const { teachers } = useContext(TeachersContext);
   const { user } = useContext(UserContext);
 
@@ -130,11 +131,6 @@ function CustomDnDCalendar(props) {
     };
   };
 
-  const handleSingleClick = (event) => {
-    const updatedEvent = { ...event, isNewEvent: false };
-    editEvent(event, updatedEvent);
-  };
-
   return (
     <DragAndDropCalendar
       style={{ width: "100vw", maxHeight: "96vh" }}
@@ -149,7 +145,7 @@ function CustomDnDCalendar(props) {
       resourceIdAccessor="resourceId"
       resourceTitleAccessor="resourceTitle"
       selectable
-      onSelectEvent={handleSingleClick}
+      onSelectEvent={handleOpenDetailView}
       onDoubleClickEvent={handleDoubleClick}
       eventPropGetter={eventStyleGetter}
       step={5}
