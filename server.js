@@ -28,13 +28,15 @@ const usersRouter = require("./routes/api/users");
 const authRouter = require("./routes/api/auth");
 const staffRouter = require("./routes/api/staff");
 const teachersRouter = require("./routes/api/teachers");
+const studentsRouter = require("./routes/api/students");
 const lessonsRouter = require("./routes/api/lessons");
 const paymentsRouter = require("./routes/api/payments");
 
 app.use("/api/users", usersRouter);
 app.use("/api/auth", authRouter);
-app.use("./api/staff", staffRouter);
+app.use("/api/staff", staffRouter);
 app.use("/api/teachers", teachersRouter);
+app.use("/api/students", studentsRouter);
 app.use("/api/lessons", lessonsRouter);
 app.use("/api/payments", paymentsRouter);
 

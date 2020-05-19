@@ -1,7 +1,7 @@
+const Student = require("./student.model");
 const mongoose = require("mongoose");
 
 const Schema = mongoose.Schema;
-
 const LessonSchema = new Schema(
   {
     title: { type: String, required: true },
@@ -18,6 +18,7 @@ const LessonSchema = new Schema(
     isLast: { type: Boolean, default: false },
     cancelled: { type: Boolean, default: false },
     sameDayCancellation: { type: Boolean, default: false },
+    students: [Student.StudentSchema],
   },
   {
     timestamps: true,

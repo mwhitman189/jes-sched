@@ -80,12 +80,6 @@ export default (initialTeachers) => {
               teacher.minsByDate[i] = datesData[i] ? datesData[i] : 0;
             }
           }
-          // teacher.minsByDate = createPayPeriodData(
-          //   events,
-          //   teacher,
-          //   monthStart,
-          //   monthEnd
-          // );
           updateTeacher(teacher);
         });
       }

@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useState, useContext } from "react";
 import moment from "moment";
 import MomentUtils from "@date-io/moment";
 import {
@@ -10,6 +10,7 @@ import useInputState from "../hooks/useInputState";
 import useToggleState from "../hooks/useToggleState";
 import { validateRoom, validateTeacher } from "../validators";
 import { TeachersContext } from "../context/TeachersContext";
+import { StudentsContext } from "../context/StudentsContext";
 import { EventsContext } from "../context/EventsContext";
 import { checkForSameDate } from "../helperFunctions";
 import roomList from "../rooms";
@@ -17,6 +18,7 @@ import lessonTypes from "../lessonTypes";
 import { makeStyles } from "@material-ui/core/styles";
 import { TimePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import MenuItem from "@material-ui/core/MenuItem";
+import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
@@ -25,6 +27,7 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import FormControl from "@material-ui/core/FormControl";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Switch from "@material-ui/core/Switch";
+import Autocomplete from "@material-ui/lab/Autocomplete";
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -33,7 +36,7 @@ const useStyles = makeStyles((theme) => ({
     display: "inline",
     "& .MuiFormControl-root": {
       margin: "10px",
-      width: "110px",
+      width: "200px",
     },
   },
   recurSwitch: {
@@ -49,6 +52,10 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: "center",
     width: "100%",
   },
+  root: {
+    display: "flex",
+    flexDirection: "column",
+  },
 }));
 
 export default function EventForm(props) {
@@ -58,6 +65,7 @@ export default function EventForm(props) {
     EventsContext
   );
   const { teachers } = useContext(TeachersContext);
+  const { students } = useContext(StudentsContext);
   const {
     formType,
     setFormType,
@@ -69,7 +77,6 @@ export default function EventForm(props) {
   } = props;
 
   const [start, updateStart] = useInputState(startTime);
-
   const [title, updateTitle, resetTitle] = useInputState(
     event ? event.title : ""
   );
@@ -149,6 +156,18 @@ export default function EventForm(props) {
     toggleIsLoading(false);
     hideForm();
   };
+
+  // const handleUpdateParticipants = (e) => {
+  //   const options = e.target;
+  //   console.log(options);
+  //   const value = [];
+  //   for (let i = 0, l = options.length; i < l; i++) {
+  //     if (options[i].selected) {
+  //       value.push(options[i].value);
+  //     }
+  //   }
+  //   updateParticipants(value);
+  // };
 
   const handleEditEvent = (e) => {
     e.preventDefault();
@@ -265,7 +284,7 @@ export default function EventForm(props) {
           </FormControl>
           <FormControl className={classes.formControl}>
             <SelectValidator
-              className={classes.selectStyles}
+              classes={{ root: classes.root }}
               margin="dense"
               label="Teacher"
               InputLabelProps={{ shrink: true }}
@@ -285,9 +304,25 @@ export default function EventForm(props) {
               ))}
             </SelectValidator>
           </FormControl>
+          <FormControl fullWidth size="medium" className={classes.formControl}>
+            <Autocomplete
+              id="combo-box-demo"
+              options={students}
+              label="Students"
+              margin="dense"
+              getOptionLabel={(option) =>
+                `${option.givenName} ${option.familyName}`
+              }
+              multiple={true}
+              filterSelectedOptions
+              renderInput={(params) => (
+                <TextField {...params} label="Students" variant="outlined" />
+              )}
+            />
+          </FormControl>
           <FormControl className={classes.formControl}>
             <SelectValidator
-              className={classes.selectStyles}
+              classes={{ root: classes.root }}
               label="Room"
               InputLabelProps={{ shrink: true }}
               margin="dense"
@@ -309,7 +344,7 @@ export default function EventForm(props) {
           </FormControl>
           <FormControl className={classes.formControl}>
             <SelectValidator
-              className={classes.selectStyles}
+              classes={{ root: classes.list }}
               margin="dense"
               label="Lesson Type"
               InputLabelProps={{ shrink: true }}

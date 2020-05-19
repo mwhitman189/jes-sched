@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useContext } from "react";
+import { StudentsContext } from "../context/StudentsContext";
 import { makeStyles } from "@material-ui/core/styles";
 import Popper from "@material-ui/core/Popper";
 import Typography from "@material-ui/core/Typography";
@@ -15,15 +16,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function PositionedPopper(props) {
-  const { isOpen, anchorEl } = props;
-  // const [anchorEl, setAnchorEl] = React.useState(null);
-  // const [isOpen, setIsOpen] = React.useState(false);
+  const { isOpen, anchorEl, selectedEvent } = props;
   const classes = useStyles();
-
-  // const handleOpenEventDetails = (event) => {
-  //   setAnchorEl(event.currentTarget);
-  //   setIsOpen(!isOpen);
-  // };
 
   return (
     <div className={classes.root}>
@@ -36,9 +30,14 @@ export default function PositionedPopper(props) {
         {({ TransitionProps }) => (
           <Fade {...TransitionProps} timeout={350}>
             <Paper>
-              <Typography className={classes.typography}>
-                Student list
-              </Typography>
+              {selectedEvent.students.map((s) => (
+                <Typography
+                  key={`${s.givenName} binky`}
+                  className={classes.typography}
+                >
+                  {s.givenName}
+                </Typography>
+              ))}
             </Paper>
           </Fade>
         )}

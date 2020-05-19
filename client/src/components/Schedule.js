@@ -132,12 +132,18 @@ const Schedule = () => {
     }
     setIsDetailView(!isDetailView);
     setAnchorEl(target.currentTarget);
+    setSelectedEvent(event);
+    console.log(selectedEvent);
   };
 
   return (
     <div>
       {isDetailView && (
-        <EventPopper isOpen={isDetailView} anchorEl={anchorEl} />
+        <EventPopper
+          isOpen={isDetailView}
+          anchorEl={anchorEl}
+          selectedEvent={selectedEvent}
+        />
       )}
       {formType === "event" && (
         <EventForm
