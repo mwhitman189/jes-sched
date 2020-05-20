@@ -90,6 +90,7 @@ export default function EventForm(props) {
   const [eventType, updateEventType, resetEventType] = useInputState(
     event ? event.type : ""
   );
+  const [participants, updateParticipants] = useInputState([]);
   const [isRecurring, toggleIsRecurring] = useToggleState(false);
   const [isLoading, toggleIsLoading] = useToggleState(false);
 
@@ -151,6 +152,7 @@ export default function EventForm(props) {
       resourceId: resource,
       type: eventType,
       recur: isRecurring,
+      students: participants,
     });
     addTeachingMins(events, monthStart, monthEnd);
     toggleIsLoading(false);
@@ -182,6 +184,7 @@ export default function EventForm(props) {
       resourceId: parseInt(resource),
       type: eventType,
       isRecurring: isRecurring,
+      students: participants,
       isNewEvent: true,
     };
     editEvent(event, editedEvent);
@@ -306,13 +309,17 @@ export default function EventForm(props) {
           </FormControl>
           <FormControl fullWidth size="medium" className={classes.formControl}>
             <Autocomplete
-              id="combo-box-demo"
+              id="students"
               options={students}
               label="Students"
               margin="dense"
               getOptionLabel={(option) =>
                 `${option.givenName} ${option.familyName}`
               }
+              onChange={(event, newStudents) => {
+                console.log(newStudents);
+                updateParticipants([...participants, ...newStudents]);
+              }}
               multiple={true}
               filterSelectedOptions
               renderInput={(params) => (

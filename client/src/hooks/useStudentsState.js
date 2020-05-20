@@ -9,7 +9,7 @@ export default (initialStudents) => {
 
   const getStudents = async () => {
     await axios
-      .get("/api/lessons", tokenConfig(user))
+      .get("/api/students", tokenConfig(user))
       .then((res) => {
         return setStudents(res.data);
       })
@@ -19,12 +19,13 @@ export default (initialStudents) => {
   return {
     students,
     setStudents,
-    addStudent: async (newStudent) => {
+    getStudents: () => getStudents(),
+    addStudent: async (newStudents) => {
       await axios
-        .post("/api/students/add", newStudent, tokenConfig(user))
+        .post("/api/students/add", newStudents, tokenConfig(user))
         .then((res) => console.log(res.data))
         .catch((err) => console.log(err));
-      return setStudents([...students, newStudent]);
+      return setStudents([...students, ...newStudents]);
     },
     editStudent: async function (student, editedStudent) {
       await axios

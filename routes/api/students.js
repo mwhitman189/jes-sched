@@ -1,5 +1,5 @@
 const router = require("express").Router();
-let Student = require("../../models/student.model");
+let { Student } = require("../../models/student.model");
 const auth = require("../../middleware/auth");
 
 router.get("/", auth, (req, res) => {

@@ -8,6 +8,7 @@ const defaultStudents = [
     familyName: "DefaultStudentLN",
     phone: "080-0101-0101",
     email: "default@default.com",
+    level: "adv",
   },
   {
     _id: 2,
@@ -15,6 +16,7 @@ const defaultStudents = [
     familyName: "DefaultStudentLN2",
     phone: "080-0101-0102",
     email: "default2@default.com",
+    level: "lg",
   },
 ];
 

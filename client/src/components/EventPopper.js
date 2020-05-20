@@ -30,14 +30,15 @@ export default function PositionedPopper(props) {
         {({ TransitionProps }) => (
           <Fade {...TransitionProps} timeout={350}>
             <Paper>
-              {selectedEvent.students.map((s) => (
-                <Typography
-                  key={`${s.givenName} binky`}
-                  className={classes.typography}
-                >
-                  {s.givenName}
-                </Typography>
-              ))}
+              {selectedEvent.students &&
+                selectedEvent.students.map((s) => (
+                  <Typography
+                    key={`${s._id} binky`}
+                    className={classes.typography}
+                  >
+                    {s.givenName}
+                  </Typography>
+                ))}
             </Paper>
           </Fade>
         )}

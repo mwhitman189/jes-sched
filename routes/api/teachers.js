@@ -1,5 +1,5 @@
 const router = require("express").Router();
-let Teacher = require("../../models/teacher.model");
+const Teacher = require("../../models/teacher.model");
 const auth = require("../../middleware/auth");
 
 router.get("/", auth, (req, res) => {

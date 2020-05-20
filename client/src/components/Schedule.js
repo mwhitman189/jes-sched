@@ -4,6 +4,7 @@ import { protectAction } from "../helperFunctions";
 import { validateRoom, validateTeacher } from "../validators";
 import { TeachersContext } from "../context/TeachersContext";
 import { EventsContext } from "../context/EventsContext";
+import { StudentsContext } from "../context/StudentsContext";
 import { UserContext } from "../context/UserContext";
 import useFormState from "../hooks/useInputState";
 import EventForm from "./EventForm";
@@ -19,6 +20,7 @@ import "react-big-calendar/lib/addons/dragAndDrop/styles.scss";
 const Schedule = () => {
   const { getTeachers, addTeachingMins } = useContext(TeachersContext);
   const { events, editEvent, getEvents } = useContext(EventsContext);
+  const { getStudents } = useContext(StudentsContext);
   const { user } = useContext(UserContext);
 
   const [formType, setFormType] = useState("");
@@ -40,6 +42,7 @@ const Schedule = () => {
     // is needed
     getEvents(now.getTime());
     getTeachers(events);
+    getStudents();
   }, []);
 
   useEffect(() => {
