@@ -26,6 +26,7 @@ export default (initialTeachers) => {
       overThresholdTwoMins: teacher.overThresholdTwoMins,
       minsByDate: teacher.minsByDate,
     };
+    console.log(updatedTeacher);
     updatedTeachers.splice(idx, 1, updatedTeacher);
 
     setTeachers(updatedTeachers);
@@ -77,7 +78,9 @@ export default (initialTeachers) => {
           );
           for (let i = 1; i < 32; i++) {
             if (JSON.stringify(teacher.minsByDate)) {
-              teacher.minsByDate[i] = datesData[i] ? datesData[i] : 0;
+              teacher.minsByDate[i] = datesData[i]
+                ? datesData[i].teachingMins
+                : 0;
             }
           }
           updateTeacher(teacher);

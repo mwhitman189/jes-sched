@@ -1,4 +1,5 @@
 import React, { useContext, useEffect } from "react";
+import { Redirect } from "react-router-dom";
 import axios from "axios";
 import loadUser from "../reducers/loadUserReducer";
 import useInputState from "../hooks/useInputState";
@@ -78,6 +79,21 @@ export default function SignUpForm() {
           type: "REGISTER_SUCCESS",
           payload: res.data,
         });
+        axios
+          .post("/api/auth", user)
+          .then((res) => {
+            dispatch({
+              type: "USER_LOADED",
+              payload: res.data,
+            });
+          })
+          .catch((err) => {
+            dispatch({ type: "LOGIN_FAILURE" });
+            errorsDispatch({
+              type: "GET_ERRORS",
+              msg: err.response.data.msg,
+            });
+          });
         return console.log("Success! Logged In");
       })
       .catch((err) => {

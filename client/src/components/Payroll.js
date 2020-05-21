@@ -96,8 +96,6 @@ const Payroll = (props) => {
             .set("date", i)
             .format("ddd"),
           teachingMinsByDate[i].teachingMins,
-          teachingMinsByDate[i].overThresholdOneMins,
-          teachingMinsByDate[i].overThresholdTwoMins,
           teachingMinsByDate[i].outsideDutyMins,
           teachingMinsByDate[i].holidayMins,
           teachingMinsByDate[i].travelAllowance,

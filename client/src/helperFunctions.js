@@ -198,10 +198,6 @@ const createPayPeriodData = (events, teacher, monthStart, monthEnd) => {
           if (datesData[date]) {
             datesData[date].teachingMins += dateData.teachingMins;
             datesData[date].outsideDutyMins += dateData.outsideDutyMins;
-            datesData[date].overThresholdOneMins +=
-              dateData.overThresholdOneMins;
-            datesData[date].overThresholdTwoMins +=
-              dateData.overThresholdTwoMins;
             datesData[date].holidayMins += dateData.holidayMins;
             datesData[date].travelAllowance += dateData.travelAllowance;
             datesData[date].travelExpenses += dateData.travelExpenses;
