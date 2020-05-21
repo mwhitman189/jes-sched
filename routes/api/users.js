@@ -15,57 +15,6 @@ function validateEmail(email) {
   return re.test(String(email).toLowerCase());
 }
 
-function registerUser(givenName, familyName, email, password, role, is_admin) {
-  // Check for existing user
-  User.findOne({ email }).then((user) => {
-    if (user) return res.status(400).json({ msg: "User already exists" });
-  });
-
-  const newUser = new User({
-    givenName,
-    familyName,
-    email,
-    password,
-    role,
-    is_admin,
-  });
-
-  // Create salt & hash
-  bcrypt.genSalt(10, (err, salt) => {
-    bcrypt.hash(newUser.password, salt, (err, hash) => {
-      if (err) throw err;
-      newUser.password = hash;
-      newUser
-        .save()
-        .then((user) => {
-          jwt.sign(
-            { id: user.id },
-            jwt_secret,
-            {
-              expiresIn: 3600,
-            },
-            (err, token) => {
-              if (err) throw err;
-              res.json({
-                token,
-                user: {
-                  id: user.id,
-                  givenName: user.givenName,
-                  familyName: user.familyName,
-                  email: user.email,
-                  role: user.role,
-                  is_admin: user.is_admin,
-                },
-              });
-            }
-          );
-        })
-        .then(() => res.json("User registered!"))
-        .catch((err) => res.status(400).json(`Error: ${err}`));
-    });
-  });
-}
-
 router.post("/signup", (req, res) => {
   const { givenName, familyName, email, password } = req.body;
   let { role, is_admin } = req.body;
@@ -83,7 +32,49 @@ router.post("/signup", (req, res) => {
   // in order to prevent unauthorized accounts
   Teacher.findOne({ email }).then((teacher) => {
     if (teacher) {
-      registerUser(givenName, familyName, email, password);
+      const newUser = new User({
+        givenName,
+        familyName,
+        email,
+        password,
+        role,
+        is_admin,
+      });
+
+      // Create salt & hash
+      bcrypt.genSalt(10, (err, salt) => {
+        bcrypt.hash(newUser.password, salt, (err, hash) => {
+          if (err) throw err;
+          newUser.password = hash;
+          newUser
+            .save()
+            .then((user) => {
+              jwt.sign(
+                { id: user.id },
+                jwt_secret,
+                {
+                  expiresIn: 3600,
+                },
+                (err, token) => {
+                  if (err) throw err;
+                  res.json({
+                    token,
+                    user: {
+                      id: user.id,
+                      givenName: user.givenName,
+                      familyName: user.familyName,
+                      email: user.email,
+                      role: user.role,
+                      is_admin: user.is_admin,
+                    },
+                  });
+                }
+              );
+            })
+            .then(() => res.json("User registered!"))
+            .catch((err) => res.status(400).json(`Error: ${err}`));
+        });
+      });
     } else {
       Staff.findOne({ email }).then((staff) => {
         if (!staff) {
@@ -93,9 +84,57 @@ router.post("/signup", (req, res) => {
         } else {
           role = "staff";
           is_admin = false;
-          registerUser(givenName, familyName, email, password, role, is_admin);
+          const newUser = new User({
+            givenName,
+            familyName,
+            email,
+            password,
+            role,
+            is_admin,
+          });
+
+          // Create salt & hash
+          bcrypt.genSalt(10, (err, salt) => {
+            bcrypt.hash(newUser.password, salt, (err, hash) => {
+              if (err) throw err;
+              newUser.password = hash;
+              newUser
+                .save()
+                .then((user) => {
+                  jwt.sign(
+                    { id: user.id },
+                    jwt_secret,
+                    {
+                      expiresIn: 3600,
+                    },
+                    (err, token) => {
+                      if (err) throw err;
+                      res.json({
+                        token,
+                        user: {
+                          id: user.id,
+                          givenName: user.givenName,
+                          familyName: user.familyName,
+                          email: user.email,
+                          role: user.role,
+                          is_admin: user.is_admin,
+                        },
+                      });
+                    }
+                  );
+                })
+                .then(() => res.json("User registered!"))
+                .catch((err) => res.status(400).json(`Error: ${err}`));
+            });
+          });
         }
       });
+    }
+  });
+
+  User.findOne({ email }).then((user) => {
+    if (user) {
+      return res.status(400).json({ msg: "User already exists" });
     }
   });
 });

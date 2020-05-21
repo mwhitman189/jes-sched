@@ -86,10 +86,10 @@ export default function SignUpForm() {
           type: "GET_ERRORS",
           msg: err.response.data.msg,
         });
-        return console.log(errors.msg);
+        return console.log(err.response.data.msg);
       });
     toggleIsLoading(false);
-    return console.log("Success! Logged In");
+    return false;
   };
 
   return (
