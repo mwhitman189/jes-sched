@@ -26,7 +26,7 @@ const RouteRegistration = ({ component: Component, ...rest }) => {
         !user.isAuthenticated ? (
           <Component {...props} />
         ) : (
-          <Redirect to="/login" />
+          <Redirect to="/schedule" />
         )
       }
     />
