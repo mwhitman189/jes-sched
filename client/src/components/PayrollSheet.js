@@ -59,7 +59,7 @@ class PayrollSheet extends Component {
   render() {
     const {
       classes,
-      rows,
+      data,
       currentTeacher,
       paymentPeriodStart,
       paymentPeriodEnd,
@@ -83,21 +83,9 @@ class PayrollSheet extends Component {
         totalTravelExpenses: 0,
       };
 
-      rows.forEach((r) => {
+      data.rows.forEach((r) => {
         sums.totalTeachingHours +=
           Math.round((r.teachingMins / 60 + Number.EPSILON) * 100) / 100;
-        if (r.overThresholdOneMins > 0) {
-          sums.overThresholdOneAllowance +=
-            (Math.round((r.overThresholdOneMins / 60 + Number.EPSILON) * 100) /
-              100) *
-            contract.otWageOne;
-        }
-        if (r.overThresholdTwoMins > 0) {
-          sums.overThresholdTwoAllowance +=
-            (Math.round((r.overThresholdTwoMins / 60 + Number.EPSILON) * 100) /
-              100) *
-            contract.otWageTwo;
-        }
         if (r.outsideDutyMins > 0) {
           sums.totalOutsideDutyHoursAllowance +=
             (Math.round((r.outsideDutyMins / 60 + Number.EPSILON) * 100) /
@@ -109,9 +97,25 @@ class PayrollSheet extends Component {
             (Math.round((r.holidayMins / 60 + Number.EPSILON) * 100) / 100) *
             contract.otWageOne;
         }
-        sums.totalTravelAllowance += r.travelAllowance;
-        sums.totalTravelExpenses += r.travelExpenses;
+        if (r.travelAllowance > 0) {
+          sums.totalTravelAllowance += r.travelAllowance;
+        }
+        if (r.travelExpenses) {
+          sums.totalTravelExpenses += r.travelExpenses;
+        }
       });
+      if (data.overThresholdOneMins > 0) {
+        sums.overThresholdOneAllowance =
+          (Math.round((data.overThresholdOneMins / 60 + Number.EPSILON) * 100) /
+            100) *
+          contract.otWageOne;
+      }
+      if (data.overThresholdTwoMins > 0) {
+        sums.overThresholdTwoAllowance =
+          (Math.round((data.overThresholdTwoMins / 60 + Number.EPSILON) * 100) /
+            100) *
+          contract.otWageTwo;
+      }
       return sums;
     };
     const sums = sumTeachingMins();
@@ -181,7 +185,7 @@ class PayrollSheet extends Component {
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.map((row) => (
+            {data.rows.map((row) => (
               <TableRow key={row.date}>
                 <TableCell component="th" scope="row">
                   {row.date}

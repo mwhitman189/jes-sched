@@ -66,7 +66,7 @@ const Payroll = (props) => {
   const { teachers } = useContext(TeachersContext);
   const { events } = useContext(EventsContext);
   const [stage, setStage] = useState("teacherSelect");
-  const [rows, setRows] = useState([]);
+  const [data, setData] = useState({});
   const [currentTeacher, setCurrentTeacher] = useState("");
   const [isLoading, toggleIsLoading] = useToggleState(false);
   const { setFormType } = props;
@@ -120,7 +120,11 @@ const Payroll = (props) => {
       }
       rows.push(newRow);
     }
-    setRows(rows);
+    setData({
+      rows: rows,
+      overThresholdOneMins: teachingMinsByDate.overThresholdOneMins,
+      overThresholdTwoMins: teachingMinsByDate.overThresholdTwoMins,
+    });
     setStage("payrollSheet");
     toggleIsLoading(false);
   };
@@ -164,7 +168,7 @@ const Payroll = (props) => {
       >
         <PayrollSheet
           classes={classes}
-          rows={rows}
+          data={data}
           currentTeacher={currentTeacher}
           ref={componentRef}
           paymentPeriodStart={monthStart}

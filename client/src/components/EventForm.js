@@ -90,7 +90,9 @@ export default function EventForm(props) {
   const [eventType, updateEventType, resetEventType] = useInputState(
     event ? event.type : ""
   );
-  const [participants, updateParticipants] = useInputState([]);
+  const [participants, updateParticipants] = useInputState(
+    event ? event.title : []
+  );
   const [isRecurring, toggleIsRecurring] = useToggleState(false);
   const [isLoading, toggleIsLoading] = useToggleState(false);
 
@@ -158,18 +160,6 @@ export default function EventForm(props) {
     toggleIsLoading(false);
     hideForm();
   };
-
-  // const handleUpdateParticipants = (e) => {
-  //   const options = e.target;
-  //   console.log(options);
-  //   const value = [];
-  //   for (let i = 0, l = options.length; i < l; i++) {
-  //     if (options[i].selected) {
-  //       value.push(options[i].value);
-  //     }
-  //   }
-  //   updateParticipants(value);
-  // };
 
   const handleEditEvent = (e) => {
     e.preventDefault();

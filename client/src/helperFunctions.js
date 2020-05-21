@@ -158,15 +158,30 @@ const createPayPeriodData = (events, teacher, monthStart, monthEnd) => {
             outsideDutyMins = totalTeachingMins.outsideDutyMins;
             teacher.outsideDutyMins += outsideDutyMins;
           }
-          // Calculate hours worked over monthly thresholds one and two
-          if (teacher.teachingMins >= teacher.otThreshold + secondThreshold) {
-            teacher.overThresholdTwoMins +=
-              teacher.teachingMins - (teacher.otThreshold + secondThreshold);
-            teacher.overThresholdOneMins += secondThreshold;
-          } else if (teacher.teachingMins >= teacher.otThreshold) {
+          // Calculate hours worked over monthly thresholds two and one
+          const otThOneTotalMins = teacher.otThreshold;
+          const otThTwoTotalMins = otThOneTotalMins + secondThreshold;
+          if (teacher.teachingMins > otThTwoTotalMins) {
+            teacher.overThresholdTwoMins += e.duration;
+          } else if (teacher.teachingMins > otThOneTotalMins) {
+            if (otThOneTotalMins + e.duration > otThTwoTotalMins) {
+              teacher.overThresholdTwoMins +=
+                otThOneTotalMins + e.duration - otThTwoTotalMins;
+              teacher.overThresholdOneMins = otThOneTotalMins;
+            } else {
+              teacher.overThresholdOneMins += e.duration;
+            }
+          } else if (teacher.teachingMins + e.duration > otThOneTotalMins) {
             teacher.overThresholdOneMins +=
-              teacher.teachingMins - teacher.otThreshold;
+              teacher.teachingMins + e.duration - otThOneTotalMins;
           }
+          // if (teacher.teachingMins >= thresholdTwoTotalMins) {
+          //   teacher.overThresholdTwoMins += teachingMins;
+          //   teacher.overThresholdOneMins += secondThreshold;
+          // } else if (teacher.teachingMins < thresholdelse if (teacher.teachingMins >= teacher.otThreshold) {
+          //   teacher.overThresholdOneMins +=
+          //     teacher.teachingMins - teacher.otThreshold;
+          // }
           // Teaching minutes object to be added to hash table
           const dateData = {
             resourceId: teacher.resourceId,
@@ -174,8 +189,6 @@ const createPayPeriodData = (events, teacher, monthStart, monthEnd) => {
             day: day,
             teachingMins: teachingMins,
             outsideDutyMins: outsideDutyMins,
-            overThresholdOneMins: teacher.overThresholdOneMins,
-            overThresholdTwoMins: teacher.overThresholdTwoMins,
             holidayMins: holidayMins,
             travelAllowance: 0,
             travelExpenses: 0,
@@ -199,6 +212,9 @@ const createPayPeriodData = (events, teacher, monthStart, monthEnd) => {
       }
     }
   });
+  datesData.overThresholdOneMins = teacher.overThresholdOneMins;
+  datesData.overThresholdTwoMins = teacher.overThresholdTwoMins;
+
   return datesData;
 };
 
