@@ -38,20 +38,29 @@ export default function PositionedPopper(props) {
               {selectedEvent.students &&
                 selectedEvent.students.map((s) => {
                   if (s._id in attendant_ids) {
-                    <Typography
-                      key={`${s._id} binky`}
-                      className={classes.typography}
-                    >
-                      {s.givenName}
-                    </Typography>;
+                    return (
+                      <div>
+                        <Typography
+                          key={`${s._id} binky`}
+                          className={classes.typography}
+                        >
+                          {s.givenName}
+                        </Typography>
+                        ;
+                      </div>
+                    );
                   } else {
-                    <p>X</p>
-                    <Typography
-                      key={`${s._id} binky`}
-                      className={classes.typography}
-                    >
-                      {s.givenName}
-                    </Typography>;
+                    return (
+                      <div>
+                        <p>X</p>
+                        <Typography
+                          key={`${s._id} binky`}
+                          className={classes.typography}
+                        >
+                          {s.givenName}
+                        </Typography>
+                      </div>
+                    );
                   }
                 })}
             </Paper>

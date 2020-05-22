@@ -136,7 +136,6 @@ const Schedule = () => {
     setIsDetailView(!isDetailView);
     setAnchorEl(target.currentTarget);
     setSelectedEvent(event);
-    console.log(selectedEvent);
   };
 
   return (
