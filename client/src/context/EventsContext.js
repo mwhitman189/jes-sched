@@ -10,8 +10,10 @@ const defaultEvents = [
     room: 2,
     duration: 0,
     resourceId: 1,
-    hide: true
-  }
+    hide: true,
+    students: [],
+    attendants: [],
+  },
 ];
 
 export const EventsContext = createContext();
