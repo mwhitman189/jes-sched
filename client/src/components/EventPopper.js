@@ -18,6 +18,11 @@ const useStyles = makeStyles((theme) => ({
 export default function PositionedPopper(props) {
   const { isOpen, anchorEl, selectedEvent } = props;
   const classes = useStyles();
+  // Create hash table for students in lesson to reduce lookup time
+  const attendant_ids = {};
+  selectedEvent.attendants.map((a) => {
+    attendant_ids._id = a._id;
+  });
 
   return (
     <div className={classes.root}>
@@ -31,14 +36,24 @@ export default function PositionedPopper(props) {
           <Fade {...TransitionProps} timeout={350}>
             <Paper>
               {selectedEvent.students &&
-                selectedEvent.students.map((s) => (
-                  <Typography
-                    key={`${s._id} binky`}
-                    className={classes.typography}
-                  >
-                    {s.givenName}
-                  </Typography>
-                ))}
+                selectedEvent.students.map((s) => {
+                  if (s._id in attendant_ids) {
+                    <Typography
+                      key={`${s._id} binky`}
+                      className={classes.typography}
+                    >
+                      {s.givenName}
+                    </Typography>;
+                  } else {
+                    <p>X</p>
+                    <Typography
+                      key={`${s._id} binky`}
+                      className={classes.typography}
+                    >
+                      {s.givenName}
+                    </Typography>;
+                  }
+                })}
             </Paper>
           </Fade>
         )}
