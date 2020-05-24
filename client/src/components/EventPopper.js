@@ -24,27 +24,28 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function PositionedPopper(props) {
-  const { isOpen, anchorEl, selectedEvent } = props;
+  const { isOpen, anchorEl, selectedEvent, attendees, setAttendees } = props;
   const { editEvent } = useContext(EventsContext);
   const { user } = useContext(UserContext);
   const classes = useStyles();
-  // Create hash table for students in lesson to reduce lookup time
-  const attendant_ids = {};
-  selectedEvent.attendants.map((a) => {
-    attendant_ids._id = a._id;
-  });
 
   const toggleAttendance = (id) => {
+    // Hash attendees' ids for faster lookup
+    let attendee_ids = {};
     if (user.user.role !== "teacher") {
-      let newAttendants;
-      if (!(id in attendant_ids)) {
-        const student = selectedEvent.students.find((s) => s._id === id);
-        newAttendants = [...selectedEvent.attendants, student];
+      let newAttendees;
+      if (attendees.some((a) => a._id === id)) {
+        newAttendees = attendees.filter((a) => a._id !== id);
       } else {
-        newAttendants = selectedEvent.attendants.filter((a) => a._id !== id);
+        const student = selectedEvent.students.find((s) => s._id === id);
+        newAttendees = [...selectedEvent.attendants, student];
       }
-      const updatedEvent = { ...selectedEvent, attendants: newAttendants };
-      return editEvent(selectedEvent, updatedEvent);
+      // Add each attendee's _id to the hash table
+      newAttendees.forEach((a) => (attendee_ids[a._id] = a._id));
+      // Add the updated event to the database, then update the state
+      const editedEvent = { ...selectedEvent, attendants: newAttendees };
+      editEvent(editedEvent);
+      return setAttendees([...newAttendees]);
     }
   };
 
@@ -60,19 +61,23 @@ export default function PositionedPopper(props) {
           <Fade {...TransitionProps} timeout={350}>
             <Paper>
               {selectedEvent.students &&
-                selectedEvent.students.map((s) => (
-                  <Typography
-                    key={`student number ${s._id}`}
-                    className={
-                      s._id in attendant_ids
-                        ? classes.attending
-                        : classes.absent
-                    }
-                    onClick={() => toggleAttendance(s._id)}
-                  >
-                    {s.givenName}
-                  </Typography>
-                ))}
+                selectedEvent.students.map((s) => {
+                  let className;
+                  if (attendees.some((a) => a._id === s._id)) {
+                    className = classes.attending;
+                  } else {
+                    className = classes.absent;
+                  }
+                  return (
+                    <Typography
+                      key={`student number ${s._id}`}
+                      className={className}
+                      onClick={() => toggleAttendance(s._id)}
+                    >
+                      {s.givenName}
+                    </Typography>
+                  );
+                })}
             </Paper>
           </Fade>
         )}

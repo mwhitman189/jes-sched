@@ -29,12 +29,12 @@ export default function EventForm(props) {
   const { formType, setFormType } = props;
   const { addTeacher, teachers } = useContext(TeachersContext);
 
-  const [givenName, updateGivenName] = useInputState("");
-  const [familyName, updateFamilyName] = useInputState("");
-  const [otThresholdHours, updateOtThresholdHours] = useInputState("");
-  const [contractType, updateContractType] = useInputState("");
-  const [dependentsNum, updateDependentsNum] = useInputState("");
-  const [email, updateEmail] = useInputState("");
+  const [givenName, setGivenName] = useInputState("");
+  const [familyName, setFamilyName] = useInputState("");
+  const [otThresholdHours, setOtThresholdHours] = useInputState("");
+  const [contractType, setContractType] = useInputState("");
+  const [dependentsNum, setDependentsNum] = useInputState("");
+  const [email, setEmail] = useInputState("");
   const [isPartTime, toggleIsPartTime] = useToggleState(false);
   const [isLoading, toggleIsLoading] = useToggleState(false);
 
@@ -99,7 +99,7 @@ export default function EventForm(props) {
               label="Given Name"
               type="text"
               value={givenName}
-              onChange={updateGivenName}
+              onChange={setGivenName}
               fullWidth
               validators={["required"]}
               errorMessages={["Enter the Given Name"]}
@@ -113,7 +113,7 @@ export default function EventForm(props) {
               label="Family Name"
               type="text"
               value={familyName}
-              onChange={updateFamilyName}
+              onChange={setFamilyName}
               fullWidth
               validators={["required"]}
               errorMessages={["Enter the Last Name"]}
@@ -128,7 +128,7 @@ export default function EventForm(props) {
               label="Email"
               type="email"
               value={email}
-              onChange={updateEmail}
+              onChange={setEmail}
               fullWidth
               validators={["required"]}
               errorMessages={["Enter a valid email"]}
@@ -142,7 +142,7 @@ export default function EventForm(props) {
               label="Contract Type"
               type="text"
               value={contractType}
-              onChange={updateContractType}
+              onChange={setContractType}
               fullWidth
               validators={["required"]}
               errorMessages={["Select a contract type"]}
@@ -158,7 +158,7 @@ export default function EventForm(props) {
                 type="text"
                 pattern="[0-9]*"
                 value={otThresholdHours}
-                onChange={updateOtThresholdHours}
+                onChange={setOtThresholdHours}
                 fullWidth
                 validators={["required"]}
                 errorMessages={["Set first OT threshold"]}
@@ -175,7 +175,7 @@ export default function EventForm(props) {
                 type="text"
                 pattern="[0-9]*"
                 value={dependentsNum}
-                onChange={updateDependentsNum}
+                onChange={setDependentsNum}
                 fullWidth
                 required
               />

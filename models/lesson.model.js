@@ -18,8 +18,8 @@ const LessonSchema = new Schema(
     isLast: { type: Boolean, default: false },
     cancelled: { type: Boolean, default: false },
     sameDayCancellation: { type: Boolean, default: false },
-    students: [Student.StudentSchema],
-    attendants: [Student.StudentSchema],
+    students: { type: [Student.StudentSchema] },
+    attendants: { type: [Student.StudentSchema] },
   },
   {
     timestamps: true,

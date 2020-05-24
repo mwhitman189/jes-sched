@@ -24,11 +24,12 @@ const Schedule = () => {
   const { user } = useContext(UserContext);
 
   const [formType, setFormType] = useState("");
-  const [startTime, updateStartTime] = useFormState(new Date());
+  const [startTime, setStartTime] = useFormState(new Date());
   const [selectedEvent, setSelectedEvent] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const [message, setMessage] = useState("");
   const [selectedTeacher, setSelectedTeacher] = useState("");
+  const [attendees, setAttendees] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isDetailView, setIsDetailView] = useState(false);
   const [anchorEl, setAnchorEl] = useState(false);
@@ -50,8 +51,8 @@ const Schedule = () => {
   }, [events]);
 
   const moveEvent = ({ event, resourceId, start, end }) => {
-    const updatedEvent = { ...event, resourceId, start, end };
-    handleDoubleClick(updatedEvent);
+    const setdEvent = { ...event, resourceId, start, end };
+    handleDoubleClick(setdEvent);
   };
 
   const validateRoomAndResource = (event, resourceId, start) => {
@@ -97,7 +98,7 @@ const Schedule = () => {
 
   const handleSelect = ({ start, resourceId }) => {
     setIsLoading(true);
-    updateStartTime(start);
+    setStartTime(start);
     setSelectedTeacher(resourceId);
     setFormType("event");
     setIsLoading(false);
@@ -105,7 +106,7 @@ const Schedule = () => {
 
   const handleDoubleClick = (event) => {
     setIsLoading(true);
-    updateStartTime(event.start);
+    setStartTime(event.start);
     setSelectedEvent(event);
     setFormType("event");
     setIsLoading(false);
@@ -130,12 +131,13 @@ const Schedule = () => {
 
   const handleSingleClick = (event, target) => {
     if (user.user.role === "teacher") {
-      const updatedEvent = { ...event, isNewEvent: false };
-      editEvent(event, updatedEvent);
+      const setdEvent = { ...event, isNewEvent: false };
+      editEvent(setdEvent);
     }
     setIsDetailView(!isDetailView);
     setAnchorEl(target.currentTarget);
     setSelectedEvent(event);
+    setAttendees(event.attendants);
   };
 
   return (
@@ -145,6 +147,8 @@ const Schedule = () => {
           isOpen={isDetailView}
           anchorEl={anchorEl}
           selectedEvent={selectedEvent}
+          attendees={attendees}
+          setAttendees={setAttendees}
         />
       )}
       {formType === "event" && (
@@ -152,11 +156,13 @@ const Schedule = () => {
           formType={formType}
           setFormType={setFormType}
           startTime={startTime}
-          updateStartTime={updateStartTime}
+          setStartTime={setStartTime}
           event={selectedEvent}
           setSelectedEvent={setSelectedEvent}
           selectedTeacher={selectedTeacher}
           validateRoomAndResource={validateRoomAndResource}
+          attendees={attendees}
+          setAttendees={setAttendees}
         />
       )}
       {formType === "teacher" && (

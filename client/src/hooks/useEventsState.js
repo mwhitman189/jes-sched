@@ -49,9 +49,13 @@ export default function (initialEvents) {
         .catch((err) => console.log(err));
       getEvents(todaysDate);
     },
-    editEvent: async function (event, editedEvent) {
+    editEvent: async function (editedEvent) {
       await axios
-        .put(`/api/lessons/update/${event._id}`, editedEvent, tokenConfig(user))
+        .put(
+          `/api/lessons/update/${editedEvent._id}`,
+          editedEvent,
+          tokenConfig(user)
+        )
         .then((res) => console.log(res.data))
         .catch((err) => console.log(err));
       getEvents(todaysDate);

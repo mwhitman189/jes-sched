@@ -137,12 +137,14 @@ const createPayPeriodData = (events, teacher, monthStart, monthEnd) => {
 
           // If event falls on a national holiday, add the class duration to holiday minutes,
           // otherwise, add to total teaching minutes
+
           if (
             JapaneseHolidays.isHoliday(e.start) ||
             e.start.getDay() === (0 || 1)
           ) {
             holidayMins = e.duration;
             teacher.holidayMins += holidayMins;
+            console.log(holidayMins);
           } else {
             const totalTeachingMins = calcOutsideDutyMins(
               e.start,
@@ -157,31 +159,26 @@ const createPayPeriodData = (events, teacher, monthStart, monthEnd) => {
             teacher.teachingMins += teachingMins;
             outsideDutyMins = totalTeachingMins.outsideDutyMins;
             teacher.outsideDutyMins += outsideDutyMins;
-          }
-          // Calculate hours worked over monthly thresholds two and one
-          const otThOneTotalMins = teacher.otThreshold;
-          const otThTwoTotalMins = otThOneTotalMins + secondThreshold;
-          if (teacher.teachingMins > otThTwoTotalMins) {
-            teacher.overThresholdTwoMins += e.duration;
-          } else if (teacher.teachingMins > otThOneTotalMins) {
-            if (otThOneTotalMins + e.duration > otThTwoTotalMins) {
-              teacher.overThresholdTwoMins +=
-                otThOneTotalMins + e.duration - otThTwoTotalMins;
-              teacher.overThresholdOneMins = otThOneTotalMins;
-            } else {
-              teacher.overThresholdOneMins += e.duration;
+
+            // Calculate hours worked over monthly thresholds two and one
+            const otThOneTotalMins = teacher.otThreshold;
+            const otThTwoTotalMins = otThOneTotalMins + secondThreshold;
+            if (teacher.teachingMins > otThTwoTotalMins) {
+              teacher.overThresholdTwoMins += e.duration;
+            } else if (teacher.teachingMins > otThOneTotalMins) {
+              if (otThOneTotalMins + e.duration > otThTwoTotalMins) {
+                teacher.overThresholdTwoMins +=
+                  otThOneTotalMins + e.duration - otThTwoTotalMins;
+                teacher.overThresholdOneMins = otThOneTotalMins;
+              } else {
+                teacher.overThresholdOneMins += e.duration;
+              }
+            } else if (teacher.teachingMins + e.duration > otThOneTotalMins) {
+              teacher.overThresholdOneMins +=
+                teacher.teachingMins + e.duration - otThOneTotalMins;
             }
-          } else if (teacher.teachingMins + e.duration > otThOneTotalMins) {
-            teacher.overThresholdOneMins +=
-              teacher.teachingMins + e.duration - otThOneTotalMins;
           }
-          // if (teacher.teachingMins >= thresholdTwoTotalMins) {
-          //   teacher.overThresholdTwoMins += teachingMins;
-          //   teacher.overThresholdOneMins += secondThreshold;
-          // } else if (teacher.teachingMins < thresholdelse if (teacher.teachingMins >= teacher.otThreshold) {
-          //   teacher.overThresholdOneMins +=
-          //     teacher.teachingMins - teacher.otThreshold;
-          // }
+
           // Teaching minutes object to be added to hash table
           const dateData = {
             resourceId: teacher.resourceId,
@@ -193,6 +190,7 @@ const createPayPeriodData = (events, teacher, monthStart, monthEnd) => {
             travelAllowance: 0,
             travelExpenses: 0,
           };
+
           // If date already in hash table, add teaching minutes to existing keys, otherwise create
           // a new date object
           if (datesData[date]) {
@@ -210,6 +208,7 @@ const createPayPeriodData = (events, teacher, monthStart, monthEnd) => {
   });
   datesData.overThresholdOneMins = teacher.overThresholdOneMins;
   datesData.overThresholdTwoMins = teacher.overThresholdTwoMins;
+  console.log(datesData);
 
   return datesData;
 };

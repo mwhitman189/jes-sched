@@ -53,10 +53,10 @@ export default function SignUpForm() {
   const { user, dispatch } = useContext(UserContext);
   const { errors, errorsDispatch } = useContext(ErrorsContext);
 
-  const [givenName, updateGivenName] = useInputState("");
-  const [familyName, updateFamilyName] = useInputState("");
-  const [email, updateEmail] = useInputState("");
-  const [password, updatePassword] = useInputState("");
+  const [givenName, setGivenName] = useInputState("");
+  const [familyName, setFamilyName] = useInputState("");
+  const [email, setEmail] = useInputState("");
+  const [password, setPassword] = useInputState("");
   const [isLoading, toggleIsLoading] = useToggleState(false);
 
   useEffect(() => {
@@ -145,7 +145,7 @@ export default function SignUpForm() {
                 fullWidth
                 id="givenName"
                 label="Given Name"
-                onChange={updateGivenName}
+                onChange={setGivenName}
                 autoFocus
               />
             </Grid>
@@ -159,7 +159,7 @@ export default function SignUpForm() {
                 id="familyName"
                 label="Family Name"
                 autoComplete="lname"
-                onChange={updateFamilyName}
+                onChange={setFamilyName}
               />
             </Grid>
             <Grid item xs={12}>
@@ -172,7 +172,7 @@ export default function SignUpForm() {
                 label="Email Address"
                 name="email"
                 autoComplete="email"
-                onChange={updateEmail}
+                onChange={setEmail}
               />
             </Grid>
             <Grid item xs={12}>
@@ -186,7 +186,7 @@ export default function SignUpForm() {
                 type="password"
                 id="password"
                 autoComplete="current-password"
-                onChange={updatePassword}
+                onChange={setPassword}
               />
             </Grid>
           </Grid>

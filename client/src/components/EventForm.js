@@ -74,25 +74,23 @@ export default function EventForm(props) {
     setSelectedEvent,
     selectedTeacher,
     validateRoomAndResource,
+    attendees,
+    setAttendees,
   } = props;
 
-  const [start, updateStart] = useInputState(startTime);
-  const [title, updateTitle, resetTitle] = useInputState(
-    event ? event.title : ""
-  );
-  const [duration, updateDuration, resetDuration] = useInputState(
+  const [start, setStart] = useInputState(startTime);
+  const [title, setTitle, resetTitle] = useInputState(event ? event.title : "");
+  const [duration, setDuration, resetDuration] = useInputState(
     event ? event.duration : ""
   );
-  const [resource, updateResource, resetResource] = useInputState(
+  const [resource, setResource, resetResource] = useInputState(
     event ? event.resourceId : selectedTeacher
   );
-  const [room, updateRoom, resetRoom] = useInputState(event ? event.room : "");
-  const [eventType, updateEventType, resetEventType] = useInputState(
+  const [room, setRoom, resetRoom] = useInputState(event ? event.room : "");
+  const [eventType, setEventType, resetEventType] = useInputState(
     event ? event.type : ""
   );
-  const [participants, updateParticipants] = useInputState(
-    event ? event.title : []
-  );
+  const [members, setMembers] = useInputState(event ? event.students : []);
   const [isRecurring, toggleIsRecurring] = useToggleState(false);
   const [isLoading, toggleIsLoading] = useToggleState(false);
 
@@ -124,7 +122,7 @@ export default function EventForm(props) {
   });
 
   const handleTimeChange = (date) => {
-    updateStart(date._d);
+    setStart(date._d);
   };
 
   const hideForm = () => {
@@ -154,8 +152,8 @@ export default function EventForm(props) {
       resourceId: resource,
       type: eventType,
       recur: isRecurring,
-      students: participants,
-      attendants: participants,
+      students: members,
+      attendants: attendees,
     });
     addTeachingMins(events, monthStart, monthEnd);
     toggleIsLoading(false);
@@ -175,11 +173,11 @@ export default function EventForm(props) {
       resourceId: parseInt(resource),
       type: eventType,
       isRecurring: isRecurring,
-      students: participants,
-      attendants: participants,
+      students: members,
+      attendants: attendees,
       isNewEvent: true,
     };
-    editEvent(event, editedEvent);
+    editEvent(editedEvent);
     addTeachingMins(events, monthStart, monthEnd);
     toggleIsLoading(false);
     hideForm();
@@ -194,7 +192,7 @@ export default function EventForm(props) {
       cancelled: true,
       sameDayCancellation: sdCancellation,
     };
-    editEvent(event, editedEvent);
+    editEvent(editedEvent);
     addTeachingMins(events, monthStart, monthEnd);
     toggleIsLoading(false);
     hideForm();
@@ -257,7 +255,7 @@ export default function EventForm(props) {
               label="Lesson Name"
               type="text"
               value={title}
-              onChange={updateTitle}
+              onChange={setTitle}
               fullWidth
               validators={["required"]}
               errorMessages={["Enter the Lesson Name"]}
@@ -271,7 +269,7 @@ export default function EventForm(props) {
               type="text"
               pattern="[0-9]*"
               value={duration}
-              onChange={updateDuration}
+              onChange={setDuration}
               fullWidth
               validators={["required"]}
               errorMessages={["Enter the Duration"]}
@@ -286,7 +284,7 @@ export default function EventForm(props) {
               fullWidth
               id="resource"
               value={resource}
-              onChange={updateResource}
+              onChange={setResource}
               name="resource"
               validators={teacherValidators}
               errorMessages={teacherValMsgs}
@@ -309,8 +307,8 @@ export default function EventForm(props) {
                 `${option.givenName} ${option.familyName}`
               }
               onChange={(event, newStudents) => {
-                console.log(newStudents);
-                updateParticipants([...participants, ...newStudents]);
+                setAttendees([...attendees, ...newStudents]);
+                console.log(attendees);
               }}
               multiple={true}
               filterSelectedOptions
@@ -328,7 +326,7 @@ export default function EventForm(props) {
               fullWidth
               id="room"
               value={room}
-              onChange={updateRoom}
+              onChange={setRoom}
               name="room"
               validators={roomValidators}
               errorMessages={roomValMsgs}
@@ -350,7 +348,7 @@ export default function EventForm(props) {
               fullWidth
               id="type"
               value={eventType}
-              onChange={updateEventType}
+              onChange={setEventType}
               name="type"
             >
               <MenuItem value="" />

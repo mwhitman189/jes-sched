@@ -64,8 +64,8 @@ export default function Login() {
   const { dispatch } = useContext(UserContext);
   const { errors, errorsDispatch } = useContext(ErrorsContext);
 
-  const [email, updateEmail] = useInputState("");
-  const [password, updatePassword] = useInputState("");
+  const [email, setEmail] = useInputState("");
+  const [password, setPassword] = useInputState("");
   const [isLoading, toggleIsLoading] = useToggleState(false);
 
   const handleLogin = async (e) => {
@@ -128,7 +128,7 @@ export default function Login() {
             label="Email Address"
             name="email"
             autoComplete="email"
-            onChange={updateEmail}
+            onChange={setEmail}
             autoFocus
           />
           <TextField
@@ -142,7 +142,7 @@ export default function Login() {
             type="password"
             id="password"
             autoComplete="current-password"
-            onChange={updatePassword}
+            onChange={setPassword}
           />
           <Button
             type="submit"

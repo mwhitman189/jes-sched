@@ -39,8 +39,6 @@ function createData(
   date,
   day,
   teachingMins,
-  overThresholdOneMins,
-  overThresholdTwoMins,
   outsideDutyMins,
   holidayMins,
   travelAllowance,
@@ -50,8 +48,6 @@ function createData(
     date,
     day,
     teachingMins,
-    overThresholdOneMins,
-    overThresholdTwoMins,
     outsideDutyMins,
     holidayMins,
     travelAllowance,
@@ -101,6 +97,7 @@ const Payroll = (props) => {
           teachingMinsByDate[i].travelAllowance,
           teachingMinsByDate[i].travelExpenses
         );
+        console.log(teachingMinsByDate[i].holidayMins);
       } else {
         newRow = createData(
           i,
