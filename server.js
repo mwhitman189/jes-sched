@@ -52,10 +52,10 @@ const forceSsl = function (req, res, next) {
 // Serve static assets if in production
 if (process.env.NODE_ENV === "production") {
   app.use(express.static("client/build"));
-  const path = res.sendFile(
-    path.resolve(__dirname, "client", "build", "index.html")
-  );
   app.get("*", (req, res) => {
+    const path = res.sendFile(
+      path.resolve(__dirname, "client", "build", "index.html")
+    );
     app.use(forceSsl(req, res, path));
   });
 }
