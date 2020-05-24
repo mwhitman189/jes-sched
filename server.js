@@ -40,12 +40,12 @@ app.use("/api/payments", paymentsRouter);
 
 const forceSsl = function (req, res, next) {
   if (req.headers["x-forwarded-proto"] !== "https") {
+    res.setHeader(
+      "strict-transport-security",
+      "max-age=31536000; includeSubDomains; preload"
+    );
     return res.redirect(["https://", req.get("Host"), req.url].join(""));
   }
-  res.setHeader(
-    "strict-transport-security",
-    "max-age=31536000; includeSubDomains; preload"
-  );
   return next();
 };
 
