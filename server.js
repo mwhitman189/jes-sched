@@ -40,10 +40,6 @@ app.use("/api/payments", paymentsRouter);
 
 const forceSsl = function (req, res, next) {
   if (req.headers["x-forwarded-proto"] !== "https") {
-    res.setHeader(
-      "strict-transport-security",
-      "max-age=31536000; includeSubDomains; preload"
-    );
     return res.redirect(["https://", req.get("Host"), req.url].join(""));
   }
   return next();
@@ -51,13 +47,11 @@ const forceSsl = function (req, res, next) {
 
 // Serve static assets if in production
 if (process.env.NODE_ENV === "production") {
-  app.use(express.static("client/build"));
+  app.use(forceSsl);
   app.get("*", (req, res) => {
-    const path = res.sendFile(
-      path.resolve(__dirname, "client", "build", "index.html")
-    );
-    app.use(forceSsl(req, res, path));
+    res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
   });
+  app.use(express.static("client/build"));
 }
 
 app.listen(port, () => {
