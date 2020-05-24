@@ -26,7 +26,6 @@ export default (initialTeachers) => {
       overThresholdTwoMins: teacher.overThresholdTwoMins,
       minsByDate: teacher.minsByDate,
     };
-    console.log(updatedTeacher);
     updatedTeachers.splice(idx, 1, updatedTeacher);
 
     setTeachers(updatedTeachers);
