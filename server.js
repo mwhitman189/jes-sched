@@ -42,15 +42,21 @@ const forceSsl = function (req, res, next) {
   if (req.headers["x-forwarded-proto"] !== "https") {
     return res.redirect(["https://", req.get("Host"), req.url].join(""));
   }
+  res.setHeader(
+    "strict-transport-security",
+    "max-age=31536000; includeSubDomains; preload"
+  );
   return next();
 };
 
 // Serve static assets if in production
 if (process.env.NODE_ENV === "production") {
   app.use(express.static("client/build"));
+  const path = res.sendFile(
+    path.resolve(__dirname, "client", "build", "index.html")
+  );
   app.get("*", (req, res) => {
-    app.use(forceSsl(req, res));
-    res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
+    app.use(forceSsl(req, res, path));
   });
 }
 
