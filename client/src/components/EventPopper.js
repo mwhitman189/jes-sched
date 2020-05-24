@@ -40,13 +40,11 @@ export default function PositionedPopper(props) {
       if (!(id in attendant_ids)) {
         const student = selectedEvent.students.find((s) => s._id === id);
         newAttendants = [...selectedEvent.attendants, student];
-        console.log("id was not in attendant_ids", newAttendants);
       } else {
         newAttendants = selectedEvent.attendants.filter((a) => a._id !== id);
-        console.log("id WAS in attendant_ids", newAttendants);
       }
       const updatedEvent = { ...selectedEvent, attendants: newAttendants };
-      editEvent(selectedEvent, updatedEvent);
+      return editEvent(selectedEvent, updatedEvent);
     }
   };
 
