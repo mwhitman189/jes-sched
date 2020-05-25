@@ -72,21 +72,24 @@ const styles = (theme) => ({
   teacherList: {
     fontSize: "1rem",
     display: "flex",
-    justifyContent: "flex-start",
+    justifyContent: "space-around",
     listStyle: "none",
     fontWeight: 600,
     margin: "0 .3rem",
+    "& li": {
+      width: "10%",
+    },
+    [theme.breakpoints.down("sm")]: {
+      fontSize: ".7rem",
+    },
   },
   listItem: {
-    marginRight: "1rem",
     color: "green",
   },
   listItemYellow: {
-    marginRight: "1rem",
     color: "#fcad03",
   },
   listItemRed: {
-    marginRight: "1rem",
     color: "red",
   },
   logoutBtn: {
