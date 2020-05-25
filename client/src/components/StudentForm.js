@@ -1,10 +1,14 @@
 import React, { useContext } from "react";
-import { ValidatorForm, TextValidator } from "react-material-ui-form-validator";
+import {
+  SelectValidator,
+  ValidatorForm,
+  TextValidator,
+} from "react-material-ui-form-validator";
 import useInputState from "../hooks/useInputState";
 import useToggleState from "../hooks/useToggleState";
-import { StudentContext } from "../context/StudentsContext";
-import { UserContext } from "../context/UserContext";
+import { StudentsContext } from "../context/StudentsContext";
 import { makeStyles } from "@material-ui/core/styles";
+import MenuItem from "@material-ui/core/MenuItem";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
@@ -25,21 +29,32 @@ const useStyles = makeStyles((theme) => ({
 
 export default function EventForm(props) {
   const classes = useStyles();
-  const { formType, setFormType } = props;
-  const { addStudent } = useContext(StudentContext);
+  const { formType, setFormType, addNewStage, toggleAddNewStage } = props;
+  const { addStudent } = useContext(StudentsContext);
 
   const [givenName, setGivenName] = useInputState("");
   const [familyName, setFamilyName] = useInputState("");
+  const [level, setLevel] = useInputState("");
   const [email, setEmail] = useInputState("");
-  const [phone, setPhone] = useInputeState("");
+  const [phone, setPhone] = useInputState("");
   const [isLoading, toggleIsLoading] = useToggleState(false);
+
+  const levels = [
+    { level: "BE", name: "Beginner" },
+    { level: "FB", name: "False Beginner" },
+    { level: "EL", name: "Elementary" },
+    { level: "LI", name: "Low Intermediate" },
+    { level: "HI", name: "High Intermediate" },
+    { level: "AD", name: "Advanced" },
+  ];
 
   const handleAddStudent = (e) => {
     e.preventDefault();
     toggleIsLoading(true);
     addStudent({
-      name: givenName,
+      givenName: givenName,
       familyName: familyName,
+      level: level,
       phone: phone,
       email: email,
     });
@@ -47,18 +62,20 @@ export default function EventForm(props) {
     hideForm();
   };
 
-  const hideForm = () => setFormType("");
-
+  const hideForm = () => {
+    setFormType("");
+    toggleAddNewStage(!addNewStage);
+  };
   return (
     <Dialog
-      open={formType === "staff"}
+      open={formType === "student"}
       onClose={hideForm}
       aria-labelledby="form-dialog-title"
     >
       <ValidatorForm onSubmit={handleAddStudent}>
-        <DialogTitle id="form-dialog-title">New Staff</DialogTitle>
+        <DialogTitle id="form-dialog-title">New Student</DialogTitle>
         <DialogContent>
-          <DialogContentText>Enter Staff Info</DialogContentText>
+          <DialogContentText>Enter Student Info</DialogContentText>
           <FormControl className={classes.formControl}>
             <TextValidator
               autoFocus
@@ -77,7 +94,7 @@ export default function EventForm(props) {
           <FormControl className={classes.formControl}>
             <TextValidator
               margin="dense"
-              id="lastName"
+              id="familyName"
               label="Family Name"
               type="text"
               value={familyName}
@@ -87,6 +104,26 @@ export default function EventForm(props) {
               errorMessages={["Enter the Last Name"]}
               required
             />
+          </FormControl>
+          <FormControl className={classes.formControl}>
+            <SelectValidator
+              classes={{ root: classes.root }}
+              margin="dense"
+              label="Level"
+              InputLabelProps={{ shrink: true }}
+              fullWidth
+              id="level"
+              value={level}
+              onChange={setLevel}
+              name="level"
+            >
+              <MenuItem value="" />
+              {levels.map((l) => (
+                <MenuItem key={`level-${l.level}`} value={l.level}>
+                  {l.name}
+                </MenuItem>
+              ))}
+            </SelectValidator>
           </FormControl>
           <FormControl className={classes.formControl}>
             <TextValidator

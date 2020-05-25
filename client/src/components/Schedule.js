@@ -9,6 +9,7 @@ import { UserContext } from "../context/UserContext";
 import useFormState from "../hooks/useInputState";
 import EventForm from "./EventForm";
 import StaffForm from "./StaffForm";
+import StudentForm from "./StudentForm";
 import TeacherForm from "./TeacherForm";
 import CustomizedSnackbars from "./CustomizedSnackbars";
 import Payroll from "./Payroll";
@@ -120,6 +121,10 @@ const Schedule = () => {
     setFormType("staff");
   };
 
+  const handleAddStudentNav = () => {
+    setFormType("student");
+  };
+
   const handleToggleSnackbar = (msg) => {
     setMessage(msg);
     setIsOpen(true);
@@ -171,6 +176,9 @@ const Schedule = () => {
       {formType === "staff" && (
         <StaffForm formType={formType} setFormType={setFormType} />
       )}
+      {formType === "student" && (
+        <StudentForm formType={formType} setFormType={setFormType} />
+      )}
       {formType === "payroll" && <Payroll setFormType={setFormType} />}
       <CustomizedSnackbars
         isOpen={isOpen}
@@ -184,6 +192,7 @@ const Schedule = () => {
         handleDoubleClick={protectAction(user, handleDoubleClick)}
         handleAddTeacherNav={protectAction(user, handleAddTeacherNav)}
         handleAddStaffNav={protectAction(user, handleAddStaffNav)}
+        handleAddStudentNav={protectAction(user, handleAddStudentNav)}
         handlePayrollNav={protectAction(user, handlePayrollNav)}
         handleOpenDetailView={handleSingleClick}
       />

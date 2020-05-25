@@ -20,12 +20,12 @@ export default (initialStudents) => {
     students,
     setStudents,
     getStudents: () => getStudents(),
-    addStudent: async (newStudents) => {
+    addStudent: async (newStudent) => {
       await axios
-        .post("/api/students/add", newStudents, tokenConfig(user))
+        .post("/api/students/add", newStudent, tokenConfig(user))
         .then((res) => console.log(res.data))
         .catch((err) => console.log(err));
-      return setStudents([...students, ...newStudents]);
+      return setStudents([...students, newStudent]);
     },
     editStudent: async function (student, editedStudent) {
       await axios

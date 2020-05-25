@@ -144,7 +144,6 @@ const createPayPeriodData = (events, teacher, monthStart, monthEnd) => {
           ) {
             holidayMins = e.duration;
             teacher.holidayMins += holidayMins;
-            console.log(holidayMins);
           } else {
             const totalTeachingMins = calcOutsideDutyMins(
               e.start,
@@ -208,7 +207,6 @@ const createPayPeriodData = (events, teacher, monthStart, monthEnd) => {
   });
   datesData.overThresholdOneMins = teacher.overThresholdOneMins;
   datesData.overThresholdTwoMins = teacher.overThresholdTwoMins;
-  console.log(datesData);
 
   return datesData;
 };

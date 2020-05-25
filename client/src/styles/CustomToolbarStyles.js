@@ -107,5 +107,8 @@ const styles = (theme) => ({
       margin: "0 .2rem",
     },
   },
+  avatar: {
+    color: "rgba(6, 156, 54, .8)",
+  },
 });
 export default styles;

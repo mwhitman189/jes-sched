@@ -14,6 +14,13 @@ import ListItemText from "@material-ui/core/ListItemText";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import AttachMoneyIcon from "@material-ui/icons/AttachMoney";
 import PersonAddIcon from "@material-ui/icons/PersonAdd";
+import Avatar from "@material-ui/core/Avatar";
+import List from "@material-ui/core/List";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemAvatar from "@material-ui/core/ListItemAvatar";
+import Dialog from "@material-ui/core/Dialog";
+import PersonIcon from "@material-ui/icons/Person";
+import DialogTitle from "@material-ui/core/DialogTitle";
 import styles from "../styles/CustomToolbarStyles";
 import "react-big-calendar/lib/sass/toolbar.scss";
 
@@ -38,6 +45,9 @@ const CustomToolbar = (props) => {
     handleAddTeacherNav,
     handlePayrollNav,
     handleAddStaffNav,
+    handleAddStudentNav,
+    toggleAddNewStage,
+    addNewStage,
   } = props;
   const { teachers } = useContext(TeachersContext);
   const { user, dispatch } = useContext(UserContext);
@@ -62,12 +72,34 @@ const CustomToolbar = (props) => {
     };
   });
 
+  const itemTypes = [
+    {
+      itemType: "teacher",
+      title: "Add new teacher",
+      onClickEvent: handleAddTeacherNav,
+    },
+    {
+      itemType: "staff",
+      title: "Add new staff",
+      onClickEvent: handleAddStaffNav,
+    },
+    {
+      itemType: "student",
+      title: "Add new student",
+      onClickEvent: handleAddStudentNav,
+    },
+  ];
+
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
 
   const handleClose = () => {
     setAnchorEl(null);
+  };
+
+  const handleAddNewNav = () => {
+    toggleAddNewStage(!addNewStage);
   };
 
   // Search for user in teachers. If user is teacher, return teacher object
@@ -224,7 +256,22 @@ const CustomToolbar = (props) => {
   );
 
   const fullSizeToolbar = (
-    <ul className={classes.toolbar}>
+    <div className={classes.toolbar}>
+      <Dialog aria-labelledby="add-new-item-select" open={addNewStage}>
+        <DialogTitle id="add-new-item-select">Add new...</DialogTitle>
+        <List>
+          {itemTypes.map((t) => (
+            <ListItem button onClick={t.onClickEvent} key={t.itemType}>
+              <ListItemAvatar>
+                <Avatar className={classes.avatar}>
+                  <PersonIcon />
+                </Avatar>
+              </ListItemAvatar>
+              <ListItemText primary={t.title} />
+            </ListItem>
+          ))}
+        </List>
+      </Dialog>
       <div className={classes.btnGroup}>
         <IconButton
           className={classes.navBtn}
@@ -287,13 +334,17 @@ const CustomToolbar = (props) => {
       <div className={classes.btnGroup}>
         {user.user.role !== "teacher" && (
           <>
-            <button className={classes.navBtn} onClick={handleAddTeacherNav}>
+            {/* <button className={classes.navBtn} onClick={handleAddTeacherNav}>
               <PersonAddIcon className={classes.icon} fontSize="small" />
               New Teacher
             </button>
             <button className={classes.navBtn} onClick={handleAddStaffNav}>
               <PersonAddIcon className={classes.icon} fontSize="small" />
               New Staff
+            </button> */}
+            <button className={classes.navBtn} onClick={handleAddNewNav}>
+              <PersonAddIcon className={classes.icon} fontSize="small" />
+              Add New ____
             </button>
             <button className={classes.navBtn} onClick={handlePayrollNav}>
               <AttachMoneyIcon className={classes.icon} fontSize="small" />
@@ -315,7 +366,7 @@ const CustomToolbar = (props) => {
           Logout
         </button>
       </div>
-    </ul>
+    </div>
   );
 
   return dimensions.width < 750 ? collapseToolbar : fullSizeToolbar;
