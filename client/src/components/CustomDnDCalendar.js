@@ -166,6 +166,7 @@ function CustomDnDCalendar(props) {
             handleAddStaffNav={handleAddStaffNav}
             handleAddStudentNav={handleAddStudentNav}
             handlePayrollNav={handlePayrollNav}
+            addNewStage={addNewStage}
             toggleAddNewStage={toggleAddNewStage}
           />
         ),

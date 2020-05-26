@@ -165,6 +165,7 @@ export default function EventForm(props) {
     toggleIsLoading(true);
     validateRoomAndResource(e, resource, start);
     const editedEvent = {
+      ...event,
       title: title,
       start: start,
       end: moment(start).add(duration, "m").toDate(),
