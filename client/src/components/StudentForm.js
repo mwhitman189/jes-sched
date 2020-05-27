@@ -64,7 +64,6 @@ export default function EventForm(props) {
 
   const hideForm = () => {
     setFormType("");
-    toggleAddNewStage(!addNewStage);
   };
   return (
     <Dialog
@@ -116,6 +115,7 @@ export default function EventForm(props) {
               value={level}
               onChange={setLevel}
               name="level"
+              required
             >
               <MenuItem value="" />
               {levels.map((l) => (

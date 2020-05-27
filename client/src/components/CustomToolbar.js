@@ -1,5 +1,6 @@
 import React, { useContext, useState, useEffect } from "react";
 import moment from "moment";
+import useToggleState from "../hooks/useToggleState";
 import { TeachersContext } from "../context/TeachersContext";
 import { UserContext } from "../context/UserContext";
 import { withStyles } from "@material-ui/core/styles";
@@ -46,12 +47,11 @@ const CustomToolbar = (props) => {
     handlePayrollNav,
     handleAddStaffNav,
     handleAddStudentNav,
-    toggleAddNewStage,
-    addNewStage,
   } = props;
   const { teachers } = useContext(TeachersContext);
   const { user, dispatch } = useContext(UserContext);
   const [anchorEl, setAnchorEl] = useState(null);
+  const [stage, setStage] = useState("");
   const [dimensions, setDimensions] = useState({
     height: window.innerHeight,
     width: window.innerWidth,
@@ -86,7 +86,10 @@ const CustomToolbar = (props) => {
     {
       itemType: "student",
       title: "Add new student",
-      onClickEvent: handleAddStudentNav,
+      onClickEvent: () => {
+        handleAddStudentNav();
+        setStage("");
+      },
     },
   ];
 
@@ -99,7 +102,11 @@ const CustomToolbar = (props) => {
   };
 
   const handleAddNewNav = () => {
-    toggleAddNewStage(!addNewStage);
+    setStage("addNewPerson");
+  };
+
+  const handleCloseAddNew = () => {
+    setStage("");
   };
 
   // Search for user in teachers. If user is teacher, return teacher object
@@ -146,11 +153,30 @@ const CustomToolbar = (props) => {
 
   const collapseToolbar = (
     <div className={classes.toolbar}>
+      <Dialog
+        aria-labelledby="add-new-item-select"
+        open={stage === "addNewPerson"}
+        onClose={handleCloseAddNew}
+      >
+        <DialogTitle id="add-new-item-select">Add New...</DialogTitle>
+        <List>
+          {itemTypes.map((t) => (
+            <ListItem button onClick={t.onClickEvent} key={t.itemType}>
+              <ListItemAvatar>
+                <Avatar className={classes.avatar}>
+                  <PersonIcon />
+                </Avatar>
+              </ListItemAvatar>
+              <ListItemText primary={t.title} />
+            </ListItem>
+          ))}
+        </List>
+      </Dialog>
       <div></div>
       <ul style={{ padding: 0 }} className={classes.teacherList}>
         {
-          // If teacher is defined because user is a teacher, list user's teaching mins.
-          // Otherwise, list all teachers' teaching mins
+          // If user is a teacher, list the user's teaching minutes.
+          // Otherwise, list all teachers' teaching minutes.
           teacher ? (
             <li
               className={
@@ -219,12 +245,12 @@ const CustomToolbar = (props) => {
           <>
             <StyledMenuItem
               className={classes.navBtn}
-              onClick={handleAddTeacherNav}
+              onClick={handleAddNewNav}
             >
               <ListItemIcon>
-                <PersonAddIcon fontSize="small" />
+                <PersonAddIcon className={classes.icon} fontSize="small" />
               </ListItemIcon>
-              <ListItemText primary="New Teacher" />
+              <ListItemText primary="Add New ____" />
             </StyledMenuItem>
             <StyledMenuItem
               className={classes.navBtn}
@@ -257,8 +283,12 @@ const CustomToolbar = (props) => {
 
   const fullSizeToolbar = (
     <div className={classes.toolbar}>
-      <Dialog aria-labelledby="add-new-item-select" open={addNewStage}>
-        <DialogTitle id="add-new-item-select">Add new...</DialogTitle>
+      <Dialog
+        aria-labelledby="add-new-item-select"
+        open={stage === "addNewPerson"}
+        onClose={handleCloseAddNew}
+      >
+        <DialogTitle id="add-new-item-select">Add New...</DialogTitle>
         <List>
           {itemTypes.map((t) => (
             <ListItem button onClick={t.onClickEvent} key={t.itemType}>
@@ -334,17 +364,9 @@ const CustomToolbar = (props) => {
       <div className={classes.btnGroup}>
         {user.user.role !== "teacher" && (
           <>
-            {/* <button className={classes.navBtn} onClick={handleAddTeacherNav}>
-              <PersonAddIcon className={classes.icon} fontSize="small" />
-              New Teacher
-            </button>
-            <button className={classes.navBtn} onClick={handleAddStaffNav}>
-              <PersonAddIcon className={classes.icon} fontSize="small" />
-              New Staff
-            </button> */}
             <button className={classes.navBtn} onClick={handleAddNewNav}>
               <PersonAddIcon className={classes.icon} fontSize="small" />
-              Add New ____
+              Add New...
             </button>
             <button className={classes.navBtn} onClick={handlePayrollNav}>
               <AttachMoneyIcon className={classes.icon} fontSize="small" />

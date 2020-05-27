@@ -2,7 +2,6 @@ import React, { useContext } from "react";
 import moment from "moment";
 import { Calendar, momentLocalizer } from "react-big-calendar";
 import withDragAndDrop from "react-big-calendar/lib/addons/dragAndDrop";
-import useToggleState from "../hooks/useToggleState";
 import { EventsContext } from "../context/EventsContext";
 import { TeachersContext } from "../context/TeachersContext";
 import { UserContext } from "../context/UserContext";
@@ -28,8 +27,6 @@ function CustomDnDCalendar(props) {
   const { events } = useContext(EventsContext);
   const { teachers } = useContext(TeachersContext);
   const { user } = useContext(UserContext);
-
-  const [addNewStage, toggleAddNewStage] = useToggleState(false);
 
   // Search for user in teachers. If user is teacher, return teacher object
   // for use in conditional rendering of teaching minutes
@@ -166,8 +163,6 @@ function CustomDnDCalendar(props) {
             handleAddStaffNav={handleAddStaffNav}
             handleAddStudentNav={handleAddStudentNav}
             handlePayrollNav={handlePayrollNav}
-            addNewStage={addNewStage}
-            toggleAddNewStage={toggleAddNewStage}
           />
         ),
       }}

@@ -309,7 +309,6 @@ export default function EventForm(props) {
               }
               onChange={(event, newStudents) => {
                 setAttendees([...attendees, ...newStudents]);
-                console.log(attendees);
               }}
               multiple={true}
               filterSelectedOptions
