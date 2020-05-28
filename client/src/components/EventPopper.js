@@ -30,22 +30,17 @@ export default function PositionedPopper(props) {
   const classes = useStyles();
 
   const toggleAttendance = (id) => {
-    // Hash attendees' ids for faster lookup
-    let attendee_ids = {};
     if (user.user.role !== "teacher") {
       let newAttendees;
       if (attendees.some((a) => a._id === id)) {
         newAttendees = attendees.filter((a) => a._id !== id);
       } else {
         const student = selectedEvent.students.find((s) => s._id === id);
-        newAttendees = [...selectedEvent.attendants, student];
+        newAttendees = [...attendees, student];
       }
-      // Add each attendee's _id to the hash table
-      newAttendees.forEach((a) => (attendee_ids[a._id] = a._id));
-      // Add the updated event to the database, then update the state
-      const editedEvent = { ...selectedEvent, attendants: newAttendees };
+      const editedEvent = { ...selectedEvent, attendees: newAttendees };
       editEvent(editedEvent);
-      return setAttendees([...newAttendees]);
+      return setAttendees(newAttendees);
     }
   };
 

@@ -19,7 +19,7 @@ const LessonSchema = new Schema(
     cancelled: { type: Boolean, default: false },
     sameDayCancellation: { type: Boolean, default: false },
     students: { type: [Student.StudentSchema] },
-    attendants: { type: [Student.StudentSchema] },
+    attendees: { type: [Student.StudentSchema] },
   },
   {
     timestamps: true,

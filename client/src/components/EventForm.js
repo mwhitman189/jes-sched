@@ -75,7 +75,6 @@ export default function EventForm(props) {
     selectedTeacher,
     validateRoomAndResource,
     attendees,
-    setAttendees,
   } = props;
 
   const [start, setStart] = useInputState(startTime);
@@ -149,11 +148,11 @@ export default function EventForm(props) {
       end: moment(start).add(duration, "m").toDate(),
       room: room,
       duration: parseInt(duration),
-      resourceId: resource,
+      resourceId: parseInt(resource),
       type: eventType,
       recur: isRecurring,
       students: members,
-      attendants: attendees,
+      attendees: members,
     });
     addTeachingMins(events, monthStart, monthEnd);
     toggleIsLoading(false);
@@ -175,7 +174,6 @@ export default function EventForm(props) {
       type: eventType,
       isRecurring: isRecurring,
       students: members,
-      attendants: attendees,
       isNewEvent: true,
     };
     editEvent(editedEvent);
@@ -307,10 +305,11 @@ export default function EventForm(props) {
               getOptionLabel={(option) =>
                 `${option.givenName} ${option.familyName}`
               }
-              onChange={(event, newStudents) => {
-                setAttendees([...attendees, ...newStudents]);
+              onChange={(newMembers) => {
+                setMembers([...event.students, ...newMembers]);
+                console.log("members state: ", members, "event.attendees");
               }}
-              multiple={true}
+              multiple
               filterSelectedOptions
               renderInput={(params) => (
                 <TextField {...params} label="Students" variant="outlined" />

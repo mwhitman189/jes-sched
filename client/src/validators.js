@@ -1,39 +1,40 @@
 import moment from "moment";
 
-function validateRoom(events, room, start, duration) {
-  return events.every((event) => {
+function validateRoom(events, event) {
+  return events.every((e) => {
     if (
       testDateOverlap(
-        [event.start, event.end],
+        [e.start, e.end],
         [
-          moment(new Date(start)),
-          moment(moment(new Date(start)).add(duration, "m").toDate()),
+          moment(new Date(event.start)),
+          moment(
+            moment(new Date(event.start)).add(event.duration, "m").toDate()
+          ),
         ]
       )
     ) {
-      return parseInt(event.room) !== parseInt(room);
+      return parseInt(e.room) !== parseInt(event.room);
     }
     return true;
   });
 }
 
-function validateTeacher(
-  otherEvents,
-  eventResourceId,
-  eventStart,
-  eventDuration
-) {
-  return otherEvents.every((otherEvent) => {
+function validateTeacher(events, event) {
+  return events.every((otherEvent) => {
     if (
       testDateOverlap(
         [otherEvent.start, otherEvent.end],
         [
-          moment(new Date(eventStart)),
-          moment(moment(new Date(eventStart)).add(eventDuration, "m").toDate()),
+          moment(new Date(event.start)),
+          moment(
+            moment(new Date(event.start))
+              .add(parseInt(event.duration), "m")
+              .toDate()
+          ),
         ]
       )
     ) {
-      return parseInt(otherEvent.resourceId) !== parseInt(eventResourceId);
+      return parseInt(otherEvent.resourceId) !== parseInt(event.resourceId);
     }
     return true;
   });

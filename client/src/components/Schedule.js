@@ -52,24 +52,19 @@ const Schedule = () => {
   }, [events]);
 
   const moveEvent = ({ event, resourceId, start, end }) => {
-    const setdEvent = { ...event, resourceId, start, end };
-    handleDoubleClick(setdEvent);
+    const updatedEvent = { ...event, resourceId, start, end };
+    handleDoubleClick(updatedEvent);
   };
 
-  const validateRoomAndResource = (event, resourceId, start) => {
-    const idx = events.indexOf(event);
-    const otherEvents = [...events.slice(0, idx), ...events.slice(idx + 1)];
+  const validateRoomAndResource = (event) => {
+    const otherEvents = events.filter((e) => event._id !== e._id);
 
-    if (
-      !validateRoom(otherEvents, event.room, start, parseInt(event.duration))
-    ) {
+    if (!validateRoom(otherEvents, event, parseInt(event.duration))) {
       setSelectedEvent(event);
       handleToggleSnackbar("Room Conflict. Please choose another room or time");
       return false;
     }
-    if (
-      !validateTeacher(otherEvents, resourceId, start, parseInt(event.duration))
-    ) {
+    if (!validateTeacher(otherEvents, event)) {
       setSelectedEvent(event);
       handleToggleSnackbar(
         "Teacher Conflict. Please choose another teacher or time"
@@ -136,13 +131,13 @@ const Schedule = () => {
 
   const handleSingleClick = (event, target) => {
     if (user.user.role === "teacher") {
-      const setdEvent = { ...event, isNewEvent: false };
-      editEvent(setdEvent);
+      const updatedEvent = { ...event, isNewEvent: false };
+      editEvent(updatedEvent);
     }
     setIsDetailView(!isDetailView);
     setAnchorEl(target.currentTarget);
     setSelectedEvent(event);
-    setAttendees(event.attendants);
+    setAttendees(event.attendees);
   };
 
   return (

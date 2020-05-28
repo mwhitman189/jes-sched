@@ -12,7 +12,7 @@ const defaultEvents = [
     resourceId: 1,
     hide: true,
     students: [],
-    attendants: [],
+    attendees: [],
   },
 ];
 
