@@ -39,7 +39,7 @@ const useStyles = makeStyles({
     color: "red",
     position: "relative",
     fontWeight: "800",
-    fontSize: "1.1rem",
+    fontSize: ".7rem",
     margin: 0,
     padding: 0,
   },

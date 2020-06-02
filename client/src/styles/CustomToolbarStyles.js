@@ -1,4 +1,4 @@
-const styles = (theme) => ({
+const useStyles = (theme) => ({
   toolbar: {
     display: "flex",
     justifyContent: "space-between",
@@ -111,4 +111,4 @@ const styles = (theme) => ({
     color: "rgba(6, 156, 54, .8)",
   },
 });
-export default styles;
+export default useStyles;
