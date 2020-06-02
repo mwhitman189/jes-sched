@@ -74,7 +74,6 @@ export default function EventForm(props) {
     setSelectedEvent,
     selectedTeacher,
     validateRoomAndResource,
-    attendees,
   } = props;
 
   const [start, setStart] = useInputState(startTime);
@@ -305,9 +304,11 @@ export default function EventForm(props) {
               getOptionLabel={(option) =>
                 `${option.givenName} ${option.familyName}`
               }
-              onChange={(newMembers) => {
-                setMembers([...event.students, ...newMembers]);
-                console.log("members state: ", members, "event.attendees");
+              onChange={(event, newMembers) => {
+                event.students
+                  ? setMembers([...event.students, ...newMembers])
+                  : setMembers(newMembers);
+                console.log(newMembers);
               }}
               multiple
               filterSelectedOptions

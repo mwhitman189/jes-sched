@@ -180,7 +180,9 @@ const CustomToolbar = (props) => {
           teacher ? (
             <li
               className={
-                teacher.overThresholdTwoMins > 0
+                teacher.isPartTime
+                  ? classes.listItemYellow
+                  : teacher.overThresholdTwoMins > 0
                   ? classes.listItemRed
                   : teacher.overThresholdOneMins > 0
                   ? classes.listItemYellow
@@ -192,7 +194,9 @@ const CustomToolbar = (props) => {
             teachers.map((t) => (
               <li
                 className={
-                  t.overThresholdTwoMins > 0
+                  t.isPartTime
+                    ? classes.listItemYellow
+                    : t.overThresholdTwoMins > 0
                     ? classes.listItemRed
                     : t.overThresholdOneMins > 0
                     ? classes.listItemYellow
@@ -337,7 +341,9 @@ const CustomToolbar = (props) => {
           teacher ? (
             <li
               className={
-                teacher.overThresholdTwoMins > 0
+                teacher.isPartTime
+                  ? classes.listItemYellow
+                  : teacher.overThresholdTwoMins > 0
                   ? classes.listItemRed
                   : teacher.overThresholdOneMins > 0
                   ? classes.listItemYellow
@@ -349,7 +355,9 @@ const CustomToolbar = (props) => {
             teachers.map((t) => (
               <li
                 className={
-                  t.overThresholdTwoMins > 0
+                  t.isPartTime
+                    ? classes.listItemYellow
+                    : t.overThresholdTwoMins > 0
                     ? classes.listItemRed
                     : t.overThresholdOneMins > 0
                     ? classes.listItemYellow

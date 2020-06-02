@@ -45,7 +45,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function MySnackbarContentWrapper(props) {
+function ContentWrapper(props) {
   const classes = useStyles();
   const { className, message, onClose, variant, ...other } = props;
   const Icon = variantIcon[variant];
@@ -75,7 +75,7 @@ function MySnackbarContentWrapper(props) {
   );
 }
 
-MySnackbarContentWrapper.propTypes = {
+ContentWrapper.propTypes = {
   className: PropTypes.string,
   message: PropTypes.string,
   onClose: PropTypes.func,
@@ -100,11 +100,7 @@ export default function CustomizedSnackbars(props) {
         autoHideDuration={6000}
         onClose={handleClose}
       >
-        <MySnackbarContentWrapper
-          variant={variant}
-          message={msg}
-          onClose={handleClose}
-        />
+        <ContentWrapper variant={variant} message={msg} onClose={handleClose} />
       </Snackbar>
     </div>
   );
