@@ -33,19 +33,8 @@ router.delete("/delete/:id", auth, (req, res) => {
 });
 
 router.put("/update/:id", auth, (req, res) => {
-  Student.findById(req.params.id)
-    .then((student) => {
-      for (let itemFromBodyIndex in req.body) {
-        if (req.body.hasOwnProperty(itemFromBodyIndex)) {
-          student[itemFromBodyIndex] = req.body[itemFromBodyIndex];
-        }
-      }
-
-      student
-        .save()
-        .then(() => res.json("Student updated!"))
-        .catch((err) => res.status(400).json(`Error: ${err}`));
-    })
+  Student.findOneAndUpdate({ _id: req.params.id }, req.body)
+    .then(() => res.json("Student updated!"))
     .catch((err) => res.status(400).json(`Error: ${err}`));
 });
 

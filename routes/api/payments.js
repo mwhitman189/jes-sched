@@ -4,8 +4,8 @@ const auth = require("../../middleware/auth");
 
 router.get("/", auth, (req, res) => {
   Payment.find()
-    .then(payments => res.json(payments))
-    .catch(err => res.status(400).json(`Error: ${err}`));
+    .then((payments) => res.json(payments))
+    .catch((err) => res.status(400).json(`Error: ${err}`));
 });
 
 router.post("/add", auth, (req, res) => {
@@ -52,42 +52,31 @@ router.post("/add", auth, (req, res) => {
     incomeTaxReservation,
     taxRefund,
     grossPayment,
-    payroll
+    payroll,
   });
 
   newPayment
     .save()
     .then(() => res.json("Payment added!"))
-    .catch(err => res.status(400).json(`Error: ${err}`));
+    .catch((err) => res.status(400).json(`Error: ${err}`));
 });
 
 router.get("/:id", auth, (req, res) => {
   Payment.findById(req.params.id)
-    .then(payment => res.json(payment))
-    .catch(err => res.status(400).json(`Error: ${err}`));
+    .then((payment) => res.json(payment))
+    .catch((err) => res.status(400).json(`Error: ${err}`));
 });
 
 router.delete("/delete/:id", auth, (req, res) => {
   Payment.findByIdAndDelete(req.params.id)
     .then(() => res.json("Payment deleted"))
-    .catch(err => res.status(400).json(`Error: ${err}`));
+    .catch((err) => res.status(400).json(`Error: ${err}`));
 });
 
 router.put("/update/:id", auth, (req, res) => {
-  Payment.findById(req.params.id)
-    .then(payment => {
-      for (let itemFromBodyIndex in req.body) {
-        if (req.body.hasOwnProperty(itemFromBodyIndex)) {
-          payment[itemFromBodyIndex] = req.body[itemFromBodyIndex];
-        }
-      }
-
-      payment
-        .save()
-        .then(() => res.json("Payment updated!"))
-        .catch(err => res.status(400).json(`Error: ${err}`));
-    })
-    .catch(err => res.status(400).json(`Error: ${err}`));
+  Payment.findOneAndUpdate({ _id: req.params.id }, req.body)
+    .then(() => res.json("Payment updated!"))
+    .catch((err) => res.status(400).json(`Error: ${err}`));
 });
 
 module.exports = router;

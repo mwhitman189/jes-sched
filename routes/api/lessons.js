@@ -62,17 +62,9 @@ router.delete("/delete/:id", auth, (req, res) => {
 });
 
 router.put("/update/:id", auth, (req, res) => {
-  Lesson.findById(req.params.id).then((lesson) => {
-    for (let itemFromBodyIndex in req.body) {
-      if (req.body.hasOwnProperty(itemFromBodyIndex)) {
-        lesson[itemFromBodyIndex] = req.body[itemFromBodyIndex];
-      }
-    }
-    lesson
-      .save()
-      .then(() => res.json("Lesson updated!"))
-      .catch((err) => res.status(400).json(`Error: ${err}`));
-  });
+  Lesson.findOneAndUpdate({ _id: req.params.id }, req.body)
+    .then(() => res.json("Lesson updated!"))
+    .catch((err) => res.status(400).json(`Error: ${err}`));
 });
 
 module.exports = router;

@@ -33,19 +33,8 @@ router.delete("/delete/:id", auth, (req, res) => {
 });
 
 router.put("/update/:id", auth, (req, res) => {
-  Staff.findById(req.params.id)
-    .then((staff) => {
-      for (let itemFromBodyIndex in req.body) {
-        if (req.body.hasOwnProperty(itemFromBodyIndex)) {
-          staff[itemFromBodyIndex] = req.body[itemFromBodyIndex];
-        }
-      }
-
-      staff
-        .save()
-        .then(() => res.json("Staff member updated!"))
-        .catch((err) => res.status(400).json(`Error: ${err}`));
-    })
+  Staff.findOneAndUpdate({ _id: req.params.id }, req.body)
+    .then(() => res.json("Staff updated!"))
     .catch((err) => res.status(400).json(`Error: ${err}`));
 });
 
