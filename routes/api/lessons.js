@@ -10,6 +10,7 @@ router.get("/", auth, (req, res) => {
 
 router.post("/add", auth, (req, res) => {
   req.body.map((item) => {
+    const id = item.id;
     const title = item.title;
     const type = item.type;
     const start = Date.parse(item.start);
@@ -26,6 +27,7 @@ router.post("/add", auth, (req, res) => {
     const attendees = item.attendees;
 
     const newLesson = new Lesson({
+      id,
       title,
       type,
       start,
@@ -56,7 +58,7 @@ router.get("/:id", auth, (req, res) => {
 });
 
 router.delete("/delete/:id", auth, (req, res) => {
-  Lesson.findByIdAndDelete(req.params.id)
+  Lesson.deleteMany({ id: req.params.id })
     .then(() => res.json("Lesson deleted"))
     .catch((err) => res.status(400).json(`Error: ${err}`));
 });

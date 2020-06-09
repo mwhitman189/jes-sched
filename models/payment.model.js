@@ -1,5 +1,7 @@
 const mongoose = require("mongoose");
 
+mongoose.set("useFindAndModify", false);
+
 const Schema = mongoose.Schema;
 
 const PaymentSchema = new Schema(
@@ -24,10 +26,10 @@ const PaymentSchema = new Schema(
     incomeTaxReservation: { type: Number, required: true },
     taxRefund: { type: Number, required: true },
     grossPayment: { type: Number, required: true },
-    payroll: { type: Number, required: true }
+    payroll: { type: Number, required: true },
   },
   {
-    timestamps: true
+    timestamps: true,
   }
 );
 

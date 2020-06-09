@@ -1,6 +1,7 @@
 import React, { useState, useContext } from "react";
 import moment from "moment";
 import MomentUtils from "@date-io/moment";
+import { v4 as uuidv4 } from "uuid";
 import {
   ValidatorForm,
   TextValidator,
@@ -142,6 +143,7 @@ export default function EventForm(props) {
     e.preventDefault();
     toggleIsLoading(true);
     addEvent({
+      id: uuidv4(),
       title: title,
       start: start,
       end: moment(start).add(duration, "m").toDate(),

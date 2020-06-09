@@ -44,7 +44,7 @@ export default function (initialEvents) {
     },
     deleteEvent: async function (event) {
       await axios
-        .delete(`/api/lessons/delete/${event._id}`, tokenConfig(user))
+        .delete(`/api/lessons/delete/${event.id}`, tokenConfig(user))
         .then((res) => console.log(res.data))
         .catch((err) => console.log(err));
       getEvents(todaysDate);

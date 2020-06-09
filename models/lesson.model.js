@@ -1,9 +1,12 @@
 const Student = require("./student.model");
 const mongoose = require("mongoose");
 
+mongoose.set("useFindAndModify", false);
+
 const Schema = mongoose.Schema;
 const LessonSchema = new Schema(
   {
+    id: { type: String },
     title: { type: String, required: true },
     type: { type: String, required: true },
     start: { type: Date, required: true },
