@@ -16,10 +16,14 @@ export default function (initialEvents) {
         res.data.forEach((event) => {
           event.start = new Date(event.start);
           event.end = new Date(event.end);
-          // Check if last recurrence, and if so, create two more months of recurrences
-          if (event.isLast) {
-            if (dateTime >= event.start.getTime()) {
-              const newEvents = addNewEvent(event);
+          // Check if the event is the last recurrence, and if so, create one more month
+          // of recurrences
+          if (event.isRecurring) {
+            if (
+              dateTime >=
+              new Date(dateTime.getYear(), dateTime.getMonth() + 1, 0)
+            ) {
+              const newEvents = addNewEvent(event, true);
               res.data = [...res.data, newEvents];
             }
           }

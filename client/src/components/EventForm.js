@@ -175,6 +175,7 @@ export default function EventForm(props) {
       type: eventType,
       isRecurring: isRecurring,
       students: members,
+      attendees: members,
       isNewEvent: true,
     };
     editEvent(editedEvent);

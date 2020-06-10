@@ -18,8 +18,26 @@ const getRecurrences = (event) => {
     dtstart: new Date(event.start),
   });
   const twoMonthsRecurrences = rrule.between(months_start, months_end);
+  // Remove redundant event
   twoMonthsRecurrences.shift();
   return twoMonthsRecurrences;
+};
+
+const updateRecurrences = (event) => {
+  const now = new Date();
+  const month_start = new Date(now.getFullYear(), now.getMonth() + 1, 1);
+  const month_end = new Date(now.getFullYear(), now.getMonth() + 2, 0);
+  // Create an array of DateTimes for the recurrence of events.
+  const rrule = new RRule({
+    freq: RRule.WEEKLY,
+    count: 26,
+    interval: 1,
+    dtstart: new Date(event.start),
+  });
+  const oneMonthsRecurrences = rrule.between(month_start, month_end);
+  // Remove redundant event
+  oneMonthsRecurrences.shift();
+  return oneMonthsRecurrences;
 };
 
 const calcDutyHours = (dutyHours, start) => {
@@ -215,10 +233,15 @@ const createPayPeriodData = (events, teacher, monthStart, monthEnd) => {
   return datesData;
 };
 
-const addNewEvent = (event) => {
+const addNewEvent = (event, isNew) => {
   const newEvents = [];
   if (event.recur === true) {
-    const recurrences = getRecurrences(event);
+    let recurrences;
+    if (isNew === true) {
+      recurrences = getRecurrences(event);
+    } else {
+      recurrences = updateRecurrences(event);
+    }
     recurrences.map((r) => {
       const newEvent = {
         ...event,
@@ -259,6 +282,7 @@ const protectAction = (user, action) => {
 
 export {
   getRecurrences,
+  updateRecurrences,
   addNewEvent,
   addPayment,
   createPayPeriodData,
