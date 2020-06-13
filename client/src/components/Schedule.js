@@ -30,7 +30,7 @@ const Schedule = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [message, setMessage] = useState("");
   const [selectedTeacher, setSelectedTeacher] = useState("");
-  const [attendees, setAttendees] = useState([]);
+  const [absentees, setAbsentees] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isDetailView, setIsDetailView] = useState(false);
   const [anchorEl, setAnchorEl] = useState(false);
@@ -137,7 +137,7 @@ const Schedule = () => {
     setIsDetailView(!isDetailView);
     setAnchorEl(target.currentTarget);
     setSelectedEvent(event);
-    setAttendees(event.attendees);
+    setAbsentees(event.absentees);
   };
 
   return (
@@ -147,8 +147,8 @@ const Schedule = () => {
           isOpen={isDetailView}
           anchorEl={anchorEl}
           selectedEvent={selectedEvent}
-          attendees={attendees}
-          setAttendees={setAttendees}
+          absentees={absentees}
+          setAbsentees={setAbsentees}
         />
       )}
       {formType === "event" && (
@@ -161,8 +161,8 @@ const Schedule = () => {
           setSelectedEvent={setSelectedEvent}
           selectedTeacher={selectedTeacher}
           validateRoomAndResource={validateRoomAndResource}
-          attendees={attendees}
-          setAttendees={setAttendees}
+          absentees={absentees}
+          setAbsentees={setAbsentees}
         />
       )}
       {formType === "teacher" && (

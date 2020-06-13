@@ -43,5 +43,21 @@ const useStyles = makeStyles({
     margin: 0,
     padding: 0,
   },
+  sameDay: {
+    fontSize: ".5rem",
+  },
+  container: {
+    display: "flex",
+    flexDirection: "row",
+  },
+  absentees: {
+    fontSize: ".5rem",
+    padding: 0,
+    margin: 0,
+  },
+  absenteeX: {
+    color: "red",
+    fontSize: ".5rem",
+  },
 });
 export default useStyles;

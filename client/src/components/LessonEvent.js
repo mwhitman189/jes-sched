@@ -10,10 +10,18 @@ const LessonEvent = ({ event }) => {
       {event.sameDayCancellation ? (
         <div className={classes.cancelled}>
           <CloseIcon />
-          <p>当日</p>
+          <p className={classes.sameDay}>当日</p>
         </div>
+      ) : event.cancelled ? (
+        <CloseIcon className={classes.cancelled} />
       ) : (
-        event.cancelled && <CloseIcon className={classes.cancelled} />
+        event.absentees &&
+        event.absentees.map((a) => (
+          <div className={classes.container}>
+            <CloseIcon className={classes.absenteeX} />
+            <p className={classes.absentees}>{a.givenName}</p>
+          </div>
+        ))
       )}
       <div className={classes.group}>
         <div>{moment(event.start).format("HH:mm")}</div>

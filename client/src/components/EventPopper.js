@@ -24,23 +24,23 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function PositionedPopper(props) {
-  const { isOpen, anchorEl, selectedEvent, attendees, setAttendees } = props;
+  const { isOpen, anchorEl, selectedEvent, absentees, setAbsentees } = props;
   const { editEvent } = useContext(EventsContext);
   const { user } = useContext(UserContext);
   const classes = useStyles();
 
   const toggleAttendance = (id) => {
     if (user.user.role !== "teacher") {
-      let newAttendees;
-      if (attendees.some((a) => a._id === id)) {
-        newAttendees = attendees.filter((a) => a._id !== id);
+      let newAbsentees;
+      if (absentees.some((a) => a._id === id)) {
+        newAbsentees = absentees.filter((a) => a._id !== id);
       } else {
         const student = selectedEvent.students.find((s) => s._id === id);
-        newAttendees = [...attendees, student];
+        newAbsentees = [...absentees, student];
       }
-      const editedEvent = { ...selectedEvent, attendees: newAttendees };
+      const editedEvent = { ...selectedEvent, absentees: newAbsentees };
       editEvent(editedEvent);
-      return setAttendees(newAttendees);
+      return setAbsentees(newAbsentees);
     }
   };
 
@@ -58,10 +58,10 @@ export default function PositionedPopper(props) {
               {selectedEvent.students &&
                 selectedEvent.students.map((s) => {
                   let className;
-                  if (attendees.some((a) => a._id === s._id)) {
-                    className = classes.attending;
-                  } else {
+                  if (absentees.some((a) => a._id === s._id)) {
                     className = classes.absent;
+                  } else {
+                    className = classes.attending;
                   }
                   return (
                     <Typography

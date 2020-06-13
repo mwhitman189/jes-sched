@@ -153,7 +153,7 @@ export default function EventForm(props) {
       type: eventType,
       recur: isRecurring,
       students: members,
-      attendees: members,
+      absentees: [],
     });
     addTeachingMins(events, monthStart, monthEnd);
     toggleIsLoading(false);
@@ -175,7 +175,7 @@ export default function EventForm(props) {
       type: eventType,
       isRecurring: isRecurring,
       students: members,
-      attendees: members,
+      absentees: [],
       isNewEvent: true,
     };
     editEvent(editedEvent);

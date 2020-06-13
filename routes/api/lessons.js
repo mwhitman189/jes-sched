@@ -24,7 +24,7 @@ router.post("/add", auth, (req, res) => {
     const isNewEvent = item.isNewEvent;
     const isLast = item.isLast;
     const students = item.students;
-    const attendees = item.attendees;
+    const absentees = item.absentees;
 
     const newLesson = new Lesson({
       id,
@@ -41,7 +41,7 @@ router.post("/add", auth, (req, res) => {
       isNewEvent,
       isLast,
       students,
-      attendees,
+      absentees,
     });
 
     return newLesson
