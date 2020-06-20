@@ -16,15 +16,15 @@ export default function (initialEvents) {
         res.data.forEach((event) => {
           event.start = new Date(event.start);
           event.end = new Date(event.end);
-          // Check if the event is the last recurrence, and if so, create one more month
-          // of recurrences
           if (event.isRecurring) {
+            // Check if the event is the last recurrence, and if so, create one more month
+            // of recurrences
             if (
-              dateTime >=
-              new Date(dateTime.getYear(), dateTime.getMonth() + 1, 0)
+              dateTime >= new Date(dateTime.getYear(), dateTime.getMonth(), 28)
             ) {
               const newEvents = addNewEvent(event, true);
               res.data = [...res.data, newEvents];
+              console.log("dateTime reached the 28th day of the month");
             }
           }
         });
@@ -39,7 +39,7 @@ export default function (initialEvents) {
       getEvents(todaysDate);
     },
     addEvent: async function (event) {
-      const newEvents = addNewEvent(event);
+      const newEvents = addNewEvent(event, true);
       await axios
         .post("/api/lessons/add", newEvents, tokenConfig(user))
         .then((res) => console.log(res.data))

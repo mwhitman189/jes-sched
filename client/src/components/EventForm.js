@@ -90,6 +90,7 @@ export default function EventForm(props) {
     event ? event.type : ""
   );
   const [members, setMembers] = useInputState(event ? event.students : []);
+  const [absentees, setAbsentees] = useInputState(event ? event.absentees : []);
   const [isRecurring, toggleIsRecurring] = useToggleState(false);
   const [isLoading, toggleIsLoading] = useToggleState(false);
 
@@ -175,7 +176,7 @@ export default function EventForm(props) {
       type: eventType,
       isRecurring: isRecurring,
       students: members,
-      absentees: [],
+      absentees: absentees,
       isNewEvent: true,
     };
     editEvent(editedEvent);
@@ -307,14 +308,16 @@ export default function EventForm(props) {
               getOptionLabel={(option) =>
                 `${option.givenName} ${option.familyName}`
               }
-              onChange={(event, newMembers) => {
+              onChange={(e, newMembers) => {
                 event.students
                   ? setMembers([...event.students, ...newMembers])
                   : setMembers(newMembers);
-                console.log(newMembers);
               }}
               multiple
-              filterSelectedOptions
+              defaultValue={event.students}
+              filterOptions={(students, state) =>
+                students.filter((s) => members.every((m) => s._id !== m._id))
+              }
               renderInput={(params) => (
                 <TextField {...params} label="Students" variant="outlined" />
               )}

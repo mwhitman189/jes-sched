@@ -58,7 +58,13 @@ router.get("/:id", auth, (req, res) => {
 });
 
 router.delete("/delete/:id", auth, (req, res) => {
-  Lesson.deleteMany({ id: req.params.id })
+  Lesson.deleteMany({ id: req.params.id }, function (err, result) {
+    if (err) {
+      res.send(err);
+    } else {
+      res.send(result);
+    }
+  })
     .then(() => res.json("Lesson deleted"))
     .catch((err) => res.status(400).json(`Error: ${err}`));
 });

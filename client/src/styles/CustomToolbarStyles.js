@@ -23,6 +23,7 @@ const useStyles = (theme) => ({
   },
   navBtn: {
     display: "flex",
+    alignItems: "center",
     color: "#fff",
     cursor: "pointer",
     background: "rgb(20,71,207)",

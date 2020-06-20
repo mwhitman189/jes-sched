@@ -35,8 +35,6 @@ const updateRecurrences = (event) => {
     dtstart: new Date(event.start),
   });
   const oneMonthsRecurrences = rrule.between(month_start, month_end);
-  // Remove redundant event
-  oneMonthsRecurrences.shift();
   return oneMonthsRecurrences;
 };
 
@@ -239,8 +237,10 @@ const addNewEvent = (event, isNew) => {
     let recurrences;
     if (isNew === true) {
       recurrences = getRecurrences(event);
+      console.log("Is New", recurrences);
     } else {
       recurrences = updateRecurrences(event);
+      console.log("Is an update", recurrences);
     }
     recurrences.map((r) => {
       const newEvent = {

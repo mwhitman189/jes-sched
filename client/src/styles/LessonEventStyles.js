@@ -36,6 +36,7 @@ const useStyles = makeStyles({
   },
   cancelled: {
     display: "flex",
+    position: "absolute",
     color: "red",
     position: "relative",
     fontWeight: "800",
@@ -44,20 +45,26 @@ const useStyles = makeStyles({
     padding: 0,
   },
   sameDay: {
+    position: "absolute",
     fontSize: ".5rem",
   },
   container: {
     display: "flex",
     flexDirection: "row",
+    position: "relative",
+    top: 0,
   },
   absentees: {
+    color: "rgba(0, 0, 0, .5)",
     fontSize: ".5rem",
+    position: "absolute",
     padding: 0,
     margin: 0,
   },
   absenteeX: {
-    color: "red",
+    color: "rgba(217, 18, 4, .5)",
     fontSize: ".5rem",
+    position: "relative",
   },
 });
 export default useStyles;
