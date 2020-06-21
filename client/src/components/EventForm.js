@@ -315,6 +315,8 @@ export default function EventForm(props) {
               }}
               multiple
               defaultValue={event.students}
+              // Prevent event participants from showing up in the student list to prevent
+              // double selection
               filterOptions={(students, state) =>
                 students.filter((s) => members.every((m) => s._id !== m._id))
               }
