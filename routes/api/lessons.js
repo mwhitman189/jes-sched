@@ -9,40 +9,12 @@ router.get("/", auth, (req, res) => {
 });
 
 router.post("/add", auth, (req, res) => {
+  // Loop through lessons if recurrences are present
   req.body.map((item) => {
-    const id = item.id;
-    const title = item.title;
-    const type = item.type;
-    const start = Date.parse(item.start);
-    const end = Date.parse(item.end);
-    const duration = Number(item.duration);
-    const resourceId = Number(item.resourceId);
-    const room = Number(item.room);
-    const hide = item.hide;
-    const recur = item.recur;
-    const isHoliday = item.isHoliday;
-    const isNewEvent = item.isNewEvent;
-    const isLast = item.isLast;
-    const students = item.students;
-    const absentees = item.absentees;
-
-    const newLesson = new Lesson({
-      id,
-      title,
-      type,
-      start,
-      end,
-      duration,
-      resourceId,
-      room,
-      hide,
-      recur,
-      isHoliday,
-      isNewEvent,
-      isLast,
-      students,
-      absentees,
-    });
+    const newLesson = new Lesson({});
+    for (let itemFromBodyIndex in item) {
+      newLesson[itemFromBodyIndex] = item[itemFromBodyIndex];
+    }
 
     return newLesson
       .save()

@@ -24,7 +24,7 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import styles from "../styles/CustomToolbarStyles";
 import "react-big-calendar/lib/sass/toolbar.scss";
 
-// Debounce to prevent re-renders on every single dimension change
+// Debounce to prevent re-renders on every dimension change
 function debounce(fn, ms) {
   let timer;
   return (_) => {

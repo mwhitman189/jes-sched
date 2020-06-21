@@ -309,14 +309,12 @@ export default function EventForm(props) {
                 `${option.givenName} ${option.familyName}`
               }
               onChange={(e, newMembers) => {
-                event.students
-                  ? setMembers([...event.students, ...newMembers])
-                  : setMembers(newMembers);
+                setMembers(newMembers);
               }}
               multiple
               defaultValue={event.students}
               // Prevent event participants from showing up in the student list to prevent
-              // double selection
+              // multiple selection
               filterOptions={(students, state) =>
                 students.filter((s) => members.every((m) => s._id !== m._id))
               }
