@@ -25,6 +25,7 @@ import styles from "../styles/CustomToolbarStyles";
 import "react-big-calendar/lib/sass/toolbar.scss";
 
 // Debounce to prevent re-renders on every dimension change
+
 function debounce(fn, ms) {
   let timer;
   return (_) => {
@@ -34,6 +35,11 @@ function debounce(fn, ms) {
       fn.apply(this, arguments);
     }, ms);
   };
+}
+
+// TODO: Add this function to the teachers' teaching time display to display hours
+function calcMinsToHours(mins) {
+  return Math.round((mins / 60 + Number.EPSILON) * 100) / 100;
 }
 
 const CustomToolbar = (props) => {
@@ -201,7 +207,7 @@ const CustomToolbar = (props) => {
                     ? classes.listItemYellow
                     : classes.listItem
                 }
-                key={t.resourceId}
+                key={`teacher's resourceID: ${t.resourceId}`}
               >{`${t.name}: ${t.teachingMins}`}</li>
             ))
           )
@@ -362,7 +368,7 @@ const CustomToolbar = (props) => {
                     ? classes.listItemYellow
                     : classes.listItem
                 }
-                key={t.resourceId}
+                key={`teacher: ${t.resourceId}`}
               >{`${t.name}: ${t.teachingMins}`}</li>
             ))
           )

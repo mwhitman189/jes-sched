@@ -9,9 +9,6 @@ export default (initialTeachers) => {
   const [teachers, setTeachers] = useState(initialTeachers);
 
   const updateTeacher = async (teacher) => {
-    const idx = teachers.findIndex((t) => t._id === teacher._id);
-    const updatedTeachers = [...teachers];
-
     const updatedTeacher = {
       ...teacher,
       resourceTitle: teacher.resourceTitle,
@@ -26,9 +23,7 @@ export default (initialTeachers) => {
       overThresholdTwoMins: teacher.overThresholdTwoMins,
       minsByDate: teacher.minsByDate,
     };
-    updatedTeachers.splice(idx, 1, updatedTeacher);
 
-    setTeachers(updatedTeachers);
     await axios
       .put(
         `/api/teachers/update/${teacher._id}`,
@@ -37,6 +32,7 @@ export default (initialTeachers) => {
       )
       .then((res) => console.log(res.data))
       .catch((err) => console.log(err));
+    return updatedTeacher;
   };
 
   return {
@@ -68,7 +64,11 @@ export default (initialTeachers) => {
     },
     addTeachingMins: (events, monthStart, monthEnd) => {
       if (teachers.length > 0) {
+        const updatedTeachers = [...teachers];
+        let updatedTeacher;
+        let idx;
         teachers.forEach((teacher) => {
+          idx = teachers.findIndex((t) => t._id === teacher._id);
           const datesData = createPayPeriodData(
             events,
             teacher,
@@ -82,8 +82,11 @@ export default (initialTeachers) => {
                 : 0;
             }
           }
-          updateTeacher(teacher);
+          updatedTeacher = updateTeacher(teacher);
         });
+        updatedTeachers.splice(idx, 1, updatedTeacher);
+
+        setTeachers(updatedTeachers);
       }
     },
   };

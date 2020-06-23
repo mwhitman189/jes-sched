@@ -9,7 +9,7 @@ const defaultTeachers = [
     familyName: "DefaultTeacherLN",
     email: "default@default.com",
     otThreshold: 0,
-    teachingMins: 0,
+    teachingHours: 0,
     outsideDutyMins: 0,
     holidayMins: 0,
     travelAllowance: 0,

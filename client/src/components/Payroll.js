@@ -97,7 +97,6 @@ const Payroll = (props) => {
           teachingMinsByDate[i].travelAllowance,
           teachingMinsByDate[i].travelExpenses
         );
-        console.log(teachingMinsByDate[i].holidayMins);
       } else {
         newRow = createData(
           i,
