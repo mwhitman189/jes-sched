@@ -52,12 +52,14 @@ const Schedule = () => {
   }, [events]);
 
   const moveEvent = ({ event, resourceId, start, end }) => {
+    console.log("Attempting to move...");
     const updatedEvent = { ...event, resourceId, start, end };
     handleDoubleClick(updatedEvent);
   };
 
   const validateRoomAndResource = (event) => {
     const otherEvents = events.filter((e) => event._id !== e._id);
+    console.log(event);
 
     if (!validateRoom(otherEvents, event, parseInt(event.duration))) {
       setSelectedEvent(event);
