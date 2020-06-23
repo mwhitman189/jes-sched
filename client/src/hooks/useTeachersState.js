@@ -1,6 +1,6 @@
 import { useState, useContext } from "react";
 import axios from "axios";
-import { createPayPeriodData } from "../helperFunctions";
+import { createPayPeriodData } from "../helpers/helperFunctions";
 import { tokenConfig } from "../reducers/loadUserReducer";
 import { UserContext } from "../context/UserContext";
 

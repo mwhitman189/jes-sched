@@ -1,6 +1,6 @@
 import { useState, useContext } from "react";
 import axios from "axios";
-import { addNewEvent } from "../helperFunctions";
+import { addNewEvent } from "../helpers/helperFunctions";
 import { UserContext } from "../context/UserContext";
 import { tokenConfig } from "../reducers/loadUserReducer";
 

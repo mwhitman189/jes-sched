@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import CustomDnDCalendar from "./CustomDnDCalendar";
-import { protectAction } from "../helperFunctions";
+import { protectAction } from "../helpers/helperFunctions";
 import { validateRoom, validateTeacher } from "../validators";
 import { TeachersContext } from "../context/TeachersContext";
 import { EventsContext } from "../context/EventsContext";

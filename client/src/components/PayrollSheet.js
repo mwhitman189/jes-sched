@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import contracts from "../contracts";
+import contracts from "../constants/contracts";
 import { withStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -8,7 +8,7 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import { TableFooter } from "@material-ui/core";
-import { addPayment } from "../helperFunctions";
+import { addPayment } from "../helpers/helperFunctions";
 import { blue } from "@material-ui/core/colors";
 
 const styles = (theme) => ({
