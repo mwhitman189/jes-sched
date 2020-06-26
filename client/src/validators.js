@@ -1,10 +1,12 @@
 import moment from "moment";
 
 function validateRoom(events, event) {
-  return events.every((e) => {
+  const otherEvents = [...events.filter((e) => e._id !== event._id)];
+
+  otherEvents.forEach((otherEvent) => {
     if (
       testDateOverlap(
-        [e.start, e.end],
+        [otherEvent.start, otherEvent.end],
         [
           moment(new Date(event.start)),
           moment(
@@ -13,14 +15,16 @@ function validateRoom(events, event) {
         ]
       )
     ) {
-      return parseInt(e.room) !== parseInt(event.room);
+      return parseInt(otherEvent.room) !== parseInt(event.room);
     }
-    return true;
   });
+  return true;
 }
 
 function validateTeacher(events, event) {
-  return events.every((otherEvent) => {
+  const otherEvents = [...events.filter((e) => e._id !== event._id)];
+
+  otherEvents.forEach((otherEvent) => {
     if (
       testDateOverlap(
         [otherEvent.start, otherEvent.end],
@@ -36,8 +40,8 @@ function validateTeacher(events, event) {
     ) {
       return parseInt(otherEvent.resourceId) !== parseInt(event.resourceId);
     }
-    return true;
   });
+  return true;
 }
 
 function testDateOverlap(dateArr, testDateArr) {

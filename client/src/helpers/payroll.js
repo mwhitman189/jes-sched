@@ -1,42 +1,6 @@
-import axios from "axios";
-import { RRule } from "rrule";
 import moment from "moment";
 
 const JapaneseHolidays = require("japanese-holidays");
-// TODO: Edit months_start and months_end to accomodate renewal of recurrences.
-const getRecurrences = (event) => {
-  const now = new Date();
-  // Create start and end dates for the current month to calc
-  // teaching minutes
-  const months_start = new Date(now.getFullYear(), now.getMonth(), 1);
-  const months_end = new Date(now.getFullYear(), now.getMonth() + 2, 0);
-  // Create an array of DateTimes for the recurrence of events.
-  const rrule = new RRule({
-    freq: RRule.WEEKLY,
-    count: 26,
-    interval: 1,
-    dtstart: new Date(event.start),
-  });
-  const twoMonthsRecurrences = rrule.between(months_start, months_end);
-  // Remove redundant event
-  twoMonthsRecurrences.shift();
-  return twoMonthsRecurrences;
-};
-
-const updateRecurrences = (event) => {
-  const now = new Date();
-  const month_start = new Date(now.getFullYear(), now.getMonth() + 1, 1);
-  const month_end = new Date(now.getFullYear(), now.getMonth() + 2, 0);
-  // Create an array of DateTimes for the recurrence of events.
-  const rrule = new RRule({
-    freq: RRule.WEEKLY,
-    count: 26,
-    interval: 1,
-    dtstart: new Date(event.start),
-  });
-  const oneMonthsRecurrences = rrule.between(month_start, month_end);
-  return oneMonthsRecurrences;
-};
 
 const calcDutyHours = (dutyHours, start) => {
   // Check whether the current event is earliest lesson
@@ -48,16 +12,6 @@ const calcDutyHours = (dutyHours, start) => {
   }
 
   return dutyHours;
-};
-
-// Check whether a cancellation took place on the same day of the class
-const checkForSameDate = (eventStart) => {
-  if (eventStart) {
-    const todaysDate = new Date();
-    return eventStart.getDate() === todaysDate.getDate();
-  } else {
-    return console.log("Event does not exist");
-  }
 };
 
 const calcOutsideDutyMins = (
@@ -231,61 +185,4 @@ const createPayPeriodData = (events, teacher, monthStart, monthEnd) => {
   return datesData;
 };
 
-const addNewEvent = (event, isNew) => {
-  const newEvents = [];
-  if (event.recur === true) {
-    let recurrences;
-    if (isNew === true) {
-      recurrences = getRecurrences(event);
-      console.log("Is New", recurrences);
-    } else {
-      recurrences = updateRecurrences(event);
-      console.log("Is an update", recurrences);
-    }
-    recurrences.map((r) => {
-      const newEvent = {
-        ...event,
-        start: r,
-        end: moment(r).add(event.duration, "m").toDate(),
-        isNewEvent: false,
-        isLast: false,
-      };
-      if (JapaneseHolidays.isHoliday(r)) {
-        newEvent.isHoliday = true;
-      }
-      newEvents.push(newEvent);
-    });
-    newEvents[newEvents.length - 1].isLast = true;
-  }
-  if (JapaneseHolidays.isHoliday(event.start)) {
-    event = { ...event, isHoliday: true };
-  }
-  event = { ...event, isNewEvent: true };
-  newEvents.unshift(event);
-
-  return newEvents;
-};
-
-const addPayment = async (newPayment) => {
-  return await axios
-    .post(`/payments/add`, newPayment)
-    .then((res) => console.log(res.data))
-    .catch((err) => console.log(err));
-};
-
-const protectAction = (user, action) => {
-  if (user.user.role === "staff") {
-    return action;
-  }
-  return console.log("Not gonna do it. Wouldn't be prudent.");
-};
-
-export {
-  getRecurrences,
-  updateRecurrences,
-  addNewEvent,
-  addPayment,
-  createPayPeriodData,
-  protectAction,
-  checkForSameDate,
-};
+export { createPayPeriodData };

@@ -8,10 +8,10 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import { TableFooter } from "@material-ui/core";
-import { addPayment } from "../helpers/helperFunctions";
+import { addDbPayment } from "../dbCalls";
 import { blue } from "@material-ui/core/colors";
 
-const styles = (theme) => ({
+const styles = () => ({
   table: {
     padding: "1rem",
     maxWidth: "90vw",
@@ -164,7 +164,7 @@ class PayrollSheet extends Component {
         grossPayment: grossPayment,
         payroll: payroll,
       };
-      addPayment(newPayment);
+      addDbPayment(newPayment);
       setFormType("");
     };
 

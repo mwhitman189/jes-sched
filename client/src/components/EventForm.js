@@ -13,7 +13,7 @@ import { validateRoom, validateTeacher } from "../validators";
 import { TeachersContext } from "../context/TeachersContext";
 import { StudentsContext } from "../context/StudentsContext";
 import { EventsContext } from "../context/EventsContext";
-import { checkForSameDate } from "../helpers/helperFunctions";
+import { checkForSameDate } from "../helpers/utilities";
 import roomList from "../constants/rooms";
 import lessonTypes from "../constants/lessonTypes";
 import { makeStyles } from "@material-ui/core/styles";

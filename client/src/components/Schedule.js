@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import CustomDnDCalendar from "./CustomDnDCalendar";
-import { protectAction } from "../helpers/helperFunctions";
+import { protectAction } from "../helpers/utilities";
 import { validateRoom, validateTeacher } from "../validators";
 import { TeachersContext } from "../context/TeachersContext";
 import { EventsContext } from "../context/EventsContext";
@@ -52,22 +52,30 @@ const Schedule = () => {
   }, [events]);
 
   const moveEvent = ({ event, resourceId, start, end }) => {
-    console.log("Attempting to move...");
-    const updatedEvent = { ...event, resourceId, start, end };
+    const updatedEvent = {
+      ...event,
+      resourceId: resourceId,
+      start: start,
+      end: end,
+    };
     handleDoubleClick(updatedEvent);
   };
 
-  const validateRoomAndResource = (event) => {
-    const otherEvents = events.filter((e) => event._id !== e._id);
-    console.log(event);
+  const validateRoomAndResource = (event, resourceId, start, end) => {
+    const updatedEvent = {
+      ...event,
+      resourceId: resourceId,
+      start: start,
+      end: end,
+    };
 
-    if (!validateRoom(otherEvents, event, parseInt(event.duration))) {
-      setSelectedEvent(event);
+    if (!validateRoom(events, updatedEvent, parseInt(updatedEvent.duration))) {
       handleToggleSnackbar("Room Conflict. Please choose another room or time");
       return false;
     }
-    if (!validateTeacher(otherEvents, event)) {
-      setSelectedEvent(event);
+    if (
+      !validateTeacher(events, updatedEvent, parseInt(updatedEvent.duration))
+    ) {
       handleToggleSnackbar(
         "Teacher Conflict. Please choose another teacher or time"
       );
@@ -80,7 +88,7 @@ const Schedule = () => {
   // If there is a conflict, prevent the move and flash a conflict snackbar
   const handleMove = ({ event, resourceId, start, end }) => {
     setIsLoading(true);
-    if (validateRoomAndResource(event, resourceId, start)) {
+    if (validateRoomAndResource(event, resourceId, start, end)) {
       moveEvent({
         event,
         resourceId,
