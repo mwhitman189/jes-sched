@@ -87,8 +87,9 @@ export default function Login() {
         dispatch({ type: "LOGIN_FAILURE" });
         errorsDispatch({
           type: "GET_ERRORS",
-          msg: err.response.data.msg,
+          msg: err.msg,
         });
+        return console.log("Failed to log in");
       });
     return console.log("Success! Logged In");
   };

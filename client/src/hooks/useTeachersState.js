@@ -1,6 +1,6 @@
 import { useState, useContext } from "react";
 import axios from "axios";
-import { createPayPeriodData } from "../helperFunctions";
+import { createPayPeriodData } from "../helpers/payroll";
 import { tokenConfig } from "../reducers/loadUserReducer";
 import { UserContext } from "../context/UserContext";
 
@@ -8,7 +8,7 @@ export default (initialTeachers) => {
   const { user } = useContext(UserContext);
   const [teachers, setTeachers] = useState(initialTeachers);
 
-  const updateTeacher = async (teacher) => {
+  const updateTeacher = (teacher) => {
     const updatedTeacher = {
       ...teacher,
       resourceTitle: teacher.resourceTitle,
@@ -24,7 +24,7 @@ export default (initialTeachers) => {
       minsByDate: teacher.minsByDate,
     };
 
-    await axios
+    axios
       .put(
         `/api/teachers/update/${teacher._id}`,
         updatedTeacher,
@@ -83,8 +83,8 @@ export default (initialTeachers) => {
             }
           }
           updatedTeacher = updateTeacher(teacher);
+          updatedTeachers[idx] = updatedTeacher;
         });
-        updatedTeachers.splice(idx, 1, updatedTeacher);
 
         setTeachers(updatedTeachers);
       }

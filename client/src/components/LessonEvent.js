@@ -17,7 +17,7 @@ const LessonEvent = ({ event }) => {
       ) : (
         event.absentees &&
         event.absentees.map((a) => (
-          <div className={classes.container}>
+          <div key={a._id} className={classes.container}>
             <CloseIcon className={classes.absenteeX} />
             <p className={classes.absentees}>{a.givenName}</p>
           </div>

@@ -4,7 +4,7 @@ import ReactToPrint from "react-to-print";
 import useToggleState from "../hooks/useToggleState";
 import { EventsContext } from "../context/EventsContext";
 import { TeachersContext } from "../context/TeachersContext";
-import { createPayPeriodData } from "../helperFunctions";
+import { createPayPeriodData } from "../helpers/payroll";
 import PayrollSheet from "./PayrollSheet";
 import { makeStyles } from "@material-ui/core/styles";
 import Avatar from "@material-ui/core/Avatar";
