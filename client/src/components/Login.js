@@ -82,16 +82,17 @@ export default function Login() {
           type: "USER_LOADED",
           payload: res.data,
         });
+        return console.log("Success! Logged In");
       })
       .catch((err) => {
+        console.log(err.response.data);
         dispatch({ type: "LOGIN_FAILURE" });
         errorsDispatch({
           type: "GET_ERRORS",
-          msg: err.msg,
+          msg: err.response.data.msg,
         });
         return console.log("Failed to log in");
       });
-    return console.log("Success! Logged In");
   };
 
   return (

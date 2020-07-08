@@ -8,7 +8,6 @@ import { UserContext } from "../context/UserContext";
 import { WorkWeek } from "./CustomViews";
 import LessonEvent from "./LessonEvent";
 import CustomToolbar from "./CustomToolbar";
-import "react-big-calendar/lib/sass/toolbar.scss";
 
 const localizer = momentLocalizer(moment);
 const DragAndDropCalendar = withDragAndDrop(Calendar);
@@ -136,7 +135,7 @@ function CustomDnDCalendar(props) {
     <DragAndDropCalendar
       style={{ width: "100vw", maxHeight: "96vh" }}
       localizer={localizer}
-      views={{ week: WorkWeek }}
+      views={{ week: WorkWeek, day: true }}
       defaultView="week"
       events={events}
       onEventDrop={handleMove}
@@ -149,6 +148,7 @@ function CustomDnDCalendar(props) {
       onSelectEvent={handleOpenDetailView}
       onDoubleClickEvent={handleDoubleClick}
       eventPropGetter={eventStyleGetter}
+      invertResourcesAndDates
       step={5}
       timeslots={12}
       min={minTime}

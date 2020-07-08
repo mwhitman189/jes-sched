@@ -16,7 +16,7 @@ import Payroll from "./Payroll";
 import Footer from "./Footer";
 import EventPopper from "./EventPopper";
 import "react-big-calendar/lib/sass/styles.scss";
-import "react-big-calendar/lib/addons/dragAndDrop/styles.scss";
+import "../styles/react-big-calendarStyles.scss";
 
 const Schedule = () => {
   const { getTeachers, addTeachingMins } = useContext(TeachersContext);

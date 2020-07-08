@@ -24,9 +24,9 @@ const authReducer = (state, action) => {
         isLoading: false,
       };
     case "AUTH_ERROR":
-    case "LOGIN_FAIL":
+    case "LOGIN_FAILURE":
     case "LOGOUT_SUCCESS":
-    case "REGISTER_FAIL":
+    case "REGISTRATION_FAILURE":
       localStorage.removeItem("token");
       return {
         ...state,
