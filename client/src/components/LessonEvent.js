@@ -56,15 +56,15 @@ const Absentees = styled.p`
 
 const EventInfo = styled.div`
   display: flex;
-  flexdirection: column;
-  justifycontent: space-between;
+  flex-direction: column;
+  justify-content: space-between;
 `;
 
 const InnerGroup = styled.div`
   fontsize: 0.7rem;
-  fontweight: 600;
+  font-weight: 600;
   display: flex;
-  justifycontent: space-between;
+  justify-content: space-between;
   padding: 0;
 `;
 
@@ -78,7 +78,7 @@ const Title = styled.div`
 const Room = styled.span`
   fontsize: 0.55rem;
   color: #1b1c1c;
-  paddingleft: 0.1rem;
+  padding-left: 0.1rem;
 `;
 
 const LessonEvent = ({ event }) => {
