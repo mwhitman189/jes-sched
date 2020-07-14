@@ -3,3 +3,16 @@
 .rbc-day-slot .rbc-events-container {
   margin: 0;
 }
+
+.rbc-event-label {
+  text-overflow: clip;
+  font-size: 0.6rem;
+}
+
+.rbc-event {
+  padding: 0;
+}
+
+.rbc-event-label {
+  display: none;
+}

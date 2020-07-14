@@ -30,7 +30,11 @@ router.get("/:id", auth, (req, res) => {
 });
 
 router.delete("/delete/:id", auth, (req, res) => {
-  Lesson.deleteMany({ id: req.params.id }, function (err, result) {
+  const now = new Date();
+  Lesson.deleteMany({ id: req.params.id, start: { $gte: now } }, function (
+    err,
+    result
+  ) {
     if (err) {
       res.send(err);
     } else {
