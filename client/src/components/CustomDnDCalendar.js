@@ -166,7 +166,7 @@ function CustomDnDCalendar(props) {
           />
         ),
       }}
-      resizableAccessor={() => false}
+      resizableAccessor={false}
     />
   );
 }
