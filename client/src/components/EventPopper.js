@@ -9,7 +9,7 @@ import Paper from "@material-ui/core/Paper";
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    width: 500,
+    zIndex: 15,
   },
   attending: {
     cursor: "pointer",
@@ -45,38 +45,37 @@ export default function PositionedPopper(props) {
   };
 
   return (
-    <div className={classes.root}>
-      <Popper
-        open={isOpen}
-        anchorEl={anchorEl}
-        placement={"left-end"}
-        transition
-      >
-        {({ TransitionProps }) => (
-          <Fade {...TransitionProps} timeout={350}>
-            <Paper>
-              {selectedEvent.students &&
-                selectedEvent.students.map((s) => {
-                  let className;
-                  if (absentees.some((a) => a._id === s._id)) {
-                    className = classes.absent;
-                  } else {
-                    className = classes.attending;
-                  }
-                  return (
-                    <Typography
-                      key={`student number ${s._id}`}
-                      className={className}
-                      onClick={() => toggleAttendance(s._id)}
-                    >
-                      {s.givenName}
-                    </Typography>
-                  );
-                })}
-            </Paper>
-          </Fade>
-        )}
-      </Popper>
-    </div>
+    <Popper
+      open={isOpen}
+      anchorEl={anchorEl}
+      placement={"left-end"}
+      transition
+      className={classes.root}
+    >
+      {({ TransitionProps }) => (
+        <Fade {...TransitionProps} timeout={350}>
+          <Paper>
+            {selectedEvent.students &&
+              selectedEvent.students.map((s) => {
+                let className;
+                if (absentees.some((a) => a._id === s._id)) {
+                  className = classes.absent;
+                } else {
+                  className = classes.attending;
+                }
+                return (
+                  <Typography
+                    key={`student number ${s._id}`}
+                    className={className}
+                    onClick={() => toggleAttendance(s._id)}
+                  >
+                    {s.givenName}
+                  </Typography>
+                );
+              })}
+          </Paper>
+        </Fade>
+      )}
+    </Popper>
   );
 }

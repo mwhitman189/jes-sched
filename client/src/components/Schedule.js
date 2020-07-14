@@ -112,6 +112,7 @@ const Schedule = () => {
 
   const handleDoubleClick = (event) => {
     setIsLoading(true);
+    setIsDetailView(false);
     setStartTime(event.start);
     setSelectedEvent(event);
     setFormType("event");
