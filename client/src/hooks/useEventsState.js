@@ -6,6 +6,7 @@ import {
   addDbEvents,
   editDbEvent,
   deleteDbEvent,
+  deleteDbEvents,
 } from "../dbCalls";
 
 export default function (initialEvents) {
@@ -25,6 +26,10 @@ export default function (initialEvents) {
     },
     deleteEvent: async function (event) {
       deleteDbEvent(event, user);
+      getDbEvents(todaysDate, setEvents, user);
+    },
+    deleteEvents: async function (event) {
+      deleteDbEvents(event, user);
       getDbEvents(todaysDate, setEvents, user);
     },
     editEvent: async function (editedEvent) {

@@ -48,7 +48,14 @@ const editDbEvent = async (editedEvent, user) => {
 
 const deleteDbEvent = async (event, user) => {
   await axios
-    .delete(`/api/lessons/delete/${event.id}`, tokenConfig(user))
+    .delete(`/api/lessons/delete/one/${event._id}`, tokenConfig(user))
+    .then((res) => console.log(res.data))
+    .catch((err) => console.log(err));
+};
+
+const deleteDbEvents = async (event, user) => {
+  await axios
+    .delete(`/api/lessons/delete/all/${event.id}`, tokenConfig(user))
     .then((res) => console.log(res.data))
     .catch((err) => console.log(err));
 };
@@ -69,4 +76,11 @@ const addDbPayment = async (newPayment, user) => {
 
 // ** Users **
 
-export { addDbPayment, getDbEvents, addDbEvents, editDbEvent, deleteDbEvent };
+export {
+  addDbPayment,
+  getDbEvents,
+  addDbEvents,
+  editDbEvent,
+  deleteDbEvent,
+  deleteDbEvents,
+};

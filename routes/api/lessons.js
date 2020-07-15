@@ -16,7 +16,7 @@ router.post("/add", auth, (req, res) => {
       newLesson[itemFromBodyIndex] = item[itemFromBodyIndex];
     }
 
-    return newLesson
+    newLesson
       .save()
       .then(() => res.json("Lesson added!"))
       .catch((err) => res.status(400).json(`Error: ${err}`));
@@ -29,18 +29,15 @@ router.get("/:id", auth, (req, res) => {
     .catch((err) => res.status(400).json(`Error: ${err}`));
 });
 
-router.delete("/delete/:id", auth, (req, res) => {
+router.delete("/delete/one/:id", auth, (req, res) => {
+  Lesson.findByIdAndDelete(req.params.id)
+    .then(() => res.json("Lesson deleted"))
+    .catch((err) => res.status(400).json(`Error: ${err}`));
+});
+
+router.delete("/delete/all/:id", auth, (req, res) => {
   const now = new Date();
-  Lesson.deleteMany({ id: req.params.id, start: { $gte: now } }, function (
-    err,
-    result
-  ) {
-    if (err) {
-      res.send(err);
-    } else {
-      res.send(result);
-    }
-  })
+  Lesson.deleteMany({ id: req.params.id })
     .then(() => res.json("Lesson deleted"))
     .catch((err) => res.status(400).json(`Error: ${err}`));
 });

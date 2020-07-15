@@ -62,7 +62,7 @@ const useStyles = makeStyles((theme) => ({
 export default function EventForm(props) {
   const classes = useStyles();
   const { addTeachingMins } = useContext(TeachersContext);
-  const { events, addEvent, editEvent, deleteEvent } = useContext(
+  const { events, addEvent, editEvent, deleteEvent, deleteEvents } = useContext(
     EventsContext
   );
   const { teachers } = useContext(TeachersContext);
@@ -203,6 +203,14 @@ export default function EventForm(props) {
   const handleDeleteEvent = () => {
     toggleIsLoading(true);
     deleteEvent(event);
+    addTeachingMins(events, monthStart, monthEnd);
+    toggleIsLoading(false);
+    hideForm();
+  };
+
+  const handleDeleteEvents = () => {
+    toggleIsLoading(true);
+    deleteEvents(event);
     addTeachingMins(events, monthStart, monthEnd);
     toggleIsLoading(false);
     hideForm();
@@ -368,7 +376,10 @@ export default function EventForm(props) {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleDeleteEvent} color="secondary">
-            Delete Lesson
+            Delete One
+          </Button>
+          <Button onClick={handleDeleteEvents} color="secondary">
+            Delete All
           </Button>
           <Button onClick={handleCancelEvent} color="secondary">
             Cancel Lesson
