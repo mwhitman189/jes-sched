@@ -36,8 +36,9 @@ router.delete("/delete/one/:id", auth, (req, res) => {
 });
 
 router.delete("/delete/all/:id", auth, (req, res) => {
-  const now = new Date();
-  Lesson.deleteMany({ id: req.params.id })
+  const today = new Date().setHours(24);
+
+  Lesson.deleteMany({ id: req.params.id, start: { $gt: today } })
     .then(() => res.json("Lesson deleted"))
     .catch((err) => res.status(400).json(`Error: ${err}`));
 });
