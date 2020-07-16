@@ -1,5 +1,6 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useRef } from "react";
 import CustomDnDCalendar from "./CustomDnDCalendar";
+import { useReactToPrint } from "react-to-print";
 import { protectAction } from "../helpers/utilities";
 import { validateRoom, validateTeacher } from "../validators";
 import { TeachersContext } from "../context/TeachersContext";
@@ -19,6 +20,27 @@ import "react-big-calendar/lib/sass/styles.scss";
 import "../styles/react-big-calendarStyles.scss";
 
 const Schedule = () => {
+  const componentRef = useRef();
+  const handlePrint = useReactToPrint({
+    content: () => componentRef.current,
+  });
+
+  return (
+    <div>
+      <LessonSchedule ref={componentRef} />
+      <button onClick={handlePrint}>Print Schedule</button>
+    </div>
+  );
+};
+
+// Wrap the schedule in a class-based component for use with React-to-print
+class LessonSchedule extends React.Component {
+  render() {
+    return <SchedulePrePrintBtn />;
+  }
+}
+
+const SchedulePrePrintBtn = () => {
   const { getTeachers, addTeachingMins } = useContext(TeachersContext);
   const { events, editEvent, getEvents } = useContext(EventsContext);
   const { getStudents } = useContext(StudentsContext);
