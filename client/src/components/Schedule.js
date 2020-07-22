@@ -20,6 +20,7 @@ import "react-big-calendar/lib/sass/styles.scss";
 import "../styles/react-big-calendarStyles.scss";
 
 const Schedule = () => {
+  // Create a ref to use with React-to-print
   const componentRef = useRef();
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
