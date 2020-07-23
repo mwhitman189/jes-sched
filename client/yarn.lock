@@ -9354,7 +9354,7 @@ react-async@^10.0.0:
 
 "react-big-calendar@github:mwhitman189/react-big-calendar":
   version "0.23.0"
-  resolved "https://codeload.github.com/mwhitman189/react-big-calendar/tar.gz/541fffba1387c482d9b194a7b83e654316a4276b"
+  resolved "https://codeload.github.com/mwhitman189/react-big-calendar/tar.gz/7a324b374722cc62e85846e548b127477360ba6b"
   dependencies:
     "@babel/runtime" "^7.1.5"
     clsx "^1.0.4"

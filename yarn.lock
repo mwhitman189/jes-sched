@@ -2095,7 +2095,7 @@ rc@^1.2.8:
 
 "react-big-calendar@https://github.com/mwhitman189/react-big-calendar":
   version "0.23.0"
-  resolved "https://github.com/mwhitman189/react-big-calendar#50ab350c537481ef84feac17dcf21a6324a1f63e"
+  resolved "https://github.com/mwhitman189/react-big-calendar#7a324b374722cc62e85846e548b127477360ba6b"
   dependencies:
     "@babel/runtime" "^7.1.5"
     clsx "^1.0.4"
