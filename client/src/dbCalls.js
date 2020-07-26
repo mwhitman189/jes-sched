@@ -64,7 +64,7 @@ const deleteDbEvents = async (event, user) => {
 // ** Payments **
 const addDbPayment = async (newPayment, user) => {
   return await axios
-    .post(`/payments/add`, newPayment, tokenConfig(user))
+    .post(`api/payments/add`, newPayment, tokenConfig(user))
     .then((res) => console.log(res.data))
     .catch((err) => console.log(err));
 };
@@ -74,11 +74,22 @@ const addDbPayment = async (newPayment, user) => {
 // ** Students **
 
 // ** Teachers **
-const editDbTeacher = async (editedTeacher, user) => {
+const getDbTeachers = async (setTeachers, user) => {
+  await axios
+    .get("/api/teachers", tokenConfig(user))
+    .then((res) => {
+      if (res.data.length > 0) {
+        setTeachers(res.data);
+      }
+    })
+    .catch((err) => console.log(err));
+};
+
+const editDbTeacher = async (updatedTeacher, user) => {
   await axios
     .put(
-      `/api/teachers/update/${editedTeacher._id}`,
-      editedTeacher,
+      `/api/teachers/update/${updatedTeacher._id}`,
+      updatedTeacher,
       tokenConfig(user)
     )
     .then((res) => console.log(res.data))
@@ -94,5 +105,6 @@ export {
   editDbEvent,
   deleteDbEvent,
   deleteDbEvents,
+  getDbTeachers,
   editDbTeacher,
 };

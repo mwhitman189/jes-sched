@@ -66,7 +66,7 @@ const SchedulePrePrintBtn = () => {
     // Pass current dateTime to compare to recurrence events to check if a new batch of recurrences
     // is needed
     getEvents(now.getTime());
-    getTeachers(events);
+    getTeachers();
     getStudents();
   }, []);
 

@@ -18,7 +18,7 @@ const TeacherSchema = new Schema(
       required: true,
     },
     otThreshold: { type: Number, trim: true },
-    teachingHours: { type: Number, trim: true, required: true, default: 0 },
+    teachingMins: { type: Number, trim: true, required: true, default: 0 },
     minsByDate: {
       1: { type: Number, trim: true, default: 0 },
       2: { type: Number, trim: true, default: 0 },

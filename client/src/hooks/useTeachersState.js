@@ -3,7 +3,7 @@ import axios from "axios";
 import { createPayPeriodData } from "../helpers/payroll";
 import { tokenConfig } from "../reducers/loadUserReducer";
 import { UserContext } from "../context/UserContext";
-import { editDbTeacher } from "../dbCalls";
+import { editDbTeacher, getDbTeachers } from "../dbCalls";
 
 export default (initialTeachers) => {
   const { user } = useContext(UserContext);
@@ -25,31 +25,15 @@ export default (initialTeachers) => {
       minsByDate: teacher.minsByDate,
     };
 
-    editDbTeacher(teacher, user);
-
-    // axios
-    //   .put(
-    //     `/api/teachers/update/${teacher._id}`,
-    //     updatedTeacher,
-    //     tokenConfig(user)
-    //   )
-    //   .then((res) => console.log(res.data))
-    //   .catch((err) => console.log(err));
+    editDbTeacher(updatedTeacher, user);
     return updatedTeacher;
   };
 
   return {
     teachers,
     setTeachers,
-    getTeachers: async () => {
-      await axios
-        .get("/api/teachers", tokenConfig(user))
-        .then((res) => {
-          if (res.data.length > 0) {
-            setTeachers(res.data);
-          }
-        })
-        .catch((err) => console.log(err));
+    getTeachers: () => {
+      getDbTeachers(setTeachers, user);
     },
     addTeacher: async (newTeacher) => {
       await axios
