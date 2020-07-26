@@ -98,8 +98,8 @@ const createPayPeriodData = (events, teacher, monthStart, monthEnd) => {
   });
 
   monthEvents.forEach((e) => {
-    if (e.sameDayCancellation || !e.isCancelled) {
-      if (moment(e.start).isBetween(monthStart, monthEnd, null, "[]")) {
+    if (e.isLesson) {
+      if (e.sameDayCancellation || !e.isCancelled) {
         if (e.resourceId === teacher.resourceId) {
           const date = e.start.getDate();
           const day = e.start.getDay();

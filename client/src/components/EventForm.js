@@ -92,7 +92,7 @@ export default function EventForm(props) {
   const [members, setMembers] = useInputState(event ? event.students : []);
   const [absentees, setAbsentees] = useInputState(event ? event.absentees : []);
   const [isRecurring, toggleIsRecurring] = useToggleState(false);
-  const [travelTime, setTravelTime] = useInputState("");
+  const [travelTime, setTravelTime] = useInputState(0);
   const [isLoading, toggleIsLoading] = useToggleState(false);
 
   let teacherValidators = ["required"];
@@ -144,12 +144,14 @@ export default function EventForm(props) {
   const handleAddEvent = (e) => {
     e.preventDefault();
     toggleIsLoading(true);
+
     const id = uuidv4();
+    const endTime = moment(start).add(duration, "m").toDate();
     addEvent({
       id: id,
       title: title,
       start: start,
-      end: moment(start).add(duration, "m").toDate(),
+      end: endTime,
       room: room,
       duration: parseInt(duration),
       resourceId: parseInt(resource),
@@ -159,13 +161,23 @@ export default function EventForm(props) {
       absentees: [],
       isLesson: true,
     });
-    if (travelTime) {
+    if (travelTime !== 0) {
       addEvent({
         id: id,
         title: "Travel",
-        start: moment(start).subtract(duration, "m").toDate(),
+        start: moment(start).subtract(travelTime, "m").toDate(),
         end: start,
-        duration: parseInt(duration),
+        duration: parseInt(travelTime),
+        resourceId: parseInt(resource),
+        isRecurring: isRecurring,
+        isLesson: false,
+      });
+      addEvent({
+        id: id,
+        title: "Return Travel",
+        start: endTime,
+        end: moment(endTime).add(travelTime, "m").toDate(),
+        duration: parseInt(travelTime),
         resourceId: parseInt(resource),
         isRecurring: isRecurring,
         isLesson: false,
