@@ -19,5 +19,6 @@ export default [
   { name: "Premium", shortName: "Prem", type: "prm" },
   { name: "High School", shortName: "HS", type: "hs" },
   { name: "Company", shortName: "Comp", type: "comp" },
+  { name: "Travel Time", shortName: "Trvl", type: "trav" },
   { name: "Other", shortName: "Other", type: "other" },
 ];

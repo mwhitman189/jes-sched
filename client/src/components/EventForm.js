@@ -169,6 +169,7 @@ export default function EventForm(props) {
         end: start,
         duration: parseInt(travelTime),
         resourceId: parseInt(resource),
+        type: "trav",
         isRecurring: isRecurring,
         isLesson: false,
       });
@@ -179,6 +180,7 @@ export default function EventForm(props) {
         end: moment(endTime).add(travelTime, "m").toDate(),
         duration: parseInt(travelTime),
         resourceId: parseInt(resource),
+        type: "trav",
         isRecurring: isRecurring,
         isLesson: false,
       });
@@ -192,11 +194,13 @@ export default function EventForm(props) {
     e.preventDefault();
     toggleIsLoading(true);
     validateRoomAndResource(e, resource, start);
+    const id = e.id;
+    const endTime = moment(start).add(duration, "m").toDate();
     const editedEvent = {
       ...event,
       title: title,
       start: start,
-      end: moment(start).add(duration, "m").toDate(),
+      end: endTime,
       room: room,
       duration: parseInt(duration),
       resourceId: parseInt(resource),
@@ -207,6 +211,30 @@ export default function EventForm(props) {
       isNewEvent: true,
     };
     editEvent(editedEvent);
+    if (travelTime !== 0) {
+      addEvent({
+        id: id,
+        title: "Travel",
+        start: moment(start).subtract(travelTime, "m").toDate(),
+        end: start,
+        duration: parseInt(travelTime),
+        resourceId: parseInt(resource),
+        type: "trav",
+        isRecurring: isRecurring,
+        isLesson: false,
+      });
+      addEvent({
+        id: id,
+        title: "Return Travel",
+        start: endTime,
+        end: moment(endTime).add(travelTime, "m").toDate(),
+        duration: parseInt(travelTime),
+        resourceId: parseInt(resource),
+        type: "trav",
+        isRecurring: isRecurring,
+        isLesson: false,
+      });
+    }
     addTeachingMins(events, monthStart, monthEnd);
     toggleIsLoading(false);
     hideForm();

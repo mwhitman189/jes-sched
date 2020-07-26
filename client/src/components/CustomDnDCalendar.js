@@ -110,6 +110,9 @@ function CustomDnDCalendar(props) {
       case "comp":
         hexColor = "#516a8c";
         break;
+      case "trav":
+        hexColor = "#b8bcbf";
+        break;
       default:
         hexColor = "#7c9ae6";
         break;

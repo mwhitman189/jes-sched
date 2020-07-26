@@ -111,15 +111,17 @@ const SchedulePrePrintBtn = () => {
   // If there is a conflict, prevent the move and flash a conflict snackbar
   const handleMove = ({ event, resourceId, start, end }) => {
     setIsLoading(true);
-    if (validateRoomAndResource(event, resourceId, start, end)) {
-      moveEvent({
-        event,
-        resourceId,
-        start,
-        end,
-      });
-      setIsLoading(false);
-      return true;
+    if (event.isLesson) {
+      if (validateRoomAndResource(event, resourceId, start, end)) {
+        moveEvent({
+          event,
+          resourceId,
+          start,
+          end,
+        });
+        setIsLoading(false);
+        return true;
+      }
     }
     setIsLoading(false);
     return false;
