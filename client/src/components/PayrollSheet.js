@@ -72,7 +72,6 @@ class PayrollSheet extends Component {
     } = this.props;
     const contract = contracts[currentTeacher.contractType];
 
-    console.log(data.rows);
     const sumTeachingMins = () => {
       const sums = {
         totalTeachingHours: 0,

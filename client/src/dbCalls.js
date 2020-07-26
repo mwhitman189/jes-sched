@@ -74,6 +74,16 @@ const addDbPayment = async (newPayment, user) => {
 // ** Students **
 
 // ** Teachers **
+const editDbTeacher = async (editedTeacher, user) => {
+  await axios
+    .put(
+      `/api/teachers/update/${editedTeacher._id}`,
+      editedTeacher,
+      tokenConfig(user)
+    )
+    .then((res) => console.log(res.data))
+    .catch((err) => console.log(err));
+};
 
 // ** Users **
 
@@ -84,4 +94,5 @@ export {
   editDbEvent,
   deleteDbEvent,
   deleteDbEvents,
+  editDbTeacher,
 };

@@ -14,6 +14,7 @@ const EventSchema = new Schema(
     duration: { type: Number, required: true },
     resourceId: { type: Number, required: true },
     room: { type: Number },
+    isLesson: { type: Boolean },
     isHidden: { type: Boolean, default: false },
     isRecurring: { type: Boolean, default: false },
     isHoliday: { type: Boolean, default: false },

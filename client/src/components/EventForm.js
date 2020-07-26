@@ -92,6 +92,7 @@ export default function EventForm(props) {
   const [members, setMembers] = useInputState(event ? event.students : []);
   const [absentees, setAbsentees] = useInputState(event ? event.absentees : []);
   const [isRecurring, toggleIsRecurring] = useToggleState(false);
+  const [travelTime, setTravelTime] = useInputState("");
   const [isLoading, toggleIsLoading] = useToggleState(false);
 
   let teacherValidators = ["required"];
@@ -143,8 +144,9 @@ export default function EventForm(props) {
   const handleAddEvent = (e) => {
     e.preventDefault();
     toggleIsLoading(true);
+    const id = uuidv4();
     addEvent({
-      id: uuidv4(),
+      id: id,
       title: title,
       start: start,
       end: moment(start).add(duration, "m").toDate(),
@@ -155,7 +157,20 @@ export default function EventForm(props) {
       isRecurring: isRecurring,
       students: members,
       absentees: [],
+      isLesson: true,
     });
+    if (travelTime) {
+      addEvent({
+        id: id,
+        title: "Travel",
+        start: moment(start).subtract(duration, "m").toDate(),
+        end: start,
+        duration: parseInt(duration),
+        resourceId: parseInt(resource),
+        isRecurring: isRecurring,
+        isLesson: false,
+      });
+    }
     addTeachingMins(events, monthStart, monthEnd);
     toggleIsLoading(false);
     hideForm();
@@ -372,6 +387,18 @@ export default function EventForm(props) {
                 </MenuItem>
               ))}
             </SelectValidator>
+          </FormControl>
+          <FormControl className={classes.formControl}>
+            <TextValidator
+              autoFocus
+              margin="dense"
+              id="travelTime"
+              label="Travel Time"
+              type="text"
+              value={travelTime}
+              onChange={setTravelTime}
+              fullWidth
+            />
           </FormControl>
         </DialogContent>
         <DialogActions>
