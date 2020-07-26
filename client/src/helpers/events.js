@@ -39,7 +39,7 @@ const updateRecurrences = (event) => {
 
 const createNewEvents = (event, isNew) => {
   const newEvents = [];
-  if (event.recur === true) {
+  if (event.isRecurring === true) {
     let recurrences;
     if (isNew === true) {
       recurrences = getRecurrences(event);

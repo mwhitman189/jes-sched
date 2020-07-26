@@ -96,10 +96,10 @@ const LessonEvent = ({ event }) => {
   return (
     <EventWrapper>
       <ExtraInfoWrapper>
-        {event.cancelled ? (
+        {event.isCancelled ? (
           <CancelledIcon>
             <CloseIcon />
-            {event.sameDayCancellation && <SameDayTag>SD</SameDayTag>}
+            {event.isSameDayCancellation && <SameDayTag>SD</SameDayTag>}
           </CancelledIcon>
         ) : (
           event.absentees &&

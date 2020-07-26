@@ -20,7 +20,6 @@ const StudentSchema = new Schema(
     },
     email: {
       type: String,
-      unique: true,
       trim: true,
       minlength: 3,
       required: true,

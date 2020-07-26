@@ -10,7 +10,7 @@ const defaultEvents = [
     room: 2,
     duration: 0,
     resourceId: 1,
-    hide: true,
+    isHidden: true,
     students: [],
     attendees: [],
   },

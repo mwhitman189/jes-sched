@@ -30,7 +30,7 @@ export default (initialStudents) => {
     editStudent: async function (student, editedStudent) {
       await axios
         .put(
-          `/api/lessons/update/${student._id}`,
+          `/api/students/update/${student._id}`,
           editedStudent,
           tokenConfig(user)
         )

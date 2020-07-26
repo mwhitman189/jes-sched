@@ -7,7 +7,7 @@ import { createNewEvents } from "./helpers/events";
 // ** Events **
 const getDbEvents = async (dateTime, setEvents, user) => {
   await axios
-    .get("/api/lessons", tokenConfig(user))
+    .get("/api/events", tokenConfig(user))
     .then((res) => {
       res.data.forEach((event) => {
         event.start = new Date(event.start);
@@ -16,7 +16,8 @@ const getDbEvents = async (dateTime, setEvents, user) => {
           // Check if the event is the last recurrence, and if so, create one more month
           // of recurrences
           if (
-            dateTime >= new Date(dateTime.getYear(), dateTime.getMonth(), 28)
+            dateTime >=
+            new Date(dateTime.getFullYear(), dateTime.getMonth(), 28)
           ) {
             const newEvents = createNewEvents(event, true);
             res.data = [...res.data, newEvents];
@@ -30,7 +31,7 @@ const getDbEvents = async (dateTime, setEvents, user) => {
 
 const addDbEvents = async (newEvents, user) => {
   await axios
-    .post("/api/lessons/add", newEvents, tokenConfig(user))
+    .post("/api/events/add", newEvents, tokenConfig(user))
     .then((res) => console.log(res.data))
     .catch((err) => console.log(err));
 };
@@ -38,7 +39,7 @@ const addDbEvents = async (newEvents, user) => {
 const editDbEvent = async (editedEvent, user) => {
   await axios
     .put(
-      `/api/lessons/update/${editedEvent._id}`,
+      `/api/events/update/${editedEvent._id}`,
       editedEvent,
       tokenConfig(user)
     )
@@ -48,14 +49,14 @@ const editDbEvent = async (editedEvent, user) => {
 
 const deleteDbEvent = async (event, user) => {
   await axios
-    .delete(`/api/lessons/delete/one/${event._id}`, tokenConfig(user))
+    .delete(`/api/events/delete/one/${event._id}`, tokenConfig(user))
     .then((res) => console.log(res.data))
     .catch((err) => console.log(err));
 };
 
 const deleteDbEvents = async (event, user) => {
   await axios
-    .delete(`/api/lessons/delete/all/${event.id}`, tokenConfig(user))
+    .delete(`/api/events/delete/all/${event.id}`, tokenConfig(user))
     .then((res) => console.log(res.data))
     .catch((err) => console.log(err));
 };

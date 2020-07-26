@@ -1,51 +1,51 @@
 const router = require("express").Router();
-const Lesson = require("../../models/lesson.model");
+const Event = require("../../models/event.model");
 const auth = require("../../middleware/auth");
 
 router.get("/", auth, (req, res) => {
-  Lesson.find()
-    .then((lessons) => res.json(lessons))
+  Event.find()
+    .then((events) => res.json(events))
     .catch((err) => res.status(400).json(`Error: ${err}`));
 });
 
 router.post("/add", auth, (req, res) => {
-  // Loop through lessons if recurrences are present
+  // Loop through events if recurrences are present
   req.body.map((item) => {
-    const newLesson = new Lesson({});
+    const newEvent = new Event({});
     for (let itemFromBodyIndex in item) {
-      newLesson[itemFromBodyIndex] = item[itemFromBodyIndex];
+      newEvent[itemFromBodyIndex] = item[itemFromBodyIndex];
     }
 
-    newLesson
+    newEvent
       .save()
-      .then(() => res.json("Lesson added!"))
+      .then(() => res.json("Event added!"))
       .catch((err) => res.status(400).json(`Error: ${err}`));
   });
 });
 
 router.get("/:id", auth, (req, res) => {
-  Lesson.findById(req.params.id)
-    .then((lesson) => res.json(lesson))
+  Event.findById(req.params.id)
+    .then((event) => res.json(event))
     .catch((err) => res.status(400).json(`Error: ${err}`));
 });
 
 router.delete("/delete/one/:id", auth, (req, res) => {
-  Lesson.findByIdAndDelete(req.params.id)
-    .then(() => res.json("Lesson deleted"))
+  Event.findByIdAndDelete(req.params.id)
+    .then(() => res.json("Event deleted"))
     .catch((err) => res.status(400).json(`Error: ${err}`));
 });
 
 router.delete("/delete/all/:id", auth, (req, res) => {
   const today = new Date().setHours(24);
 
-  Lesson.deleteMany({ id: req.params.id, start: { $gt: today } })
-    .then(() => res.json("Lesson deleted"))
+  Event.deleteMany({ id: req.params.id, start: { $gt: today } })
+    .then(() => res.json("Event deleted"))
     .catch((err) => res.status(400).json(`Error: ${err}`));
 });
 
 router.put("/update/:id", auth, (req, res) => {
-  Lesson.findOneAndUpdate({ _id: req.params.id }, req.body)
-    .then(() => res.json("Lesson updated!"))
+  Event.findOneAndUpdate({ _id: req.params.id }, req.body)
+    .then(() => res.json("Event updated!"))
     .catch((err) => res.status(400).json(`Error: ${err}`));
 });
 

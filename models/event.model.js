@@ -4,23 +4,23 @@ const mongoose = require("mongoose");
 mongoose.set("useFindAndModify", false);
 
 const Schema = mongoose.Schema;
-const LessonSchema = new Schema(
+const EventSchema = new Schema(
   {
     id: { type: String },
-    title: { type: String, required: true },
-    type: { type: String, required: true },
+    title: { type: String },
+    type: { type: String },
     start: { type: Date, required: true },
     end: { type: Date, required: true },
     duration: { type: Number, required: true },
     resourceId: { type: Number, required: true },
     room: { type: Number },
-    hide: { type: Boolean, default: false },
-    recur: { type: Boolean, default: false },
+    isHidden: { type: Boolean, default: false },
+    isRecurring: { type: Boolean, default: false },
     isHoliday: { type: Boolean, default: false },
     isNewEvent: { type: Boolean, default: false },
     isLast: { type: Boolean, default: false },
-    cancelled: { type: Boolean, default: false },
-    sameDayCancellation: { type: Boolean, default: false },
+    isCancelled: { type: Boolean, default: false },
+    isSameDayCancellation: { type: Boolean, default: false },
     students: { type: [Student.StudentSchema] },
     absentees: { type: [Student.StudentSchema] },
   },
@@ -29,6 +29,6 @@ const LessonSchema = new Schema(
   }
 );
 
-const Lesson = mongoose.model("Lesson", LessonSchema);
+const Event = mongoose.model("Event", EventSchema);
 
-module.exports = Lesson;
+module.exports = Event;

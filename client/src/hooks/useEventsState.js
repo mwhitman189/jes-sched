@@ -12,7 +12,7 @@ import {
 export default function (initialEvents) {
   const { user } = useContext(UserContext);
   const [events, setEvents] = useState(initialEvents);
-  const todaysDate = new Date().getTime();
+  const todaysDate = new Date();
 
   return {
     events,

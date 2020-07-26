@@ -152,7 +152,7 @@ export default function EventForm(props) {
       duration: parseInt(duration),
       resourceId: parseInt(resource),
       type: eventType,
-      recur: isRecurring,
+      isRecurring: isRecurring,
       students: members,
       absentees: [],
     });
@@ -191,8 +191,8 @@ export default function EventForm(props) {
     let sdCancellation = checkForSameDate(event.start);
     const editedEvent = {
       ...event,
-      cancelled: true,
-      sameDayCancellation: sdCancellation,
+      isCancelled: true,
+      isSameDayCancellation: sdCancellation,
     };
     editEvent(editedEvent);
     addTeachingMins(events, monthStart, monthEnd);
