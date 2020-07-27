@@ -119,7 +119,7 @@ export default function EventForm(props) {
             >
               <MenuItem value="" />
               {levels.map((l) => (
-                <MenuItem key={`level-${l.level}`} value={l.level}>
+                <MenuItem key={`studentForm-level-${l.level}`} value={l.level}>
                   {l.name}
                 </MenuItem>
               ))}

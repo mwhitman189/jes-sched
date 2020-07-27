@@ -143,7 +143,7 @@ const Payroll = (props) => {
             <ListItem
               button
               onClick={() => showPayrollSheet(t)}
-              key={t.resourceId}
+              key={`payroll-teacher-${t.resourceId}`}
             >
               <ListItemAvatar>
                 <Avatar className={classes.avatar}>

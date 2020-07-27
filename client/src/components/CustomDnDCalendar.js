@@ -8,6 +8,7 @@ import { UserContext } from "../context/UserContext";
 import { WorkWeek } from "./CustomViews";
 import LessonEvent from "./LessonEvent";
 import CustomToolbar from "./CustomToolbar";
+import lessonTypes from "../constants/lessonTypes";
 
 const localizer = momentLocalizer(moment);
 const DragAndDropCalendar = withDragAndDrop(Calendar);
@@ -45,81 +46,19 @@ function CustomDnDCalendar(props) {
     if (event.hide) {
       return { style: { display: "none" } };
     }
-    let hexColor;
-    switch (event.type) {
-      case "pvt":
-        hexColor = "#e6ba1f";
-        break;
-      case "beg":
-        hexColor = "#00fca5";
-        break;
-      case "el":
-        hexColor = "#02bd7b";
-        break;
-      case "lint":
-        hexColor = "#018256";
-        break;
-      case "hint":
-        hexColor = "#0b8a5e";
-        break;
-      case "adv":
-        hexColor = "#04593c";
-        break;
-      case "bny":
-        hexColor = "#e18fff";
-        break;
-      case "lb":
-        hexColor = "#97dd1a";
-        break;
-      case "lg1":
-        hexColor = "#ca161e";
-        break;
-      case "lg2":
-        hexColor = "#fdc100";
-        break;
-      case "lg3":
-        hexColor = "#0065bd";
-        break;
-      case "lg4":
-        hexColor = "#00ae3e";
-        break;
-      case "lg5":
-        hexColor = "#ff8d2a";
-        break;
-      case "lg6":
-        hexColor = "#8f178e";
-        break;
-      case "gs":
-        hexColor = "#670084";
-        break;
-      case "ct1":
-        hexColor = "#d90000";
-        break;
-      case "ct2":
-        hexColor = "#0076d0";
-        break;
-      case "ct3":
-        hexColor = "#008935";
-        break;
-      case "prm":
-        hexColor = "#7d190b";
-        break;
-      case "hs":
-        hexColor = "#22c1d7";
-        break;
-      case "comp":
-        hexColor = "#516a8c";
-        break;
-      case "trav":
-        hexColor = "#b8bcbf";
-        break;
-      default:
-        hexColor = "#7c9ae6";
-        break;
+
+    // Check lesson type objects for the appropriate bgColor
+    const typeObj = lessonTypes.find((typeObj) => event.type === typeObj.type);
+    let bgColor = "#000";
+
+    if (typeObj === undefined) {
+      return false;
+    } else {
+      bgColor = typeObj.bgColor;
     }
 
     let style = {
-      backgroundColor: hexColor,
+      backgroundColor: bgColor,
       color: "white",
       border: 0,
       display: "block",

@@ -166,7 +166,11 @@ const CustomToolbar = (props) => {
         <DialogTitle id="add-new-item-select">Add New...</DialogTitle>
         <List>
           {itemTypes.map((t) => (
-            <ListItem button onClick={t.onClickEvent} key={t.itemType}>
+            <ListItem
+              button
+              onClick={t.onClickEvent}
+              key={`itemType-${t.itemType}`}
+            >
               <ListItemAvatar>
                 <Avatar className={classes.avatar}>
                   <PersonIcon />
@@ -207,7 +211,7 @@ const CustomToolbar = (props) => {
                     ? classes.listItemYellow
                     : classes.listItem
                 }
-                key={`teacher's resourceID: ${t.resourceId}`}
+                key={`toolbar-teacher2-${t.resourceId}`}
               >{`${t.name}: ${t.teachingMins}`}</li>
             ))
           )
@@ -300,7 +304,11 @@ const CustomToolbar = (props) => {
         <DialogTitle id="add-new-item-select">Add New...</DialogTitle>
         <List>
           {itemTypes.map((t) => (
-            <ListItem button onClick={t.onClickEvent} key={t.itemType}>
+            <ListItem
+              button
+              onClick={t.onClickEvent}
+              key={`toolbar-type-${t.itemType}`}
+            >
               <ListItemAvatar>
                 <Avatar className={classes.avatar}>
                   <PersonIcon />
@@ -368,7 +376,7 @@ const CustomToolbar = (props) => {
                     ? classes.listItemYellow
                     : classes.listItem
                 }
-                key={`teacher: ${t.resourceId}`}
+                key={`toolbar-teacher1-${t.resourceId}`}
               >{`${t.name}: ${t.teachingMins}`}</li>
             ))
           )

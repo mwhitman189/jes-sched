@@ -65,7 +65,7 @@ export default function PositionedPopper(props) {
                 }
                 return (
                   <Typography
-                    key={`student number ${s._id}`}
+                    key={`popper-student-${s._id}`}
                     className={className}
                     onClick={() => toggleAttendance(s._id)}
                   >

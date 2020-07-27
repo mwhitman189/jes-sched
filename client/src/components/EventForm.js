@@ -356,7 +356,10 @@ export default function EventForm(props) {
             >
               <MenuItem value="" />
               {teachers.map((t) => (
-                <MenuItem key={`teacher-${t.resourceId}`} value={t.resourceId}>
+                <MenuItem
+                  key={`evtForm-teacher-${t.resourceId}`}
+                  value={t.resourceId}
+                >
                   {t.name}
                 </MenuItem>
               ))}
@@ -402,7 +405,7 @@ export default function EventForm(props) {
             >
               <MenuItem value="" />
               {roomList.map((r) => (
-                <MenuItem key={`room-${r}`} value={r}>
+                <MenuItem key={`evtForm-room-${r}`} value={r}>
                   {r}
                 </MenuItem>
               ))}
@@ -422,7 +425,7 @@ export default function EventForm(props) {
             >
               <MenuItem value="" />
               {lessonTypes.map((t) => (
-                <MenuItem key={`type-${t.shortName}`} value={t.type}>
+                <MenuItem key={`evtForm-type-${t.shortName}`} value={t.type}>
                   {t.name}
                 </MenuItem>
               ))}

@@ -186,7 +186,7 @@ class PayrollSheet extends Component {
           </TableHead>
           <TableBody>
             {data.rows.map((row) => (
-              <TableRow key={row.date}>
+              <TableRow key={`payrollSheet-row-${row.date}`}>
                 <TableCell component="th" scope="row">
                   {row.date}
                 </TableCell>

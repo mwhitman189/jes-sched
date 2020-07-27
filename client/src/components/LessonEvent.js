@@ -104,7 +104,7 @@ const LessonEvent = ({ event }) => {
         ) : (
           event.absentees &&
           event.absentees.map((a) => (
-            <AbsenteesWrapper key={a._id}>
+            <AbsenteesWrapper key={`lessonEvent-absentee-${a._id}`}>
               <AbsenteeX />
               <Absentees>{a.givenName}</Absentees>
             </AbsenteesWrapper>
