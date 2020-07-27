@@ -78,7 +78,8 @@ const useStyles = (theme) => ({
     fontWeight: 600,
     margin: "0 .3rem",
     "& li": {
-      width: "10%",
+      fontSize: "85%",
+      padding: "0 .6rem",
     },
     [theme.breakpoints.down("sm")]: {
       fontSize: ".7rem",

@@ -25,7 +25,6 @@ import styles from "../styles/CustomToolbarStyles";
 import "react-big-calendar/lib/sass/toolbar.scss";
 
 // Debounce to prevent re-renders on every dimension change
-
 function debounce(fn, ms) {
   let timer;
   return (_) => {
@@ -76,6 +75,52 @@ const CustomToolbar = (props) => {
       window.removeEventListener("resize", debouncedHandleResize);
     };
   });
+
+  const TeachersList = () => {
+    return (
+      <ul className={classes.teacherList}>
+        {
+          // If teacher is defined because user is a teacher, list user's teaching mins.
+          // Otherwise, list all teachers' teaching mins
+          teacher ? (
+            <li
+              className={
+                teacher.isPartTime
+                  ? classes.listItemYellow
+                  : teacher.overThresholdTwoMins > 0
+                  ? classes.listItemRed
+                  : teacher.overThresholdOneMins > 0
+                  ? classes.listItemYellow
+                  : classes.listItem
+              }
+            >{`${teacher.name}: ${teacher.teachingMins}`}</li>
+          ) : (
+            teachers &&
+            teachers.map((t) => {
+              const teachingHours = calcMinsToHours(t.teachingMins);
+              return (
+                <li
+                  className={
+                    t.isPartTime
+                      ? classes.listItemYellow
+                      : t.overThresholdTwoMins > 0
+                      ? classes.listItemRed
+                      : t.overThresholdOneMins > 0
+                      ? classes.listItemYellow
+                      : classes.listItem
+                  }
+                  key={`toolbar-teacher1-${t.resourceId}`}
+                >
+                  <div>{t.name}</div>
+                  <div>{teachingHours}</div>
+                </li>
+              );
+            })
+          )
+        }
+      </ul>
+    );
+  };
 
   const itemTypes = [
     {
@@ -182,7 +227,8 @@ const CustomToolbar = (props) => {
         </List>
       </Dialog>
       <div></div>
-      <ul style={{ padding: 0 }} className={classes.teacherList}>
+      <TeachersList />
+      {/* <ul style={{ padding: 0 }} className={classes.teacherList}>
         {
           // If user is a teacher, list the user's teaching minutes.
           // Otherwise, list all teachers' teaching minutes.
@@ -200,23 +246,26 @@ const CustomToolbar = (props) => {
             >{`${teacher.name}: ${teacher.teachingMins}`}</li>
           ) : (
             teachers &&
-            teachers.map((t) => (
-              <li
-                className={
-                  t.isPartTime
-                    ? classes.listItemYellow
-                    : t.overThresholdTwoMins > 0
-                    ? classes.listItemRed
-                    : t.overThresholdOneMins > 0
-                    ? classes.listItemYellow
-                    : classes.listItem
-                }
-                key={`toolbar-teacher2-${t.resourceId}`}
-              >{`${t.name}: ${t.teachingMins}`}</li>
-            ))
+            teachers.map((t) => {
+              const teachingHours = calcMinsToHours(t.teachingMins);
+              return (
+                <li
+                  className={
+                    t.isPartTime
+                      ? classes.listItemYellow
+                      : t.overThresholdTwoMins > 0
+                      ? classes.listItemRed
+                      : t.overThresholdOneMins > 0
+                      ? classes.listItemYellow
+                      : classes.listItem
+                  }
+                  key={`toolbar-teacher2-${t.resourceId}`}
+                >{`${t.name}: ${teachingHours}`}</li>
+              );
+            })
           )
         }
-      </ul>
+      </ul> */}
       <Button
         aria-controls="customized-menu"
         aria-haspopup="true"
@@ -347,7 +396,8 @@ const CustomToolbar = (props) => {
           />
         </IconButton>
       </div>
-      <ul className={classes.teacherList}>
+      <TeachersList />
+      {/* <ul className={classes.teacherList}>
         {
           // If teacher is defined because user is a teacher, list user's teaching mins.
           // Otherwise, list all teachers' teaching mins
@@ -365,23 +415,26 @@ const CustomToolbar = (props) => {
             >{`${teacher.name}: ${teacher.teachingMins}`}</li>
           ) : (
             teachers &&
-            teachers.map((t) => (
-              <li
-                className={
-                  t.isPartTime
-                    ? classes.listItemYellow
-                    : t.overThresholdTwoMins > 0
-                    ? classes.listItemRed
-                    : t.overThresholdOneMins > 0
-                    ? classes.listItemYellow
-                    : classes.listItem
-                }
-                key={`toolbar-teacher1-${t.resourceId}`}
-              >{`${t.name}: ${t.teachingMins}`}</li>
-            ))
+            teachers.map((t) => {
+              const teachingHours = calcMinsToHours(t.teachingMins);
+              return (
+                <li
+                  className={
+                    t.isPartTime
+                      ? classes.listItemYellow
+                      : t.overThresholdTwoMins > 0
+                      ? classes.listItemRed
+                      : t.overThresholdOneMins > 0
+                      ? classes.listItemYellow
+                      : classes.listItem
+                  }
+                  key={`toolbar-teacher1-${t.resourceId}`}
+                >{`${t.name}: ${teachingHours}`}</li>
+              );
+            })
           )
         }
-      </ul>
+      </ul> */}
       <div className={classes.btnGroup}>
         {user.user.role !== "teacher" && (
           <>
