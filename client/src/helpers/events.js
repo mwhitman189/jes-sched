@@ -38,7 +38,8 @@ const updateRecurrences = (event) => {
 };
 
 const createNewEvents = (event, isNew) => {
-  const newEvents = [];
+  let newEvents = [];
+  let origEvent = event;
   if (event.isRecurring === true) {
     let recurrences;
     if (isNew === true) {
@@ -57,16 +58,16 @@ const createNewEvents = (event, isNew) => {
       if (JapaneseHolidays.isHoliday(r)) {
         newEvent.isHoliday = true;
       }
-      newEvents.push(newEvent);
+      newEvents = [...newEvents, newEvent];
     });
     newEvents[newEvents.length - 1].isLast = true;
   }
-  if (JapaneseHolidays.isHoliday(event.start)) {
-    event = { ...event, isHoliday: true };
+  if (JapaneseHolidays.isHoliday(origEvent.start)) {
+    origEvent = { ...origEvent, isHoliday: true };
   }
-  event = { ...event, isNewEvent: true };
-  newEvents.unshift(event);
-
+  origEvent = { ...origEvent, isNewEvent: true };
+  newEvents = [...newEvents, origEvent];
+  console.log(newEvents);
   return newEvents;
 };
 

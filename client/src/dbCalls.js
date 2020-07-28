@@ -19,8 +19,8 @@ const getDbEvents = async (dateTime, setEvents, user) => {
             dateTime >=
             new Date(dateTime.getFullYear(), dateTime.getMonth(), 28)
           ) {
-            const newEvents = createNewEvents(event, true);
-            res.data = [...res.data, newEvents];
+            const newEvents = createNewEvents(event, false);
+            res.data = [...res.data, ...newEvents];
           }
         }
       });
