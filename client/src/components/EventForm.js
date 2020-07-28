@@ -29,6 +29,7 @@ import FormControl from "@material-ui/core/FormControl";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Switch from "@material-ui/core/Switch";
 import Autocomplete from "@material-ui/lab/Autocomplete";
+import { getDbEvents } from "../dbCalls";
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -62,9 +63,14 @@ const useStyles = makeStyles((theme) => ({
 export default function EventForm(props) {
   const classes = useStyles();
   const { addTeachingMins } = useContext(TeachersContext);
-  const { events, addEvent, editEvent, deleteEvent, deleteEvents } = useContext(
-    EventsContext
-  );
+  const {
+    events,
+    addEvent,
+    editEvent,
+    getEvents,
+    deleteEvent,
+    deleteEvents,
+  } = useContext(EventsContext);
   const { teachers } = useContext(TeachersContext);
   const { students } = useContext(StudentsContext);
   const {
@@ -236,6 +242,7 @@ export default function EventForm(props) {
       });
     }
     addTeachingMins(events, monthStart, monthEnd);
+    // getEvents();
     toggleIsLoading(false);
     hideForm();
   };
