@@ -12,7 +12,7 @@ const getDbEvents = async (dateTime, setEvents, user) => {
       res.data.forEach((event) => {
         event.start = new Date(event.start);
         event.end = new Date(event.end);
-        if (event.isRecurring) {
+        if (event.isLast) {
           // Check if the event is the last recurrence, and if so, create one more month
           // of recurrences
           if (

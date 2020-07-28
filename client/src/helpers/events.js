@@ -67,7 +67,7 @@ const createNewEvents = (event, isNew) => {
   }
   origEvent = { ...origEvent, isNewEvent: true };
   newEvents = [...newEvents, origEvent];
-  console.log(newEvents);
+
   return newEvents;
 };
 
