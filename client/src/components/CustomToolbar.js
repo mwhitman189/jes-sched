@@ -36,7 +36,6 @@ function debounce(fn, ms) {
   };
 }
 
-// TODO: Add this function to the teachers' teaching time display to display hours
 function calcMinsToHours(mins) {
   return Math.round((mins / 60 + Number.EPSILON) * 100) / 100;
 }
@@ -45,6 +44,7 @@ const CustomToolbar = (props) => {
   const {
     classes,
     onNavigate,
+    onView,
     isRTL,
     date,
     handleAddTeacherNav,
@@ -228,44 +228,6 @@ const CustomToolbar = (props) => {
       </Dialog>
       <div></div>
       <TeachersList />
-      {/* <ul style={{ padding: 0 }} className={classes.teacherList}>
-        {
-          // If user is a teacher, list the user's teaching minutes.
-          // Otherwise, list all teachers' teaching minutes.
-          teacher ? (
-            <li
-              className={
-                teacher.isPartTime
-                  ? classes.listItemYellow
-                  : teacher.overThresholdTwoMins > 0
-                  ? classes.listItemRed
-                  : teacher.overThresholdOneMins > 0
-                  ? classes.listItemYellow
-                  : classes.listItem
-              }
-            >{`${teacher.name}: ${teacher.teachingMins}`}</li>
-          ) : (
-            teachers &&
-            teachers.map((t) => {
-              const teachingHours = calcMinsToHours(t.teachingMins);
-              return (
-                <li
-                  className={
-                    t.isPartTime
-                      ? classes.listItemYellow
-                      : t.overThresholdTwoMins > 0
-                      ? classes.listItemRed
-                      : t.overThresholdOneMins > 0
-                      ? classes.listItemYellow
-                      : classes.listItem
-                  }
-                  key={`toolbar-teacher2-${t.resourceId}`}
-                >{`${t.name}: ${teachingHours}`}</li>
-              );
-            })
-          )
-        }
-      </ul> */}
       <Button
         aria-controls="customized-menu"
         aria-haspopup="true"
@@ -300,6 +262,13 @@ const CustomToolbar = (props) => {
             <ListItemIcon style={{ minWidth: 0 }}>
               <RightArrowIcon fontSize="small" />
             </ListItemIcon>
+          </StyledMenuItem>
+          <StyledMenuItem
+            className={classes.navBtnNav}
+            type="button"
+            onClick={() => onView("week")}
+          >
+            <ListItemIcon style={{ minWidth: 0 }}>Week</ListItemIcon>
           </StyledMenuItem>
         </div>
 
@@ -395,46 +364,17 @@ const CustomToolbar = (props) => {
             icon={isRTL ? "chevron-left" : "chevron-right"}
           />
         </IconButton>
+        <IconButton
+          className={classes.navBtn}
+          type="button"
+          onClick={() => onView("week")}
+        >
+          Week
+        </IconButton>
       </div>
+
       <TeachersList />
-      {/* <ul className={classes.teacherList}>
-        {
-          // If teacher is defined because user is a teacher, list user's teaching mins.
-          // Otherwise, list all teachers' teaching mins
-          teacher ? (
-            <li
-              className={
-                teacher.isPartTime
-                  ? classes.listItemYellow
-                  : teacher.overThresholdTwoMins > 0
-                  ? classes.listItemRed
-                  : teacher.overThresholdOneMins > 0
-                  ? classes.listItemYellow
-                  : classes.listItem
-              }
-            >{`${teacher.name}: ${teacher.teachingMins}`}</li>
-          ) : (
-            teachers &&
-            teachers.map((t) => {
-              const teachingHours = calcMinsToHours(t.teachingMins);
-              return (
-                <li
-                  className={
-                    t.isPartTime
-                      ? classes.listItemYellow
-                      : t.overThresholdTwoMins > 0
-                      ? classes.listItemRed
-                      : t.overThresholdOneMins > 0
-                      ? classes.listItemYellow
-                      : classes.listItem
-                  }
-                  key={`toolbar-teacher1-${t.resourceId}`}
-                >{`${t.name}: ${teachingHours}`}</li>
-              );
-            })
-          )
-        }
-      </ul> */}
+
       <div className={classes.btnGroup}>
         {user.user.role !== "teacher" && (
           <>

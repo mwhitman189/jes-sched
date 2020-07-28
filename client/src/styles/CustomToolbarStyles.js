@@ -13,6 +13,7 @@ const useStyles = (theme) => ({
     },
   },
   btnGroup: {
+    height: "40px",
     display: "flex",
     whiteSpace: "nowrap",
     alignItems: "center",
@@ -22,6 +23,7 @@ const useStyles = (theme) => ({
     },
   },
   navBtn: {
+    height: "90%",
     display: "flex",
     alignItems: "center",
     color: "#fff",
