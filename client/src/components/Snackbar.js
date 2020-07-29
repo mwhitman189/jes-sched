@@ -28,7 +28,13 @@ const Content = styled.div`
 `;
 
 export default function Snackbar(props) {
-  const { msg, isOpen } = props;
+  const { msg, isOpen, setIsOpen } = props;
+
+  if (isOpen)
+    setTimeout(function () {
+      setIsOpen(false);
+    }, 3500);
+
   return (
     <Container>
       <Content isOpen={isOpen}>{msg}</Content>

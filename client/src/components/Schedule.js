@@ -13,7 +13,6 @@ import StaffForm from "./StaffForm";
 import StudentForm from "./StudentForm";
 import TeacherForm from "./TeacherForm";
 import Snackbar from "./Snackbar";
-// import CustomizedSnackbars from "./CustomizedSnackbars";
 import Payroll from "./Payroll";
 import Footer from "./Footer";
 import EventPopper from "./EventPopper";
@@ -212,7 +211,7 @@ const SchedulePrePrintBtn = () => {
         <StudentForm formType={formType} setFormType={setFormType} />
       )}
       {formType === "payroll" && <Payroll setFormType={setFormType} />}
-      <Snackbar msg={message} isOpen={isOpen} />
+      <Snackbar msg={message} isOpen={isOpen} setIsOpen={setIsOpen} />
       {/* <CustomizedSnackbars
         isOpen={isOpen}
         setIsOpen={setIsOpen}
