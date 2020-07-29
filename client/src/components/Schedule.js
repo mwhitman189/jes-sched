@@ -12,7 +12,8 @@ import EventForm from "./EventForm";
 import StaffForm from "./StaffForm";
 import StudentForm from "./StudentForm";
 import TeacherForm from "./TeacherForm";
-import CustomizedSnackbars from "./CustomizedSnackbars";
+import Snackbar from "./Snackbar";
+// import CustomizedSnackbars from "./CustomizedSnackbars";
 import Payroll from "./Payroll";
 import Footer from "./Footer";
 import EventPopper from "./EventPopper";
@@ -211,12 +212,13 @@ const SchedulePrePrintBtn = () => {
         <StudentForm formType={formType} setFormType={setFormType} />
       )}
       {formType === "payroll" && <Payroll setFormType={setFormType} />}
-      <CustomizedSnackbars
+      <Snackbar msg={message} isOpen={isOpen} />
+      {/* <CustomizedSnackbars
         isOpen={isOpen}
         setIsOpen={setIsOpen}
         variant={"error"}
         msg={message}
-      />
+      /> */}
       <CustomDnDCalendar
         handleMove={protectAction(user, handleMove)}
         handleSelect={protectAction(user, handleSelect)}

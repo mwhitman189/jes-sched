@@ -242,7 +242,6 @@ export default function EventForm(props) {
       });
     }
     addTeachingMins(events, monthStart, monthEnd);
-    // getEvents();
     toggleIsLoading(false);
     hideForm();
   };
