@@ -44,4 +44,5 @@ export default function Snackbar(props) {
 
 Snackbar.propTypes = {
   msg: PropTypes.string,
+  isOpen: PropTypes.bool,
 };

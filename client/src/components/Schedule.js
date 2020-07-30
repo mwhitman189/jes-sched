@@ -91,14 +91,12 @@ const SchedulePrePrintBtn = () => {
       start: start,
       end: end,
     };
-
-    if (!validateRoom(events, updatedEvent, parseInt(updatedEvent.duration))) {
+    console.log(!validateTeacher(events, updatedEvent));
+    if (!validateRoom(events, updatedEvent)) {
       handleToggleSnackbar("Room Conflict. Please choose another room or time");
       return false;
     }
-    if (
-      !validateTeacher(events, updatedEvent, parseInt(updatedEvent.duration))
-    ) {
+    if (!validateTeacher(events, updatedEvent)) {
       handleToggleSnackbar(
         "Teacher Conflict. Please choose another teacher or time"
       );
