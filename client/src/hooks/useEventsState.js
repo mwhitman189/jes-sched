@@ -14,31 +14,23 @@ export default function (initialEvents) {
   const [events, setEvents] = useState(initialEvents);
   const todaysDate = new Date();
 
-  const getEventsFunc = () => {
-    getDbEvents(todaysDate, setEvents, user);
-  };
-
   return {
     events,
     getEvents: () => {
-      getEventsFunc();
+      getDbEvents(todaysDate, setEvents, user);
     },
     addEvent: async function (event) {
       const newEvents = createNewEvents(event, true);
-      addDbEvents(newEvents, user);
-      getEventsFunc();
+      addDbEvents(newEvents, events, setEvents, user);
     },
     deleteEvent: async function (event) {
-      deleteDbEvent(event, user);
-      getEventsFunc();
+      deleteDbEvent(event, events, setEvents, user);
     },
     deleteEvents: async function (event) {
-      deleteDbEvents(event, user);
-      getEventsFunc();
+      deleteDbEvents(event, events, setEvents, user);
     },
     editEvent: async function (editedEvent) {
-      editDbEvent(editedEvent, user);
-      getEventsFunc();
+      editDbEvent(editedEvent, events, setEvents, user);
     },
   };
 }

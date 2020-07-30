@@ -40,14 +40,14 @@ const AbsenteesWrapper = styled.div`
   top: 0;
 `;
 
-const AbsenteeX = styled(CloseIcon)`
-  color: rgba(217, 18, 4, 0.5);
-  font-size: 0.4rem;
+const AbsenteeX = styled.span`
+  width: 1rem;
+  color: rgba(217, 18, 4, 0.8);
   position: relative;
 `;
 
 const Absentees = styled.p`
-  color: rgba(0, 0, 0, 0.5);
+  color: rgba(0, 0, 0, 0.8);
   font-size: 0.5rem;
   padding: 0;
   margin: 0;
@@ -105,8 +105,10 @@ const LessonEvent = ({ event }) => {
           event.absentees &&
           event.absentees.map((a) => (
             <AbsenteesWrapper key={`lessonEvent-absentee-${a._id}`}>
-              <AbsenteeX />
-              <Absentees>{a.givenName}</Absentees>
+              <Absentees>
+                <AbsenteeX>x</AbsenteeX>
+                {a.givenName}
+              </Absentees>
             </AbsenteesWrapper>
           ))
         )}

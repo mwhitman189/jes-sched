@@ -29,35 +29,48 @@ const getDbEvents = async (dateTime, setEvents, user) => {
     .catch((err) => console.log(err));
 };
 
-const addDbEvents = async (newEvents, user) => {
+const addDbEvents = async (newEvents, events, setEvents, user) => {
   await axios
     .post("/api/events/add", newEvents, tokenConfig(user))
-    .then((res) => console.log(res.data))
+    .then((res) => setEvents([...events, ...newEvents]))
     .catch((err) => console.log(err));
 };
 
-const editDbEvent = async (editedEvent, user) => {
+const editDbEvent = async (editedEvent, events, setEvents, user) => {
   await axios
     .put(
       `/api/events/update/${editedEvent._id}`,
       editedEvent,
       tokenConfig(user)
     )
-    .then((res) => console.log(res.data))
+    .then((res) => {
+      const idx = events.findIndex((e) => e._id === editedEvent._id);
+      return setEvents([
+        ...events.slice(0, idx),
+        editedEvent,
+        ...events.slice(idx + 1),
+      ]);
+    })
     .catch((err) => console.log(err));
 };
 
-const deleteDbEvent = async (event, user) => {
+const deleteDbEvent = async (event, events, setEvents, user) => {
   await axios
     .delete(`/api/events/delete/one/${event._id}`, tokenConfig(user))
-    .then((res) => console.log(res.data))
+    .then((res) => setEvents(events.filter((e) => e._id !== event._id)))
     .catch((err) => console.log(err));
 };
 
-const deleteDbEvents = async (event, user) => {
+const deleteDbEvents = async (event, events, setEvents, user) => {
   await axios
     .delete(`/api/events/delete/all/${event.id}`, tokenConfig(user))
-    .then((res) => console.log(res.data))
+    .then((res) => {
+      const today = new Date().setHours(24);
+      // Only delete events with the event ID if they occur after today's date
+      return setEvents(
+        events.filter((e) => e.id !== event.id || e.start < today)
+      );
+    })
     .catch((err) => console.log(err));
 };
 

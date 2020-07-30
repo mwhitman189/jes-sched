@@ -12,7 +12,7 @@ import EventForm from "./EventForm";
 import StaffForm from "./StaffForm";
 import StudentForm from "./StudentForm";
 import TeacherForm from "./TeacherForm";
-import CustomizedSnackbars from "./CustomizedSnackbars";
+import Snackbar from "./Snackbar";
 import Payroll from "./Payroll";
 import Footer from "./Footer";
 import EventPopper from "./EventPopper";
@@ -91,14 +91,12 @@ const SchedulePrePrintBtn = () => {
       start: start,
       end: end,
     };
-
-    if (!validateRoom(events, updatedEvent, parseInt(updatedEvent.duration))) {
+    console.log(!validateTeacher(events, updatedEvent));
+    if (!validateRoom(events, updatedEvent)) {
       handleToggleSnackbar("Room Conflict. Please choose another room or time");
       return false;
     }
-    if (
-      !validateTeacher(events, updatedEvent, parseInt(updatedEvent.duration))
-    ) {
+    if (!validateTeacher(events, updatedEvent)) {
       handleToggleSnackbar(
         "Teacher Conflict. Please choose another teacher or time"
       );
@@ -211,12 +209,13 @@ const SchedulePrePrintBtn = () => {
         <StudentForm formType={formType} setFormType={setFormType} />
       )}
       {formType === "payroll" && <Payroll setFormType={setFormType} />}
-      <CustomizedSnackbars
+      <Snackbar msg={message} isOpen={isOpen} setIsOpen={setIsOpen} />
+      {/* <CustomizedSnackbars
         isOpen={isOpen}
         setIsOpen={setIsOpen}
         variant={"error"}
         msg={message}
-      />
+      /> */}
       <CustomDnDCalendar
         handleMove={protectAction(user, handleMove)}
         handleSelect={protectAction(user, handleSelect)}
