@@ -68,7 +68,8 @@ const TeacherSchema = new Schema(
     },
     contractType: { type: String, trim: true, required: true },
     dependentsNum: { type: Number, trim: true, default: 0 },
-    isPartTime: { type: Boolean, trim: true, required: true },
+    isPartTime: { type: Boolean, trim: true, default: false },
+    isSub: { type: Boolean, trim: true, default: false },
   },
   {
     timestamps: true,

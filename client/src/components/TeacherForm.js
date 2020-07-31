@@ -36,6 +36,7 @@ export default function EventForm(props) {
   const [dependentsNum, setDependentsNum] = useInputState("");
   const [email, setEmail] = useInputState("");
   const [isPartTime, toggleIsPartTime] = useToggleState(false);
+  const [isSub, toggleIsSub] = useToggleState(false);
   const [isLoading, toggleIsLoading] = useToggleState(false);
 
   const handleAddTeacher = (e) => {
@@ -63,6 +64,7 @@ export default function EventForm(props) {
       contractType: contractType,
       dependentsNum: dependentsNum,
       isPartTime: isPartTime,
+      isSub: isSub,
       minsByDate: {},
     });
     toggleIsLoading(false);
@@ -90,6 +92,12 @@ export default function EventForm(props) {
               />
             }
             label="Part-Time Teacher"
+          />
+          <FormControlLabel
+            control={
+              <Switch checked={isSub} onChange={toggleIsSub} value={isSub} />
+            }
+            label="Substitute Teacher"
           />
           <FormControl className={classes.formControl}>
             <TextValidator
