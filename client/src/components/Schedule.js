@@ -91,7 +91,7 @@ const SchedulePrePrintBtn = () => {
       start: start,
       end: end,
     };
-    console.log(!validateTeacher(events, updatedEvent));
+
     if (!validateRoom(events, updatedEvent)) {
       handleToggleSnackbar("Room Conflict. Please choose another room or time");
       return false;
