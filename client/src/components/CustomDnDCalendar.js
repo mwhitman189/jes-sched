@@ -12,6 +12,7 @@ import lessonTypes from "../constants/lessonTypes";
 
 const localizer = momentLocalizer(moment);
 const DragAndDropCalendar = withDragAndDrop(Calendar);
+const JapaneseHolidays = require("japanese-holidays");
 
 function CustomDnDCalendar(props) {
   const {
@@ -73,6 +74,13 @@ function CustomDnDCalendar(props) {
     };
   };
 
+  const dayStyleGetter = (date) => {
+    const styles = {
+      backgroundColor: "#ffd9d9",
+    };
+    return JapaneseHolidays.isHoliday(date) && { style: styles };
+  };
+
   return (
     <DragAndDropCalendar
       style={{ width: "100vw", maxHeight: "96vh" }}
@@ -90,6 +98,7 @@ function CustomDnDCalendar(props) {
       onSelectEvent={handleOpenDetailView}
       onDoubleClickEvent={handleDoubleClick}
       eventPropGetter={eventStyleGetter}
+      dayPropGetter={dayStyleGetter}
       invertResourcesAndDates
       step={5}
       timeslots={12}

@@ -30,15 +30,12 @@ export default function (initialEvents) {
     },
     deleteEvent: async function (event) {
       deleteDbEvent(event, events, setEvents, user);
-      getEventsFunc();
     },
     deleteEvents: async function (event) {
       deleteDbEvents(event, events, setEvents, user);
-      getEventsFunc();
     },
     editEvent: async function (editedEvent) {
       editDbEvent(editedEvent, events, setEvents, user);
-      getEventsFunc();
     },
   };
 }
