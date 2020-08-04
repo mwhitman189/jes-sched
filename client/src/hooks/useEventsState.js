@@ -25,8 +25,7 @@ export default function (initialEvents) {
     },
     addEvent: async function (event) {
       const newEvents = createNewEvents(event, true);
-      addDbEvents(newEvents, events, setEvents, user);
-      getEventsFunc();
+      addDbEvents(newEvents, events, setEvents, getEventsFunc, user);
     },
     deleteEvent: async function (event) {
       deleteDbEvent(event, events, setEvents, user);
