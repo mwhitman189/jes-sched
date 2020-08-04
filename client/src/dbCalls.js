@@ -29,10 +29,19 @@ const getDbEvents = async (dateTime, setEvents, user) => {
     .catch((err) => console.log(err));
 };
 
-const addDbEvents = async (newEvents, events, setEvents, user) => {
+const addDbEvents = async (
+  newEvents,
+  events,
+  setEvents,
+  getEventsFunc,
+  user
+) => {
   await axios
     .post("/api/events/add", newEvents, tokenConfig(user))
-    .then((res) => setEvents([...events, ...newEvents]))
+    .then((res) => {
+      getEventsFunc();
+      return setEvents([...events, ...newEvents]);
+    })
     .catch((err) => console.log(err));
 };
 
