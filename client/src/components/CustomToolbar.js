@@ -2,6 +2,7 @@ import React, { useContext, useState, useEffect } from "react";
 import moment from "moment";
 import { TeachersContext } from "../context/TeachersContext";
 import { UserContext } from "../context/UserContext";
+import styled from "styled-components";
 import { withStyles } from "@material-ui/core/styles";
 import IconButton from "@material-ui/core/IconButton";
 import RightArrowIcon from "@material-ui/icons/ChevronRight";
@@ -23,6 +24,33 @@ import PersonIcon from "@material-ui/icons/Person";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import styles from "../styles/CustomToolbarStyles";
 import "react-big-calendar/lib/sass/toolbar.scss";
+
+const TeacherList = styled.ul`
+  font-size: 1rem;
+  display: flex;
+  justify-content: space-around;
+  list-style: none;
+  font-weight: 600;
+  width: 33%;
+  "& li": {
+    font-size: 85%
+    padding: 0 .6rem
+  };
+  [theme.breakpoints.down("sm")]: {
+    font-size: .7rem
+  };
+`;
+
+const Resource = styled.li`
+  color: ${(props) =>
+    props.resource.isPartTime
+      ? "rgba(20, 71, 207, 0.5)"
+      : props.resource.overThresholdTwoMins > 0
+      ? "rgba(20, 71, 207, 0.2)"
+      : props.resource.overThresholdOneMins > 0
+      ? "rgba(20, 71, 207, 0.5)"
+      : "rgba(20, 71, 207, 1)"};
+`;
 
 // Debounce to prevent re-renders on every dimension change
 function debounce(fn, ms) {
@@ -78,51 +106,33 @@ const CustomToolbar = (props) => {
 
   const TeachersList = () => {
     return (
-      <ul className={classes.teacherList}>
+      <TeacherList>
         {
           // If teacher is defined because user is a teacher, list user's teaching mins.
           // Otherwise, list all teachers' teaching mins
           teacher ? (
-            <li
-              className={
-                teacher.isPartTime
-                  ? classes.listItemYellow
-                  : teacher.overThresholdTwoMins > 0
-                  ? classes.listItemRed
-                  : teacher.overThresholdOneMins > 0
-                  ? classes.listItemYellow
-                  : classes.listItem
-              }
-            >{`${teacher.name}: ${teacher.teachingMins}`}</li>
+            <Resource
+              resource={teacher}
+            >{`${teacher.name}: ${teacher.teachingMins}`}</Resource>
           ) : (
             teachers &&
             teachers.map((t) => {
               const teachingHours = calcMinsToHours(t.teachingMins);
               return (
-                <li
-                  className={
-                    t.isPartTime
-                      ? classes.listItemYellow
-                      : t.overThresholdTwoMins > 0
-                      ? classes.listItemRed
-                      : t.overThresholdOneMins > 0
-                      ? classes.listItemYellow
-                      : classes.listItem
-                  }
-                  key={`toolbar-teacher1-${t.resourceId}`}
-                >
+                <Resource key={`toolbar-teacher1-${t.resourceId}`} resource={t}>
                   <div>{t.name}</div>
                   <div>{teachingHours}</div>
-                </li>
+                </Resource>
               );
             })
           )
         }
-      </ul>
+      </TeacherList>
     );
   };
 
-  const itemTypes = [
+  // Set the types of items to display in the "Create new..." dialog
+  const ITEM_TYPES = [
     {
       itemType: "teacher",
       title: "Add new teacher",
@@ -210,7 +220,7 @@ const CustomToolbar = (props) => {
       >
         <DialogTitle id="add-new-item-select">Add New...</DialogTitle>
         <List>
-          {itemTypes.map((t) => (
+          {ITEM_TYPES.map((t) => (
             <ListItem
               button
               onClick={t.onClickEvent}
@@ -281,7 +291,7 @@ const CustomToolbar = (props) => {
               <ListItemIcon>
                 <PersonAddIcon className={classes.icon} fontSize="small" />
               </ListItemIcon>
-              <ListItemText primary="Add New ____" />
+              <ListItemText primary="Add New..." />
             </StyledMenuItem>
             <StyledMenuItem
               className={classes.navBtn}
@@ -321,7 +331,7 @@ const CustomToolbar = (props) => {
       >
         <DialogTitle id="add-new-item-select">Add New...</DialogTitle>
         <List>
-          {itemTypes.map((t) => (
+          {ITEM_TYPES.map((t) => (
             <ListItem
               button
               onClick={t.onClickEvent}
