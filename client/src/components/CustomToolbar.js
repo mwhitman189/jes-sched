@@ -44,12 +44,12 @@ const TeacherList = styled.ul`
 const Resource = styled.li`
   color: ${(props) =>
     props.resource.isPartTime
-      ? "rgba(20, 71, 207, 0.5)"
+      ? "#ca02e0"
       : props.resource.overThresholdTwoMins > 0
-      ? "rgba(20, 71, 207, 0.2)"
+      ? "#e00262"
       : props.resource.overThresholdOneMins > 0
-      ? "rgba(20, 71, 207, 0.5)"
-      : "rgba(20, 71, 207, 1)"};
+      ? "#ca02e0"
+      : "#0220e0"};
 `;
 
 // Debounce to prevent re-renders on every dimension change

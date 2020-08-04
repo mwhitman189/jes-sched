@@ -1,5 +1,4 @@
 import React, { useContext, useEffect } from "react";
-import { Redirect } from "react-router-dom";
 import axios from "axios";
 import loadUser from "../reducers/loadUserReducer";
 import useInputState from "../hooks/useInputState";
