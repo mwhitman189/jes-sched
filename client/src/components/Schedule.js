@@ -210,12 +210,6 @@ const SchedulePrePrintBtn = () => {
       )}
       {formType === "payroll" && <Payroll setFormType={setFormType} />}
       <Snackbar msg={message} isOpen={isOpen} setIsOpen={setIsOpen} />
-      {/* <CustomizedSnackbars
-        isOpen={isOpen}
-        setIsOpen={setIsOpen}
-        variant={"error"}
-        msg={message}
-      /> */}
       <CustomDnDCalendar
         handleMove={protectAction(user, handleMove)}
         handleSelect={protectAction(user, handleSelect)}

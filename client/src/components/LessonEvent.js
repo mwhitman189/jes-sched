@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useContext } from "react";
 import moment from "moment";
 import styled from "styled-components";
+import { TeachersContext } from "../context/TeachersContext";
 import CloseIcon from "@material-ui/icons/Close";
 
 const EventWrapper = styled.div`
@@ -12,6 +13,12 @@ const EventWrapper = styled.div`
   overflow: hidden;
   position: relative;
   height: 100%;
+`;
+
+const ResourceName = styled.div`
+  color: rgba(245, 66, 230, 0.6);
+  position: absolute;
+  top: ${(props) => (props.duration > 50 ? "8px" : "5px")};
 `;
 
 const CancelledIcon = styled.div`
@@ -93,8 +100,13 @@ const EndTime = styled.div`
 `;
 
 const LessonEvent = ({ event }) => {
+  const { teachers } = useContext(TeachersContext);
+  const resource = teachers.find((r) => r.resourceId === event.resourceId);
   return (
     <EventWrapper>
+      <ResourceName duration={event.duration}>
+        {(resource.isPartTime || resource.isSub) && resource.name}
+      </ResourceName>
       <ExtraInfoWrapper>
         {event.isCancelled ? (
           <CancelledIcon>
