@@ -29,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function EventForm(props) {
   const classes = useStyles();
-  const { formType, setFormType, addNewStage, toggleAddNewStage } = props;
+  const { formType, setFormType } = props;
   const { addStudent } = useContext(StudentsContext);
 
   const [givenName, setGivenName] = useInputState("");
