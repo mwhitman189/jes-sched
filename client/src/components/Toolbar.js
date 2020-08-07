@@ -81,7 +81,7 @@ const Button = styled.button`
 `;
 
 const MenuButton = styled(Button)`
-  position: absolute;
+  position: relative;
   top: 4px;
   right: 4px;
   width: 50px;
