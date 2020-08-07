@@ -35,7 +35,7 @@ const Resource = styled.li`
 
 const TeacherList = () => {
   const { teachers } = useContext(TeachersContext);
-  const { user, dispatch } = useContext(UserContext);
+  const { user } = useContext(UserContext);
 
   // Search for user in teachers. If user is teacher, return teacher object
   // for use in conditional rendering of teaching minutes

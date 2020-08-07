@@ -28,7 +28,16 @@ const Menu = styled.nav`
   flex-direction: column;
   width: 200px;
   z-index: 2000;
+  padding: 2px;
   transform: ${(props) => (props.isClosed ? "translate(200px)" : "none")};
+  @media (min-width: ${BREAKPOINT}) {
+    position: relative;
+    transform: none;
+    flex-direction: row;
+    width: 100%;
+    height: 100%;
+    background: #fff;
+  }
 `;
 
 const ButtonContainer = styled.div`
@@ -37,7 +46,7 @@ const ButtonContainer = styled.div`
   justify-content: center;
   align-items: center;
   flex: 1 1 0px;
-  padding: 3px;
+  padding: 0;
   flex-direction: ${(props) => (props.isColumn ? "column" : "row")};
   @media (min-width: ${BREAKPOINT}) {
     height: 100%;
@@ -55,7 +64,7 @@ const Button = styled.button`
   background: ${(props) => (props.background ? props.background : "#4287f5")};
   border: none;
   border-radius: 4px;
-  margin: 4px;
+  margin: 0 4px;
   height: 35px;
   width: 100%;
   &:hover {
@@ -73,7 +82,7 @@ const MenuButton = styled(Button)`
   right: 4px;
   width: 50px;
   @media (min-width: ${BREAKPOINT}) {
-    display: hidden;
+    display: none;
   }
 `;
 
@@ -90,6 +99,9 @@ const CloseButton = styled(Button)`
   height: 30px;
   border-radius: 50%;
   background-color: #575757;
+  @media (min-width: ${BREAKPOINT}) {
+    display: none;
+  }
 `;
 
 const DateDisplay = styled.span`
@@ -172,7 +184,7 @@ const Toolbar = (props) => {
           <CloseButton onClick={closeDrawer}>X</CloseButton>
         </ButtonContainer>
         <Button onClick={() => onView("week")}>Week View</Button>
-        <ButtonContainer isColumn>
+        <ButtonContainer>
           {user.user.role === "staff" && (
             <>
               <Button onClick={handleOpen}>Add New...</Button>
