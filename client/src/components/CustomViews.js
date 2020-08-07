@@ -72,6 +72,9 @@ WorkWeek.navigate = (date, action) => {
     case Navigate.NEXT:
       return dates.add(date, 7, "day");
 
+    case Navigate.TODAY:
+      return date;
+
     default:
       return date;
   }

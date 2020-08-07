@@ -15,4 +15,8 @@ const protectAction = (user, action) => {
   return console.log("Not gonna do it. Wouldn't be prudent.");
 };
 
-export { checkForSameDate, protectAction };
+const calcMinsToHours = (mins) => {
+  return Math.round((mins / 60 + Number.EPSILON) * 100) / 100;
+};
+
+export { checkForSameDate, protectAction, calcMinsToHours };

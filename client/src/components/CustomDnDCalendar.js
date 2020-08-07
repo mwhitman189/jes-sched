@@ -6,8 +6,8 @@ import { EventsContext } from "../context/EventsContext";
 import { TeachersContext } from "../context/TeachersContext";
 import { UserContext } from "../context/UserContext";
 import { WorkWeek } from "./CustomViews";
+import Toolbar from "./Toolbar";
 import LessonEvent from "./LessonEvent";
-import CustomToolbar from "./CustomToolbar";
 import lessonTypes from "../constants/lessonTypes";
 
 const localizer = momentLocalizer(moment);
@@ -74,6 +74,7 @@ function CustomDnDCalendar(props) {
     };
   };
 
+  // Set the background color of holiday DayColumns to a different color
   const dayStyleGetter = (date) => {
     const styles = {
       backgroundColor: "#ffd9d9",
@@ -108,7 +109,7 @@ function CustomDnDCalendar(props) {
       components={{
         event: LessonEvent,
         toolbar: (props) => (
-          <CustomToolbar
+          <Toolbar
             {...props}
             handleAddTeacherNav={handleAddTeacherNav}
             handleAddStaffNav={handleAddStaffNav}
