@@ -64,9 +64,8 @@ const Toolbar = (props) => {
     handleAddStudentNav,
   } = props;
 
-  const { teachers } = useContext(TeachersContext);
   const { user, dispatch } = useContext(UserContext);
-  const [stage, setStage] = useState("");
+  const [isOpen, setIsOpen] = useState(false);
 
   // Set the types of items to display in the "Create new..." dialog
   const ITEM_TYPES = [
@@ -88,11 +87,11 @@ const Toolbar = (props) => {
   ];
 
   const handleOpen = () => {
-    setStage("addNew");
+    setIsOpen(true);
   };
 
   const handleClose = () => {
-    setStage("");
+    setIsOpen(false);
   };
 
   const handleLogout = (e) => {
@@ -103,9 +102,9 @@ const Toolbar = (props) => {
   return (
     <ToolbarContainer>
       <NewEntryDialog
-        stage={stage}
-        closeDialog={handleClose}
+        isOpen={isOpen}
         items={ITEM_TYPES}
+        closeDialog={handleClose}
       />
       <ButtonContainer isLeft>
         <Button onClick={() => onNavigate("PREV")}>&lt;</Button>

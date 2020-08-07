@@ -15,8 +15,6 @@ const Dialog = styled.dialog`
     0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12);
 `;
 
-const Form = styled.form``;
-
 const ButtonContainer = styled.div`
   padding: 5px;
   margin: 0;
@@ -47,19 +45,22 @@ const Button = styled.button`
 `;
 
 function NewEntryDialog(props) {
-  const { items, stage } = props;
+  const { items, isOpen, closeDialog } = props;
+
+  const selectItem = (item) => {
+    item.onClickEvent();
+    closeDialog();
+  };
 
   return (
-    <Dialog id="dialog" isOpen={stage === "addNew"}>
-      <Form>
-        <ButtonContainer>
-          {items.map((i) => (
-            <Button key={i.title} onClick={i.onClickEvent}>
-              {i.title}
-            </Button>
-          ))}
-        </ButtonContainer>
-      </Form>
+    <Dialog id="dialog" isOpen={isOpen}>
+      <ButtonContainer>
+        {items.map((i) => (
+          <Button key={i.title} onClick={() => selectItem(i)}>
+            {i.title}
+          </Button>
+        ))}
+      </ButtonContainer>
     </Dialog>
   );
 }
