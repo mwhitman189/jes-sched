@@ -10,7 +10,6 @@ const Resources = styled.ul`
   justify-content: space-around;
   list-style: none;
   font-weight: 600;
-  flex: 1 1 0px;
   margin: 0;
   padding: 0;
   "& li": {
@@ -23,6 +22,7 @@ const Resources = styled.ul`
 `;
 
 const Resource = styled.li`
+  margin: 0 8px;
   color: ${(props) =>
     props.resource.isPartTime
       ? "#ca02e0"

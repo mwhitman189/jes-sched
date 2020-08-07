@@ -6,6 +6,8 @@ import NewEntryDialog from "./NewEntryDialog";
 import styled from "styled-components";
 import "react-big-calendar/lib/sass/toolbar.scss";
 
+const BREAKPOINT = "500px";
+
 const ToolbarContainer = styled.div`
   height: 40px;
   display: flex;
@@ -37,7 +39,7 @@ const ButtonContainer = styled.div`
   flex: 1 1 0px;
   padding: 3px;
   flex-direction: ${(props) => (props.isColumn ? "column" : "row")};
-  @media (min-width: 930px) {
+  @media (min-width: ${BREAKPOINT}) {
     height: 100%;
   }
 `;
@@ -60,7 +62,7 @@ const Button = styled.button`
     background: ${(props) =>
       props.hoverBackground ? props.hoverBackground : "#2b69cc"};
   }
-  @media (min-width: 930px) {
+  @media (min-width: ${BREAKPOINT}) {
     width: ${(props) => (props.width ? props.width : "80px")};
   }
 `;
@@ -70,7 +72,7 @@ const MenuButton = styled(Button)`
   top: 4px;
   right: 4px;
   width: 50px;
-  @media (min-width: 930px) {
+  @media (min-width: ${BREAKPOINT}) {
     display: hidden;
   }
 `;
@@ -147,6 +149,10 @@ const Toolbar = (props) => {
     setIsClosed(false);
   };
 
+  const closeDrawer = () => {
+    setIsClosed(true);
+  };
+
   return (
     <ToolbarContainer>
       <NewEntryDialog
@@ -163,7 +169,7 @@ const Toolbar = (props) => {
             {moment(date).format("MM/DD").toLocaleString()}
           </DateDisplay>
           <Button onClick={() => onNavigate("NEXT")}>&gt;</Button>
-          <CloseButton>X</CloseButton>
+          <CloseButton onClick={closeDrawer}>X</CloseButton>
         </ButtonContainer>
         <Button onClick={() => onView("week")}>Week View</Button>
         <ButtonContainer isColumn>
