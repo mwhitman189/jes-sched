@@ -19,7 +19,7 @@ const Content = styled.div`
   height: 60px;
   width: 100%;
   box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.5);
-  z-index: 1000;
+  z-index: 4;
   @media (min-width: 768px) {
     border-radius: 4px;
     width: 200px;

@@ -90,7 +90,7 @@ const Room = styled.span`
 `;
 
 const ExtraInfoWrapper = styled.div`
-  z-index: 9;
+  z-index: 3;
   position: absolute;
 `;
 

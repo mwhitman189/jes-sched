@@ -6,7 +6,7 @@ import NewEntryDialog from "./NewEntryDialog";
 import styled from "styled-components";
 import "react-big-calendar/lib/sass/toolbar.scss";
 
-const BREAKPOINT = "500px";
+const BREAKPOINT = "930px";
 
 const ToolbarContainer = styled.div`
   height: 40px;
@@ -26,8 +26,9 @@ const Menu = styled.nav`
   display: flex;
   background: #b3cae8;
   flex-direction: column;
+  justify-content: space-between;
   width: 200px;
-  z-index: 2000;
+  z-index: 2;
   padding: 2px;
   transform: ${(props) => (props.isClosed ? "translate(200px)" : "none")};
   @media (min-width: ${BREAKPOINT}) {
@@ -45,11 +46,13 @@ const ButtonContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
   flex: 1 1 0px;
   padding: 0;
-  flex-direction: ${(props) => (props.isColumn ? "column" : "row")};
+  flex-direction: ${(props) => (props.isRow ? "row" : "column")};
   @media (min-width: ${BREAKPOINT}) {
     height: 100%;
+    flex-direction: row;
   }
 `;
 
@@ -64,15 +67,16 @@ const Button = styled.button`
   background: ${(props) => (props.background ? props.background : "#4287f5")};
   border: none;
   border-radius: 4px;
-  margin: 0 4px;
   height: 35px;
   width: 100%;
+  margin: 2px 4px;
   &:hover {
     background: ${(props) =>
       props.hoverBackground ? props.hoverBackground : "#2b69cc"};
   }
   @media (min-width: ${BREAKPOINT}) {
     width: ${(props) => (props.width ? props.width : "80px")};
+    margin: 0 4px;
   }
 `;
 
@@ -175,7 +179,7 @@ const Toolbar = (props) => {
       <TeacherList />
       <MenuButton onClick={openDrawer}>Menu</MenuButton>
       <Menu isClosed={isClosed}>
-        <ButtonContainer isLeft>
+        <ButtonContainer isRow>
           <Button onClick={() => onNavigate("PREV")}>&lt;</Button>
           <DateDisplay onClick={() => onNavigate("TODAY")}>
             {moment(date).format("MM/DD").toLocaleString()}
@@ -183,7 +187,9 @@ const Toolbar = (props) => {
           <Button onClick={() => onNavigate("NEXT")}>&gt;</Button>
           <CloseButton onClick={closeDrawer}>X</CloseButton>
         </ButtonContainer>
-        <Button onClick={() => onView("week")}>Week View</Button>
+        <ButtonContainer>
+          <Button onClick={() => onView("week")}>Week View</Button>
+        </ButtonContainer>
         <ButtonContainer>
           {user.user.role === "staff" && (
             <>
