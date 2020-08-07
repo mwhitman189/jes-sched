@@ -1,6 +1,5 @@
 import React, { useContext, useState } from "react";
 import moment from "moment";
-import { TeachersContext } from "../context/TeachersContext";
 import { UserContext } from "../context/UserContext";
 import TeacherList from "./TeacherList";
 import NewEntryDialog from "./NewEntryDialog";
@@ -16,14 +15,31 @@ const ToolbarContainer = styled.div`
   padding: 0 10px;
 `;
 
+const Menu = styled.nav`
+  position: fixed;
+  top: 0;
+  right: 0;
+  overflow-x: hidden;
+  transition: 0.2s;
+  display: flex;
+  background: #b3cae8;
+  flex-direction: column;
+  width: 200px;
+  z-index: 2000;
+  transform: ${(props) => (props.isClosed ? "translate(200px)" : "none")};
+`;
+
 const ButtonContainer = styled.div`
   margin: 0;
-  height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
   flex: 1 1 0px;
   padding: 3px;
+  flex-direction: ${(props) => (props.isColumn ? "column" : "row")};
+  @media (min-width: 930px) {
+    height: 100%;
+  }
 `;
 
 const Button = styled.button`
@@ -37,13 +53,41 @@ const Button = styled.button`
   background: ${(props) => (props.background ? props.background : "#4287f5")};
   border: none;
   border-radius: 4px;
-  margin: 0 4px;
-  height: 100%;
-  width: ${(props) => (props.width ? props.width : "80px")};
+  margin: 4px;
+  height: 35px;
+  width: 100%;
   &:hover {
     background: ${(props) =>
       props.hoverBackground ? props.hoverBackground : "#2b69cc"};
   }
+  @media (min-width: 930px) {
+    width: ${(props) => (props.width ? props.width : "80px")};
+  }
+`;
+
+const MenuButton = styled(Button)`
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 50px;
+  @media (min-width: 930px) {
+    display: hidden;
+  }
+`;
+
+const CloseButton = styled(Button)`
+  right: 0;
+  margin: 10px;
+  align-self: flex-end;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1rem;
+  color: #ffffff;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background-color: #575757;
 `;
 
 const DateDisplay = styled.span`
@@ -65,6 +109,7 @@ const Toolbar = (props) => {
 
   const { user, dispatch } = useContext(UserContext);
   const [isOpen, setIsOpen] = useState(false);
+  const [isClosed, setIsClosed] = useState(true);
 
   // Set the types of items to display in the "Create new..." dialog
   const ITEM_TYPES = [
@@ -98,6 +143,10 @@ const Toolbar = (props) => {
     dispatch({ type: "LOGOUT_SUCCESS" });
   };
 
+  const openDrawer = () => {
+    setIsClosed(false);
+  };
+
   return (
     <ToolbarContainer>
       <NewEntryDialog
@@ -105,30 +154,34 @@ const Toolbar = (props) => {
         items={ITEM_TYPES}
         closeDialog={handleClose}
       />
-      <ButtonContainer isLeft>
-        <Button onClick={() => onNavigate("PREV")}>&lt;</Button>
-        <DateDisplay onClick={() => onNavigate("TODAY")}>
-          {moment(date).format("MM/DD").toLocaleString()}
-        </DateDisplay>
-        <Button onClick={() => onNavigate("NEXT")}>&gt;</Button>
-        <Button onClick={() => onView("week")}>Week View</Button>
-      </ButtonContainer>
       <TeacherList />
-      <ButtonContainer>
-        {user.user.role === "staff" && (
-          <>
-            <Button onClick={handleOpen}>Add New...</Button>
-            <Button onClick={handlePayrollNav}>Payroll</Button>
-          </>
-        )}
-        <Button
-          onClick={handleLogout}
-          background={"#f21d4b"}
-          hoverBackground={"#c90a33"}
-        >
-          Log Out
-        </Button>
-      </ButtonContainer>
+      <MenuButton onClick={openDrawer}>Menu</MenuButton>
+      <Menu isClosed={isClosed}>
+        <ButtonContainer isLeft>
+          <Button onClick={() => onNavigate("PREV")}>&lt;</Button>
+          <DateDisplay onClick={() => onNavigate("TODAY")}>
+            {moment(date).format("MM/DD").toLocaleString()}
+          </DateDisplay>
+          <Button onClick={() => onNavigate("NEXT")}>&gt;</Button>
+          <CloseButton>X</CloseButton>
+        </ButtonContainer>
+        <Button onClick={() => onView("week")}>Week View</Button>
+        <ButtonContainer isColumn>
+          {user.user.role === "staff" && (
+            <>
+              <Button onClick={handleOpen}>Add New...</Button>
+              <Button onClick={handlePayrollNav}>Payroll</Button>
+            </>
+          )}
+          <Button
+            onClick={handleLogout}
+            background={"#f21d4b"}
+            hoverBackground={"#c90a33"}
+          >
+            Log Out
+          </Button>
+        </ButtonContainer>
+      </Menu>
     </ToolbarContainer>
   );
 };
