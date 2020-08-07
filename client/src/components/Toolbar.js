@@ -32,7 +32,7 @@ const Button = styled.button`
   justify-content: center;
   align-items: center;
   font-weight: 800;
-  text-transform: uppercase;
+  text-transform: capitalize;
   color: #fff;
   background: ${(props) => (props.background ? props.background : "#4287f5")};
   border: none;
@@ -56,7 +56,6 @@ const Toolbar = (props) => {
   const {
     onNavigate,
     onView,
-    isRTL,
     date,
     handleAddTeacherNav,
     handlePayrollNav,
@@ -112,6 +111,7 @@ const Toolbar = (props) => {
           {moment(date).format("MM/DD").toLocaleString()}
         </DateDisplay>
         <Button onClick={() => onNavigate("NEXT")}>&gt;</Button>
+        <Button onClick={() => onView("week")}>Week View</Button>
       </ButtonContainer>
       <TeacherList />
       <ButtonContainer>
