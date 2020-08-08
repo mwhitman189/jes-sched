@@ -82,8 +82,6 @@ const Button = styled.button`
 
 const MenuButton = styled(Button)`
   position: relative;
-  top: 4px;
-  right: 4px;
   width: 50px;
   @media (min-width: ${BREAKPOINT}) {
     display: none;
