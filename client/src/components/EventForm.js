@@ -1,7 +1,11 @@
 import React, { useContext } from "react";
 import moment from "moment";
+import Flatpickr from "react-flatpickr";
 import MomentUtils from "@date-io/moment";
 import { v4 as uuidv4 } from "uuid";
+import styled from "styled-components";
+import BREAKPOINTS from "../constants/breakpoints";
+import STYLES from "../constants/styles";
 import {
   ValidatorForm,
   TextValidator,
@@ -14,6 +18,7 @@ import { TeachersContext } from "../context/TeachersContext";
 import { StudentsContext } from "../context/StudentsContext";
 import { EventsContext } from "../context/EventsContext";
 import { checkForSameDate } from "../helpers/utilities";
+import "flatpickr/dist/themes/airbnb.css";
 import roomList from "../constants/rooms";
 import lessonTypes from "../constants/lessonTypes";
 import { makeStyles } from "@material-ui/core/styles";
@@ -21,7 +26,6 @@ import { TimePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import MenuItem from "@material-ui/core/MenuItem";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
-import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogTitle from "@material-ui/core/DialogTitle";
@@ -58,6 +62,44 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: "column",
   },
 }));
+
+const Dialog = styled.div`
+  position: absolute;
+  background-color: ${STYLES.color_primaryBackground};
+  display: ${(props) => (props.isOpen ? "flex" : "none")};
+  margin: 0;
+  top: 15%;
+  left: 50%;
+  flex-direction: column;
+  transform: translate(-50%, -15%);
+  padding: 10px;
+  border-radius: 8px;
+  background-color: ${STYLES.color_primaryBackground};
+  z-index: 3;
+  box-shadow: ${STYLES.shadow};
+  @media (min-width: ${BREAKPOINTS.md}) {
+    width: 600px;
+  }
+`;
+
+const Form = styled.form`
+  display: flex;
+  width: 100%;
+  justify-content: flex-start;
+  align-items: center;
+`;
+
+const Title = styled.h1`
+  font-size: 2rem;
+  color: ${STYLES.primaryText};
+  margin: 0;
+`;
+
+const StyledFlatpickr = styled(Flatpickr)`
+  color: ${STYLES.color_primaryText};
+  height: 25px;
+  border-radius: 4px;
+`;
 
 export default function EventForm(props) {
   const classes = useStyles();
@@ -276,192 +318,208 @@ export default function EventForm(props) {
   };
 
   return (
-    <Dialog
-      open={formType === "event"}
-      onClose={hideForm}
-      aria-labelledby="form-dialog-title"
-      // Allow TimePicker component to gain focus, preventing stack overflow
-      disableEnforceFocus
-    >
-      <ValidatorForm onSubmit={event ? handleEditEvent : handleAddEvent}>
-        <DialogTitle id="form-dialog-title">New Lesson</DialogTitle>
-        <DialogContent>
-          <FormControlLabel
-            className={classes.recurSwitch}
-            control={
-              <Switch
-                checked={isRecurring}
-                onChange={handleToggleRecurrence}
-                value={isRecurring}
-              />
-            }
-            label="Weekly lesson"
-          />
-          <FormControl
-            className={[classes.formControl, classes.timePickerContainer].join(
-              " "
-            )}
-            style={{ flexDirection: "row" }}
-          >
-            <MuiPickersUtilsProvider utils={MomentUtils}>
-              <TimePicker
-                value={start}
-                onChange={handleTimeChange}
-                minutesStep={5}
-                margin="dense"
-              />
-            </MuiPickersUtilsProvider>
-          </FormControl>
-          <FormControl className={classes.formControl}>
-            <TextValidator
-              autoFocus
-              margin="dense"
-              id="title"
-              label="Lesson Name"
-              type="text"
-              value={title}
-              onChange={setTitle}
-              fullWidth
-              validators={["required"]}
-              errorMessages={["Enter the Lesson Name"]}
-            />
-          </FormControl>
-          <FormControl className={classes.formControl}>
-            <TextValidator
-              margin="dense"
-              id="duration"
-              label="Duration"
-              type="text"
-              pattern="[0-9]*"
-              value={duration}
-              onChange={setDuration}
-              fullWidth
-              validators={["required"]}
-              errorMessages={["Enter the Duration"]}
-            />
-          </FormControl>
-          <FormControl className={classes.formControl}>
-            <SelectValidator
-              classes={{ root: classes.root }}
-              margin="dense"
-              label="Teacher"
-              InputLabelProps={{ shrink: true }}
-              fullWidth
-              id="resource"
-              value={resource}
-              onChange={setResource}
-              name="resource"
-              validators={teacherValidators}
-              errorMessages={teacherValMsgs}
-            >
-              <MenuItem value="" />
-              {teachers.map((t) => (
-                <MenuItem
-                  key={`evtForm-teacher-${t.resourceId}`}
-                  value={t.resourceId}
-                >
-                  {t.name}
-                </MenuItem>
-              ))}
-            </SelectValidator>
-          </FormControl>
-          <FormControl fullWidth size="medium" className={classes.formControl}>
-            <Autocomplete
-              id="students"
-              options={students}
-              label="Students"
-              margin="dense"
-              getOptionLabel={(option) =>
-                `${option.givenName} ${option.familyName}`
-              }
-              onChange={(e, newMembers) => {
-                setMembers(newMembers);
-              }}
-              multiple
-              defaultValue={event.students}
-              // Prevent event participants from showing up in the student list to prevent
-              // multiple selection
-              filterOptions={(students, state) =>
-                students.filter((s) => members.every((m) => s._id !== m._id))
-              }
-              renderInput={(params) => (
-                <TextField {...params} label="Students" variant="outlined" />
-              )}
-            />
-          </FormControl>
-          <FormControl className={classes.formControl}>
-            <SelectValidator
-              classes={{ root: classes.root }}
-              label="Room"
-              InputLabelProps={{ shrink: true }}
-              margin="dense"
-              fullWidth
-              id="room"
-              value={room}
-              onChange={setRoom}
-              name="room"
-              validators={roomValidators}
-              errorMessages={roomValMsgs}
-            >
-              <MenuItem value="" />
-              {roomList.map((r) => (
-                <MenuItem key={`evtForm-room-${r}`} value={r}>
-                  {r}
-                </MenuItem>
-              ))}
-            </SelectValidator>
-          </FormControl>
-          <FormControl className={classes.formControl}>
-            <SelectValidator
-              classes={{ root: classes.list }}
-              margin="dense"
-              label="Lesson Type"
-              InputLabelProps={{ shrink: true }}
-              fullWidth
-              id="type"
-              value={eventType}
-              onChange={setEventType}
-              name="type"
-            >
-              <MenuItem value="" />
-              {lessonTypes.map((t) => (
-                <MenuItem key={`evtForm-type-${t.shortName}`} value={t.type}>
-                  {t.name}
-                </MenuItem>
-              ))}
-            </SelectValidator>
-          </FormControl>
-          <FormControl className={classes.formControl}>
-            <TextValidator
-              autoFocus
-              margin="dense"
-              id="travelTime"
-              label="Travel Time"
-              type="text"
-              value={travelTime}
-              onChange={setTravelTime}
-              fullWidth
-            />
-          </FormControl>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleDeleteEvent} color="secondary">
-            Delete One
-          </Button>
-          <Button onClick={handleDeleteEvents} color="secondary">
-            Delete All
-          </Button>
-          <Button onClick={handleCancelEvent} color="secondary">
-            Cancel Lesson
-          </Button>
-          <Button onClick={hideForm} color="primary">
-            Back
-          </Button>
-          <Button type="submit" color="primary">
-            {event ? "Confirm Change" : "Add Lesson"}
-          </Button>
-        </DialogActions>
-      </ValidatorForm>
+    <Dialog isOpen={formType === "event"}>
+      <Title>{event ? "Edit Lesson" : "Add New Lesson"}</Title>
+      <Form onSubmit={event ? handleEditEvent : handleAddEvent}>
+        <StyledFlatpickr
+          defaultValue={event ? event.start : ""}
+          value={start}
+          options={{
+            enableTime: true,
+            noCalendar: true,
+            time_24hr: true,
+            minTime: "9:00",
+            maxTime: "21:00",
+          }}
+        />
+      </Form>
     </Dialog>
+    // <Dialog
+    //   open={formType === "event"}
+    //   onClose={hideForm}
+    //   aria-labelledby="form-dialog-title"
+    //   // Allow TimePicker component to gain focus, preventing stack overflow
+    //   disableEnforceFocus
+    // >
+    //   <ValidatorForm onSubmit={event ? handleEditEvent : handleAddEvent}>
+    //     <DialogTitle id="form-dialog-title">New Lesson</DialogTitle>
+    //     <DialogContent>
+    //       <FormControlLabel
+    //         className={classes.recurSwitch}
+    //         control={
+    //           <Switch
+    //             checked={isRecurring}
+    //             onChange={handleToggleRecurrence}
+    //             value={isRecurring}
+    //           />
+    //         }
+    //         label="Weekly lesson"
+    //       />
+    //       <FormControl
+    //         className={[classes.formControl, classes.timePickerContainer].join(
+    //           " "
+    //         )}
+    //         style={{ flexDirection: "row" }}
+    //       >
+    //         <MuiPickersUtilsProvider utils={MomentUtils}>
+    //           <TimePicker
+    //             value={start}
+    //             onChange={handleTimeChange}
+    //             minutesStep={5}
+    //             margin="dense"
+    //           />
+    //         </MuiPickersUtilsProvider>
+    //       </FormControl>
+    //       <FormControl className={classes.formControl}>
+    //         <TextValidator
+    //           autoFocus
+    //           margin="dense"
+    //           id="title"
+    //           label="Lesson Name"
+    //           type="text"
+    //           value={title}
+    //           onChange={setTitle}
+    //           fullWidth
+    //           validators={["required"]}
+    //           errorMessages={["Enter the Lesson Name"]}
+    //         />
+    //       </FormControl>
+    //       <FormControl className={classes.formControl}>
+    //         <TextValidator
+    //           margin="dense"
+    //           id="duration"
+    //           label="Duration"
+    //           type="text"
+    //           pattern="[0-9]*"
+    //           value={duration}
+    //           onChange={setDuration}
+    //           fullWidth
+    //           validators={["required"]}
+    //           errorMessages={["Enter the Duration"]}
+    //         />
+    //       </FormControl>
+    //       <FormControl className={classes.formControl}>
+    //         <SelectValidator
+    //           classes={{ root: classes.root }}
+    //           margin="dense"
+    //           label="Teacher"
+    //           InputLabelProps={{ shrink: true }}
+    //           fullWidth
+    //           id="resource"
+    //           value={resource}
+    //           onChange={setResource}
+    //           name="resource"
+    //           validators={teacherValidators}
+    //           errorMessages={teacherValMsgs}
+    //         >
+    //           <MenuItem value="" />
+    //           {teachers.map((t) => (
+    //             <MenuItem
+    //               key={`evtForm-teacher-${t.resourceId}`}
+    //               value={t.resourceId}
+    //             >
+    //               {t.name}
+    //             </MenuItem>
+    //           ))}
+    //         </SelectValidator>
+    //       </FormControl>
+    //       <FormControl fullWidth size="medium" className={classes.formControl}>
+    //         <Autocomplete
+    //           id="students"
+    //           options={students}
+    //           label="Students"
+    //           margin="dense"
+    //           getOptionLabel={(option) =>
+    //             `${option.givenName} ${option.familyName}`
+    //           }
+    //           onChange={(e, newMembers) => {
+    //             setMembers(newMembers);
+    //           }}
+    //           multiple
+    //           defaultValue={event.students}
+    //           // Prevent event participants from showing up in the student list to prevent
+    //           // multiple selection
+    //           filterOptions={(students, state) =>
+    //             students.filter((s) => members.every((m) => s._id !== m._id))
+    //           }
+    //           renderInput={(params) => (
+    //             <TextField {...params} label="Students" variant="outlined" />
+    //           )}
+    //         />
+    //       </FormControl>
+    //       <FormControl className={classes.formControl}>
+    //         <SelectValidator
+    //           classes={{ root: classes.root }}
+    //           label="Room"
+    //           InputLabelProps={{ shrink: true }}
+    //           margin="dense"
+    //           fullWidth
+    //           id="room"
+    //           value={room}
+    //           onChange={setRoom}
+    //           name="room"
+    //           validators={roomValidators}
+    //           errorMessages={roomValMsgs}
+    //         >
+    //           <MenuItem value="" />
+    //           {roomList.map((r) => (
+    //             <MenuItem key={`evtForm-room-${r}`} value={r}>
+    //               {r}
+    //             </MenuItem>
+    //           ))}
+    //         </SelectValidator>
+    //       </FormControl>
+    //       <FormControl className={classes.formControl}>
+    //         <SelectValidator
+    //           classes={{ root: classes.list }}
+    //           margin="dense"
+    //           label="Lesson Type"
+    //           InputLabelProps={{ shrink: true }}
+    //           fullWidth
+    //           id="type"
+    //           value={eventType}
+    //           onChange={setEventType}
+    //           name="type"
+    //         >
+    //           <MenuItem value="" />
+    //           {lessonTypes.map((t) => (
+    //             <MenuItem key={`evtForm-type-${t.shortName}`} value={t.type}>
+    //               {t.name}
+    //             </MenuItem>
+    //           ))}
+    //         </SelectValidator>
+    //       </FormControl>
+    //       <FormControl className={classes.formControl}>
+    //         <TextValidator
+    //           autoFocus
+    //           margin="dense"
+    //           id="travelTime"
+    //           label="Travel Time"
+    //           type="text"
+    //           value={travelTime}
+    //           onChange={setTravelTime}
+    //           fullWidth
+    //         />
+    //       </FormControl>
+    //     </DialogContent>
+    //     <DialogActions>
+    //       <Button onClick={handleDeleteEvent} color="secondary">
+    //         Delete One
+    //       </Button>
+    //       <Button onClick={handleDeleteEvents} color="secondary">
+    //         Delete All
+    //       </Button>
+    //       <Button onClick={handleCancelEvent} color="secondary">
+    //         Cancel Lesson
+    //       </Button>
+    //       <Button onClick={hideForm} color="primary">
+    //         Back
+    //       </Button>
+    //       <Button type="submit" color="primary">
+    //         {event ? "Confirm Change" : "Add Lesson"}
+    //       </Button>
+    //     </DialogActions>
+    //   </ValidatorForm>
+    // </Dialog>
   );
 }
