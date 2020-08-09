@@ -12,6 +12,7 @@ const Container = styled.div`
 const InputLabel = styled.label`
   color: ${STYLES.color_primaryText};
   position: ${(props) => (props.isCheckbox ? "relative" : "absolute")};
+  ${(props) => !props.isCheckbox && { transform: "translateY(-22px)" }}
   font-size: ${(props) => (props.isCheckbox ? "1rem" : "0.6rem")};
   margin: ${(props) => (props.isCheckbox ? "0 10px 0 5px" : 0)};
 `;

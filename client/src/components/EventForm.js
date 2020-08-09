@@ -3,6 +3,7 @@ import moment from "moment";
 import Flatpickr from "react-flatpickr";
 import Form from "./templates/Form";
 import FormInput from "./templates/FormInput";
+import TextInput from "./templates/TextInput";
 import Checkbox from "./templates/Checkbox";
 import MomentUtils from "@date-io/moment";
 import { v4 as uuidv4 } from "uuid";
@@ -335,6 +336,9 @@ export default function EventForm(props) {
               minuteIncrement: 5,
             }}
           />
+        </FormInput>
+        <FormInput label="Lesson Name">
+          <TextInput name="title" value={title} setValue={setTitle} />
         </FormInput>
       </Form>
     </Dialog>
