@@ -1,6 +1,9 @@
 import React, { useContext } from "react";
 import moment from "moment";
 import Flatpickr from "react-flatpickr";
+import Form from "./templates/Form";
+import FormInput from "./templates/FormInput";
+import Checkbox from "./templates/Checkbox";
 import MomentUtils from "@date-io/moment";
 import { v4 as uuidv4 } from "uuid";
 import styled from "styled-components";
@@ -64,6 +67,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Dialog = styled.div`
+  color: ${STYLES.color_primaryText};
   position: absolute;
   background-color: ${STYLES.color_primaryBackground};
   display: ${(props) => (props.isOpen ? "flex" : "none")};
@@ -80,19 +84,6 @@ const Dialog = styled.div`
   @media (min-width: ${BREAKPOINTS.md}) {
     width: 600px;
   }
-`;
-
-const Form = styled.form`
-  display: flex;
-  width: 100%;
-  justify-content: flex-start;
-  align-items: center;
-`;
-
-const Title = styled.h1`
-  font-size: 2rem;
-  color: ${STYLES.primaryText};
-  margin: 0;
 `;
 
 const StyledFlatpickr = styled(Flatpickr)`
@@ -319,19 +310,32 @@ export default function EventForm(props) {
 
   return (
     <Dialog isOpen={formType === "event"}>
-      <Title>{event ? "Edit Lesson" : "Add New Lesson"}</Title>
-      <Form onSubmit={event ? handleEditEvent : handleAddEvent}>
-        <StyledFlatpickr
-          defaultValue={event ? event.start : ""}
-          value={start}
-          options={{
-            enableTime: true,
-            noCalendar: true,
-            time_24hr: true,
-            minTime: "9:00",
-            maxTime: "21:00",
-          }}
-        />
+      <Form
+        title={event ? "Edit Lesson" : "Add New Lesson"}
+        submitAction={event ? handleEditEvent : handleAddEvent}
+      >
+        <FormInput label="Weekly Event" isCheckbox>
+          <Checkbox
+            name="isRecurring"
+            isChecked={isRecurring}
+            handleToggle={handleToggleRecurrence}
+          />
+        </FormInput>
+        <FormInput label="Start Time">
+          <StyledFlatpickr
+            id="time-picker"
+            defaultValue={event ? event.start : ""}
+            value={start}
+            options={{
+              enableTime: true,
+              noCalendar: true,
+              time_24hr: true,
+              minTime: "9:00",
+              maxTime: "21:00",
+              minuteIncrement: 5,
+            }}
+          />
+        </FormInput>
       </Form>
     </Dialog>
     // <Dialog

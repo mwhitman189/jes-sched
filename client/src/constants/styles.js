@@ -1,7 +1,7 @@
 const STYLES = {
   color_primary: "#4287f5",
-  color_primaryText: "#4a4a4a",
-  color_primaryBackground: "#dedede",
+  color_primaryText: "#575757",
+  color_primaryBackground: "#edf1f7",
   color_secondary: "#f21d4b",
   color_secondaryText: "#fff",
   color_secondaryBackground: "#b3cae8",
