@@ -1,11 +1,11 @@
-import React, { useContext } from "react";
+import React, { useContext, useCallback } from "react";
 import moment from "moment";
 import Flatpickr from "react-flatpickr";
 import Form from "./templates/Form";
 import FormInput from "./templates/FormInput";
 import TextInput from "./templates/TextInput";
 import Checkbox from "./templates/Checkbox";
-import SelectInput from "./templates/SelectInput";
+import StyledSelect from "./templates/StyledSelect";
 import MomentUtils from "@date-io/moment";
 import { v4 as uuidv4 } from "uuid";
 import styled from "styled-components";
@@ -27,17 +27,6 @@ import "flatpickr/dist/themes/airbnb.css";
 import roomList from "../constants/rooms";
 import lessonTypes from "../constants/lessonTypes";
 import { makeStyles } from "@material-ui/core/styles";
-import { TimePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
-import MenuItem from "@material-ui/core/MenuItem";
-import TextField from "@material-ui/core/TextField";
-import Button from "@material-ui/core/Button";
-import DialogActions from "@material-ui/core/DialogActions";
-import DialogContent from "@material-ui/core/DialogContent";
-import DialogTitle from "@material-ui/core/DialogTitle";
-import FormControl from "@material-ui/core/FormControl";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Switch from "@material-ui/core/Switch";
-import Autocomplete from "@material-ui/lab/Autocomplete";
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -313,6 +302,10 @@ export default function EventForm(props) {
     toggleIsRecurring(!isRecurring);
   };
 
+  const handleMembersChange = (selectedOption) => {
+    setMembers(selectedOption);
+  };
+
   return (
     <Dialog isOpen={formType === "event"}>
       <Form
@@ -348,13 +341,28 @@ export default function EventForm(props) {
           <TextInput name="duration" value={duration} setValue={setDuration} />
         </FormInput>
         <FormInput label="Teacher">
-          <SelectInput
+          <StyledSelect
             name="resource"
-            currValue={resource}
-            listItems={teachers}
-            valueKey={"resourceId"}
-            nameKey={"name"}
-            setValue={setResource}
+            value={resource || ""}
+            getOptionValue={(option) => option.resourceId}
+            options={teachers}
+            onChange={setResource}
+            placeholder="Select Teacher"
+            getOptionLabel={(option) => option.name}
+          />
+        </FormInput>
+        <FormInput label="Students">
+          <StyledSelect
+            options={students}
+            getOptionLabel={(option) =>
+              `${option.givenName} ${option.familyName}`
+            }
+            getOptionValue={(option) => option.label}
+            isMulti
+            onChange={handleMembersChange}
+            placeholder="Add students"
+            noOptionsMessage={() => "Student does not exist..."}
+            isSearchable
           />
         </FormInput>
       </Form>
@@ -370,55 +378,6 @@ export default function EventForm(props) {
     //     <DialogTitle id="form-dialog-title">New Lesson</DialogTitle>
     //     <DialogContent>
 
-    //       <FormControl className={classes.formControl}>
-    //         <SelectValidator
-    //           classes={{ root: classes.root }}
-    //           margin="dense"
-    //           label="Teacher"
-    //           InputLabelProps={{ shrink: true }}
-    //           fullWidth
-    //           id="resource"
-    //           value={resource}
-    //           onChange={setResource}
-    //           name="resource"
-    //           validators={teacherValidators}
-    //           errorMessages={teacherValMsgs}
-    //         >
-    //           <MenuItem value="" />
-    //           {teachers.map((t) => (
-    //             <MenuItem
-    //               key={`evtForm-teacher-${t.resourceId}`}
-    //               value={t.resourceId}
-    //             >
-    //               {t.name}
-    //             </MenuItem>
-    //           ))}
-    //         </SelectValidator>
-    //       </FormControl>
-    //       <FormControl fullWidth size="medium" className={classes.formControl}>
-    //         <Autocomplete
-    //           id="students"
-    //           options={students}
-    //           label="Students"
-    //           margin="dense"
-    //           getOptionLabel={(option) =>
-    //             `${option.givenName} ${option.familyName}`
-    //           }
-    //           onChange={(e, newMembers) => {
-    //             setMembers(newMembers);
-    //           }}
-    //           multiple
-    //           defaultValue={event.students}
-    //           // Prevent event participants from showing up in the student list to prevent
-    //           // multiple selection
-    //           filterOptions={(students, state) =>
-    //             students.filter((s) => members.every((m) => s._id !== m._id))
-    //           }
-    //           renderInput={(params) => (
-    //             <TextField {...params} label="Students" variant="outlined" />
-    //           )}
-    //         />
-    //       </FormControl>
     //       <FormControl className={classes.formControl}>
     //         <SelectValidator
     //           classes={{ root: classes.root }}

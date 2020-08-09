@@ -54,6 +54,7 @@ export default function EventForm(props) {
     addStudent({
       givenName: givenName,
       familyName: familyName,
+      label: givenName + " " + familyName,
       level: level,
       phone: phone,
       email: email,

@@ -7,7 +7,8 @@ const StudentSchema = new Schema(
   {
     givenName: { type: String, required: true, trim: true },
     familyName: { type: String, required: true, trim: true },
-    level: { type: String, required: true, trim: true },
+    label: { type: String, required: true, trim: true },
+    level: { type: String, trim: true },
     phone: {
       type: String,
       validate: {
