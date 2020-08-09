@@ -5,6 +5,7 @@ import Form from "./templates/Form";
 import FormInput from "./templates/FormInput";
 import TextInput from "./templates/TextInput";
 import Checkbox from "./templates/Checkbox";
+import SelectInput from "./templates/SelectInput";
 import MomentUtils from "@date-io/moment";
 import { v4 as uuidv4 } from "uuid";
 import styled from "styled-components";
@@ -82,6 +83,7 @@ const Dialog = styled.div`
   background-color: ${STYLES.color_primaryBackground};
   z-index: 3;
   box-shadow: ${STYLES.shadow};
+  min-height: 400px;
   @media (min-width: ${BREAKPOINTS.md}) {
     width: 600px;
   }
@@ -91,6 +93,8 @@ const StyledFlatpickr = styled(Flatpickr)`
   color: ${STYLES.color_primaryText};
   height: 25px;
   border-radius: 4px;
+  border: ${STYLES.color_secondaryBackground} solid 2px;
+  box-shadow: ${STYLES.shadow};
 `;
 
 export default function EventForm(props) {
@@ -322,6 +326,9 @@ export default function EventForm(props) {
             handleToggle={handleToggleRecurrence}
           />
         </FormInput>
+        <FormInput label="Lesson Name">
+          <TextInput name="title" value={title} setValue={setTitle} />
+        </FormInput>
         <FormInput label="Start Time">
           <StyledFlatpickr
             id="time-picker"
@@ -337,8 +344,18 @@ export default function EventForm(props) {
             }}
           />
         </FormInput>
-        <FormInput label="Lesson Name">
-          <TextInput name="title" value={title} setValue={setTitle} />
+        <FormInput label="Lesson Duration">
+          <TextInput name="duration" value={duration} setValue={setDuration} />
+        </FormInput>
+        <FormInput label="Teacher">
+          <SelectInput
+            name="resource"
+            currValue={resource}
+            listItems={teachers}
+            valueKey={"resourceId"}
+            nameKey={"name"}
+            setValue={setResource}
+          />
         </FormInput>
       </Form>
     </Dialog>
@@ -352,60 +369,7 @@ export default function EventForm(props) {
     //   <ValidatorForm onSubmit={event ? handleEditEvent : handleAddEvent}>
     //     <DialogTitle id="form-dialog-title">New Lesson</DialogTitle>
     //     <DialogContent>
-    //       <FormControlLabel
-    //         className={classes.recurSwitch}
-    //         control={
-    //           <Switch
-    //             checked={isRecurring}
-    //             onChange={handleToggleRecurrence}
-    //             value={isRecurring}
-    //           />
-    //         }
-    //         label="Weekly lesson"
-    //       />
-    //       <FormControl
-    //         className={[classes.formControl, classes.timePickerContainer].join(
-    //           " "
-    //         )}
-    //         style={{ flexDirection: "row" }}
-    //       >
-    //         <MuiPickersUtilsProvider utils={MomentUtils}>
-    //           <TimePicker
-    //             value={start}
-    //             onChange={handleTimeChange}
-    //             minutesStep={5}
-    //             margin="dense"
-    //           />
-    //         </MuiPickersUtilsProvider>
-    //       </FormControl>
-    //       <FormControl className={classes.formControl}>
-    //         <TextValidator
-    //           autoFocus
-    //           margin="dense"
-    //           id="title"
-    //           label="Lesson Name"
-    //           type="text"
-    //           value={title}
-    //           onChange={setTitle}
-    //           fullWidth
-    //           validators={["required"]}
-    //           errorMessages={["Enter the Lesson Name"]}
-    //         />
-    //       </FormControl>
-    //       <FormControl className={classes.formControl}>
-    //         <TextValidator
-    //           margin="dense"
-    //           id="duration"
-    //           label="Duration"
-    //           type="text"
-    //           pattern="[0-9]*"
-    //           value={duration}
-    //           onChange={setDuration}
-    //           fullWidth
-    //           validators={["required"]}
-    //           errorMessages={["Enter the Duration"]}
-    //         />
-    //       </FormControl>
+
     //       <FormControl className={classes.formControl}>
     //         <SelectValidator
     //           classes={{ root: classes.root }}

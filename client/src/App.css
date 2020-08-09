@@ -4,3 +4,8 @@
   width: 100%;
   justify-content: center;
 }
+
+input {
+  padding: 0;
+  border: none;
+}
