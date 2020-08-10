@@ -9,8 +9,6 @@ import StyledSelect from "./templates/StyledSelect";
 import MomentUtils from "@date-io/moment";
 import { v4 as uuidv4 } from "uuid";
 import styled from "styled-components";
-import BREAKPOINTS from "../constants/breakpoints";
-import STYLES from "../constants/styles";
 import {
   ValidatorForm,
   TextValidator,
@@ -23,71 +21,73 @@ import { TeachersContext } from "../context/TeachersContext";
 import { StudentsContext } from "../context/StudentsContext";
 import { EventsContext } from "../context/EventsContext";
 import { checkForSameDate } from "../helpers/utilities";
-import "flatpickr/dist/themes/airbnb.css";
 import roomList from "../constants/rooms";
 import lessonTypes from "../constants/lessonTypes";
-import { makeStyles } from "@material-ui/core/styles";
-
-const useStyles = makeStyles((theme) => ({
-  formControl: {
-    margin: theme.spacing(1),
-    minWidth: 120,
-    display: "inline",
-    "& .MuiFormControl-root": {
-      margin: "10px",
-      width: "200px",
-    },
-  },
-  recurSwitch: {
-    position: "absolute",
-    right: "1rem",
-    top: "1rem",
-  },
-  selectEmpty: {
-    marginTop: theme.spacing(2),
-  },
-  timePickerContainer: {
-    display: "flex",
-    justifyContent: "center",
-    width: "100%",
-  },
-  root: {
-    display: "flex",
-    flexDirection: "column",
-  },
-}));
+import "flatpickr/dist/themes/airbnb.css";
 
 const Dialog = styled.div`
-  color: ${STYLES.color_primaryText};
+  color: ${(props) => props.theme.colors.primaryText};
   position: absolute;
-  background-color: ${STYLES.color_primaryBackground};
+  background-color: ${(props) => props.theme.colors.primaryBackground};
   display: ${(props) => (props.isOpen ? "flex" : "none")};
   margin: 0;
   top: 15%;
   left: 50%;
   flex-direction: column;
+  justify-content: space-between;
   transform: translate(-50%, -15%);
   padding: 10px;
   border-radius: 8px;
-  background-color: ${STYLES.color_primaryBackground};
+  background-color: ${(props) => props.theme.colors.primaryBackground};
   z-index: 3;
-  box-shadow: ${STYLES.shadow};
-  min-height: 400px;
-  @media (min-width: ${BREAKPOINTS.md}) {
+  box-shadow: ${(props) => props.theme.effects.shadow};
+  height: 400px;
+  @media (min-width: ${(props) => props.theme.breakpoints.md}) {
     width: 600px;
   }
 `;
 
+const InputGroup = styled.div`
+  display: flex;
+  flex-direction: row;
+`;
+
 const StyledFlatpickr = styled(Flatpickr)`
-  color: ${STYLES.color_primaryText};
+  color: ${(props) => props.theme.colors.primaryText};
   height: 25px;
   border-radius: 4px;
-  border: ${STYLES.color_secondaryBackground} solid 2px;
-  box-shadow: ${STYLES.shadow};
+  border: ${(props) => props.theme.colors.secondaryBackground} solid 2px;
+  box-shadow: ${(props) => props.theme.effects.shadow};
+`;
+
+const ButtonGroup = styled.div`
+  margin: 30px 0 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: column;
+  flex: 1 1 0px;
+  padding: 0;
+  flex-direction: row;
+`;
+
+const Button = styled.button`
+  display: ${(props) => props.theme.btnStyles.display};
+  cursor: ${(props) => props.theme.btnStyles.cursor};
+  justify-content: ${(props) => props.theme.btnStyles.justifyContent};
+  align-items: ${(props) => props.theme.btnStyles.alignItems};
+  font-weight: ${(props) => props.theme.btnStyles.fontWeight};
+  text-transform: ${(props) => props.theme.btnStyles.textTransform};
+  color: ${(props) => props.theme.btnStyles.color};
+  background: ${(props) => (props.background ? props.background : "#4287f5")};
+  border: ${(props) => props.theme.btnStyles.border};
+  border-radius: ${(props) => props.theme.btnStyles.borderRadius};
+  height: ${(props) => props.theme.btnStyles.height};
+  margin: ${(props) => props.theme.btnStyles.margin};
+  width: ${(props) => props.theme.btnStyles.width};
 `;
 
 export default function EventForm(props) {
-  const classes = useStyles();
   const { addTeachingMins } = useContext(TeachersContext);
   const { events, addEvent, editEvent, deleteEvent, deleteEvents } = useContext(
     EventsContext
@@ -306,151 +306,131 @@ export default function EventForm(props) {
     setMembers(selectedOption);
   };
 
+  const handleResourceChange = (selectedOption) => {
+    setResource(selectedOption.resourceId);
+  };
+
+  const handleRoomChange = (selectedOption) => {
+    setRoom(selectedOption.value);
+  };
+
+  const handleEventTypeChange = (selectedOption) => {
+    setEventType(selectedOption.value);
+  };
+
   return (
     <Dialog isOpen={formType === "event"}>
       <Form
         title={event ? "Edit Lesson" : "Add New Lesson"}
         submitAction={event ? handleEditEvent : handleAddEvent}
       >
-        <FormInput label="Weekly Event" isCheckbox>
-          <Checkbox
-            name="isRecurring"
-            isChecked={isRecurring}
-            handleToggle={handleToggleRecurrence}
-          />
-        </FormInput>
-        <FormInput label="Lesson Name">
-          <TextInput name="title" value={title} setValue={setTitle} />
-        </FormInput>
-        <FormInput label="Start Time">
-          <StyledFlatpickr
-            id="time-picker"
-            defaultValue={event ? event.start : ""}
-            value={start}
-            options={{
-              enableTime: true,
-              noCalendar: true,
-              time_24hr: true,
-              minTime: "9:00",
-              maxTime: "21:00",
-              minuteIncrement: 5,
-            }}
-          />
-        </FormInput>
-        <FormInput label="Lesson Duration">
-          <TextInput name="duration" value={duration} setValue={setDuration} />
-        </FormInput>
-        <FormInput label="Teacher">
-          <StyledSelect
-            name="resource"
-            value={resource || ""}
-            getOptionValue={(option) => option.resourceId}
-            options={teachers}
-            onChange={setResource}
-            placeholder="Select Teacher"
-            getOptionLabel={(option) => option.name}
-          />
-        </FormInput>
-        <FormInput label="Students">
-          <StyledSelect
-            options={students}
-            getOptionLabel={(option) =>
-              `${option.givenName} ${option.familyName}`
-            }
-            getOptionValue={(option) => option.label}
-            isMulti
-            onChange={handleMembersChange}
-            placeholder="Add students"
-            noOptionsMessage={() => "Student does not exist..."}
-            isSearchable
-          />
-        </FormInput>
+        <InputGroup>
+          <FormInput label="Weekly Event" isCheckbox>
+            <Checkbox
+              name="isRecurring"
+              isChecked={isRecurring}
+              handleToggle={handleToggleRecurrence}
+            />
+          </FormInput>
+          <FormInput label="Lesson Name">
+            <TextInput name="title" value={title} setValue={setTitle} />
+          </FormInput>
+          <FormInput label="Start Time">
+            <StyledFlatpickr
+              id="time-picker"
+              defaultValue={event ? event.start : ""}
+              value={start}
+              options={{
+                enableTime: true,
+                noCalendar: true,
+                time_24hr: true,
+                minTime: "9:00",
+                maxTime: "21:00",
+                minuteIncrement: 5,
+              }}
+            />
+          </FormInput>
+        </InputGroup>
+        <InputGroup>
+          <FormInput label="Lesson Duration">
+            <TextInput
+              name="duration"
+              value={duration}
+              setValue={setDuration}
+            />
+          </FormInput>
+          <FormInput label="Travel Time (minutes)">
+            <TextInput
+              name="travelTime"
+              value={travelTime}
+              setValue={setTravelTime}
+            />
+          </FormInput>
+        </InputGroup>
+        <InputGroup>
+          <FormInput label="Teacher">
+            <StyledSelect
+              name="resource"
+              value={resource || ""}
+              getOptionLabel={(option) => option.name}
+              getOptionValue={(option) => option.resourceId}
+              options={teachers}
+              onChange={handleResourceChange}
+              placeholder="Select Teacher"
+            />
+          </FormInput>
+          <FormInput label="Students">
+            <StyledSelect
+              options={students}
+              getOptionLabel={(option) =>
+                `${option.givenName} ${option.familyName}`
+              }
+              getOptionValue={(option) => option.label}
+              isMulti
+              onChange={handleMembersChange}
+              placeholder="Add students"
+              noOptionsMessage={() => "Student does not exist..."}
+              isSearchable
+            />
+          </FormInput>
+        </InputGroup>
+        <InputGroup>
+          <FormInput label="Room">
+            <StyledSelect
+              name="room"
+              options={roomList}
+              getOptionValue={(option) => option.value}
+              onChange={handleRoomChange}
+              placeholder="Select Room"
+            />
+          </FormInput>
+          <FormInput label="Lesson Type">
+            <StyledSelect
+              name="type"
+              options={lessonTypes}
+              onChange={handleEventTypeChange}
+              placeholder="Lesson Type"
+            />
+          </FormInput>
+        </InputGroup>
+        <ButtonGroup>
+          <Button onClick={handleDeleteEvent} color="secondary">
+            Delete One
+          </Button>
+          <Button onClick={handleDeleteEvents} color="secondary">
+            Delete All
+          </Button>
+          <Button onClick={handleCancelEvent} color="secondary">
+            Cancel Lesson
+          </Button>
+          <Button onClick={hideForm} color="primary">
+            Back
+          </Button>
+          <Button type="submit" color="primary">
+            {event ? "Confirm Change" : "Add Lesson"}
+          </Button>
+        </ButtonGroup>
       </Form>
     </Dialog>
-    // <Dialog
-    //   open={formType === "event"}
-    //   onClose={hideForm}
-    //   aria-labelledby="form-dialog-title"
-    //   // Allow TimePicker component to gain focus, preventing stack overflow
-    //   disableEnforceFocus
-    // >
-    //   <ValidatorForm onSubmit={event ? handleEditEvent : handleAddEvent}>
-    //     <DialogTitle id="form-dialog-title">New Lesson</DialogTitle>
-    //     <DialogContent>
-
-    //       <FormControl className={classes.formControl}>
-    //         <SelectValidator
-    //           classes={{ root: classes.root }}
-    //           label="Room"
-    //           InputLabelProps={{ shrink: true }}
-    //           margin="dense"
-    //           fullWidth
-    //           id="room"
-    //           value={room}
-    //           onChange={setRoom}
-    //           name="room"
-    //           validators={roomValidators}
-    //           errorMessages={roomValMsgs}
-    //         >
-    //           <MenuItem value="" />
-    //           {roomList.map((r) => (
-    //             <MenuItem key={`evtForm-room-${r}`} value={r}>
-    //               {r}
-    //             </MenuItem>
-    //           ))}
-    //         </SelectValidator>
-    //       </FormControl>
-    //       <FormControl className={classes.formControl}>
-    //         <SelectValidator
-    //           classes={{ root: classes.list }}
-    //           margin="dense"
-    //           label="Lesson Type"
-    //           InputLabelProps={{ shrink: true }}
-    //           fullWidth
-    //           id="type"
-    //           value={eventType}
-    //           onChange={setEventType}
-    //           name="type"
-    //         >
-    //           <MenuItem value="" />
-    //           {lessonTypes.map((t) => (
-    //             <MenuItem key={`evtForm-type-${t.shortName}`} value={t.type}>
-    //               {t.name}
-    //             </MenuItem>
-    //           ))}
-    //         </SelectValidator>
-    //       </FormControl>
-    //       <FormControl className={classes.formControl}>
-    //         <TextValidator
-    //           autoFocus
-    //           margin="dense"
-    //           id="travelTime"
-    //           label="Travel Time"
-    //           type="text"
-    //           value={travelTime}
-    //           onChange={setTravelTime}
-    //           fullWidth
-    //         />
-    //       </FormControl>
-    //     </DialogContent>
-    //     <DialogActions>
-    //       <Button onClick={handleDeleteEvent} color="secondary">
-    //         Delete One
-    //       </Button>
-    //       <Button onClick={handleDeleteEvents} color="secondary">
-    //         Delete All
-    //       </Button>
-    //       <Button onClick={handleCancelEvent} color="secondary">
-    //         Cancel Lesson
-    //       </Button>
-    //       <Button onClick={hideForm} color="primary">
-    //         Back
-    //       </Button>
-    //       <Button type="submit" color="primary">
-    //         {event ? "Confirm Change" : "Add Lesson"}
-    //       </Button>
-    //     </DialogActions>
-    //   </ValidatorForm>
-    // </Dialog>
   );
 }

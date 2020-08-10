@@ -1,6 +1,5 @@
 import React from "react";
 import styled from "styled-components";
-import STYLES from "../constants/styles";
 
 const Dialog = styled.dialog`
   position: absolute;
@@ -12,7 +11,7 @@ const Dialog = styled.dialog`
   top: 20%;
   z-index: 3;
   border-radius: 4px;
-  box-shadow: ${STYLES.shadow};
+  box-shadow: ${(props) => props.theme.shadow};
 `;
 
 const ButtonContainer = styled.div`

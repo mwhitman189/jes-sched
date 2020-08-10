@@ -1,7 +1,5 @@
 import React from "react";
 import styled from "styled-components";
-import BREAKPOINTS from "../../constants/breakpoints";
-import STYLES from "../../constants/styles";
 
 const Container = styled.div`
   display: flex;
@@ -11,13 +9,13 @@ const Container = styled.div`
   margin-right: 10px;
   margin: 30px 10px 0 0;
   width: 100%;
-  @media (min-width: ${BREAKPOINTS.md}) {
+  @media (min-width: ${(props) => props.theme.breakpoints.md}) {
     width: 160px;
   }
 `;
 
 const InputLabel = styled.label`
-  color: ${STYLES.color_primaryText};
+  color: ${(props) => props.theme.colors.primaryText};
   position: ${(props) => (props.isCheckbox ? "relative" : "absolute")};
   ${(props) => !props.isCheckbox && { transform: "translateY(-22px)" }}
   font-size: ${(props) => (props.isCheckbox ? "1rem" : "0.6rem")};

@@ -6,8 +6,6 @@ import NewEntryDialog from "./NewEntryDialog";
 import styled from "styled-components";
 import "react-big-calendar/lib/sass/toolbar.scss";
 
-const BREAKPOINT = "930px";
-
 const ToolbarContainer = styled.div`
   height: 40px;
   display: flex;
@@ -31,7 +29,7 @@ const Menu = styled.nav`
   z-index: 2;
   padding: 2px;
   transform: ${(props) => (props.isClosed ? "translate(200px)" : "none")};
-  @media (min-width: ${BREAKPOINT}) {
+  @media (min-width: ${(props) => props.theme.breakpoints.md}) {
     position: relative;
     transform: none;
     flex-direction: row;
@@ -50,31 +48,31 @@ const ButtonContainer = styled.div`
   flex: 1 1 0px;
   padding: 0;
   flex-direction: ${(props) => (props.isRow ? "row" : "column")};
-  @media (min-width: ${BREAKPOINT}) {
+  @media (min-width: ${(props) => props.theme.breakpoints.md}) {
     height: 100%;
     flex-direction: row;
   }
 `;
 
 const Button = styled.button`
-  display: flex;
-  cursor: pointer;
-  justify-content: center;
-  align-items: center;
-  font-weight: 800;
-  text-transform: capitalize;
-  color: #fff;
+  display: ${(props) => props.theme.btnStyles.display};
+  cursor: ${(props) => props.theme.btnStyles.cursor};
+  justify-content: ${(props) => props.theme.btnStyles.justifyContent};
+  align-items: ${(props) => props.theme.btnStyles.alignItems};
+  font-weight: ${(props) => props.theme.btnStyles.fontWeight};
+  text-transform: ${(props) => props.theme.btnStyles.textTransform};
+  color: ${(props) => props.theme.btnStyles.color};
   background: ${(props) => (props.background ? props.background : "#4287f5")};
-  border: none;
-  border-radius: 4px;
-  height: 35px;
+  border: ${(props) => props.theme.btnStyles.border};
+  border-radius: ${(props) => props.theme.btnStyles.borderRadius};
+  height: ${(props) => props.theme.btnStyles.height};
+  margin: ${(props) => props.theme.btnStyles.margin};
   width: 100%;
-  margin: 2px 4px;
   &:hover {
     background: ${(props) =>
       props.hoverBackground ? props.hoverBackground : "#2b69cc"};
   }
-  @media (min-width: ${BREAKPOINT}) {
+  @media (min-width: ${(props) => props.theme.breakpoints.md}) {
     width: ${(props) => (props.width ? props.width : "80px")};
     margin: 0 4px;
   }
@@ -83,7 +81,7 @@ const Button = styled.button`
 const MenuButton = styled(Button)`
   position: relative;
   width: 50px;
-  @media (min-width: ${BREAKPOINT}) {
+  @media (min-width: ${(props) => props.theme.breakpoints.md}) {
     display: none;
   }
 `;
@@ -101,7 +99,7 @@ const CloseButton = styled(Button)`
   height: 30px;
   border-radius: 50%;
   background-color: #575757;
-  @media (min-width: ${BREAKPOINT}) {
+  @media (min-width: ${(props) => props.theme.breakpoints.md}) {
     display: none;
   }
 `;

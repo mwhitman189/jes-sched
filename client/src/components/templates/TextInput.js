@@ -1,16 +1,14 @@
 import React from "react";
 import styled from "styled-components";
-import BREAKPOINTS from "../../constants/breakpoints";
-import STYLES from "../../constants/styles";
 
 const Input = styled.input`
-  color: ${STYLES.color_primaryText};
+  color: ${(props) => props.theme.colors.primaryText};
   height: 25px;
   border-radius: 4px;
-  border: ${STYLES.color_secondaryBackground} solid 2px;
+  border: ${(props) => props.theme.colors.secondaryBackground} solid 2px;
   width: 100%;
-  border: ${STYLES.color_secondaryBackground} solid 2px;
-  @media (min-width: ${BREAKPOINTS.md}) {
+  border: ${(props) => props.theme.colors.secondaryBackground} solid 2px;
+  @media (min-width: ${(props) => props.theme.breakpoints.md}) {
     width: 160px;
   }
 `;

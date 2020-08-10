@@ -1,6 +1,5 @@
 import React from "react";
 import styled from "styled-components";
-import STYLES from "../../constants/styles";
 
 const Form = styled.form`
   display: flex;
@@ -14,7 +13,7 @@ const Form = styled.form`
 
 const Title = styled.h1`
   font-size: 1.6rem;
-  color: ${STYLES.primaryText};
+  color: ${(props) => props.theme.colors.primaryText};
   margin: 1rem 0 0 2rem;
   align-self: flex-start;
   padding: 0 0 10px;
