@@ -54,7 +54,7 @@ const SchedulePrePrintBtn = () => {
   const [selectedEvent, setSelectedEvent] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const [message, setMessage] = useState("");
-  const [selectedTeacher, setSelectedTeacher] = useState("");
+  const [selectedTeacherId, setSelectedTeacherId] = useState("");
   const [absentees, setAbsentees] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isDetailView, setIsDetailView] = useState(false);
@@ -130,7 +130,7 @@ const SchedulePrePrintBtn = () => {
   const handleSelect = ({ start, resourceId }) => {
     setIsLoading(true);
     setStartTime(start);
-    setSelectedTeacher(resourceId);
+    setSelectedTeacherId(resourceId);
     setFormType("event");
     setIsLoading(false);
   };
@@ -196,7 +196,7 @@ const SchedulePrePrintBtn = () => {
             setStartTime={setStartTime}
             event={selectedEvent}
             setSelectedEvent={setSelectedEvent}
-            selectedTeacher={selectedTeacher}
+            selectedTeacherId={selectedTeacherId}
             validateRoomAndResource={validateRoomAndResource}
             absentees={absentees}
             setAbsentees={setAbsentees}

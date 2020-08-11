@@ -6,14 +6,8 @@ import FormInput from "./templates/FormInput";
 import TextInput from "./templates/TextInput";
 import Checkbox from "./templates/Checkbox";
 import StyledSelect from "./templates/StyledSelect";
-import MomentUtils from "@date-io/moment";
 import { v4 as uuidv4 } from "uuid";
 import styled from "styled-components";
-import {
-  ValidatorForm,
-  TextValidator,
-  SelectValidator,
-} from "react-material-ui-form-validator";
 import useInputState from "../hooks/useInputState";
 import useToggleState from "../hooks/useToggleState";
 import { validateRoom, validateTeacher } from "../validators";
@@ -100,18 +94,20 @@ export default function EventForm(props) {
     event,
     startTime,
     setSelectedEvent,
-    selectedTeacher,
+    selectedTeacherId,
     validateRoomAndResource,
   } = props;
+
+  const resourceFromId = teachers.find(
+    (t) => t.resourceId === (event.resourceId || selectedTeacherId)
+  );
 
   const [start, setStart] = useInputState(startTime);
   const [title, setTitle, resetTitle] = useInputState(event ? event.title : "");
   const [duration, setDuration, resetDuration] = useInputState(
     event ? event.duration : ""
   );
-  const [resource, setResource, resetResource] = useInputState(
-    event ? event.resourceId : selectedTeacher
-  );
+  const [resource, setResource, resetResource] = useInputState(resourceFromId);
   const [room, setRoom, resetRoom] = useInputState(event ? event.room : "");
   const [eventType, setEventType, resetEventType] = useInputState(
     event ? event.type : ""
@@ -122,32 +118,21 @@ export default function EventForm(props) {
   const [travelTime, setTravelTime] = useInputState(0);
   const [isLoading, toggleIsLoading] = useToggleState(false);
 
-  let teacherValidators = ["required"];
-  let teacherValMsgs = ["Teacher Required"];
-  let roomValidators = ["required"];
-  let roomValMsgs = ["Room Required"];
-  if (!event) {
-    teacherValidators.push("teacherIsAvailable");
-    teacherValMsgs.push("Teacher unavailable");
-    roomValidators.push("roomIsAvailable");
-    roomValMsgs.push("Room unavailable");
-  }
-
   const now = new Date();
   const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
   const monthEnd = new Date(now.getFullYear(), now.getMonth() + 1, 0);
 
   // If an event does not exist, check whether the selected room is
   // available at the specified time
-  ValidatorForm.addValidationRule("teacherIsAvailable", (teacher) => {
-    return validateTeacher(events, teacher, start, duration);
-  });
+  // ValidatorForm.addValidationRule("teacherIsAvailable", (teacher) => {
+  //   return validateTeacher(events, teacher, start, duration);
+  // });
 
   // If an event does not exist, check whether the selected room is
   // available at the specified time
-  ValidatorForm.addValidationRule("roomIsAvailable", (room) => {
-    return validateRoom(events, room, start, duration);
-  });
+  // ValidatorForm.addValidationRule("roomIsAvailable", (room) => {
+  //   return validateRoom(events, room, start, duration);
+  // });
 
   const handleTimeChange = (date) => {
     setStart(date._d);
@@ -307,7 +292,7 @@ export default function EventForm(props) {
   };
 
   const handleResourceChange = (selectedOption) => {
-    setResource(selectedOption.resourceId);
+    setResource(selectedOption);
   };
 
   const handleRoomChange = (selectedOption) => {
@@ -317,6 +302,8 @@ export default function EventForm(props) {
   const handleEventTypeChange = (selectedOption) => {
     setEventType(selectedOption.value);
   };
+
+  console.log(resource);
 
   return (
     <Dialog isOpen={formType === "event"}>

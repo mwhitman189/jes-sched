@@ -48,7 +48,8 @@ function CustomDnDCalendar(props) {
       return { style: { display: "none" } };
     }
 
-    // Check lesson value objects for the appropriate bgColor
+    // Find the type of event, then provide the corresponding bgColor from the
+    // type object
     const typeObj = lessonTypes.find((typeObj) => event.type === typeObj.value);
     let bgColor = "#000";
 
@@ -66,6 +67,7 @@ function CustomDnDCalendar(props) {
       boxShadow: "",
     };
 
+    // Add a shadow to new events only to indicate that they have not been viewed
     if (event.isNewEvent) {
       style.boxShadow = "2px 2px 2px 2px rgba(74,73,74,0.35)";
     }
