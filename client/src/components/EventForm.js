@@ -134,10 +134,6 @@ export default function EventForm(props) {
   //   return validateRoom(events, room, start, duration);
   // });
 
-  const handleTimeChange = (date) => {
-    setStart(date._d);
-  };
-
   const hideForm = () => {
     resetForm();
     setFormType("");
