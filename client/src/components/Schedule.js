@@ -175,6 +175,7 @@ const SchedulePrePrintBtn = () => {
     setSelectedEvent(event);
     setAbsentees(event.absentees);
   };
+  console.log(selectedEvent);
 
   return (
     <ThemeProvider theme={theme}>

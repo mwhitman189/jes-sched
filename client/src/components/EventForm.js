@@ -101,7 +101,6 @@ export default function EventForm(props) {
   const resourceFromId = teachers.find(
     (t) => t.resourceId === (event.resourceId || selectedTeacherId)
   );
-
   const [start, setStart] = useInputState(startTime);
   const [title, setTitle, resetTitle] = useInputState(event ? event.title : "");
   const [duration, setDuration, resetDuration] = useInputState(
@@ -299,8 +298,6 @@ export default function EventForm(props) {
     setEventType(selectedOption.value);
   };
 
-  console.log(resource);
-
   return (
     <Dialog isOpen={formType === "event"}>
       <Form
@@ -316,7 +313,12 @@ export default function EventForm(props) {
             />
           </FormInput>
           <FormInput label="Lesson Name">
-            <TextInput name="title" value={title} setValue={setTitle} />
+            <TextInput
+              name="title"
+              value={title}
+              setValue={setTitle}
+              required
+            />
           </FormInput>
           <FormInput label="Start Time">
             <StyledFlatpickr
@@ -331,6 +333,7 @@ export default function EventForm(props) {
                 maxTime: "21:00",
                 minuteIncrement: 5,
               }}
+              required
             />
           </FormInput>
         </InputGroup>
@@ -340,6 +343,7 @@ export default function EventForm(props) {
               name="duration"
               value={duration}
               setValue={setDuration}
+              required
             />
           </FormInput>
           <FormInput label="Travel Time (minutes)">
@@ -354,17 +358,20 @@ export default function EventForm(props) {
           <FormInput label="Teacher">
             <StyledSelect
               name="resource"
+              options={teachers}
               value={resource || ""}
               getOptionLabel={(option) => option.name}
               getOptionValue={(option) => option.resourceId}
-              options={teachers}
               onChange={handleResourceChange}
               placeholder="Select Teacher"
+              required
             />
           </FormInput>
           <FormInput label="Students">
             <StyledSelect
+              name="students"
               options={students}
+              value={members || []}
               getOptionLabel={(option) =>
                 `${option.givenName} ${option.familyName}`
               }
@@ -381,6 +388,7 @@ export default function EventForm(props) {
           <FormInput label="Room">
             <StyledSelect
               name="room"
+              value={room || 0}
               options={roomList}
               getOptionValue={(option) => option.value}
               onChange={handleRoomChange}
@@ -390,23 +398,25 @@ export default function EventForm(props) {
           <FormInput label="Lesson Type">
             <StyledSelect
               name="type"
+              value={eventType || ""}
               options={lessonTypes}
               onChange={handleEventTypeChange}
               placeholder="Lesson Type"
+              required
             />
           </FormInput>
         </InputGroup>
         <ButtonGroup>
-          <Button onClick={handleDeleteEvent} color="secondary">
+          <Button type="button" onClick={handleDeleteEvent} color="secondary">
             Delete One
           </Button>
-          <Button onClick={handleDeleteEvents} color="secondary">
+          <Button type="button" onClick={handleDeleteEvents} color="secondary">
             Delete All
           </Button>
-          <Button onClick={handleCancelEvent} color="secondary">
+          <Button type="button" onClick={handleCancelEvent} color="secondary">
             Cancel Lesson
           </Button>
-          <Button onClick={hideForm} color="primary">
+          <Button type="button" onClick={hideForm} color="primary">
             Back
           </Button>
           <Button type="submit" color="primary">
