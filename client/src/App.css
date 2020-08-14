@@ -9,3 +9,8 @@ input {
   padding: 0;
   border: none;
 }
+
+.material-icons {
+  font-size: 24px;
+  margin: 4px;
+}

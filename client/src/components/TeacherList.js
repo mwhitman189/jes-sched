@@ -16,7 +16,7 @@ const Resources = styled.ul`
     font-size: 85%
     padding: 0 .6rem
   };
-  @media (min-width: ${(props) => props.theme.breakpoints.md}): {
+  @media (min-width: ${(props) => props.theme.breakpoints.lg}): {
     font-size: .7rem
   };
 `;

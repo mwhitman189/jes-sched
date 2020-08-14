@@ -36,7 +36,7 @@ const Dialog = styled.div`
   z-index: 3;
   box-shadow: ${(props) => props.theme.effects.shadow};
   height: 400px;
-  @media (min-width: ${(props) => props.theme.breakpoints.md}) {
+  @media (min-width: ${(props) => props.theme.breakpoints.lg}) {
     width: 600px;
   }
 `;

@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import moment from "moment";
 import { UserContext } from "../context/UserContext";
 import TeacherList from "./TeacherList";
@@ -13,6 +13,7 @@ const ToolbarContainer = styled.div`
   width: 100%;
   margin: 0;
   padding: 0 10px;
+  flex: 1 1 auto;
 `;
 
 const Menu = styled.nav`
@@ -29,7 +30,7 @@ const Menu = styled.nav`
   z-index: 2;
   padding: 2px;
   transform: ${(props) => (props.isClosed ? "translate(200px)" : "none")};
-  @media (min-width: ${(props) => props.theme.breakpoints.md}) {
+  @media (min-width: ${(props) => props.theme.breakpoints.lg}) {
     position: relative;
     transform: none;
     flex-direction: row;
@@ -48,7 +49,7 @@ const ButtonContainer = styled.div`
   flex: 1 1 0px;
   padding: 0;
   flex-direction: ${(props) => (props.isRow ? "row" : "column")};
-  @media (min-width: ${(props) => props.theme.breakpoints.md}) {
+  @media (min-width: ${(props) => props.theme.breakpoints.lg}) {
     height: 100%;
     flex-direction: row;
   }
@@ -72,8 +73,8 @@ const Button = styled.button`
     background: ${(props) =>
       props.hoverBackground ? props.hoverBackground : "#2b69cc"};
   }
-  @media (min-width: ${(props) => props.theme.breakpoints.md}) {
-    width: ${(props) => (props.width ? props.width : "80px")};
+  @media (min-width: ${(props) => props.theme.breakpoints.lg}) {
+    width: ${(props) => (props.width ? props.width : "90px")};
     margin: 0 4px;
   }
 `;
@@ -81,7 +82,7 @@ const Button = styled.button`
 const MenuButton = styled(Button)`
   position: relative;
   width: 50px;
-  @media (min-width: ${(props) => props.theme.breakpoints.md}) {
+  @media (min-width: ${(props) => props.theme.breakpoints.lg}) {
     display: none;
   }
 `;
@@ -99,7 +100,7 @@ const CloseButton = styled(Button)`
   height: 30px;
   border-radius: 50%;
   background-color: #575757;
-  @media (min-width: ${(props) => props.theme.breakpoints.md}) {
+  @media (min-width: ${(props) => props.theme.breakpoints.lg}) {
     display: none;
   }
 `;
@@ -129,17 +130,17 @@ const Toolbar = (props) => {
   const ITEM_TYPES = [
     {
       itemType: "teacher",
-      title: "Add teacher",
+      title: "Teacher",
       onClickEvent: handleAddTeacherNav,
     },
     {
       itemType: "staff",
-      title: "Add staff",
+      title: "Staff",
       onClickEvent: handleAddStaffNav,
     },
     {
       itemType: "student",
-      title: "Add student",
+      title: "Student",
       onClickEvent: handleAddStudentNav,
     },
   ];
@@ -189,7 +190,9 @@ const Toolbar = (props) => {
         <ButtonContainer>
           {user.user.role === "staff" && (
             <>
-              <Button onClick={handleOpen}>Add New...</Button>
+              <Button onClick={handleOpen}>
+                <span className="material-icons">person_add</span>Add New...
+              </Button>
               <Button onClick={handlePayrollNav}>Payroll</Button>
             </>
           )}

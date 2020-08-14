@@ -9,7 +9,7 @@ const Input = styled.select`
   padding: 4px 0;
   width: 100%;
   border: ${(props) => props.theme.colors.secondaryBackground} solid 2px;
-  @media (min-width: ${(props) => props.theme.breakpoints.md}) {
+  @media (min-width: ${(props) => props.theme.breakpoints.lg}) {
     width: 160px;
   }
 `;

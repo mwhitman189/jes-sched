@@ -9,7 +9,7 @@ const Container = styled.div`
   margin-right: 10px;
   margin: 30px 10px 0 0;
   width: 100%;
-  @media (min-width: ${(props) => props.theme.breakpoints.md}) {
+  @media (min-width: ${(props) => props.theme.breakpoints.lg}) {
     width: 160px;
   }
 `;
