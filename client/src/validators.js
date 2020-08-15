@@ -23,22 +23,21 @@ function validateRoom(events, event) {
 
 function validateTeacher(events, event) {
   for (let otherEvent of events) {
-    if (otherEvent._id !== event._id) {
-      if (
-        testDateOverlap(
-          [otherEvent.start, otherEvent.end],
-          [
-            moment(new Date(event.start)),
-            moment(
-              moment(new Date(event.start))
-                .add(parseInt(event.duration), "m")
-                .toDate()
-            ),
-          ]
-        )
-      ) {
-        return parseInt(otherEvent.resourceId) !== parseInt(event.resourceId);
-      }
+    if (otherEvent._id === event._id) return true;
+    if (
+      testDateOverlap(
+        [otherEvent.start, otherEvent.end],
+        [
+          moment(new Date(event.start)),
+          moment(
+            moment(new Date(event.start))
+              .add(parseInt(event.duration), "m")
+              .toDate()
+          ),
+        ]
+      )
+    ) {
+      return parseInt(otherEvent.resourceId) !== parseInt(event.resourceId);
     }
   }
   return true;
