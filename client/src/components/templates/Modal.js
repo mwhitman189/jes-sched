@@ -7,9 +7,6 @@ const ModalArea = styled.div`
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
-  padding: 2.5em 0 0;
   border-radius: 4px;
   border: none;
   background-color: #ffffff;
@@ -17,16 +14,20 @@ const ModalArea = styled.div`
     0px 24px 38px 3px rgba(0, 0, 0, 0.14), 0px 9px 46px 8px rgba(0, 0, 0, 0.12);
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
+  padding: 2.5em 1.5em 1.5em 1.5em;
+  left: 50%;
+  top: 50%;
+  height: auto;
+  transform: translate(-50%, -50%);
+  max-width: 600px;
+  max-height: calc(100% - 1em);
+`;
 
-  @media (min-width: 600px) {
-    padding: 2.5em 1.5em 1.5em 1.5em;
-    left: 50%;
-    top: 50%;
-    height: auto;
-    transform: translate(-50%, -50%);
-    max-width: 30em;
-    max-height: calc(100% - 1em);
-  }
+const ModalBody = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
 `;
 
 export const Modal = ({
@@ -63,7 +64,7 @@ export const Modal = ({
               <path d="M 10,10 L 30,30 M 30,10 L 10,30" />
             </svg>
           </button>
-          <div className="modal-body">{children}</div>
+          <ModalBody>{children}</ModalBody>
         </ModalArea>
       </aside>
     </FocusTrap>,

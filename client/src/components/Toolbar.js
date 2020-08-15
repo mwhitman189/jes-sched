@@ -30,7 +30,7 @@ const Menu = styled.nav`
   justify-content: space-between;
   width: 200px;
   z-index: 2;
-  padding: 2px;
+  padding: 5px;
   transform: ${(props) => (props.isClosed ? "translate(200px)" : "none")};
   @media (min-width: ${(props) => props.theme.breakpoints.lg}) {
     position: relative;
@@ -39,6 +39,7 @@ const Menu = styled.nav`
     width: 100%;
     height: 100%;
     background: #fff;
+    padding: 2px;
   }
 `;
 
@@ -72,13 +73,18 @@ const Button = styled.button`
   height: ${(props) => props.theme.btnStyles.height};
   margin: ${(props) => props.theme.btnStyles.margin};
   width: 100%;
+  justify-content: ${(props) =>
+    props.justification ? props.justification : "flex-start"};
+
   &:hover {
     background: ${(props) =>
       props.hoverBackground ? props.hoverBackground : "#2b69cc"};
   }
+
   @media (min-width: ${(props) => props.theme.breakpoints.lg}) {
     width: ${(props) => (props.width ? props.width : "90px")};
     margin: 0 4px;
+    justify-content: center;
   }
 `;
 
@@ -166,11 +172,15 @@ const Toolbar = (props) => {
       <MenuButton onClick={openDrawer}>Menu</MenuButton>
       <Menu isClosed={isClosed}>
         <ButtonContainer isRow>
-          <Button onClick={() => onNavigate("PREV")}>&lt;</Button>
+          <Button onClick={() => onNavigate("PREV")} justification="center">
+            &lt;
+          </Button>
           <DateDisplay onClick={() => onNavigate("TODAY")}>
             {moment(date).format("MM/DD").toLocaleString()}
           </DateDisplay>
-          <Button onClick={() => onNavigate("NEXT")}>&gt;</Button>
+          <Button onClick={() => onNavigate("NEXT")} justification="center">
+            &gt;
+          </Button>
           <CloseButton onClick={closeDrawer}>X</CloseButton>
         </ButtonContainer>
         <ButtonContainer>

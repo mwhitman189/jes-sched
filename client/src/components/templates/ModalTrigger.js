@@ -16,13 +16,18 @@ const Button = styled.button`
   height: ${(props) => props.theme.btnStyles.height};
   margin: ${(props) => props.theme.btnStyles.margin};
   width: 100%;
+  justify-content: ${(props) =>
+    props.justification ? props.justification : "flex-start"};
+
   &:hover {
     background: ${(props) =>
       props.hoverBackground ? props.hoverBackground : "#2b69cc"};
   }
+
   @media (min-width: ${(props) => props.theme.breakpoints.lg}) {
     width: ${(props) => (props.width ? props.width : "90px")};
     margin: 0 4px;
+    justify-content: center;
   }
 `;
 
