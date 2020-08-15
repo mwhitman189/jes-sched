@@ -16,7 +16,7 @@ const Resources = styled.ul`
     font-size: 85%
     padding: 0 .6rem
   };
-  [theme.breakpoints.down("sm")]: {
+  @media (min-width: ${(props) => props.theme.breakpoints.lg}): {
     font-size: .7rem
   };
 `;
@@ -54,14 +54,14 @@ const TeacherList = () => {
         teacher ? (
           <Resource
             resource={teacher}
-          >{`${teacher.name}: ${individualTeachingHours}`}</Resource>
+          >{`${teacher.givenName}: ${individualTeachingHours}`}</Resource>
         ) : (
           teachers &&
           teachers.map((t) => {
             const teachingHours = calcMinsToHours(t.teachingMins);
             return (
               <Resource key={`toolbar-teacher1-${t.resourceId}`} resource={t}>
-                <div>{t.name}</div>
+                <div>{t.givenName}</div>
                 <div>{teachingHours}</div>
               </Resource>
             );

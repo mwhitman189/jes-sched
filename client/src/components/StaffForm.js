@@ -45,7 +45,7 @@ export default function EventForm(props) {
     e.preventDefault();
     toggleIsLoading(true);
     addStaff({
-      name: givenName,
+      givenName: givenName,
       familyName: familyName,
       email: email,
     });

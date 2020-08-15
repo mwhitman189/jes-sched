@@ -1,24 +1,11 @@
 import React from "react";
 import styled from "styled-components";
 
-const Dialog = styled.dialog`
-  position: absolute;
-  background-color: #f0f0f0;
-  display: ${(props) => (props.isOpen ? "block" : "none")};
-  width: 260px;
-  margin: 0 auto;
-  border: none;
-  top: 20%;
-  z-index: 3;
-  border-radius: 4px;
-  box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2),
-    0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12);
-`;
-
 const ButtonContainer = styled.div`
   padding: 5px;
   margin: 0;
   height: 100%;
+  width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -27,7 +14,7 @@ const ButtonContainer = styled.div`
 const Button = styled.button`
   display: flex;
   cursor: pointer;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   font-weight: 800;
   text-transform: uppercase;
@@ -45,23 +32,21 @@ const Button = styled.button`
 `;
 
 function NewEntryDialog(props) {
-  const { items, isOpen, closeDialog } = props;
+  const { items } = props;
 
   const selectItem = (item) => {
     item.onClickEvent();
-    closeDialog();
   };
 
   return (
-    <Dialog id="dialog" isOpen={isOpen}>
-      <ButtonContainer>
-        {items.map((i) => (
-          <Button key={i.title} onClick={() => selectItem(i)}>
-            {i.title}
-          </Button>
-        ))}
-      </ButtonContainer>
-    </Dialog>
+    <ButtonContainer id="button-container">
+      {items.map((i) => (
+        <Button key={i.title} onClick={() => selectItem(i)}>
+          <span className="material-icons">person</span>
+          {i.title}
+        </Button>
+      ))}
+    </ButtonContainer>
   );
 }
 export default NewEntryDialog;

@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext, useRef } from "react";
 import CustomDnDCalendar from "./CustomDnDCalendar";
+import { ThemeProvider } from "styled-components";
 import { useReactToPrint } from "react-to-print";
 import { protectAction } from "../helpers/utilities";
 import { validateRoom, validateTeacher } from "../validators";
@@ -7,6 +8,7 @@ import { TeachersContext } from "../context/TeachersContext";
 import { EventsContext } from "../context/EventsContext";
 import { StudentsContext } from "../context/StudentsContext";
 import { UserContext } from "../context/UserContext";
+import theme from "../constants/styles";
 import useFormState from "../hooks/useInputState";
 import EventForm from "./EventForm";
 import StaffForm from "./StaffForm";
@@ -52,7 +54,7 @@ const SchedulePrePrintBtn = () => {
   const [selectedEvent, setSelectedEvent] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const [message, setMessage] = useState("");
-  const [selectedTeacher, setSelectedTeacher] = useState("");
+  const [selectedTeacherId, setSelectedTeacherId] = useState("");
   const [absentees, setAbsentees] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isDetailView, setIsDetailView] = useState(false);
@@ -128,7 +130,7 @@ const SchedulePrePrintBtn = () => {
   const handleSelect = ({ start, resourceId }) => {
     setIsLoading(true);
     setStartTime(start);
-    setSelectedTeacher(resourceId);
+    setSelectedTeacherId(resourceId);
     setFormType("event");
     setIsLoading(false);
   };
@@ -175,53 +177,55 @@ const SchedulePrePrintBtn = () => {
   };
 
   return (
-    <div>
-      {isDetailView && (
-        <EventPopper
-          isOpen={isDetailView}
-          anchorEl={anchorEl}
-          selectedEvent={selectedEvent}
-          absentees={absentees}
-          setAbsentees={setAbsentees}
+    <ThemeProvider theme={theme}>
+      <div>
+        {isDetailView && (
+          <EventPopper
+            isOpen={isDetailView}
+            anchorEl={anchorEl}
+            selectedEvent={selectedEvent}
+            absentees={absentees}
+            setAbsentees={setAbsentees}
+          />
+        )}
+        {formType === "event" && (
+          <EventForm
+            formType={formType}
+            setFormType={setFormType}
+            startTime={startTime}
+            setStartTime={setStartTime}
+            event={selectedEvent}
+            setSelectedEvent={setSelectedEvent}
+            selectedTeacherId={selectedTeacherId}
+            validateRoomAndResource={validateRoomAndResource}
+            absentees={absentees}
+            setAbsentees={setAbsentees}
+          />
+        )}
+        {formType === "teacher" && (
+          <TeacherForm formType={formType} setFormType={setFormType} />
+        )}
+        {formType === "staff" && (
+          <StaffForm formType={formType} setFormType={setFormType} />
+        )}
+        {formType === "student" && (
+          <StudentForm formType={formType} setFormType={setFormType} />
+        )}
+        {formType === "payroll" && <Payroll setFormType={setFormType} />}
+        <Snackbar msg={message} isOpen={isOpen} setIsOpen={setIsOpen} />
+        <CustomDnDCalendar
+          handleMove={protectAction(user, handleMove)}
+          handleSelect={protectAction(user, handleSelect)}
+          handleDoubleClick={protectAction(user, handleDoubleClick)}
+          handleAddTeacherNav={protectAction(user, handleAddTeacherNav)}
+          handleAddStaffNav={protectAction(user, handleAddStaffNav)}
+          handleAddStudentNav={protectAction(user, handleAddStudentNav)}
+          handlePayrollNav={protectAction(user, handlePayrollNav)}
+          handleOpenDetailView={handleSingleClick}
         />
-      )}
-      {formType === "event" && (
-        <EventForm
-          formType={formType}
-          setFormType={setFormType}
-          startTime={startTime}
-          setStartTime={setStartTime}
-          event={selectedEvent}
-          setSelectedEvent={setSelectedEvent}
-          selectedTeacher={selectedTeacher}
-          validateRoomAndResource={validateRoomAndResource}
-          absentees={absentees}
-          setAbsentees={setAbsentees}
-        />
-      )}
-      {formType === "teacher" && (
-        <TeacherForm formType={formType} setFormType={setFormType} />
-      )}
-      {formType === "staff" && (
-        <StaffForm formType={formType} setFormType={setFormType} />
-      )}
-      {formType === "student" && (
-        <StudentForm formType={formType} setFormType={setFormType} />
-      )}
-      {formType === "payroll" && <Payroll setFormType={setFormType} />}
-      <Snackbar msg={message} isOpen={isOpen} setIsOpen={setIsOpen} />
-      <CustomDnDCalendar
-        handleMove={protectAction(user, handleMove)}
-        handleSelect={protectAction(user, handleSelect)}
-        handleDoubleClick={protectAction(user, handleDoubleClick)}
-        handleAddTeacherNav={protectAction(user, handleAddTeacherNav)}
-        handleAddStaffNav={protectAction(user, handleAddStaffNav)}
-        handleAddStudentNav={protectAction(user, handleAddStudentNav)}
-        handlePayrollNav={protectAction(user, handlePayrollNav)}
-        handleOpenDetailView={handleSingleClick}
-      />
-      <Footer />
-    </div>
+        <Footer />
+      </div>
+    </ThemeProvider>
   );
 };
 export default Schedule;

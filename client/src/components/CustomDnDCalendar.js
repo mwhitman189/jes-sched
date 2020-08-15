@@ -41,15 +41,16 @@ function CustomDnDCalendar(props) {
   const maxTime = new Date();
   maxTime.setHours(20, 59, 59);
 
-  // Style events based on event.type
+  // Style events based on event.value
   const eventStyleGetter = (event) => {
     // Hide a dummy event that fixes drag and drop bug
     if (event.hide) {
       return { style: { display: "none" } };
     }
 
-    // Check lesson type objects for the appropriate bgColor
-    const typeObj = lessonTypes.find((typeObj) => event.type === typeObj.type);
+    // Find the type of event, then provide the corresponding bgColor from the
+    // type object
+    const typeObj = lessonTypes.find((typeObj) => event.type === typeObj.value);
     let bgColor = "#000";
 
     if (typeObj === undefined) {
@@ -66,6 +67,7 @@ function CustomDnDCalendar(props) {
       boxShadow: "",
     };
 
+    // Add a shadow to new events only to indicate that they have not been viewed
     if (event.isNewEvent) {
       style.boxShadow = "2px 2px 2px 2px rgba(74,73,74,0.35)";
     }

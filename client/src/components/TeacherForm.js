@@ -57,7 +57,7 @@ export default function EventForm(props) {
       resourceId: bigResourceId,
       resourceTitle: givenName,
       email: email,
-      name: givenName,
+      givenName: givenName,
       familyName: familyName,
       teachingMins: 0,
       otThreshold: parseInt(otThresholdHours * 60),

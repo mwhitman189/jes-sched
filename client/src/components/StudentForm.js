@@ -40,12 +40,12 @@ export default function EventForm(props) {
   const [isLoading, toggleIsLoading] = useToggleState(false);
 
   const levels = [
-    { level: "BE", name: "Beginner" },
-    { level: "FB", name: "False Beginner" },
-    { level: "EL", name: "Elementary" },
-    { level: "LI", name: "Low Intermediate" },
-    { level: "HI", name: "High Intermediate" },
-    { level: "AD", name: "Advanced" },
+    { value: "BE", label: "Beginner" },
+    { value: "FB", label: "False Beginner" },
+    { value: "EL", label: "Elementary" },
+    { value: "LI", label: "Low Intermediate" },
+    { value: "HI", label: "High Intermediate" },
+    { value: "AD", label: "Advanced" },
   ];
 
   const handleAddStudent = (e) => {
@@ -54,6 +54,7 @@ export default function EventForm(props) {
     addStudent({
       givenName: givenName,
       familyName: familyName,
+      label: givenName + " " + familyName,
       level: level,
       phone: phone,
       email: email,
@@ -119,8 +120,8 @@ export default function EventForm(props) {
             >
               <MenuItem value="" />
               {levels.map((l) => (
-                <MenuItem key={`studentForm-level-${l.level}`} value={l.level}>
-                  {l.name}
+                <MenuItem key={`studentForm-level-${l.value}`} value={l.value}>
+                  {l.label}
                 </MenuItem>
               ))}
             </SelectValidator>

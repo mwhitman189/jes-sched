@@ -8,7 +8,7 @@ const TeacherSchema = new Schema(
   {
     resourceId: { type: Number, trim: true, required: true },
     resourceTitle: { type: String, trim: true, required: true },
-    name: { type: String, trim: true, required: true },
+    givenName: { type: String, trim: true, required: true },
     familyName: { type: String, trim: true, required: true },
     email: {
       type: String,

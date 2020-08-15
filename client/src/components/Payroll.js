@@ -150,7 +150,7 @@ const Payroll = (props) => {
                   <PersonIcon />
                 </Avatar>
               </ListItemAvatar>
-              <ListItemText primary={t.name} />
+              <ListItemText primary={t.givenName} />
             </ListItem>
           ))}
         </List>
