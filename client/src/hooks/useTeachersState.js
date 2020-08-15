@@ -13,7 +13,7 @@ export default (initialTeachers) => {
     const updatedTeacher = {
       ...teacher,
       resourceTitle: teacher.resourceTitle,
-      name: teacher.name,
+      givenName: teacher.givenName,
       familyName: teacher.familyName,
       email: teacher.email,
       teachingMins: teacher.teachingMins,

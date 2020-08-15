@@ -54,14 +54,14 @@ const TeacherList = () => {
         teacher ? (
           <Resource
             resource={teacher}
-          >{`${teacher.name}: ${individualTeachingHours}`}</Resource>
+          >{`${teacher.givenName}: ${individualTeachingHours}`}</Resource>
         ) : (
           teachers &&
           teachers.map((t) => {
             const teachingHours = calcMinsToHours(t.teachingMins);
             return (
               <Resource key={`toolbar-teacher1-${t.resourceId}`} resource={t}>
-                <div>{t.name}</div>
+                <div>{t.givenName}</div>
                 <div>{teachingHours}</div>
               </Resource>
             );

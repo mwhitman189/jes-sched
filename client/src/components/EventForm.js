@@ -1,4 +1,4 @@
-import React, { useContext, useCallback } from "react";
+import React, { useContext } from "react";
 import moment from "moment";
 import Flatpickr from "react-flatpickr";
 import Form from "./templates/Form";
@@ -106,7 +106,9 @@ export default function EventForm(props) {
   const [duration, setDuration, resetDuration] = useInputState(
     event ? event.duration : ""
   );
-  const [resource, setResource, resetResource] = useInputState(resourceFromId);
+  const [resource, setResource, resetResource] = useInputState(
+    resourceFromId ? resourceFromId : ""
+  );
   const [room, setRoom, resetRoom] = useInputState(event ? event.room : "");
   const [eventType, setEventType, resetEventType] = useInputState(
     event ? event.type : ""
@@ -114,7 +116,7 @@ export default function EventForm(props) {
   const [members, setMembers] = useInputState(event ? event.students : []);
   const [absentees, setAbsentees] = useInputState(event ? event.absentees : []);
   const [isRecurring, toggleIsRecurring] = useToggleState(false);
-  const [travelTime, setTravelTime] = useInputState(0);
+  const [travelTime, setTravelTime] = useInputState("");
   const [isLoading, toggleIsLoading] = useToggleState(false);
 
   const now = new Date();
@@ -159,23 +161,23 @@ export default function EventForm(props) {
       title: title,
       start: start,
       end: endTime,
-      room: room,
+      room: room.value,
       duration: parseInt(duration),
-      resourceId: parseInt(resource),
-      type: eventType,
+      resourceId: parseInt(resource.resourceId),
+      type: eventType.value,
       isRecurring: isRecurring,
       students: members,
       absentees: [],
       isLesson: true,
     });
-    if (travelTime !== 0) {
+    if (travelTime > 0) {
       addEvent({
         id: id,
         title: "Travel",
         start: moment(start).subtract(travelTime, "m").toDate(),
         end: start,
         duration: parseInt(travelTime),
-        resourceId: parseInt(resource),
+        resourceId: parseInt(resource.resourceId),
         type: "trav",
         isRecurring: isRecurring,
         isLesson: false,
@@ -186,7 +188,7 @@ export default function EventForm(props) {
         start: endTime,
         end: moment(endTime).add(travelTime, "m").toDate(),
         duration: parseInt(travelTime),
-        resourceId: parseInt(resource),
+        resourceId: parseInt(resource.resourceId),
         type: "trav",
         isRecurring: isRecurring,
         isLesson: false,
@@ -208,24 +210,24 @@ export default function EventForm(props) {
       title: title,
       start: start,
       end: endTime,
-      room: room,
+      room: room.value,
       duration: parseInt(duration),
-      resourceId: parseInt(resource),
-      type: eventType,
+      resourceId: parseInt(resource.resourceId),
+      type: eventType.value,
       isRecurring: isRecurring,
       students: members,
       absentees: absentees,
       isNewEvent: true,
     };
     editEvent(editedEvent);
-    if (travelTime !== 0) {
+    if (travelTime > 0) {
       addEvent({
         id: id,
         title: "Travel",
         start: moment(start).subtract(travelTime, "m").toDate(),
         end: start,
         duration: parseInt(travelTime),
-        resourceId: parseInt(resource),
+        resourceId: parseInt(resource.resourceId),
         type: "trav",
         isRecurring: isRecurring,
         isLesson: false,
@@ -236,7 +238,7 @@ export default function EventForm(props) {
         start: endTime,
         end: moment(endTime).add(travelTime, "m").toDate(),
         duration: parseInt(travelTime),
-        resourceId: parseInt(resource),
+        resourceId: parseInt(resource.resourceId),
         type: "trav",
         isRecurring: isRecurring,
         isLesson: false,
@@ -291,11 +293,11 @@ export default function EventForm(props) {
   };
 
   const handleRoomChange = (selectedOption) => {
-    setRoom(selectedOption.value);
+    setRoom(selectedOption);
   };
 
   const handleEventTypeChange = (selectedOption) => {
-    setEventType(selectedOption.value);
+    setEventType(selectedOption);
   };
 
   return (
@@ -360,7 +362,7 @@ export default function EventForm(props) {
               name="resource"
               options={teachers}
               value={resource || ""}
-              getOptionLabel={(option) => option.name}
+              getOptionLabel={(option) => option.givenName}
               getOptionValue={(option) => option.resourceId}
               onChange={handleResourceChange}
               placeholder="Select Teacher"

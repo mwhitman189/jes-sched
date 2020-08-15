@@ -170,7 +170,7 @@ class PayrollSheet extends Component {
     return (
       <div className={classes.table}>
         <DialogTitle className={classes.title} id="payroll-sheet-dialog">
-          Payroll for {currentTeacher.name}
+          Payroll for {currentTeacher.givenName}
         </DialogTitle>
         <Table className={classes.table} size="small" aria-label="simple table">
           <TableHead>
