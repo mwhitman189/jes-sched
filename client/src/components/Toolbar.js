@@ -1,9 +1,11 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useState } from "react";
 import moment from "moment";
 import { UserContext } from "../context/UserContext";
 import TeacherList from "./TeacherList";
+import ModalContainer from "./templates/ModalContainer";
 import NewEntryDialog from "./NewEntryDialog";
 import styled from "styled-components";
+import theme from "../constants/styles";
 import "react-big-calendar/lib/sass/toolbar.scss";
 
 const ToolbarContainer = styled.div`
@@ -63,7 +65,8 @@ const Button = styled.button`
   font-weight: ${(props) => props.theme.btnStyles.fontWeight};
   text-transform: ${(props) => props.theme.btnStyles.textTransform};
   color: ${(props) => props.theme.btnStyles.color};
-  background: ${(props) => (props.background ? props.background : "#4287f5")};
+  background: ${(props) =>
+    props.background ? props.background : props.theme.colors.primary};
   border: ${(props) => props.theme.btnStyles.border};
   border-radius: ${(props) => props.theme.btnStyles.borderRadius};
   height: ${(props) => props.theme.btnStyles.height};
@@ -123,7 +126,6 @@ const Toolbar = (props) => {
   } = props;
 
   const { user, dispatch } = useContext(UserContext);
-  const [isOpen, setIsOpen] = useState(false);
   const [isClosed, setIsClosed] = useState(true);
 
   // Set the types of items to display in the "Create new..." dialog
@@ -145,14 +147,6 @@ const Toolbar = (props) => {
     },
   ];
 
-  const handleOpen = () => {
-    setIsOpen(true);
-  };
-
-  const handleClose = () => {
-    setIsOpen(false);
-  };
-
   const handleLogout = (e) => {
     e.preventDefault();
     dispatch({ type: "LOGOUT_SUCCESS" });
@@ -168,11 +162,6 @@ const Toolbar = (props) => {
 
   return (
     <ToolbarContainer>
-      <NewEntryDialog
-        isOpen={isOpen}
-        items={ITEM_TYPES}
-        closeDialog={handleClose}
-      />
       <TeacherList />
       <MenuButton onClick={openDrawer}>Menu</MenuButton>
       <Menu isClosed={isClosed}>
@@ -189,13 +178,17 @@ const Toolbar = (props) => {
         </ButtonContainer>
         <ButtonContainer>
           {user.user.role === "staff" && (
-            <>
-              <Button onClick={handleOpen}>
-                <span className="material-icons">person_add</span>Add New...
-              </Button>
-              <Button onClick={handlePayrollNav}>Payroll</Button>
-            </>
+            <ModalContainer
+              triggerIcon="person_add"
+              triggerText="Add New..."
+              background={theme.colors.primary}
+              textColor={theme.colors.secondaryText}
+              btnStyles={theme.btnStyles}
+            >
+              <NewEntryDialog items={ITEM_TYPES} />
+            </ModalContainer>
           )}
+          <Button onClick={handlePayrollNav}>Payroll</Button>
           <Button
             onClick={handleLogout}
             background={"#f21d4b"}

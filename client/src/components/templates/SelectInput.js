@@ -1,6 +1,5 @@
 import React from "react";
 import styled from "styled-components";
-import BREAKPOINTS from "../../constants/breakpoints";
 
 const Input = styled.select`
   color: ${(props) => props.theme.colors.primaryText};

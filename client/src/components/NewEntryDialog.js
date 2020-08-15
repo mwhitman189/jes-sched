@@ -1,18 +1,5 @@
-import React, { useEffect } from "react";
+import React from "react";
 import styled from "styled-components";
-
-const Dialog = styled.dialog`
-  position: absolute;
-  background-color: #f0f0f0;
-  display: ${(props) => (props.isOpen ? "block" : "none")};
-  width: 260px;
-  margin: 0 auto;
-  border: none;
-  top: 20%;
-  z-index: 4;
-  border-radius: 4px;
-  box-shadow: ${(props) => props.theme.effects.shadow};
-`;
 
 const ButtonContainer = styled.div`
   padding: 5px;
@@ -45,24 +32,21 @@ const Button = styled.button`
 `;
 
 function NewEntryDialog(props) {
-  const { items, isOpen, closeDialog } = props;
+  const { items } = props;
 
   const selectItem = (item) => {
     item.onClickEvent();
-    closeDialog();
   };
 
   return (
-    <Dialog id="dialog" role="dialog" aria-labelledby="dialog" isOpen={isOpen}>
-      <ButtonContainer id="button-container">
-        {items.map((i) => (
-          <Button key={i.title} onClick={() => selectItem(i)}>
-            <span class="material-icons">person</span>
-            {i.title}
-          </Button>
-        ))}
-      </ButtonContainer>
-    </Dialog>
+    <ButtonContainer id="button-container">
+      {items.map((i) => (
+        <Button key={i.title} onClick={() => selectItem(i)}>
+          <span className="material-icons">person</span>
+          {i.title}
+        </Button>
+      ))}
+    </ButtonContainer>
   );
 }
 export default NewEntryDialog;
