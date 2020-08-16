@@ -105,7 +105,6 @@ export default function EventForm(props) {
     startTime,
     setSelectedEvent,
     selectedTeacherId,
-    validateRoomAndResource,
   } = props;
 
   const resourceFromId = teachers.find(
@@ -142,18 +141,6 @@ export default function EventForm(props) {
   const now = new Date();
   const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
   const monthEnd = new Date(now.getFullYear(), now.getMonth() + 1, 0);
-
-  // If an event does not exist, check whether the selected room is
-  // available at the specified time
-  // ValidatorForm.addValidationRule("teacherIsAvailable", (teacher) => {
-  //   return validateTeacher(events, teacher, start, duration);
-  // });
-
-  // If an event does not exist, check whether the selected room is
-  // available at the specified time
-  // ValidatorForm.addValidationRule("roomIsAvailable", (room) => {
-  //   return validateRoom(events, room, start, duration);
-  // });
 
   // Form Validation
   useEffect(() => {
@@ -200,13 +187,7 @@ export default function EventForm(props) {
         resourceError: "Lesson name required",
       }));
     } else {
-      if (
-        !validateTeacher(events, {
-          resourceId: resource.resourceId,
-          start: start,
-          duration: duration,
-        })
-      ) {
+      if (!validateTeacher(events, event)) {
         setErrors((prevState) => ({
           ...prevState,
           resourceError: "Teacher conflict",
@@ -219,19 +200,20 @@ export default function EventForm(props) {
 
   useEffect(() => {
     // Event room
-    if (
-      !validateRoom(events, {
-        room: room ? room.value : "",
-        start: start,
-        duration: duration,
-      })
-    ) {
+    if (room === "") {
       setErrors((prevState) => ({
         ...prevState,
-        roomError: "Room conflict",
+        roomError: "Room required",
       }));
     } else {
-      setErrors((prevState) => ({ ...prevState, roomError: "" }));
+      if (!validateRoom(events, event)) {
+        setErrors((prevState) => ({
+          ...prevState,
+          roomError: "Room conflict",
+        }));
+      } else {
+        setErrors((prevState) => ({ ...prevState, roomError: "" }));
+      }
     }
   }, [room]);
 
@@ -302,7 +284,6 @@ export default function EventForm(props) {
   const handleEditEvent = (e) => {
     e.preventDefault();
     toggleIsLoading(true);
-    validateRoomAndResource(e, resource, start);
     const id = e.id;
     const endTime = moment(start).add(duration, "m").toDate();
     const editedEvent = {
@@ -477,7 +458,7 @@ export default function EventForm(props) {
               getOptionLabel={(option) =>
                 `${option.givenName} ${option.familyName}`
               }
-              getOptionValue={(option) => option.label}
+              getOptionValue={(option) => option.value}
               isMulti
               onChange={handleMembersChange}
               placeholder="Add students"
@@ -490,8 +471,8 @@ export default function EventForm(props) {
           <FormInput label="Room" error={errors.roomError}>
             <StyledSelect
               name="room"
-              value={room || 0}
               options={roomList}
+              value={room || ""}
               getOptionValue={(option) => option.value}
               onChange={handleRoomChange}
               placeholder="Select Room"
@@ -500,8 +481,8 @@ export default function EventForm(props) {
           <FormInput label="Lesson Type" error={errors.eventTypeError}>
             <StyledSelect
               name="type"
-              value={eventType || ""}
               options={lessonTypes}
+              value={eventType || ""}
               onChange={handleEventTypeChange}
               placeholder="Lesson Type"
             />
