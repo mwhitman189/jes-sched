@@ -144,7 +144,6 @@ export default function EventForm(props) {
   const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
   const monthEnd = new Date(now.getFullYear(), now.getMonth() + 1, 0);
 
-  console.log(students);
   // ***Form Validation***
   useEffect(() => {
     // Event title
