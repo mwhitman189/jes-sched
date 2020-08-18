@@ -33,7 +33,7 @@ const Dialog = styled.div`
   padding: 10px;
   border-radius: 8px;
   background-color: ${(props) => props.theme.colors.primaryBackground};
-  z-index: 3;
+  z-index: 10;
   box-shadow: ${(props) => props.theme.effects.shadow};
   height: 400px;
   @media (min-width: ${(props) => props.theme.breakpoints.lg}) {
