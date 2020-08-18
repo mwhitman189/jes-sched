@@ -44,11 +44,13 @@ const AbsenteesWrapper = styled.div`
   display: flex;
   flex-direction: row;
   position: relative;
-  top: 0;
+  top: 6px;
 `;
 
 const AbsenteeX = styled.span`
   width: 1rem;
+  padding: 0;
+  margin: 0;
   color: rgba(217, 18, 4, 0.8);
   position: relative;
 `;
@@ -78,15 +80,19 @@ const InnerGroup = styled.div`
 `;
 
 const Title = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   max-width: 85%;
-  line-height: 80%;
   white-space: nowrap;
   overflow: hidden;
 `;
 
 const Room = styled.span`
   color: #1b1c1c;
-  padding-left: 0.1rem;
+  background: ${(props) => props.theme.colors.secondaryText};
+  border-radius: 50%;
+  padding: 0.2rem;
 `;
 
 const ExtraInfoWrapper = styled.div`

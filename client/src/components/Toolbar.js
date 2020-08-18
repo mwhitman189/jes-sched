@@ -11,11 +11,9 @@ import "react-big-calendar/lib/sass/toolbar.scss";
 const ToolbarContainer = styled.div`
   height: 40px;
   display: flex;
-  justify-content: space-around;
   width: 100%;
   margin: 0;
   padding: 0 10px;
-  flex: 1 1 auto;
 `;
 
 const Menu = styled.nav`
@@ -74,7 +72,7 @@ const Button = styled.button`
   margin: ${(props) => props.theme.btnStyles.margin};
   width: 100%;
   justify-content: ${(props) =>
-    props.justification ? props.justification : "flex-start"};
+    props.justification ? props.justification : "center"};
 
   &:hover {
     background: ${(props) =>

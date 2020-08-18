@@ -17,7 +17,7 @@ const Button = styled.button`
   margin: ${(props) => props.theme.btnStyles.margin};
   width: 100%;
   justify-content: ${(props) =>
-    props.justification ? props.justification : "flex-start"};
+    props.justification ? props.justification : "center"};
 
   &:hover {
     background: ${(props) =>

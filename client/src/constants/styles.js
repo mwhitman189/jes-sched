@@ -6,6 +6,7 @@ const theme = {
     secondary: "#f21d4b",
     secondaryText: "#fff",
     secondaryBackground: "#b3cae8",
+    alert: "#f50057",
   },
   effects: { shadow: "0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23)" },
   btnStyles: {

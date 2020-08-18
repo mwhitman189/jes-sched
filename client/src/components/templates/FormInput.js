@@ -23,7 +23,15 @@ const InputLabel = styled.label`
   ${(props) => !props.isCheckbox && { alignSelf: "start" }}
 `;
 
-function FormInput({ label, children }) {
+const Label = styled.p`
+  font-size: 0.7rem;
+`;
+
+const Error = styled(Label)`
+  color: ${(props) => props.theme.colors.alert};
+`;
+
+function FormInput({ label, error, children }) {
   const isCheckbox = children.type.name === "Checkbox";
 
   return (
@@ -37,7 +45,9 @@ function FormInput({ label, children }) {
         </>
       ) : (
         <>
-          <InputLabel htmlFor={children.props.id}>{label}</InputLabel>
+          <InputLabel htmlFor={children.props.id}>
+            {error ? <Error>{error}</Error> : <Label>{label}</Label>}
+          </InputLabel>
           {children}
         </>
       )}
