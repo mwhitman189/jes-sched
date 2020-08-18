@@ -83,10 +83,7 @@ const Button = styled.button`
 
 const SubmitButton = styled(Button)`
   ${(props) =>
-    props.titleError ||
-    props.durationError ||
-    props.resourceError ||
-    props.eventTypeError
+    props.disabled
       ? "opacity: .4; cursor: not-allowed"
       : "opacity: 1; cursor: pointer"};
 `;
@@ -110,6 +107,10 @@ export default function EventForm(props) {
   const resourceFromId = teachers.find(
     (t) => t.resourceId === (event.resourceId || selectedTeacherId)
   );
+
+  const roomOption = event ? { label: event.room, value: event.room } : "";
+  const eventTypeOption = lessonTypes.find((t) => t.value === event.type);
+
   const [start, setStart] = useInputState(startTime);
   const [title, setTitle, resetTitle] = useInputState(event ? event.title : "");
 
@@ -121,9 +122,9 @@ export default function EventForm(props) {
     resourceFromId ? resourceFromId : ""
   );
 
-  const [room, setRoom, resetRoom] = useInputState(event ? event.room : "");
+  const [room, setRoom, resetRoom] = useInputState(roomOption);
   const [eventType, setEventType, resetEventType] = useInputState(
-    event ? event.type : ""
+    eventTypeOption
   );
   const [members, setMembers] = useInputState(event ? event.students : []);
   const [absentees, setAbsentees] = useInputState(event ? event.absentees : []);
@@ -136,13 +137,15 @@ export default function EventForm(props) {
     errors.titleError ||
     errors.durationError ||
     errors.resourceError ||
+    errors.roomError ||
     errors.eventTypeError;
 
   const now = new Date();
   const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
   const monthEnd = new Date(now.getFullYear(), now.getMonth() + 1, 0);
 
-  // Form Validation
+  console.log(students);
+  // ***Form Validation***
   useEffect(() => {
     // Event title
     if (title === "") {
@@ -187,6 +190,9 @@ export default function EventForm(props) {
         resourceError: "Lesson name required",
       }));
     } else {
+      // Set the resourceId to the new value
+      event.resourceId = resource.resourceId;
+
       if (!validateTeacher(events, event)) {
         setErrors((prevState) => ({
           ...prevState,
@@ -206,6 +212,9 @@ export default function EventForm(props) {
         roomError: "Room required",
       }));
     } else {
+      // Set the room to the new value
+      event.room = room.value;
+
       if (!validateRoom(events, event)) {
         setErrors((prevState) => ({
           ...prevState,
@@ -216,6 +225,7 @@ export default function EventForm(props) {
       }
     }
   }, [room]);
+  // ***End Form Validation***
 
   const hideForm = () => {
     resetForm();
@@ -458,7 +468,7 @@ export default function EventForm(props) {
               getOptionLabel={(option) =>
                 `${option.givenName} ${option.familyName}`
               }
-              getOptionValue={(option) => option.value}
+              getOptionValue={(option) => option}
               isMulti
               onChange={handleMembersChange}
               placeholder="Add students"
@@ -473,6 +483,7 @@ export default function EventForm(props) {
               name="room"
               options={roomList}
               value={room || ""}
+              getOptionsLabel={(option) => option.label}
               getOptionValue={(option) => option.value}
               onChange={handleRoomChange}
               placeholder="Select Room"

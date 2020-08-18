@@ -2,7 +2,7 @@ import moment from "moment";
 
 function validateRoom(events, event) {
   for (let otherEvent of events) {
-    if (otherEvent._id !== event._id) {
+    if (otherEvent._id !== event._id && event.room !== 0) {
       if (
         testDateOverlap(
           [moment(otherEvent.start), moment(otherEvent.end)],
@@ -12,7 +12,6 @@ function validateRoom(events, event) {
           ]
         )
       ) {
-        console.log("conflict");
         return parseInt(otherEvent.room) !== parseInt(event.room);
       }
     }
