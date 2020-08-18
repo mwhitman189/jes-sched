@@ -1,23 +1,23 @@
 import React, { useState, useContext, useEffect } from "react";
 import moment from "moment";
 import Flatpickr from "react-flatpickr";
+import "flatpickr/dist/themes/airbnb.css";
+import { v4 as uuidv4 } from "uuid";
+import styled from "styled-components";
+import { checkForSameDate } from "../helpers/utilities";
+import roomList from "../constants/rooms";
+import lessonTypes from "../constants/lessonTypes";
 import Form from "./templates/Form";
 import FormInput from "./templates/FormInput";
 import TextInput from "./templates/TextInput";
 import Checkbox from "./templates/Checkbox";
 import StyledSelect from "./templates/StyledSelect";
-import { v4 as uuidv4 } from "uuid";
-import styled from "styled-components";
 import useInputState from "../hooks/useInputState";
 import useToggleState from "../hooks/useToggleState";
 import { validateRoom, validateTeacher } from "../validators";
 import { TeachersContext } from "../context/TeachersContext";
 import { StudentsContext } from "../context/StudentsContext";
 import { EventsContext } from "../context/EventsContext";
-import { checkForSameDate } from "../helpers/utilities";
-import roomList from "../constants/rooms";
-import lessonTypes from "../constants/lessonTypes";
-import "flatpickr/dist/themes/airbnb.css";
 
 const Dialog = styled.div`
   color: ${(props) => props.theme.colors.primaryText};
