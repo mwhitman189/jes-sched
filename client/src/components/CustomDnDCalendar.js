@@ -103,6 +103,7 @@ function CustomDnDCalendar(props) {
       eventPropGetter={eventStyleGetter}
       dayPropGetter={dayStyleGetter}
       invertResourcesAndDates
+      displayOthersColumn
       step={5}
       timeslots={12}
       min={minTime}
