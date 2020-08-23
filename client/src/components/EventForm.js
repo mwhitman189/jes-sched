@@ -190,7 +190,7 @@ export default function EventForm(props) {
       }));
     } else {
       // Set the resourceId to the new value
-      event.resourceId = resource.resourceId;
+      if (event) event.resourceId = resource.resourceId;
 
       if (!validateTeacher(events, event)) {
         setErrors((prevState) => ({
@@ -212,7 +212,7 @@ export default function EventForm(props) {
       }));
     } else {
       // Set the room to the new value
-      event.room = room.value;
+      if (event) event.room = room.value;
 
       if (!validateRoom(events, event)) {
         setErrors((prevState) => ({
