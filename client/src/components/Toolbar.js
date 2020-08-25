@@ -14,6 +14,7 @@ const ToolbarContainer = styled.div`
   width: 100%;
   margin: 0;
   padding: 0 10px;
+  justify-content: space-between;
 `;
 
 const Menu = styled.nav`
