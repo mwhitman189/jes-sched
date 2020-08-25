@@ -3,24 +3,24 @@ import styled from "styled-components";
 
 const Container = styled.div`
   display: flex;
-  flex-direction: ${(props) => (props.isCheckbox ? "row" : "column")};
+  flex-direction: ${({ isCheckbox }) => (isCheckbox ? "row" : "column")};
   justify-content: center;
   align-items: center;
   margin-right: 10px;
   margin: 30px 10px 0 0;
   width: 100%;
-  @media (min-width: ${(props) => props.theme.breakpoints.lg}) {
+  @media (min-width: ${({ theme }) => theme.breakpoints.lg}) {
     width: 160px;
   }
 `;
 
 const InputLabel = styled.label`
-  color: ${(props) => props.theme.colors.primaryText};
-  position: ${(props) => (props.isCheckbox ? "relative" : "absolute")};
-  ${(props) => !props.isCheckbox && { transform: "translateY(-22px)" }}
-  font-size: ${(props) => (props.isCheckbox ? "1rem" : "0.6rem")};
-  margin: ${(props) => (props.isCheckbox ? "0 10px 0 5px" : 0)};
-  ${(props) => !props.isCheckbox && { alignSelf: "start" }}
+  color: ${({ theme }) => theme.colors.primaryText};
+  position: ${({ isCheckbox }) => (isCheckbox ? "relative" : "absolute")};
+  ${({ isCheckbox }) => !isCheckbox && { transform: "translateY(-22px)" }}
+  font-size: ${({ isCheckbox }) => (isCheckbox ? "1rem" : "0.6rem")};
+  margin: ${({ isCheckbox }) => (isCheckbox ? "0 10px 0 5px" : 0)};
+  ${({ isCheckbox }) => !isCheckbox && { alignSelf: "start" }}
 `;
 
 const Label = styled.p`
@@ -28,7 +28,7 @@ const Label = styled.p`
 `;
 
 const Error = styled(Label)`
-  color: ${(props) => props.theme.colors.alert};
+  color: ${({ theme }) => theme.colors.alert};
 `;
 
 function FormInput({ label, error, children }) {
@@ -39,13 +39,13 @@ function FormInput({ label, error, children }) {
       {isCheckbox ? (
         <>
           {children}
-          <InputLabel htmlFor={children.props.id} isCheckbox={isCheckbox}>
+          <InputLabel htmlFor={children.id} isCheckbox={isCheckbox}>
             {label}
           </InputLabel>
         </>
       ) : (
         <>
-          <InputLabel htmlFor={children.props.id}>
+          <InputLabel htmlFor={children.id}>
             {error ? <Error>{error}</Error> : <Label>{label}</Label>}
           </InputLabel>
           {children}

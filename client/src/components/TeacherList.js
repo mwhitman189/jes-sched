@@ -16,19 +16,19 @@ const Resources = styled.ul`
     font-size: 85%
     padding: 0 .6rem
   };
-  @media (min-width: ${(props) => props.theme.breakpoints.lg}): {
+  @media (min-width: ${({ theme }) => theme.breakpoints.lg}): {
     font-size: .7rem
   };
 `;
 
 const Resource = styled.li`
   margin: 0 8px;
-  color: ${(props) =>
-    props.resource.isPartTime
+  color: ${(resource) =>
+    resource.isPartTime
       ? "#ca02e0"
-      : props.resource.overThresholdTwoMins > 0
+      : resource.overThresholdTwoMins > 0
       ? "#e00262"
-      : props.resource.overThresholdOneMins > 0
+      : resource.overThresholdOneMins > 0
       ? "#ca02e0"
       : "#0220e0"};
 `;

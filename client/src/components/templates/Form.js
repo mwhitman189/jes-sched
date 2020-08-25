@@ -13,7 +13,7 @@ const Form = styled.form`
 
 const Title = styled.h1`
   font-size: 1.6rem;
-  color: ${(props) => props.theme.colors.primaryText};
+  color: ${({ theme }) => theme.colors.primaryText};
   margin: 1rem 0 0 2rem;
   align-self: flex-start;
   padding: 0 0 10px;

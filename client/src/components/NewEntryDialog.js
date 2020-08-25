@@ -19,15 +19,15 @@ const Button = styled.button`
   font-weight: 800;
   text-transform: uppercase;
   color: #fff;
-  background: ${(props) => (props.background ? props.background : "#4287f5")};
+  background: ${({ background }) => (background ? background : "#4287f5")};
   border: none;
   border-radius: 4px;
   margin: 3px 4px;
   height: 40px;
-  width: ${(props) => (props.width ? props.width : "160px")};
+  width: ${({ width }) => (width ? width : "160px")};
   &:hover {
-    background: ${(props) =>
-      props.hoverBackground ? props.hoverBackground : "#2b69cc"};
+    background: ${({ hoverBackground }) =>
+      hoverBackground ? hoverBackground : "#2b69cc"};
   }
 `;
 

@@ -18,7 +18,7 @@ const EventWrapper = styled.div`
 const ResourceName = styled.div`
   color: rgba(245, 66, 230, 0.6);
   position: absolute;
-  top: ${(props) => (props.duration > 50 ? "8px" : "5px")};
+  top: ${({ duration }) => (duration > 50 ? "8px" : "5px")};
 `;
 
 const CancelledIcon = styled.div`
@@ -90,7 +90,7 @@ const Title = styled.div`
 
 const Room = styled.span`
   color: #1b1c1c;
-  background: ${(props) => props.theme.colors.secondaryText};
+  background: ${({ theme }) => theme.colors.secondaryText};
   border-radius: 50%;
   padding: 0.2rem;
 `;

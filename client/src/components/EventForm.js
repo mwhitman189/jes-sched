@@ -20,10 +20,10 @@ import { StudentsContext } from "../context/StudentsContext";
 import { EventsContext } from "../context/EventsContext";
 
 const Dialog = styled.div`
-  color: ${(props) => props.theme.colors.primaryText};
+  color: ${({ theme }) => theme.colors.primaryText};
   position: absolute;
-  background-color: ${(props) => props.theme.colors.primaryBackground};
-  display: ${(props) => (props.isOpen ? "flex" : "none")};
+  background-color: ${({ theme }) => theme.colors.primaryBackground};
+  display: ${({ isOpen }) => (isOpen ? "flex" : "none")};
   margin: 0;
   top: 15%;
   left: 50%;
@@ -32,11 +32,11 @@ const Dialog = styled.div`
   transform: translate(-50%, -15%);
   padding: 10px;
   border-radius: 8px;
-  background-color: ${(props) => props.theme.colors.primaryBackground};
+  background-color: ${({ theme }) => theme.colors.primaryBackground};
   z-index: 10;
-  box-shadow: ${(props) => props.theme.effects.shadow};
+  box-shadow: ${({ theme }) => theme.effects.shadow};
   height: 400px;
-  @media (min-width: ${(props) => props.theme.breakpoints.lg}) {
+  @media (min-width: ${({ theme }) => theme.breakpoints.lg}) {
     width: 600px;
   }
 `;
@@ -47,11 +47,11 @@ const InputGroup = styled.div`
 `;
 
 const StyledFlatpickr = styled(Flatpickr)`
-  color: ${(props) => props.theme.colors.primaryText};
+  color: ${({ theme }) => theme.colors.primaryText};
   height: 25px;
   border-radius: 4px;
-  border: ${(props) => props.theme.colors.secondaryBackground} solid 2px;
-  box-shadow: ${(props) => props.theme.effects.shadow};
+  border: ${({ theme }) => theme.colors.secondaryBackground} solid 2px;
+  box-shadow: ${({ theme }) => theme.effects.shadow};
 `;
 
 const ButtonGroup = styled.div`
@@ -66,24 +66,24 @@ const ButtonGroup = styled.div`
 `;
 
 const Button = styled.button`
-  display: ${(props) => props.theme.btnStyles.display};
-  cursor: ${(props) => props.theme.btnStyles.cursor};
-  justify-content: ${(props) => props.theme.btnStyles.justifyContent};
-  align-items: ${(props) => props.theme.btnStyles.alignItems};
-  font-weight: ${(props) => props.theme.btnStyles.fontWeight};
-  text-transform: ${(props) => props.theme.btnStyles.textTransform};
-  color: ${(props) => props.theme.btnStyles.color};
-  background: ${(props) => (props.background ? props.background : "#4287f5")};
-  border: ${(props) => props.theme.btnStyles.border};
-  border-radius: ${(props) => props.theme.btnStyles.borderRadius};
-  height: ${(props) => props.theme.btnStyles.height};
-  margin: ${(props) => props.theme.btnStyles.margin};
-  width: ${(props) => props.theme.btnStyles.width};
+  display: ${({ theme }) => theme.btnStyles.display};
+  cursor: ${({ theme }) => theme.btnStyles.cursor};
+  justify-content: ${({ theme }) => theme.btnStyles.justifyContent};
+  align-items: ${({ theme }) => theme.btnStyles.alignItems};
+  font-weight: ${({ theme }) => theme.btnStyles.fontWeight};
+  text-transform: ${({ theme }) => theme.btnStyles.textTransform};
+  color: ${({ theme }) => theme.btnStyles.color};
+  background: ${({ background }) => (background ? background : "#4287f5")};
+  border: ${({ theme }) => theme.btnStyles.border};
+  border-radius: ${({ theme }) => theme.btnStyles.borderRadius};
+  height: ${({ theme }) => theme.btnStyles.height};
+  margin: ${({ theme }) => theme.btnStyles.margin};
+  width: ${({ theme }) => theme.btnStyles.width};
 `;
 
 const SubmitButton = styled(Button)`
-  ${(props) =>
-    props.disabled
+  ${({ disabled }) =>
+    disabled
       ? "opacity: .4; cursor: not-allowed"
       : "opacity: 1; cursor: pointer"};
 `;

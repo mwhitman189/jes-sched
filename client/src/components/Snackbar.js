@@ -9,7 +9,7 @@ const Container = styled.div`
 `;
 
 const Content = styled.div`
-  display: ${(props) => (props.isOpen ? "flex" : "none")};
+  display: ${({ isOpen }) => (isOpen ? "flex" : "none")};
   align-items: center;
   justify-content: center;
   color: #f2f0f0;
