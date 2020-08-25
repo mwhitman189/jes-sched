@@ -3,7 +3,6 @@ import CustomDnDCalendar from "./CustomDnDCalendar";
 import { ThemeProvider } from "styled-components";
 import { useReactToPrint } from "react-to-print";
 import { protectAction } from "../helpers/utilities";
-import { validateRoom, validateTeacher } from "../validators";
 import { TeachersContext } from "../context/TeachersContext";
 import { EventsContext } from "../context/EventsContext";
 import { StudentsContext } from "../context/StudentsContext";
@@ -85,47 +84,6 @@ const SchedulePrePrintBtn = () => {
     };
     handleDoubleClick(updatedEvent);
   };
-
-  // const validateRoomAndResource = (event, resourceId, start, end) => {
-  //   const updatedEvent = {
-  //     ...event,
-  //     resourceId: resourceId,
-  //     start: start,
-  //     end: end,
-  //   };
-
-  //   if (!validateRoom(events, updatedEvent)) {
-  //     handleToggleSnackbar("Room Conflict. Please choose another room or time");
-  //     return false;
-  //   }
-  //   if (!validateTeacher(events, updatedEvent)) {
-  //     handleToggleSnackbar(
-  //       "Teacher Conflict. Please choose another teacher or time"
-  //     );
-  //     return false;
-  //   }
-  //   return true;
-  // };
-
-  // // Add validation to a move upon dropping an event with drag and drop
-  // // If there is a conflict, prevent the move and flash a conflict snackbar
-  // const handleMove = ({ event, resourceId, start, end }) => {
-  //   setIsLoading(true);
-  //   if (event.isLesson) {
-  //     if (validateRoomAndResource(event, resourceId, start, end)) {
-  //       moveEvent({
-  //         event,
-  //         resourceId,
-  //         start,
-  //         end,
-  //       });
-  //       setIsLoading(false);
-  //       return true;
-  //     }
-  //   }
-  //   setIsLoading(false);
-  //   return false;
-  // };
 
   const handleSelect = ({ start, resourceId }) => {
     setIsLoading(true);

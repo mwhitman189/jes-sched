@@ -30,8 +30,8 @@ const Menu = styled.nav`
   width: 200px;
   z-index: 2;
   padding: 5px;
-  transform: ${(props) => (props.isClosed ? "translate(200px)" : "none")};
-  @media (min-width: ${(props) => props.theme.breakpoints.lg}) {
+  transform: ${({ isClosed }) => (isClosed ? "translate(200px)" : "none")};
+  @media (min-width: ${({ theme }) => theme.breakpoints.lg}) {
     position: relative;
     transform: none;
     flex-direction: row;
@@ -50,38 +50,38 @@ const ButtonContainer = styled.div`
   flex-direction: column;
   flex: 1 1 0px;
   padding: 0;
-  flex-direction: ${(props) => (props.isRow ? "row" : "column")};
-  @media (min-width: ${(props) => props.theme.breakpoints.lg}) {
+  flex-direction: ${({ isRow }) => (isRow ? "row" : "column")};
+  @media (min-width: ${({ theme }) => theme.breakpoints.lg}) {
     height: 100%;
     flex-direction: row;
   }
 `;
 
 const Button = styled.button`
-  display: ${(props) => props.theme.btnStyles.display};
-  cursor: ${(props) => props.theme.btnStyles.cursor};
-  justify-content: ${(props) => props.theme.btnStyles.justifyContent};
-  align-items: ${(props) => props.theme.btnStyles.alignItems};
-  font-weight: ${(props) => props.theme.btnStyles.fontWeight};
-  text-transform: ${(props) => props.theme.btnStyles.textTransform};
-  color: ${(props) => props.theme.btnStyles.color};
-  background: ${(props) =>
-    props.background ? props.background : props.theme.colors.primary};
-  border: ${(props) => props.theme.btnStyles.border};
-  border-radius: ${(props) => props.theme.btnStyles.borderRadius};
-  height: ${(props) => props.theme.btnStyles.height};
-  margin: ${(props) => props.theme.btnStyles.margin};
+  display: ${({ theme }) => theme.btnStyles.display};
+  cursor: ${({ theme }) => theme.btnStyles.cursor};
+  justify-content: ${({ theme }) => theme.btnStyles.justifyContent};
+  align-items: ${({ theme }) => theme.btnStyles.alignItems};
+  font-weight: ${({ theme }) => theme.btnStyles.fontWeight};
+  text-transform: ${({ theme }) => theme.btnStyles.textTransform};
+  color: ${({ theme }) => theme.btnStyles.color};
+  background: ${({ background, theme }) =>
+    background ? background : theme.colors.primary};
+  border: ${({ theme }) => theme.btnStyles.border};
+  border-radius: ${({ theme }) => theme.btnStyles.borderRadius};
+  height: ${({ theme }) => theme.btnStyles.height};
+  margin: ${({ theme }) => theme.btnStyles.margin};
   width: 100%;
-  justify-content: ${(props) =>
-    props.justification ? props.justification : "center"};
+  justify-content: ${({ justification }) =>
+    justification ? justification : "center"};
 
   &:hover {
-    background: ${(props) =>
-      props.hoverBackground ? props.hoverBackground : "#2b69cc"};
+    background: ${({ hoverBackground }) =>
+      hoverBackground ? hoverBackground : "#2b69cc"};
   }
 
-  @media (min-width: ${(props) => props.theme.breakpoints.lg}) {
-    width: ${(props) => (props.width ? props.width : "90px")};
+  @media (min-width: ${({ theme }) => theme.breakpoints.lg}) {
+    width: ${({ width }) => (width ? width : "90px")};
     margin: 0 4px;
     justify-content: center;
   }
@@ -90,7 +90,7 @@ const Button = styled.button`
 const MenuButton = styled(Button)`
   position: relative;
   width: 50px;
-  @media (min-width: ${(props) => props.theme.breakpoints.lg}) {
+  @media (min-width: ${({ theme }) => theme.breakpoints.lg}) {
     display: none;
   }
 `;
@@ -108,7 +108,7 @@ const CloseButton = styled(Button)`
   height: 30px;
   border-radius: 50%;
   background-color: #575757;
-  @media (min-width: ${(props) => props.theme.breakpoints.lg}) {
+  @media (min-width: ${({ theme }) => theme.breakpoints.lg}) {
     display: none;
   }
 `;
