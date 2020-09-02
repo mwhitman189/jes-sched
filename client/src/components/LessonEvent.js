@@ -1,8 +1,8 @@
-import React, { useContext } from "react";
-import moment from "moment";
-import styled from "styled-components";
-import { TeachersContext } from "../context/TeachersContext";
-import CloseIcon from "@material-ui/icons/Close";
+import React, { useContext } from 'react';
+import moment from 'moment';
+import styled from 'styled-components';
+import CloseIcon from '@material-ui/icons/Close';
+import { TeachersContext } from '../context/TeachersContext';
 
 const EventWrapper = styled.div`
   display: flex;
@@ -18,7 +18,7 @@ const EventWrapper = styled.div`
 const ResourceName = styled.div`
   color: rgba(245, 66, 230, 0.6);
   position: absolute;
-  top: ${({ duration }) => (duration > 50 ? "8px" : "5px")};
+  top: ${({ duration }) => (duration > 50 ? '8px' : '5px')};
 `;
 
 const CancelledIcon = styled.div`
@@ -120,8 +120,8 @@ const LessonEvent = ({ event }) => {
             {event.isSameDayCancellation && <SameDayTag>SD</SameDayTag>}
           </CancelledIcon>
         ) : (
-          event.absentees &&
-          event.absentees.map((a) => (
+          event.absentees
+          && event.absentees.map((a) => (
             <AbsenteesWrapper key={`lessonEvent-absentee-${a._id}`}>
               <Absentees>
                 <AbsenteeX>x</AbsenteeX>
@@ -131,14 +131,14 @@ const LessonEvent = ({ event }) => {
           ))
         )}
       </ExtraInfoWrapper>
-      <div>{moment(event.start).format("HH:mm")}</div>
+      <div>{moment(event.start).format('HH:mm')}</div>
       <EventInfo>
         <InnerGroup>
           <Title>{event.title}</Title>
           <Room>{event.room}</Room>
         </InnerGroup>
       </EventInfo>
-      <EndTime>{moment(event.end).format("HH:mm")}</EndTime>
+      <EndTime>{moment(event.end).format('HH:mm')}</EndTime>
     </EventWrapper>
   );
 };

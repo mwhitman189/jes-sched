@@ -10,7 +10,7 @@ export default {
     healthInsur: 0,
     pension: 0,
     employmentInsur: 0,
-    taxRate: 0.15
+    taxRate: 0.15,
   },
   IB: {
     baseSalary: 290000,
@@ -23,7 +23,7 @@ export default {
     healthInsur: 0,
     pension: 0,
     employmentInsur: 0,
-    taxRate: 0.15
+    taxRate: 0.15,
   },
   IIA: {
     baseSalary: 280000,
@@ -36,7 +36,7 @@ export default {
     healthInsur: 15150,
     pension: 27450,
     employmentInsur: 964,
-    taxRate: 0.15
+    taxRate: 0.15,
   },
   IIB: {
     baseSalary: 280000,
@@ -49,7 +49,7 @@ export default {
     healthInsur: 15150,
     pension: 27450,
     employmentInsur: 964,
-    taxRate: 0.15
+    taxRate: 0.15,
   },
   IIIA: {
     baseSalary: 0,
@@ -62,7 +62,7 @@ export default {
     healthInsur: false,
     pension: false,
     employmentInsur: false,
-    taxRate: 0.15
+    taxRate: 0.15,
   },
   IIIB: {
     baseSalary: 0,
@@ -74,6 +74,6 @@ export default {
     healthInsur: false,
     pension: false,
     employmentInsur: false,
-    taxRate: 0.15
-  }
+    taxRate: 0.15,
+  },
 };

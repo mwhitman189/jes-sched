@@ -1,18 +1,18 @@
-import React, { useContext } from "react";
-import axios from "axios";
-import { ValidatorForm, TextValidator } from "react-material-ui-form-validator";
-import useInputState from "../hooks/useInputState";
-import useToggleState from "../hooks/useToggleState";
-import { tokenConfig } from "../reducers/loadUserReducer";
-import { UserContext } from "../context/UserContext";
-import { makeStyles } from "@material-ui/core/styles";
-import Button from "@material-ui/core/Button";
-import Dialog from "@material-ui/core/Dialog";
-import DialogActions from "@material-ui/core/DialogActions";
-import DialogContent from "@material-ui/core/DialogContent";
-import DialogContentText from "@material-ui/core/DialogContentText";
-import DialogTitle from "@material-ui/core/DialogTitle";
-import FormControl from "@material-ui/core/FormControl";
+import React, { useContext } from 'react';
+import axios from 'axios';
+import { ValidatorForm, TextValidator } from 'react-material-ui-form-validator';
+import { makeStyles } from '@material-ui/core/styles';
+import Button from '@material-ui/core/Button';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import FormControl from '@material-ui/core/FormControl';
+import { UserContext } from '../context/UserContext';
+import { tokenConfig } from '../reducers/loadUserReducer';
+import useToggleState from '../hooks/useToggleState';
+import useInputState from '../hooks/useInputState';
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -29,14 +29,14 @@ export default function EventForm(props) {
   const { formType, setFormType } = props;
   const { user } = useContext(UserContext);
 
-  const [givenName, setGivenName] = useInputState("");
-  const [familyName, setFamilyName] = useInputState("");
-  const [email, setEmail] = useInputState("");
+  const [givenName, setGivenName] = useInputState('');
+  const [familyName, setFamilyName] = useInputState('');
+  const [email, setEmail] = useInputState('');
   const [isLoading, toggleIsLoading] = useToggleState(false);
 
   const addStaff = async (newStaff) => {
     await axios
-      .put(`/api/staff/add`, newStaff, tokenConfig(user))
+      .put('/api/staff/add', newStaff, tokenConfig(user))
       .then((res) => console.log(res.data))
       .catch((err) => console.log(err));
   };
@@ -45,19 +45,19 @@ export default function EventForm(props) {
     e.preventDefault();
     toggleIsLoading(true);
     addStaff({
-      givenName: givenName,
-      familyName: familyName,
-      email: email,
+      givenName,
+      familyName,
+      email,
     });
     toggleIsLoading(false);
     hideForm();
   };
 
-  const hideForm = () => setFormType("");
+  const hideForm = () => setFormType('');
 
   return (
     <Dialog
-      open={formType === "staff"}
+      open={formType === 'staff'}
       onClose={hideForm}
       aria-labelledby="form-dialog-title"
     >
@@ -75,8 +75,8 @@ export default function EventForm(props) {
               value={givenName}
               onChange={setGivenName}
               fullWidth
-              validators={["required"]}
-              errorMessages={["Enter the Given Name"]}
+              validators={['required']}
+              errorMessages={['Enter the Given Name']}
               required
             />
           </FormControl>
@@ -89,8 +89,8 @@ export default function EventForm(props) {
               value={familyName}
               onChange={setFamilyName}
               fullWidth
-              validators={["required"]}
-              errorMessages={["Enter the Last Name"]}
+              validators={['required']}
+              errorMessages={['Enter the Last Name']}
               required
             />
           </FormControl>
@@ -104,8 +104,8 @@ export default function EventForm(props) {
               value={email}
               onChange={setEmail}
               fullWidth
-              validators={["required"]}
-              errorMessages={["Enter a valid email"]}
+              validators={['required']}
+              errorMessages={['Enter a valid email']}
               required
             />
           </FormControl>

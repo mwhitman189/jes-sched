@@ -1,8 +1,8 @@
-import React, { useContext } from "react";
-import styled from "styled-components";
-import { calcMinsToHours } from "../helpers/utilities";
-import { TeachersContext } from "../context/TeachersContext";
-import { UserContext } from "../context/UserContext";
+import React, { useContext } from 'react';
+import styled from 'styled-components';
+import { calcMinsToHours } from '../helpers/utilities';
+import { TeachersContext } from '../context/TeachersContext';
+import { UserContext } from '../context/UserContext';
 
 const Resources = styled.ul`
   font-size: 1rem;
@@ -23,14 +23,13 @@ const Resources = styled.ul`
 
 const Resource = styled.li`
   margin: 0 8px;
-  color: ${(resource) =>
-    resource.isPartTime
-      ? "#ca02e0"
-      : resource.overThresholdTwoMins > 0
-      ? "#e00262"
+  color: ${(resource) => (resource.isPartTime
+    ? '#ca02e0'
+    : resource.overThresholdTwoMins > 0
+      ? '#e00262'
       : resource.overThresholdOneMins > 0
-      ? "#ca02e0"
-      : "#0220e0"};
+        ? '#ca02e0'
+        : '#0220e0')};
 `;
 
 const TeacherList = () => {
@@ -39,12 +38,10 @@ const TeacherList = () => {
 
   // Search for user in teachers. If user is teacher, return teacher object
   // for use in conditional rendering of teaching minutes
-  const teacher =
-    user.user.role === "teacher" &&
-    teachers.find((t) => t.email === user.user.email);
+  const teacher = user.user.role === 'teacher'
+    && teachers.find((t) => t.email === user.user.email);
 
-  const individualTeachingHours =
-    teacher && calcMinsToHours(teacher.teachingMins);
+  const individualTeachingHours = teacher && calcMinsToHours(teacher.teachingMins);
 
   return (
     <Resources>
@@ -54,10 +51,12 @@ const TeacherList = () => {
         teacher ? (
           <Resource
             resource={teacher}
-          >{`${teacher.givenName}: ${individualTeachingHours}`}</Resource>
+          >
+            {`${teacher.givenName}: ${individualTeachingHours}`}
+          </Resource>
         ) : (
-          teachers &&
-          teachers.map((t) => {
+          teachers
+          && teachers.map((t) => {
             const teachingHours = calcMinsToHours(t.teachingMins);
             return (
               <Resource key={`toolbar-teacher1-${t.resourceId}`} resource={t}>

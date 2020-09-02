@@ -1,7 +1,7 @@
-import { useState, useContext } from "react";
-import axios from "axios";
-import { tokenConfig } from "../reducers/loadUserReducer";
-import { UserContext } from "../context/UserContext";
+import { useState, useContext } from 'react';
+import axios from 'axios';
+import { tokenConfig } from '../reducers/loadUserReducer';
+import { UserContext } from '../context/UserContext';
 
 export default (initialStudents) => {
   const { user } = useContext(UserContext);
@@ -9,10 +9,8 @@ export default (initialStudents) => {
 
   const getStudents = async () => {
     await axios
-      .get("/api/students", tokenConfig(user))
-      .then((res) => {
-        return setStudents(res.data);
-      })
+      .get('/api/students', tokenConfig(user))
+      .then((res) => setStudents(res.data))
       .catch((err) => console.log(err));
   };
 
@@ -22,17 +20,17 @@ export default (initialStudents) => {
     getStudents: () => getStudents(),
     addStudent: async (newStudent) => {
       await axios
-        .post("/api/students/add", newStudent, tokenConfig(user))
+        .post('/api/students/add', newStudent, tokenConfig(user))
         .then((res) => console.log(res.data))
         .catch((err) => console.log(err));
       return setStudents([...students, newStudent]);
     },
-    editStudent: async function (student, editedStudent) {
+    async editStudent(student, editedStudent) {
       await axios
         .put(
           `/api/students/update/${student._id}`,
           editedStudent,
-          tokenConfig(user)
+          tokenConfig(user),
         )
         .then((res) => console.log(res.data))
         .catch((err) => console.log(err));

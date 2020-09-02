@@ -1,8 +1,8 @@
-import React, { useReducer, createContext } from "react";
-import authReducer from "../reducers/authReducer";
+import React, { useReducer, createContext } from 'react';
+import authReducer from '../reducers/authReducer';
 
 const initialState = {
-  token: localStorage.getItem("token"),
+  token: localStorage.getItem('token'),
   isAuthenticated: null,
   isLoading: false,
   user: null,

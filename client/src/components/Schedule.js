@@ -1,24 +1,26 @@
-import React, { useState, useEffect, useContext, useRef } from "react";
-import CustomDnDCalendar from "./CustomDnDCalendar";
-import { ThemeProvider } from "styled-components";
-import { useReactToPrint } from "react-to-print";
-import { protectAction } from "../helpers/utilities";
-import { TeachersContext } from "../context/TeachersContext";
-import { EventsContext } from "../context/EventsContext";
-import { StudentsContext } from "../context/StudentsContext";
-import { UserContext } from "../context/UserContext";
-import theme from "../constants/styles";
-import useFormState from "../hooks/useInputState";
-import EventForm from "./EventForm";
-import StaffForm from "./StaffForm";
-import StudentForm from "./StudentForm";
-import TeacherForm from "./TeacherForm";
-import Snackbar from "./Snackbar";
-import Payroll from "./Payroll";
-import Footer from "./Footer";
-import EventPopper from "./EventPopper";
-import "react-big-calendar/lib/sass/styles.scss";
-import "../styles/react-big-calendarStyles.scss";
+import React, {
+  useState, useEffect, useContext, useRef,
+} from 'react';
+import { ThemeProvider } from 'styled-components';
+import { useReactToPrint } from 'react-to-print';
+import CustomDnDCalendar from './CustomDnDCalendar';
+import { protectAction } from '../helpers/utilities';
+import { TeachersContext } from '../context/TeachersContext';
+import { EventsContext } from '../context/EventsContext';
+import { StudentsContext } from '../context/StudentsContext';
+import { UserContext } from '../context/UserContext';
+import theme from '../constants/styles';
+import useFormState from '../hooks/useInputState';
+import EventForm from './EventForm';
+import StaffForm from './StaffForm';
+import StudentForm from './StudentForm';
+import TeacherForm from './TeacherForm';
+import Snackbar from './Snackbar';
+import Payroll from './Payroll';
+import Footer from './Footer';
+import EventPopper from './EventPopper';
+import 'react-big-calendar/lib/sass/styles.scss';
+import '../styles/react-big-calendarStyles.scss';
 
 const Schedule = () => {
   // Create a ref to use with React-to-print
@@ -48,12 +50,12 @@ const SchedulePrePrintBtn = () => {
   const { getStudents } = useContext(StudentsContext);
   const { user } = useContext(UserContext);
 
-  const [formType, setFormType] = useState("");
+  const [formType, setFormType] = useState('');
   const [startTime, setStartTime] = useFormState(new Date());
-  const [selectedEvent, setSelectedEvent] = useState("");
+  const [selectedEvent, setSelectedEvent] = useState('');
   const [isOpen, setIsOpen] = useState(false);
-  const [message, setMessage] = useState("");
-  const [selectedTeacherId, setSelectedTeacherId] = useState("");
+  const [message, setMessage] = useState('');
+  const [selectedTeacherId, setSelectedTeacherId] = useState('');
   const [absentees, setAbsentees] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isDetailView, setIsDetailView] = useState(false);
@@ -75,12 +77,14 @@ const SchedulePrePrintBtn = () => {
     addTeachingMins(events, monthStart, monthEnd);
   }, [events]);
 
-  const moveEvent = ({ event, resourceId, start, end }) => {
+  const moveEvent = ({
+    event, resourceId, start, end,
+  }) => {
     const updatedEvent = {
       ...event,
-      resourceId: resourceId,
-      start: start,
-      end: end,
+      resourceId,
+      start,
+      end,
     };
     handleDoubleClick(updatedEvent);
   };
@@ -89,7 +93,7 @@ const SchedulePrePrintBtn = () => {
     setIsLoading(true);
     setStartTime(start);
     setSelectedTeacherId(resourceId);
-    setFormType("event");
+    setFormType('event');
     setIsLoading(false);
   };
 
@@ -98,20 +102,20 @@ const SchedulePrePrintBtn = () => {
     setIsDetailView(false);
     setStartTime(event.start);
     setSelectedEvent(event);
-    setFormType("event");
+    setFormType('event');
     setIsLoading(false);
   };
 
   const handleAddTeacherNav = () => {
-    setFormType("teacher");
+    setFormType('teacher');
   };
 
   const handleAddStaffNav = () => {
-    setFormType("staff");
+    setFormType('staff');
   };
 
   const handleAddStudentNav = () => {
-    setFormType("student");
+    setFormType('student');
   };
 
   const handleToggleSnackbar = (msg) => {
@@ -120,11 +124,11 @@ const SchedulePrePrintBtn = () => {
   };
 
   const handlePayrollNav = () => {
-    setFormType("payroll");
+    setFormType('payroll');
   };
 
   const handleSingleClick = (event, target) => {
-    if (user.user.role === "teacher") {
+    if (user.user.role === 'teacher') {
       const updatedEvent = { ...event, isNewEvent: false };
       editEvent(updatedEvent);
     }
@@ -146,7 +150,7 @@ const SchedulePrePrintBtn = () => {
             setAbsentees={setAbsentees}
           />
         )}
-        {formType === "event" && (
+        {formType === 'event' && (
           <EventForm
             formType={formType}
             setFormType={setFormType}
@@ -159,16 +163,16 @@ const SchedulePrePrintBtn = () => {
             setAbsentees={setAbsentees}
           />
         )}
-        {formType === "teacher" && (
+        {formType === 'teacher' && (
           <TeacherForm formType={formType} setFormType={setFormType} />
         )}
-        {formType === "staff" && (
+        {formType === 'staff' && (
           <StaffForm formType={formType} setFormType={setFormType} />
         )}
-        {formType === "student" && (
+        {formType === 'student' && (
           <StudentForm formType={formType} setFormType={setFormType} />
         )}
-        {formType === "payroll" && <Payroll setFormType={setFormType} />}
+        {formType === 'payroll' && <Payroll setFormType={setFormType} />}
         <Snackbar msg={message} isOpen={isOpen} setIsOpen={setIsOpen} />
         <CustomDnDCalendar
           handleMove={protectAction(user, moveEvent)}

@@ -1,9 +1,9 @@
-import React from "react";
-import styled from "styled-components";
+import React from 'react';
+import styled from 'styled-components';
 
 const Container = styled.div`
   display: flex;
-  flex-direction: ${({ isCheckbox }) => (isCheckbox ? "row" : "column")};
+  flex-direction: ${({ isCheckbox }) => (isCheckbox ? 'row' : 'column')};
   justify-content: center;
   align-items: center;
   margin-right: 10px;
@@ -16,11 +16,11 @@ const Container = styled.div`
 
 const InputLabel = styled.label`
   color: ${({ theme }) => theme.colors.primaryText};
-  position: ${({ isCheckbox }) => (isCheckbox ? "relative" : "absolute")};
-  ${({ isCheckbox }) => !isCheckbox && { transform: "translateY(-22px)" }}
-  font-size: ${({ isCheckbox }) => (isCheckbox ? "1rem" : "0.6rem")};
-  margin: ${({ isCheckbox }) => (isCheckbox ? "0 10px 0 5px" : 0)};
-  ${({ isCheckbox }) => !isCheckbox && { alignSelf: "start" }}
+  position: ${({ isCheckbox }) => (isCheckbox ? 'relative' : 'absolute')};
+  ${({ isCheckbox }) => !isCheckbox && { transform: 'translateY(-22px)' }}
+  font-size: ${({ isCheckbox }) => (isCheckbox ? '1rem' : '0.6rem')};
+  margin: ${({ isCheckbox }) => (isCheckbox ? '0 10px 0 5px' : 0)};
+  ${({ isCheckbox }) => !isCheckbox && { alignSelf: 'start' }}
 `;
 
 const Label = styled.p`
@@ -32,7 +32,7 @@ const Error = styled(Label)`
 `;
 
 function FormInput({ label, error, children }) {
-  const isCheckbox = children.type.name === "Checkbox";
+  const isCheckbox = children.type.name === 'Checkbox';
 
   return (
     <Container isCheckbox={isCheckbox}>

@@ -1,6 +1,6 @@
-import moment from "moment";
+import moment from 'moment';
 
-const JapaneseHolidays = require("japanese-holidays");
+const JapaneseHolidays = require('japanese-holidays');
 
 const calcDutyHours = (dutyHours, start) => {
   // Check whether the current event is earliest lesson
@@ -8,7 +8,7 @@ const calcDutyHours = (dutyHours, start) => {
     dutyHours.startTime = moment(start);
 
     // Add 9 hours to the DH start time to ensure a minimum of 9 DH
-    dutyHours.endTime = moment(dutyHours.startTime).add(9, "hours");
+    dutyHours.endTime = moment(dutyHours.startTime).add(9, 'hours');
   }
 
   return dutyHours;
@@ -19,44 +19,43 @@ const calcOutsideDutyMins = (
   eventEnd,
   duration,
   dutyHoursStart,
-  dutyHoursEnd
+  dutyHoursEnd,
 ) => {
   // Calculate difference in hours between the duty hours start time and the lesson start time
-  const startDiff = dutyHoursStart.diff(eventStart, "minutes");
-  const endDiff = dutyHoursStart.diff(eventEnd, "minutes");
+  const startDiff = dutyHoursStart.diff(eventStart, 'minutes');
+  const endDiff = dutyHoursStart.diff(eventEnd, 'minutes');
 
   // Calculate difference in hours between the duty hours end time and the lesson end time
-  const afterDhEndDiff = -dutyHoursEnd.diff(eventEnd, "minutes");
-  const afterDhStartDiff = -dutyHoursEnd.diff(eventStart, "minutes");
+  const afterDhEndDiff = -dutyHoursEnd.diff(eventEnd, 'minutes');
+  const afterDhStartDiff = -dutyHoursEnd.diff(eventStart, 'minutes');
 
   let outsideDutyMins;
   if (startDiff <= 0 && afterDhEndDiff <= 0) {
     outsideDutyMins = 0;
     return {
       teachingMins: duration,
-      outsideDutyMins: outsideDutyMins,
+      outsideDutyMins,
     };
-  } else if (
-    (startDiff > 0 && endDiff > 0) ||
-    (afterDhEndDiff > 0 && afterDhStartDiff > 0)
+  } if (
+    (startDiff > 0 && endDiff > 0)
+    || (afterDhEndDiff > 0 && afterDhStartDiff > 0)
   ) {
     return {
       teachingMins: 0,
       outsideDutyMins: duration,
     };
-  } else if (startDiff > 0) {
+  } if (startDiff > 0) {
     const regularTeachingMins = duration - startDiff;
     return {
       teachingMins: regularTeachingMins,
       outsideDutyMins: startDiff,
     };
-  } else {
-    const regularTeachingMins = duration - afterDhEndDiff;
-    return {
-      teachingMins: regularTeachingMins,
-      outsideDutyMins: afterDhEndDiff,
-    };
   }
+  const regularTeachingMins = duration - afterDhEndDiff;
+  return {
+    teachingMins: regularTeachingMins,
+    outsideDutyMins: afterDhEndDiff,
+  };
 };
 
 const createPayPeriodData = (events, teacher, monthStart, monthEnd) => {
@@ -68,12 +67,10 @@ const createPayPeriodData = (events, teacher, monthStart, monthEnd) => {
   teacher.overThresholdOneMins = 0;
   teacher.overThresholdTwoMins = 0;
 
-  const monthEvents = events.filter((e) => {
-    return (
-      moment(e.start).isBetween(monthStart, monthEnd, null, "[]") &&
-      e.resourceId === teacher.resourceId
-    );
-  });
+  const monthEvents = events.filter((e) => (
+    moment(e.start).isBetween(monthStart, monthEnd, null, '[]')
+      && e.resourceId === teacher.resourceId
+  ));
 
   const dutyHoursByDate = {};
 
@@ -82,8 +79,8 @@ const createPayPeriodData = (events, teacher, monthStart, monthEnd) => {
     // Set the base duty hours to noon to ensure at least 9 duty hours
     if (!dutyHoursByDate[date]) {
       const baseDutyHours = {
-        startTime: moment(e.start).set("hour", 12).set("minutes", 0),
-        endTime: moment(e.start).set("hour", 21).set("minutes", 0),
+        startTime: moment(e.start).set('hour', 12).set('minutes', 0),
+        endTime: moment(e.start).set('hour', 21).set('minutes', 0),
       };
       // Set the duty hours for the event's date
       dutyHoursByDate[date] = calcDutyHours(baseDutyHours, e.start, e.end);
@@ -92,7 +89,7 @@ const createPayPeriodData = (events, teacher, monthStart, monthEnd) => {
       dutyHoursByDate[date] = calcDutyHours(
         dutyHoursByDate[date],
         e.start,
-        e.end
+        e.end,
       );
     }
   });
@@ -113,8 +110,8 @@ const createPayPeriodData = (events, teacher, monthStart, monthEnd) => {
           // otherwise, add to total teaching minutes
 
           if (
-            JapaneseHolidays.isHoliday(e.start) ||
-            e.start.getDay() === (0 || 1)
+            JapaneseHolidays.isHoliday(e.start)
+            || e.start.getDay() === (0 || 1)
           ) {
             holidayMins = e.duration;
             teacher.holidayMins += holidayMins;
@@ -124,7 +121,7 @@ const createPayPeriodData = (events, teacher, monthStart, monthEnd) => {
               e.end,
               e.duration,
               dutyHoursByDate[date].startTime,
-              dutyHoursByDate[date].endTime
+              dutyHoursByDate[date].endTime,
             );
 
             // Add total teaching minutes and outside duty minutes to teacher object
@@ -140,26 +137,26 @@ const createPayPeriodData = (events, teacher, monthStart, monthEnd) => {
               teacher.overThresholdTwoMins += e.duration;
             } else if (teacher.teachingMins > otThOneTotalMins) {
               if (otThOneTotalMins + e.duration > otThTwoTotalMins) {
-                teacher.overThresholdTwoMins +=
-                  otThOneTotalMins + e.duration - otThTwoTotalMins;
+                teacher.overThresholdTwoMins
+                  += otThOneTotalMins + e.duration - otThTwoTotalMins;
                 teacher.overThresholdOneMins = otThOneTotalMins;
               } else {
                 teacher.overThresholdOneMins += e.duration;
               }
             } else if (teacher.teachingMins + e.duration > otThOneTotalMins) {
-              teacher.overThresholdOneMins +=
-                teacher.teachingMins + e.duration - otThOneTotalMins;
+              teacher.overThresholdOneMins
+                += teacher.teachingMins + e.duration - otThOneTotalMins;
             }
           }
 
           // Teaching minutes object to be added to hash table
           const dateData = {
             resourceId: teacher.resourceId,
-            date: date,
-            day: day,
-            teachingMins: teachingMins,
-            outsideDutyMins: outsideDutyMins,
-            holidayMins: holidayMins,
+            date,
+            day,
+            teachingMins,
+            outsideDutyMins,
+            holidayMins,
             travelAllowance: 0,
             travelExpenses: 0,
           };

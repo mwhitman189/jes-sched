@@ -1,9 +1,9 @@
-import React, { useContext } from "react";
-import { Switch, Route, Redirect } from "react-router-dom";
-import { UserContext } from "../context/UserContext";
-import Login from "../components/Login";
-import SignUp from "../components/SignUpForm";
-import Schedule from "../components/Schedule";
+import React, { useContext } from 'react';
+import { Switch, Route, Redirect } from 'react-router-dom';
+import { UserContext } from '../context/UserContext';
+import Login from '../components/Login';
+import SignUp from '../components/SignUpForm';
+import Schedule from '../components/Schedule';
 
 function Routes() {
   return (
@@ -22,13 +22,11 @@ const RouteRegistration = ({ component: Component, ...rest }) => {
   return (
     <Route
       {...rest}
-      render={(props) =>
-        !user.isAuthenticated ? (
-          <Component {...props} />
-        ) : (
-          <Redirect to="/schedule" />
-        )
-      }
+      render={(props) => (!user.isAuthenticated ? (
+        <Component {...props} />
+      ) : (
+        <Redirect to="/schedule" />
+      ))}
     />
   );
 };
@@ -40,13 +38,11 @@ const RouteProtected = ({ component: Component, ...rest }) => {
   return (
     <Route
       {...rest}
-      render={(props) =>
-        user.isAuthenticated ? (
-          <Component {...props} />
-        ) : (
-          <Redirect to="/login" />
-        )
-      }
+      render={(props) => (user.isAuthenticated ? (
+        <Component {...props} />
+      ) : (
+        <Redirect to="/login" />
+      ))}
     />
   );
 };

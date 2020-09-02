@@ -1,11 +1,11 @@
-import React from "react";
-import { Navigate } from "react-big-calendar";
-import TimeGrid from "react-big-calendar/lib/TimeGrid";
-import * as dates from "date-arithmetic";
+import React from 'react';
+import { Navigate } from 'react-big-calendar';
+import TimeGrid from 'react-big-calendar/lib/TimeGrid';
+import * as dates from 'date-arithmetic';
 
 const WorkWeek = (props) => {
-  let { date } = props;
-  let range = WorkWeek.range(date);
+  const { date } = props;
+  const range = WorkWeek.range(date);
 
   return <TimeGrid {...props} range={range} />;
 };
@@ -15,7 +15,7 @@ WorkWeek.range = (date) => {
   // on the first day of the calendar week regardless of time of day
   date.setHours(0, 0, 0, 0);
   // Set start date to the current work week's Monday
-  let gotDate = date.getDate();
+  const gotDate = date.getDate();
 
   // Check the current date's day as integer from 0(Sun) to 6(Sat)
   switch (date.getDay()) {
@@ -51,14 +51,14 @@ WorkWeek.range = (date) => {
       break;
   }
 
-  let start = date;
-  let end = dates.add(start, 5, "day");
+  const start = date;
+  const end = dates.add(start, 5, 'day');
   let current = start;
-  let range = [];
+  const range = [];
 
-  while (dates.lte(current, end, "day")) {
+  while (dates.lte(current, end, 'day')) {
     range.push(current);
-    current = dates.add(current, 1, "day");
+    current = dates.add(current, 1, 'day');
   }
   return range;
 };
@@ -67,10 +67,10 @@ WorkWeek.range = (date) => {
 WorkWeek.navigate = (date, action) => {
   switch (action) {
     case Navigate.PREVIOUS:
-      return dates.subtract(date, 7, "day");
+      return dates.subtract(date, 7, 'day');
 
     case Navigate.NEXT:
-      return dates.add(date, 7, "day");
+      return dates.add(date, 7, 'day');
 
     case Navigate.TODAY:
       return date;
@@ -80,8 +80,6 @@ WorkWeek.navigate = (date, action) => {
   }
 };
 
-WorkWeek.title = (date) => {
-  return `${date.toLocaleDateString()}`;
-};
+WorkWeek.title = (date) => `${date.toLocaleDateString()}`;
 
 export { WorkWeek };

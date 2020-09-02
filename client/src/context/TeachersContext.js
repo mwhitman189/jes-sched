@@ -1,13 +1,13 @@
-import React, { createContext } from "react";
-import useTeachersState from "../hooks/useTeachersState";
+import React, { createContext } from 'react';
+import useTeachersState from '../hooks/useTeachersState';
 
 const defaultTeachers = [
   {
     resourceId: 1,
-    resourceTitle: "defaultTeacher",
-    name: "DefaultTeacher",
-    familyName: "DefaultTeacherLN",
-    email: "default@default.com",
+    resourceTitle: 'defaultTeacher',
+    name: 'DefaultTeacher',
+    familyName: 'DefaultTeacherLN',
+    email: 'default@default.com',
     otThreshold: 0,
     teachingHours: 0,
     outsideDutyMins: 0,
@@ -16,7 +16,7 @@ const defaultTeachers = [
     travelExpenses: 0,
     overThresholdOneMins: 0,
     overThresholdTwoMins: 0,
-    contractType: "IA",
+    contractType: 'IA',
     dependentsNum: 0,
     isPartTime: false,
   },

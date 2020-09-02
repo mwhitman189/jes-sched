@@ -1,39 +1,37 @@
-import { useState, useContext } from "react";
-import { createNewEvents } from "../helpers/events";
-import { UserContext } from "../context/UserContext";
+import { useState, useContext } from 'react';
+import { createNewEvents } from '../helpers/events';
+import { UserContext } from '../context/UserContext';
 import {
   getDbEvents,
   addDbEvents,
   editDbEvent,
   deleteDbEvent,
   deleteDbEvents,
-} from "../dbCalls";
+} from '../dbCalls';
 
 export default function (initialEvents) {
   const { user } = useContext(UserContext);
   const [events, setEvents] = useState(initialEvents);
   const todaysDate = new Date();
 
-  const getEventsFunc = () => {
-    return getDbEvents(todaysDate, setEvents, user);
-  };
+  const getEventsFunc = () => getDbEvents(todaysDate, setEvents, user);
 
   return {
     events,
     getEvents: () => {
       getEventsFunc();
     },
-    addEvent: async function (event) {
+    async addEvent(event) {
       const newEvents = createNewEvents(event, true);
       addDbEvents(newEvents, events, setEvents, getEventsFunc, user);
     },
-    deleteEvent: async function (event) {
+    async deleteEvent(event) {
       deleteDbEvent(event, events, setEvents, user);
     },
-    deleteEvents: async function (event) {
+    async deleteEvents(event) {
       deleteDbEvents(event, events, setEvents, user);
     },
-    editEvent: async function (editedEvent) {
+    async editEvent(editedEvent) {
       editDbEvent(editedEvent, events, setEvents, user);
     },
   };

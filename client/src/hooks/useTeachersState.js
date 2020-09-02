@@ -1,9 +1,9 @@
-import { useState, useContext } from "react";
-import axios from "axios";
-import { createPayPeriodData } from "../helpers/payroll";
-import { tokenConfig } from "../reducers/loadUserReducer";
-import { UserContext } from "../context/UserContext";
-import { editDbTeacher, getDbTeachers } from "../dbCalls";
+import { useState, useContext } from 'react';
+import axios from 'axios';
+import { createPayPeriodData } from '../helpers/payroll';
+import { tokenConfig } from '../reducers/loadUserReducer';
+import { UserContext } from '../context/UserContext';
+import { editDbTeacher, getDbTeachers } from '../dbCalls';
 
 export default (initialTeachers) => {
   const { user } = useContext(UserContext);
@@ -37,7 +37,7 @@ export default (initialTeachers) => {
     },
     addTeacher: async (newTeacher) => {
       await axios
-        .post("/api/teachers/add", newTeacher, tokenConfig(user))
+        .post('/api/teachers/add', newTeacher, tokenConfig(user))
         .then((res) => console.log(res.data))
         .catch((err) => console.log(err));
       return setTeachers([...teachers, newTeacher]);
@@ -60,7 +60,7 @@ export default (initialTeachers) => {
             events,
             teacher,
             monthStart,
-            monthEnd
+            monthEnd,
           );
           for (let i = 1; i < 32; i++) {
             if (JSON.stringify(teacher.minsByDate)) {

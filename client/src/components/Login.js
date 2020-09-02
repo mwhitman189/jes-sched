@@ -1,28 +1,29 @@
-import React, { useContext } from "react";
-import axios from "axios";
-import useInputState from "../hooks/useInputState";
-import useToggleState from "../hooks/useToggleState";
-import { UserContext } from "../context/UserContext";
-import { ErrorsContext } from "../context/ErrorsContext";
-import { makeStyles } from "@material-ui/core/styles";
-import Avatar from "@material-ui/core/Avatar";
-import Button from "@material-ui/core/Button";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import TextField from "@material-ui/core/TextField";
-import Link from "@material-ui/core/Link";
-import Grid from "@material-ui/core/Grid";
-import Box from "@material-ui/core/Box";
-import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
-import Typography from "@material-ui/core/Typography";
-import Container from "@material-ui/core/Container";
+import React, { useContext } from 'react';
+import axios from 'axios';
+import { makeStyles } from '@material-ui/core/styles';
+import Avatar from '@material-ui/core/Avatar';
+import Button from '@material-ui/core/Button';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import TextField from '@material-ui/core/TextField';
+import Link from '@material-ui/core/Link';
+import Grid from '@material-ui/core/Grid';
+import Box from '@material-ui/core/Box';
+import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+import Typography from '@material-ui/core/Typography';
+import Container from '@material-ui/core/Container';
+import { ErrorsContext } from '../context/ErrorsContext';
+import { UserContext } from '../context/UserContext';
+import useToggleState from '../hooks/useToggleState';
+import useInputState from '../hooks/useInputState';
 
 function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
-      {"Copyright © "}
+      {'Copyright © '}
       <Link color="inherit" href="https://material-ui.com/">
         Whitman Solutions
-      </Link>{" "}
+      </Link>
+      {' '}
       {new Date().getFullYear()}
     </Typography>
   );
@@ -31,28 +32,28 @@ function Copyright() {
 const useStyles = makeStyles((theme) => ({
   paper: {
     marginTop: theme.spacing(8),
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
   },
   avatar: {
     margin: theme.spacing(1),
     backgroundColor: theme.palette.secondary.main,
   },
   form: {
-    width: "100%", // Fix IE 11 issue.
+    width: '100%', // Fix IE 11 issue.
     marginTop: theme.spacing(1),
   },
   formGreeting: {
-    fontSize: "1.5rem",
+    fontSize: '1.5rem',
     margin: 0,
-    padding: ".2rem",
+    padding: '.2rem',
   },
   formErrors: {
-    color: "red",
-    fontSize: "1rem",
+    color: 'red',
+    fontSize: '1rem',
     margin: 0,
-    padding: ".2rem",
+    padding: '.2rem',
   },
   submit: {
     margin: theme.spacing(3, 0, 2),
@@ -64,34 +65,34 @@ export default function Login() {
   const { dispatch } = useContext(UserContext);
   const { errors, errorsDispatch } = useContext(ErrorsContext);
 
-  const [email, setEmail] = useInputState("");
-  const [password, setPassword] = useInputState("");
+  const [email, setEmail] = useInputState('');
+  const [password, setPassword] = useInputState('');
   const [isLoading, toggleIsLoading] = useToggleState(false);
 
   const handleLogin = async (e) => {
     e.preventDefault();
     const userToLogIn = {
-      email: email,
-      password: password,
+      email,
+      password,
     };
 
     await axios
-      .post("/api/auth", userToLogIn)
+      .post('/api/auth', userToLogIn)
       .then((res) => {
         dispatch({
-          type: "USER_LOADED",
+          type: 'USER_LOADED',
           payload: res.data,
         });
-        return console.log("Success! Logged In");
+        return console.log('Success! Logged In');
       })
       .catch((err) => {
         console.log(err.response.data);
-        dispatch({ type: "LOGIN_FAILURE" });
+        dispatch({ type: 'LOGIN_FAILURE' });
         errorsDispatch({
-          type: "GET_ERRORS",
+          type: 'GET_ERRORS',
           msg: err.response.data.msg,
         });
-        return console.log("Failed to log in");
+        return console.log('Failed to log in');
       });
   };
 
@@ -164,7 +165,7 @@ export default function Login() {
             </Grid>
             <Grid item>
               <Link href="/signup" variant="body2">
-                {"Don't have an account? Sign Up"}
+                Don't have an account? Sign Up
               </Link>
             </Grid>
           </Grid>

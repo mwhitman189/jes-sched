@@ -1,13 +1,13 @@
-import axios from "axios";
-import { tokenConfig } from "./reducers/loadUserReducer";
-import { createNewEvents } from "./helpers/events";
+import axios from 'axios';
+import { tokenConfig } from './reducers/loadUserReducer';
+import { createNewEvents } from './helpers/events';
 
 // ** Auth **
 
 // ** Events **
-const getDbEvents = (dateTime, setEvents, user) => {
-  axios
-    .get("/api/events", tokenConfig(user))
+const getDbEvents = async (dateTime, setEvents, user) => {
+  await axios
+    .get('/api/events', tokenConfig(user))
     .then((res) => {
       res.data.forEach((event) => {
         event.start = new Date(event.start);
@@ -16,8 +16,8 @@ const getDbEvents = (dateTime, setEvents, user) => {
           // Check if the event is the last recurrence, and if so, create one more month
           // of recurrences
           if (
-            dateTime >=
-            new Date(dateTime.getFullYear(), dateTime.getMonth(), 28)
+            dateTime
+            >= new Date(dateTime.getFullYear(), dateTime.getMonth(), 28)
           ) {
             const newEvents = createNewEvents(event, false);
             res.data = [...res.data, ...newEvents];
@@ -29,9 +29,15 @@ const getDbEvents = (dateTime, setEvents, user) => {
     .catch((err) => console.log(err));
 };
 
-const addDbEvents = (newEvents, events, setEvents, getEventsFunc, user) => {
-  axios
-    .post("/api/events/add", newEvents, tokenConfig(user))
+const addDbEvents = async (
+  newEvents,
+  events,
+  setEvents,
+  getEventsFunc,
+  user,
+) => {
+  await axios
+    .post('/api/events/add', newEvents, tokenConfig(user))
     .then((res) => {
       getEventsFunc();
       return setEvents([...events, ...newEvents]);
@@ -39,12 +45,12 @@ const addDbEvents = (newEvents, events, setEvents, getEventsFunc, user) => {
     .catch((err) => console.log(err));
 };
 
-const editDbEvent = (editedEvent, events, setEvents, user) => {
-  axios
+const editDbEvent = async (editedEvent, events, setEvents, user) => {
+  await axios
     .put(
       `/api/events/update/${editedEvent._id}`,
       editedEvent,
-      tokenConfig(user)
+      tokenConfig(user),
     )
     .then((res) => {
       const idx = events.findIndex((e) => e._id === editedEvent._id);
@@ -57,54 +63,54 @@ const editDbEvent = (editedEvent, events, setEvents, user) => {
     .catch((err) => console.log(err));
 };
 
-const deleteDbEvent = (event, events, setEvents, user) => {
-  axios
+const deleteDbEvent = async (event, events, setEvents, user) => {
+  await axios
     .delete(`/api/events/delete/one/${event._id}`, tokenConfig(user))
     .then((res) => setEvents(events.filter((e) => e._id !== event._id)))
     .catch((err) => console.log(err));
 };
 
-const deleteDbEvents = (event, events, setEvents, user) => {
-  axios
+const deleteDbEvents = async (event, events, setEvents, user) => {
+  await axios
     .delete(`/api/events/delete/all/${event.id}`, tokenConfig(user))
     .then((res) => {
       const today = new Date().setHours(24);
       // Only delete events with the event ID if they occur after today's date
       return setEvents(
-        events.filter((e) => e.id !== event.id || e.start < today)
+        events.filter((e) => e.id !== event.id || e.start < today),
       );
     })
     .catch((err) => console.log(err));
 };
 
 // ** Payments **
-const addDbPayment = (newPayment, user) => {
-  return axios
-    .post(`api/payments/add`, newPayment, tokenConfig(user))
-    .then((res) => console.log(res.data))
-    .catch((err) => console.log(err));
-};
+const addDbPayment = async (newPayment, user) => await axios
+  .post('api/payments/add', newPayment, tokenConfig(user))
+  .then((res) => console.log(res.data))
+  .catch((err) => console.log(err));
 
 // ** Staff **
 
 // ** Students **
 
 // ** Teachers **
-const getDbTeachers = (setTeachers, user) => {
-  axios
-    .get("/api/teachers", tokenConfig(user))
+const getDbTeachers = async (setTeachers, user) => {
+  await axios
+    .get('/api/teachers', tokenConfig(user))
     .then((res) => {
-      setTeachers(res.data);
+      if (res.data.length > 0) {
+        return setTeachers(res.data);
+      }
     })
     .catch((err) => console.log(err));
 };
 
-const editDbTeacher = (updatedTeacher, user) => {
-  axios
+const editDbTeacher = async (updatedTeacher, user) => {
+  await axios
     .put(
       `/api/teachers/update/${updatedTeacher._id}`,
       updatedTeacher,
-      tokenConfig(user)
+      tokenConfig(user),
     )
     .then((res) => console.log(res.data))
     .catch((err) => console.log(err));

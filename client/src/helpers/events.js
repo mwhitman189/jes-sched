@@ -1,7 +1,7 @@
-import { RRule } from "rrule";
-import moment from "moment";
+import { RRule } from 'rrule';
+import moment from 'moment';
 
-const JapaneseHolidays = require("japanese-holidays");
+const JapaneseHolidays = require('japanese-holidays');
 
 const getRecurrences = (event) => {
   const now = new Date();
@@ -51,7 +51,7 @@ const createNewEvents = (event, isNew) => {
       const newEvent = {
         ...event,
         start: r,
-        end: moment(r).add(event.duration, "m").toDate(),
+        end: moment(r).add(event.duration, 'm').toDate(),
         isNewEvent: false,
         isLast: false,
       };

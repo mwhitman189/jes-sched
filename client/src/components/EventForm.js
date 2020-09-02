@@ -1,29 +1,29 @@
-import React, { useState, useContext, useEffect } from "react";
-import moment from "moment";
-import Flatpickr from "react-flatpickr";
-import "flatpickr/dist/themes/airbnb.css";
-import { v4 as uuidv4 } from "uuid";
-import styled from "styled-components";
-import { checkForSameDate } from "../helpers/utilities";
-import roomList from "../constants/rooms";
-import lessonTypes from "../constants/lessonTypes";
-import Form from "./templates/Form";
-import FormInput from "./templates/FormInput";
-import TextInput from "./templates/TextInput";
-import Checkbox from "./templates/Checkbox";
-import StyledSelect from "./templates/StyledSelect";
-import useInputState from "../hooks/useInputState";
-import useToggleState from "../hooks/useToggleState";
-import { validateRoom, validateTeacher } from "../validators";
-import { TeachersContext } from "../context/TeachersContext";
-import { StudentsContext } from "../context/StudentsContext";
-import { EventsContext } from "../context/EventsContext";
+import React, { useState, useContext, useEffect } from 'react';
+import moment from 'moment';
+import Flatpickr from 'react-flatpickr';
+import 'flatpickr/dist/themes/airbnb.css';
+import { v4 as uuidv4 } from 'uuid';
+import styled from 'styled-components';
+import { checkForSameDate } from '../helpers/utilities';
+import roomList from '../constants/rooms';
+import lessonTypes from '../constants/lessonTypes';
+import Form from './templates/Form';
+import FormInput from './templates/FormInput';
+import TextInput from './templates/TextInput';
+import Checkbox from './templates/Checkbox';
+import StyledSelect from './templates/StyledSelect';
+import useInputState from '../hooks/useInputState';
+import useToggleState from '../hooks/useToggleState';
+import { validateRoom, validateTeacher } from '../validators';
+import { TeachersContext } from '../context/TeachersContext';
+import { StudentsContext } from '../context/StudentsContext';
+import { EventsContext } from '../context/EventsContext';
 
 const Dialog = styled.div`
   color: ${({ theme }) => theme.colors.primaryText};
   position: absolute;
   background-color: ${({ theme }) => theme.colors.primaryBackground};
-  display: ${({ isOpen }) => (isOpen ? "flex" : "none")};
+  display: ${({ isOpen }) => (isOpen ? 'flex' : 'none')};
   margin: 0;
   top: 15%;
   left: 50%;
@@ -73,7 +73,7 @@ const Button = styled.button`
   font-weight: ${({ theme }) => theme.btnStyles.fontWeight};
   text-transform: ${({ theme }) => theme.btnStyles.textTransform};
   color: ${({ theme }) => theme.btnStyles.color};
-  background: ${({ background }) => (background ? background : "#4287f5")};
+  background: ${({ background }) => (background || '#4287f5')};
   border: ${({ theme }) => theme.btnStyles.border};
   border-radius: ${({ theme }) => theme.btnStyles.borderRadius};
   height: ${({ theme }) => theme.btnStyles.height};
@@ -82,16 +82,17 @@ const Button = styled.button`
 `;
 
 const SubmitButton = styled(Button)`
-  ${({ disabled }) =>
-    disabled
-      ? "opacity: .4; cursor: not-allowed"
-      : "opacity: 1; cursor: pointer"};
+  ${({ disabled }) => (disabled
+    ? 'opacity: .4; cursor: not-allowed'
+    : 'opacity: 1; cursor: pointer')};
 `;
 
 export default function EventForm(props) {
   const { addTeachingMins } = useContext(TeachersContext);
-  const { events, addEvent, editEvent, deleteEvent, deleteEvents } = useContext(
-    EventsContext
+  const {
+    events, addEvent, editEvent, deleteEvent, deleteEvents,
+  } = useContext(
+    EventsContext,
   );
   const { teachers } = useContext(TeachersContext);
   const { students } = useContext(StudentsContext);
@@ -105,40 +106,39 @@ export default function EventForm(props) {
   } = props;
 
   const resourceFromId = teachers.find(
-    (t) => t.resourceId === (event.resourceId || selectedTeacherId)
+    (t) => t.resourceId === (event.resourceId || selectedTeacherId),
   );
 
-  const roomOption = event ? { label: event.room, value: event.room } : "";
+  const roomOption = event ? { label: event.room, value: event.room } : '';
   const eventTypeOption = lessonTypes.find((t) => t.value === event.type);
 
-  const [start, setStart] = useInputState(startTime);
-  const [title, setTitle, resetTitle] = useInputState(event ? event.title : "");
+  const [start] = useInputState(startTime);
+  const [title, setTitle, resetTitle] = useInputState(event ? event.title : '');
 
   const [duration, setDuration, resetDuration] = useInputState(
-    event ? event.duration : ""
+    event ? event.duration : '',
   );
 
   const [resource, setResource, resetResource] = useInputState(
-    resourceFromId ? resourceFromId : ""
+    resourceFromId || '',
   );
 
   const [room, setRoom, resetRoom] = useInputState(roomOption);
   const [eventType, setEventType, resetEventType] = useInputState(
-    eventTypeOption
+    eventTypeOption,
   );
   const [members, setMembers] = useInputState(event ? event.students : []);
-  const [absentees, setAbsentees] = useInputState(event ? event.absentees : []);
+  const [absentees] = useInputState(event ? event.absentees : []);
   const [isRecurring, toggleIsRecurring] = useToggleState(false);
-  const [travelTime, setTravelTime] = useInputState("");
+  const [travelTime, setTravelTime] = useInputState('');
   const [errors, setErrors] = useState({});
   const [isLoading, toggleIsLoading] = useToggleState(false);
 
-  const isSubmitDisabled =
-    errors.titleError ||
-    errors.durationError ||
-    errors.resourceError ||
-    errors.roomError ||
-    errors.eventTypeError;
+  const isSubmitDisabled = errors.titleError
+    || errors.durationError
+    || errors.resourceError
+    || errors.roomError
+    || errors.eventTypeError;
 
   const now = new Date();
   const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
@@ -147,46 +147,46 @@ export default function EventForm(props) {
   // ***Form Validation***
   useEffect(() => {
     // Event title
-    if (title === "") {
+    if (title === '') {
       setErrors((prevState) => ({
         ...prevState,
-        titleError: "Lesson name required",
+        titleError: 'Lesson name required',
       }));
     } else {
-      setErrors((prevState) => ({ ...prevState, titleError: "" }));
+      setErrors((prevState) => ({ ...prevState, titleError: '' }));
     }
   }, [title]);
 
   useEffect(() => {
     // Event duration
-    if (duration === "") {
+    if (duration === '') {
       setErrors((prevState) => ({
         ...prevState,
-        durationError: "Duration required",
+        durationError: 'Duration required',
       }));
     } else {
-      setErrors((prevState) => ({ ...prevState, durationError: "" }));
+      setErrors((prevState) => ({ ...prevState, durationError: '' }));
     }
   }, [duration]);
 
   useEffect(() => {
     // Event type
-    if (eventType === "") {
+    if (eventType === '') {
       setErrors((prevState) => ({
         ...prevState,
-        eventTypeError: "Lesson type required",
+        eventTypeError: 'Lesson type required',
       }));
     } else {
-      setErrors((prevState) => ({ ...prevState, eventTypeError: "" }));
+      setErrors((prevState) => ({ ...prevState, eventTypeError: '' }));
     }
   }, [eventType]);
 
   useEffect(() => {
     // Event resource
-    if (resource === "") {
+    if (resource === '') {
       setErrors((prevState) => ({
         ...prevState,
-        resourceError: "Lesson name required",
+        resourceError: 'Lesson name required',
       }));
     } else {
       // Set the resourceId to the new value
@@ -195,20 +195,20 @@ export default function EventForm(props) {
       if (!validateTeacher(events, event)) {
         setErrors((prevState) => ({
           ...prevState,
-          resourceError: "Teacher conflict",
+          resourceError: 'Teacher conflict',
         }));
       } else {
-        setErrors((prevState) => ({ ...prevState, resourceError: "" }));
+        setErrors((prevState) => ({ ...prevState, resourceError: '' }));
       }
     }
   }, [resource]);
 
   useEffect(() => {
     // Event room
-    if (room === "") {
+    if (room === '') {
       setErrors((prevState) => ({
         ...prevState,
-        roomError: "Room required",
+        roomError: 'Room required',
       }));
     } else {
       // Set the room to the new value
@@ -217,10 +217,10 @@ export default function EventForm(props) {
       if (!validateRoom(events, event)) {
         setErrors((prevState) => ({
           ...prevState,
-          roomError: "Room conflict",
+          roomError: 'Room conflict',
         }));
       } else {
-        setErrors((prevState) => ({ ...prevState, roomError: "" }));
+        setErrors((prevState) => ({ ...prevState, roomError: '' }));
       }
     }
   }, [room]);
@@ -228,7 +228,7 @@ export default function EventForm(props) {
 
   const hideForm = () => {
     resetForm();
-    setFormType("");
+    setFormType('');
   };
 
   const resetForm = () => {
@@ -238,7 +238,7 @@ export default function EventForm(props) {
     resetRoom();
     resetEventType();
     toggleIsRecurring(false);
-    setSelectedEvent("");
+    setSelectedEvent('');
   };
 
   const handleAddEvent = (e) => {
@@ -246,42 +246,42 @@ export default function EventForm(props) {
     toggleIsLoading(true);
 
     const id = uuidv4();
-    const endTime = moment(start).add(duration, "m").toDate();
+    const endTime = moment(start).add(duration, 'm').toDate();
     addEvent({
-      id: id,
-      title: title,
-      start: start,
+      id,
+      title,
+      start,
       end: endTime,
       room: room.value,
       duration: parseInt(duration),
       resourceId: parseInt(resource.resourceId),
       type: eventType.value,
-      isRecurring: isRecurring,
+      isRecurring,
       students: members,
       absentees: [],
       isLesson: true,
     });
     if (travelTime > 0) {
       addEvent({
-        id: id,
-        title: "Travel",
-        start: moment(start).subtract(travelTime, "m").toDate(),
+        id,
+        title: 'Travel',
+        start: moment(start).subtract(travelTime, 'm').toDate(),
         end: start,
         duration: parseInt(travelTime),
         resourceId: parseInt(resource.resourceId),
-        type: "trav",
-        isRecurring: isRecurring,
+        type: 'trav',
+        isRecurring,
         isLesson: false,
       });
       addEvent({
-        id: id,
-        title: "Return Travel",
+        id,
+        title: 'Return Travel',
         start: endTime,
-        end: moment(endTime).add(travelTime, "m").toDate(),
+        end: moment(endTime).add(travelTime, 'm').toDate(),
         duration: parseInt(travelTime),
         resourceId: parseInt(resource.resourceId),
-        type: "trav",
-        isRecurring: isRecurring,
+        type: 'trav',
+        isRecurring,
         isLesson: false,
       });
     }
@@ -293,44 +293,44 @@ export default function EventForm(props) {
   const handleEditEvent = (e) => {
     e.preventDefault();
     toggleIsLoading(true);
-    const id = e.id;
-    const endTime = moment(start).add(duration, "m").toDate();
+    const { id } = e;
+    const endTime = moment(start).add(duration, 'm').toDate();
     const editedEvent = {
       ...event,
-      title: title,
-      start: start,
+      title,
+      start,
       end: endTime,
       room: room.value,
       duration: parseInt(duration),
       resourceId: parseInt(resource.resourceId),
       type: eventType.value,
-      isRecurring: isRecurring,
+      isRecurring,
       students: members,
-      absentees: absentees,
+      absentees,
       isNewEvent: true,
     };
     editEvent(editedEvent);
     if (travelTime > 0) {
       addEvent({
-        id: id,
-        title: "Travel",
-        start: moment(start).subtract(travelTime, "m").toDate(),
+        id,
+        title: 'Travel',
+        start: moment(start).subtract(travelTime, 'm').toDate(),
         end: start,
         duration: parseInt(travelTime),
         resourceId: parseInt(resource.resourceId),
-        type: "trav",
-        isRecurring: isRecurring,
+        type: 'trav',
+        isRecurring,
         isLesson: false,
       });
       addEvent({
-        id: id,
-        title: "Return Travel",
+        id,
+        title: 'Return Travel',
         start: endTime,
-        end: moment(endTime).add(travelTime, "m").toDate(),
+        end: moment(endTime).add(travelTime, 'm').toDate(),
         duration: parseInt(travelTime),
         resourceId: parseInt(resource.resourceId),
-        type: "trav",
-        isRecurring: isRecurring,
+        type: 'trav',
+        isRecurring,
         isLesson: false,
       });
     }
@@ -342,7 +342,7 @@ export default function EventForm(props) {
   const handleCancelEvent = (e) => {
     e.preventDefault();
     toggleIsLoading(true);
-    let sdCancellation = checkForSameDate(event.start);
+    const sdCancellation = checkForSameDate(event.start);
     const editedEvent = {
       ...event,
       isCancelled: true,
@@ -391,9 +391,9 @@ export default function EventForm(props) {
   };
 
   return (
-    <Dialog isOpen={formType === "event"}>
+    <Dialog isOpen={formType === 'event'}>
       <Form
-        title={event ? "Edit Lesson" : "Add New Lesson"}
+        title={event ? 'Edit Lesson' : 'Add New Lesson'}
         submitAction={event ? handleEditEvent : handleAddEvent}
       >
         <InputGroup>
@@ -415,14 +415,14 @@ export default function EventForm(props) {
           <FormInput label="Start Time">
             <StyledFlatpickr
               id="time-picker"
-              defaultValue={event ? event.start : ""}
+              defaultValue={event ? event.start : ''}
               value={start}
               options={{
                 enableTime: true,
                 noCalendar: true,
                 time_24hr: true,
-                minTime: "9:00",
-                maxTime: "21:00",
+                minTime: '9:00',
+                maxTime: '21:00',
                 minuteIncrement: 5,
               }}
               required
@@ -451,7 +451,7 @@ export default function EventForm(props) {
             <StyledSelect
               name="resource"
               options={teachers}
-              value={resource || ""}
+              value={resource || ''}
               getOptionLabel={(option) => option.givenName}
               getOptionValue={(option) => option.resourceId}
               onChange={handleResourceChange}
@@ -464,14 +464,12 @@ export default function EventForm(props) {
               name="students"
               options={students}
               value={members || []}
-              getOptionLabel={(option) =>
-                `${option.givenName} ${option.familyName}`
-              }
+              getOptionLabel={(option) => `${option.givenName} ${option.familyName}`}
               getOptionValue={(option) => option}
               isMulti
               onChange={handleMembersChange}
               placeholder="Add students"
-              noOptionsMessage={() => "Student does not exist..."}
+              noOptionsMessage={() => 'Student does not exist...'}
               isSearchable
             />
           </FormInput>
@@ -481,7 +479,7 @@ export default function EventForm(props) {
             <StyledSelect
               name="room"
               options={roomList}
-              value={room || ""}
+              value={room || ''}
               getOptionsLabel={(option) => option.label}
               getOptionValue={(option) => option.value}
               onChange={handleRoomChange}
@@ -492,7 +490,7 @@ export default function EventForm(props) {
             <StyledSelect
               name="type"
               options={lessonTypes}
-              value={eventType || ""}
+              value={eventType || ''}
               onChange={handleEventTypeChange}
               placeholder="Lesson Type"
             />
@@ -519,7 +517,7 @@ export default function EventForm(props) {
             resourceError={errors.resourceError}
             disabled={isSubmitDisabled}
           >
-            {event ? "Confirm Change" : "Add Lesson"}
+            {event ? 'Confirm Change' : 'Add Lesson'}
           </SubmitButton>
         </ButtonGroup>
       </Form>

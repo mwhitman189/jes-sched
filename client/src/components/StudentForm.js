@@ -1,21 +1,21 @@
-import React, { useContext } from "react";
+import React, { useContext } from 'react';
 import {
   SelectValidator,
   ValidatorForm,
   TextValidator,
-} from "react-material-ui-form-validator";
-import useInputState from "../hooks/useInputState";
-import useToggleState from "../hooks/useToggleState";
-import { StudentsContext } from "../context/StudentsContext";
-import { makeStyles } from "@material-ui/core/styles";
-import MenuItem from "@material-ui/core/MenuItem";
-import Button from "@material-ui/core/Button";
-import Dialog from "@material-ui/core/Dialog";
-import DialogActions from "@material-ui/core/DialogActions";
-import DialogContent from "@material-ui/core/DialogContent";
-import DialogContentText from "@material-ui/core/DialogContentText";
-import DialogTitle from "@material-ui/core/DialogTitle";
-import FormControl from "@material-ui/core/FormControl";
+} from 'react-material-ui-form-validator';
+import { makeStyles } from '@material-ui/core/styles';
+import MenuItem from '@material-ui/core/MenuItem';
+import Button from '@material-ui/core/Button';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import FormControl from '@material-ui/core/FormControl';
+import { StudentsContext } from '../context/StudentsContext';
+import useToggleState from '../hooks/useToggleState';
+import useInputState from '../hooks/useInputState';
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -32,43 +32,43 @@ export default function EventForm(props) {
   const { formType, setFormType } = props;
   const { addStudent } = useContext(StudentsContext);
 
-  const [givenName, setGivenName] = useInputState("");
-  const [familyName, setFamilyName] = useInputState("");
-  const [level, setLevel] = useInputState("");
-  const [email, setEmail] = useInputState("");
-  const [phone, setPhone] = useInputState("");
+  const [givenName, setGivenName] = useInputState('');
+  const [familyName, setFamilyName] = useInputState('');
+  const [level, setLevel] = useInputState('');
+  const [email, setEmail] = useInputState('');
+  const [phone, setPhone] = useInputState('');
   const [isLoading, toggleIsLoading] = useToggleState(false);
 
   const levels = [
-    { value: "BE", label: "Beginner" },
-    { value: "FB", label: "False Beginner" },
-    { value: "EL", label: "Elementary" },
-    { value: "LI", label: "Low Intermediate" },
-    { value: "HI", label: "High Intermediate" },
-    { value: "AD", label: "Advanced" },
+    { value: 'BE', label: 'Beginner' },
+    { value: 'FB', label: 'False Beginner' },
+    { value: 'EL', label: 'Elementary' },
+    { value: 'LI', label: 'Low Intermediate' },
+    { value: 'HI', label: 'High Intermediate' },
+    { value: 'AD', label: 'Advanced' },
   ];
 
   const handleAddStudent = (e) => {
     e.preventDefault();
     toggleIsLoading(true);
     addStudent({
-      givenName: givenName,
-      familyName: familyName,
-      label: givenName + " " + familyName,
-      level: level,
-      phone: phone,
-      email: email,
+      givenName,
+      familyName,
+      label: `${givenName} ${familyName}`,
+      level,
+      phone,
+      email,
     });
     toggleIsLoading(false);
     hideForm();
   };
 
   const hideForm = () => {
-    setFormType("");
+    setFormType('');
   };
   return (
     <Dialog
-      open={formType === "student"}
+      open={formType === 'student'}
       onClose={hideForm}
       aria-labelledby="form-dialog-title"
     >
@@ -86,8 +86,8 @@ export default function EventForm(props) {
               value={givenName}
               onChange={setGivenName}
               fullWidth
-              validators={["required"]}
-              errorMessages={["Enter the Given Name"]}
+              validators={['required']}
+              errorMessages={['Enter the Given Name']}
               required
             />
           </FormControl>
@@ -100,8 +100,8 @@ export default function EventForm(props) {
               value={familyName}
               onChange={setFamilyName}
               fullWidth
-              validators={["required"]}
-              errorMessages={["Enter the Last Name"]}
+              validators={['required']}
+              errorMessages={['Enter the Last Name']}
               required
             />
           </FormControl>
@@ -136,8 +136,8 @@ export default function EventForm(props) {
               value={email}
               onChange={setEmail}
               fullWidth
-              validators={["required"]}
-              errorMessages={["Enter a valid email"]}
+              validators={['required']}
+              errorMessages={['Enter a valid email']}
               required
             />
           </FormControl>
@@ -151,8 +151,8 @@ export default function EventForm(props) {
               value={phone}
               onChange={setPhone}
               fullWidth
-              validators={["required"]}
-              errorMessages={["Enter the Given Name"]}
+              validators={['required']}
+              errorMessages={['Enter the Given Name']}
               required
             />
           </FormControl>

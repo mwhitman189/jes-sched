@@ -1,10 +1,10 @@
-import React, { createContext } from "react";
-import useEventsState from "../hooks/useEventsState";
+import React, { createContext } from 'react';
+import useEventsState from '../hooks/useEventsState';
 
 const defaultEvents = [
   {
     id: 1,
-    title: "Dummy Event to fix drag and drop bug",
+    title: 'Dummy Event to fix drag and drop bug',
     start: new Date(),
     end: new Date(),
     room: 2,

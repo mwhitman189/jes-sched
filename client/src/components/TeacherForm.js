@@ -1,18 +1,18 @@
-import React, { useContext } from "react";
-import { ValidatorForm, TextValidator } from "react-material-ui-form-validator";
-import useInputState from "../hooks/useInputState";
-import useToggleState from "../hooks/useToggleState";
-import { TeachersContext } from "../context/TeachersContext";
-import { makeStyles } from "@material-ui/core/styles";
-import Button from "@material-ui/core/Button";
-import Dialog from "@material-ui/core/Dialog";
-import DialogActions from "@material-ui/core/DialogActions";
-import DialogContent from "@material-ui/core/DialogContent";
-import DialogContentText from "@material-ui/core/DialogContentText";
-import DialogTitle from "@material-ui/core/DialogTitle";
-import FormControl from "@material-ui/core/FormControl";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Switch from "@material-ui/core/Switch";
+import React, { useContext } from 'react';
+import { ValidatorForm, TextValidator } from 'react-material-ui-form-validator';
+import { makeStyles } from '@material-ui/core/styles';
+import Button from '@material-ui/core/Button';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import FormControl from '@material-ui/core/FormControl';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Switch from '@material-ui/core/Switch';
+import { TeachersContext } from '../context/TeachersContext';
+import useToggleState from '../hooks/useToggleState';
+import useInputState from '../hooks/useInputState';
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -29,12 +29,12 @@ export default function EventForm(props) {
   const { formType, setFormType } = props;
   const { addTeacher, teachers } = useContext(TeachersContext);
 
-  const [givenName, setGivenName] = useInputState("");
-  const [familyName, setFamilyName] = useInputState("");
-  const [otThresholdHours, setOtThresholdHours] = useInputState("");
-  const [contractType, setContractType] = useInputState("");
-  const [dependentsNum, setDependentsNum] = useInputState("");
-  const [email, setEmail] = useInputState("");
+  const [givenName, setGivenName] = useInputState('');
+  const [familyName, setFamilyName] = useInputState('');
+  const [otThresholdHours, setOtThresholdHours] = useInputState('');
+  const [contractType, setContractType] = useInputState('');
+  const [dependentsNum, setDependentsNum] = useInputState('');
+  const [email, setEmail] = useInputState('');
   const [isPartTime, toggleIsPartTime] = useToggleState(false);
   const [isSub, toggleIsSub] = useToggleState(false);
   const [isLoading, toggleIsLoading] = useToggleState(false);
@@ -56,26 +56,26 @@ export default function EventForm(props) {
     addTeacher({
       resourceId: bigResourceId,
       resourceTitle: givenName,
-      email: email,
-      givenName: givenName,
-      familyName: familyName,
+      email,
+      givenName,
+      familyName,
       teachingMins: 0,
       otThreshold: parseInt(otThresholdHours * 60),
-      contractType: contractType,
-      dependentsNum: dependentsNum,
-      isPartTime: isPartTime,
-      isSub: isSub,
+      contractType,
+      dependentsNum,
+      isPartTime,
+      isSub,
       minsByDate: {},
     });
     toggleIsLoading(false);
     hideForm();
   };
 
-  const hideForm = () => setFormType("");
+  const hideForm = () => setFormType('');
 
   return (
     <Dialog
-      open={formType === "teacher"}
+      open={formType === 'teacher'}
       onClose={hideForm}
       aria-labelledby="form-dialog-title"
     >
@@ -84,13 +84,13 @@ export default function EventForm(props) {
         <DialogContent>
           <DialogContentText>Enter Teacher Info</DialogContentText>
           <FormControlLabel
-            control={
+            control={(
               <Switch
                 checked={isPartTime}
                 onChange={toggleIsPartTime}
                 value={isPartTime}
               />
-            }
+            )}
             label="Part-Time Teacher"
           />
           <FormControlLabel
@@ -109,8 +109,8 @@ export default function EventForm(props) {
               value={givenName}
               onChange={setGivenName}
               fullWidth
-              validators={["required"]}
-              errorMessages={["Enter the Given Name"]}
+              validators={['required']}
+              errorMessages={['Enter the Given Name']}
               required
             />
           </FormControl>
@@ -123,8 +123,8 @@ export default function EventForm(props) {
               value={familyName}
               onChange={setFamilyName}
               fullWidth
-              validators={["required"]}
-              errorMessages={["Enter the Last Name"]}
+              validators={['required']}
+              errorMessages={['Enter the Last Name']}
               required
             />
           </FormControl>
@@ -138,8 +138,8 @@ export default function EventForm(props) {
               value={email}
               onChange={setEmail}
               fullWidth
-              validators={["required"]}
-              errorMessages={["Enter a valid email"]}
+              validators={['required']}
+              errorMessages={['Enter a valid email']}
               required
             />
           </FormControl>
@@ -152,8 +152,8 @@ export default function EventForm(props) {
               value={contractType}
               onChange={setContractType}
               fullWidth
-              validators={["required"]}
-              errorMessages={["Select a contract type"]}
+              validators={['required']}
+              errorMessages={['Select a contract type']}
               required
             />
           </FormControl>
@@ -168,8 +168,8 @@ export default function EventForm(props) {
                 value={otThresholdHours}
                 onChange={setOtThresholdHours}
                 fullWidth
-                validators={["required"]}
-                errorMessages={["Set first OT threshold"]}
+                validators={['required']}
+                errorMessages={['Set first OT threshold']}
                 required
               />
             </FormControl>

@@ -1,46 +1,46 @@
-import React, { useContext, useEffect } from "react";
-import axios from "axios";
-import loadUser from "../reducers/loadUserReducer";
-import useInputState from "../hooks/useInputState";
-import useToggleState from "../hooks/useToggleState";
-import { UserContext } from "../context/UserContext";
-import { ErrorsContext } from "../context/ErrorsContext";
-import { makeStyles } from "@material-ui/core/styles";
-import Avatar from "@material-ui/core/Avatar";
-import Button from "@material-ui/core/Button";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import TextField from "@material-ui/core/TextField";
-import Grid from "@material-ui/core/Grid";
-import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
-import Container from "@material-ui/core/Container";
-import Link from "@material-ui/core/Link";
-import Typography from "@material-ui/core/Typography";
+import React, { useContext, useEffect } from 'react';
+import axios from 'axios';
+import { makeStyles } from '@material-ui/core/styles';
+import Avatar from '@material-ui/core/Avatar';
+import Button from '@material-ui/core/Button';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import TextField from '@material-ui/core/TextField';
+import Grid from '@material-ui/core/Grid';
+import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+import Container from '@material-ui/core/Container';
+import Link from '@material-ui/core/Link';
+import Typography from '@material-ui/core/Typography';
+import { ErrorsContext } from '../context/ErrorsContext';
+import { UserContext } from '../context/UserContext';
+import useToggleState from '../hooks/useToggleState';
+import useInputState from '../hooks/useInputState';
+import loadUser from '../reducers/loadUserReducer';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
     marginTop: theme.spacing(8),
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
   },
   avatar: {
     margin: theme.spacing(1),
     backgroundColor: theme.palette.secondary.main,
   },
   form: {
-    width: "100%", // Fix IE 11 issue.
+    width: '100%', // Fix IE 11 issue.
     marginTop: theme.spacing(3),
   },
   formGreeting: {
-    fontSize: "1.5rem",
+    fontSize: '1.5rem',
     margin: 0,
-    padding: ".2rem",
+    padding: '.2rem',
   },
   formErrors: {
-    color: "red",
-    fontSize: "1rem",
+    color: 'red',
+    fontSize: '1rem',
     margin: 0,
-    padding: ".2rem",
+    padding: '.2rem',
   },
   submit: {
     margin: theme.spacing(3, 0, 2),
@@ -52,10 +52,10 @@ export default function SignUpForm() {
   const { user, dispatch } = useContext(UserContext);
   const { errors, errorsDispatch } = useContext(ErrorsContext);
 
-  const [givenName, setGivenName] = useInputState("");
-  const [familyName, setFamilyName] = useInputState("");
-  const [email, setEmail] = useInputState("");
-  const [password, setPassword] = useInputState("");
+  const [givenName, setGivenName] = useInputState('');
+  const [familyName, setFamilyName] = useInputState('');
+  const [email, setEmail] = useInputState('');
+  const [password, setPassword] = useInputState('');
   const [isLoading, toggleIsLoading] = useToggleState(false);
 
   useEffect(() => {
@@ -66,39 +66,39 @@ export default function SignUpForm() {
     e.preventDefault();
     toggleIsLoading(true);
     const user = {
-      givenName: givenName,
-      familyName: familyName,
-      email: email,
-      password: password,
+      givenName,
+      familyName,
+      email,
+      password,
     };
     await axios
-      .post("/api/users/signup", user)
+      .post('/api/users/signup', user)
       .then((res) => {
         dispatch({
-          type: "REGISTER_SUCCESS",
+          type: 'REGISTER_SUCCESS',
           payload: res.data,
         });
         axios
-          .post("/api/auth", user)
+          .post('/api/auth', user)
           .then((res) => {
             dispatch({
-              type: "USER_LOADED",
+              type: 'USER_LOADED',
               payload: res.data,
             });
           })
           .catch((err) => {
-            dispatch({ type: "LOGIN_FAILURE" });
+            dispatch({ type: 'LOGIN_FAILURE' });
             errorsDispatch({
-              type: "GET_ERRORS",
+              type: 'GET_ERRORS',
               msg: err.response.data.msg,
             });
           });
-        return console.log("Success! Logged In");
+        return console.log('Success! Logged In');
       })
       .catch((err) => {
-        dispatch({ type: "REGISTER_FAIL" });
+        dispatch({ type: 'REGISTER_FAIL' });
         errorsDispatch({
-          type: "GET_ERRORS",
+          type: 'GET_ERRORS',
           msg: err.response.data.msg,
         });
         return console.log(err.response.data.msg);

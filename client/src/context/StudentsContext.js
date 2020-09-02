@@ -1,22 +1,22 @@
-import React, { createContext } from "react";
-import useStudentsState from "../hooks/useStudentsState";
+import React, { createContext } from 'react';
+import useStudentsState from '../hooks/useStudentsState';
 
 const defaultStudents = [
   {
     _id: 1,
-    givenName: "DefaultStudent",
-    familyName: "DefaultStudentLN",
-    phone: "080-0101-0101",
-    email: "default@default.com",
-    level: "adv",
+    givenName: 'DefaultStudent',
+    familyName: 'DefaultStudentLN',
+    phone: '080-0101-0101',
+    email: 'default@default.com',
+    level: 'adv',
   },
   {
     _id: 2,
-    givenName: "DefaultStudent2",
-    familyName: "DefaultStudentLN2",
-    phone: "080-0101-0102",
-    email: "default2@default.com",
-    level: "lg",
+    givenName: 'DefaultStudent2',
+    familyName: 'DefaultStudentLN2',
+    phone: '080-0101-0102',
+    email: 'default2@default.com',
+    level: 'lg',
   },
 ];
 

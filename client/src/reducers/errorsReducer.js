@@ -1,12 +1,12 @@
 const errorsReducer = (state, action) => {
   switch (action.type) {
-    case "GET_ERRORS":
+    case 'GET_ERRORS':
       return {
         msg: action.msg,
         status: action.status,
         id: action.id,
       };
-    case "CLEAR_ERRORS":
+    case 'CLEAR_ERRORS':
       return {
         msg: null,
         status: null,

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState } from 'react';
 
 function useToggle(initialVal = false) {
   const [isToggled, setIsToggled] = useState(initialVal);

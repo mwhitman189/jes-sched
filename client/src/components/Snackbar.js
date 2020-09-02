@@ -1,6 +1,6 @@
-import React from "react";
-import PropTypes from "prop-types";
-import styled from "styled-components";
+import React from 'react';
+import PropTypes from 'prop-types';
+import styled from 'styled-components';
 
 const Container = styled.div`
   display: flex;
@@ -9,7 +9,7 @@ const Container = styled.div`
 `;
 
 const Content = styled.div`
-  display: ${({ isOpen }) => (isOpen ? "flex" : "none")};
+  display: ${({ isOpen }) => (isOpen ? 'flex' : 'none')};
   align-items: center;
   justify-content: center;
   color: #f2f0f0;
@@ -30,10 +30,11 @@ const Content = styled.div`
 export default function Snackbar(props) {
   const { msg, isOpen, setIsOpen } = props;
 
-  if (isOpen)
-    setTimeout(function () {
+  if (isOpen) {
+    setTimeout(() => {
       setIsOpen(false);
     }, 3500);
+  }
 
   return (
     <Container>
