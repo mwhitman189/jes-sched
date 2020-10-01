@@ -1,23 +1,23 @@
-import React, { useState, useContext, useEffect } from 'react';
-import moment from 'moment';
-import Flatpickr from 'react-flatpickr';
-import 'flatpickr/dist/themes/airbnb.css';
-import { v4 as uuidv4 } from 'uuid';
-import styled from 'styled-components';
-import { checkForSameDate } from '../helpers/utilities';
-import roomList from '../constants/rooms';
-import lessonTypes from '../constants/lessonTypes';
-import Form from './templates/Form';
-import FormInput from './templates/FormInput';
-import TextInput from './templates/TextInput';
-import Checkbox from './templates/Checkbox';
-import StyledSelect from './templates/StyledSelect';
-import useInputState from '../hooks/useInputState';
-import useToggleState from '../hooks/useToggleState';
-import { validateRoom, validateTeacher } from '../validators';
-import { TeachersContext } from '../context/TeachersContext';
-import { StudentsContext } from '../context/StudentsContext';
-import { EventsContext } from '../context/EventsContext';
+import React, { useState, useContext, useEffect } from 'react'
+import moment from 'moment'
+import Flatpickr from 'react-flatpickr'
+import 'flatpickr/dist/themes/airbnb.css'
+import { v4 as uuidv4 } from 'uuid'
+import styled from 'styled-components'
+import { checkForSameDate } from '../helpers/utilities'
+import roomList from '../constants/rooms'
+import lessonTypes from '../constants/lessonTypes'
+import Form from './templates/Form'
+import FormInput from './templates/FormInput'
+import TextInput from './templates/TextInput'
+import Checkbox from './templates/Checkbox'
+import StyledSelect from './templates/StyledSelect'
+import useInputState from '../hooks/useInputState'
+import useToggleState from '../hooks/useToggleState'
+import { validateRoom, validateTeacher } from '../validators'
+import { TeachersContext } from '../context/TeachersContext'
+import { StudentsContext } from '../context/StudentsContext'
+import { EventsContext } from '../context/EventsContext'
 
 const Dialog = styled.div`
   color: ${({ theme }) => theme.colors.primaryText};
@@ -39,12 +39,12 @@ const Dialog = styled.div`
   @media (min-width: ${({ theme }) => theme.breakpoints.lg}) {
     width: 600px;
   }
-`;
+`
 
 const InputGroup = styled.div`
   display: flex;
   flex-direction: row;
-`;
+`
 
 const StyledFlatpickr = styled(Flatpickr)`
   color: ${({ theme }) => theme.colors.primaryText};
@@ -52,7 +52,7 @@ const StyledFlatpickr = styled(Flatpickr)`
   border-radius: 4px;
   border: ${({ theme }) => theme.colors.secondaryBackground} solid 2px;
   box-shadow: ${({ theme }) => theme.effects.shadow};
-`;
+`
 
 const ButtonGroup = styled.div`
   margin: 30px 0 0;
@@ -63,7 +63,7 @@ const ButtonGroup = styled.div`
   flex: 1 1 0px;
   padding: 0;
   flex-direction: row;
-`;
+`
 
 const Button = styled.button`
   display: ${({ theme }) => theme.btnStyles.display};
@@ -79,23 +79,23 @@ const Button = styled.button`
   height: ${({ theme }) => theme.btnStyles.height};
   margin: ${({ theme }) => theme.btnStyles.margin};
   width: ${({ theme }) => theme.btnStyles.width};
-`;
+`
 
 const SubmitButton = styled(Button)`
   ${({ disabled }) => (disabled
     ? 'opacity: .4; cursor: not-allowed'
     : 'opacity: 1; cursor: pointer')};
-`;
+`
 
 export default function EventForm(props) {
-  const { addTeachingMins } = useContext(TeachersContext);
+  const { addTeachingMins } = useContext(TeachersContext)
   const {
     events, addEvent, editEvent, deleteEvent, deleteEvents,
   } = useContext(
     EventsContext,
-  );
-  const { teachers } = useContext(TeachersContext);
-  const { students } = useContext(StudentsContext);
+  )
+  const { teachers } = useContext(TeachersContext)
+  const { students } = useContext(StudentsContext)
   const {
     formType,
     setFormType,
@@ -103,46 +103,46 @@ export default function EventForm(props) {
     startTime,
     setSelectedEvent,
     selectedTeacherId,
-  } = props;
+  } = props
 
   const resourceFromId = teachers.find(
     (t) => t.resourceId === (event.resourceId || selectedTeacherId),
-  );
+  )
 
-  const roomOption = event ? { label: event.room, value: event.room } : '';
-  const eventTypeOption = lessonTypes.find((t) => t.value === event.type);
+  const roomOption = event ? { label: event.room, value: event.room } : ''
+  const eventTypeOption = lessonTypes.find((t) => t.value === event.type)
 
-  const [start] = useInputState(startTime);
-  const [title, setTitle, resetTitle] = useInputState(event ? event.title : '');
+  const [ start ] = useInputState(startTime)
+  const [ title, setTitle, resetTitle ] = useInputState(event ? event.title : '')
 
-  const [duration, setDuration, resetDuration] = useInputState(
+  const [ duration, setDuration, resetDuration ] = useInputState(
     event ? event.duration : '',
-  );
+  )
 
-  const [resource, setResource, resetResource] = useInputState(
+  const [ resource, setResource, resetResource ] = useInputState(
     resourceFromId || '',
-  );
+  )
 
-  const [room, setRoom, resetRoom] = useInputState(roomOption);
-  const [eventType, setEventType, resetEventType] = useInputState(
+  const [ room, setRoom, resetRoom ] = useInputState(roomOption)
+  const [ eventType, setEventType, resetEventType ] = useInputState(
     eventTypeOption,
-  );
-  const [members, setMembers] = useInputState(event ? event.students : []);
-  const [absentees] = useInputState(event ? event.absentees : []);
-  const [isRecurring, toggleIsRecurring] = useToggleState(false);
-  const [travelTime, setTravelTime] = useInputState('');
-  const [errors, setErrors] = useState({});
-  const [isLoading, toggleIsLoading] = useToggleState(false);
+  )
+  const [ members, setMembers ] = useInputState(event ? event.students : [])
+  const [ absentees ] = useInputState(event ? event.absentees : [])
+  const [ isRecurring, toggleIsRecurring ] = useToggleState(false)
+  const [ travelTime, setTravelTime ] = useInputState('')
+  const [ errors, setErrors ] = useState({})
+  const [ isLoading, toggleIsLoading ] = useToggleState(false)
 
   const isSubmitDisabled = errors.titleError
     || errors.durationError
     || errors.resourceError
     || errors.roomError
-    || errors.eventTypeError;
+    || errors.eventTypeError
 
-  const now = new Date();
-  const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
-  const monthEnd = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+  const now = new Date()
+  const monthStart = new Date(now.getFullYear(), now.getMonth(), 1)
+  const monthEnd = new Date(now.getFullYear(), now.getMonth() + 1, 0)
 
   // ***Form Validation***
   useEffect(() => {
@@ -151,11 +151,11 @@ export default function EventForm(props) {
       setErrors((prevState) => ({
         ...prevState,
         titleError: 'Lesson name required',
-      }));
+      }))
     } else {
-      setErrors((prevState) => ({ ...prevState, titleError: '' }));
+      setErrors((prevState) => ({ ...prevState, titleError: '' }))
     }
-  }, [title]);
+  }, [ title ])
 
   useEffect(() => {
     // Event duration
@@ -163,11 +163,11 @@ export default function EventForm(props) {
       setErrors((prevState) => ({
         ...prevState,
         durationError: 'Duration required',
-      }));
+      }))
     } else {
-      setErrors((prevState) => ({ ...prevState, durationError: '' }));
+      setErrors((prevState) => ({ ...prevState, durationError: '' }))
     }
-  }, [duration]);
+  }, [ duration ])
 
   useEffect(() => {
     // Event type
@@ -175,11 +175,11 @@ export default function EventForm(props) {
       setErrors((prevState) => ({
         ...prevState,
         eventTypeError: 'Lesson type required',
-      }));
+      }))
     } else {
-      setErrors((prevState) => ({ ...prevState, eventTypeError: '' }));
+      setErrors((prevState) => ({ ...prevState, eventTypeError: '' }))
     }
-  }, [eventType]);
+  }, [ eventType ])
 
   useEffect(() => {
     // Event resource
@@ -187,21 +187,21 @@ export default function EventForm(props) {
       setErrors((prevState) => ({
         ...prevState,
         resourceError: 'Lesson name required',
-      }));
+      }))
     } else {
       // Set the resourceId to the new value
-      if (event) event.resourceId = resource.resourceId;
+      if (event) event.resourceId = resource.resourceId
 
       if (!validateTeacher(events, event)) {
         setErrors((prevState) => ({
           ...prevState,
           resourceError: 'Teacher conflict',
-        }));
+        }))
       } else {
-        setErrors((prevState) => ({ ...prevState, resourceError: '' }));
+        setErrors((prevState) => ({ ...prevState, resourceError: '' }))
       }
     }
-  }, [resource]);
+  }, [ resource ])
 
   useEffect(() => {
     // Event room
@@ -209,44 +209,44 @@ export default function EventForm(props) {
       setErrors((prevState) => ({
         ...prevState,
         roomError: 'Room required',
-      }));
+      }))
     } else {
       // Set the room to the new value
-      if (event) event.room = room.value;
+      if (event) event.room = room.value
 
       if (!validateRoom(events, event)) {
         setErrors((prevState) => ({
           ...prevState,
           roomError: 'Room conflict',
-        }));
+        }))
       } else {
-        setErrors((prevState) => ({ ...prevState, roomError: '' }));
+        setErrors((prevState) => ({ ...prevState, roomError: '' }))
       }
     }
-  }, [room]);
+  }, [ room ])
   // ***End Form Validation***
 
   const hideForm = () => {
-    resetForm();
-    setFormType('');
-  };
+    resetForm()
+    setFormType('')
+  }
 
   const resetForm = () => {
-    resetTitle();
-    resetDuration();
-    resetResource();
-    resetRoom();
-    resetEventType();
-    toggleIsRecurring(false);
-    setSelectedEvent('');
-  };
+    resetTitle()
+    resetDuration()
+    resetResource()
+    resetRoom()
+    resetEventType()
+    toggleIsRecurring(false)
+    setSelectedEvent('')
+  }
 
   const handleAddEvent = (e) => {
-    e.preventDefault();
-    toggleIsLoading(true);
+    e.preventDefault()
+    toggleIsLoading(true)
 
-    const id = uuidv4();
-    const endTime = moment(start).add(duration, 'm').toDate();
+    const id = uuidv4()
+    const endTime = moment(start).add(duration, 'm').toDate()
     addEvent({
       id,
       title,
@@ -260,7 +260,7 @@ export default function EventForm(props) {
       students: members,
       absentees: [],
       isLesson: true,
-    });
+    })
     if (travelTime > 0) {
       addEvent({
         id,
@@ -272,7 +272,7 @@ export default function EventForm(props) {
         type: 'trav',
         isRecurring,
         isLesson: false,
-      });
+      })
       addEvent({
         id,
         title: 'Return Travel',
@@ -283,18 +283,18 @@ export default function EventForm(props) {
         type: 'trav',
         isRecurring,
         isLesson: false,
-      });
+      })
     }
-    addTeachingMins(events, monthStart, monthEnd);
-    toggleIsLoading(false);
-    hideForm();
-  };
+    addTeachingMins(events, monthStart, monthEnd)
+    toggleIsLoading(false)
+    hideForm()
+  }
 
   const handleEditEvent = (e) => {
-    e.preventDefault();
-    toggleIsLoading(true);
-    const { id } = e;
-    const endTime = moment(start).add(duration, 'm').toDate();
+    e.preventDefault()
+    toggleIsLoading(true)
+    const { id } = e
+    const endTime = moment(start).add(duration, 'm').toDate()
     const editedEvent = {
       ...event,
       title,
@@ -308,8 +308,8 @@ export default function EventForm(props) {
       students: members,
       absentees,
       isNewEvent: true,
-    };
-    editEvent(editedEvent);
+    }
+    editEvent(editedEvent)
     if (travelTime > 0) {
       addEvent({
         id,
@@ -321,7 +321,7 @@ export default function EventForm(props) {
         type: 'trav',
         isRecurring,
         isLesson: false,
-      });
+      })
       addEvent({
         id,
         title: 'Return Travel',
@@ -332,63 +332,63 @@ export default function EventForm(props) {
         type: 'trav',
         isRecurring,
         isLesson: false,
-      });
+      })
     }
-    addTeachingMins(events, monthStart, monthEnd);
-    toggleIsLoading(false);
-    hideForm();
-  };
+    addTeachingMins(events, monthStart, monthEnd)
+    toggleIsLoading(false)
+    hideForm()
+  }
 
   const handleCancelEvent = (e) => {
-    e.preventDefault();
-    toggleIsLoading(true);
-    const sdCancellation = checkForSameDate(event.start);
+    e.preventDefault()
+    toggleIsLoading(true)
+    const sdCancellation = checkForSameDate(event.start)
     const editedEvent = {
       ...event,
       isCancelled: true,
       isSameDayCancellation: sdCancellation,
-    };
-    editEvent(editedEvent);
-    addTeachingMins(events, monthStart, monthEnd);
-    toggleIsLoading(false);
-    hideForm();
-  };
+    }
+    editEvent(editedEvent)
+    addTeachingMins(events, monthStart, monthEnd)
+    toggleIsLoading(false)
+    hideForm()
+  }
 
   const handleDeleteEvent = () => {
-    toggleIsLoading(true);
-    deleteEvent(event);
-    addTeachingMins(events, monthStart, monthEnd);
-    toggleIsLoading(false);
-    hideForm();
-  };
+    toggleIsLoading(true)
+    deleteEvent(event)
+    addTeachingMins(events, monthStart, monthEnd)
+    toggleIsLoading(false)
+    hideForm()
+  }
 
   const handleDeleteEvents = () => {
-    toggleIsLoading(true);
-    deleteEvents(event);
-    addTeachingMins(events, monthStart, monthEnd);
-    toggleIsLoading(false);
-    hideForm();
-  };
+    toggleIsLoading(true)
+    deleteEvents(event)
+    addTeachingMins(events, monthStart, monthEnd)
+    toggleIsLoading(false)
+    hideForm()
+  }
 
   const handleToggleRecurrence = () => {
-    toggleIsRecurring(!isRecurring);
-  };
+    toggleIsRecurring(!isRecurring)
+  }
 
   const handleMembersChange = (selectedOption) => {
-    setMembers(selectedOption);
-  };
+    setMembers(selectedOption)
+  }
 
   const handleResourceChange = (selectedOption) => {
-    setResource(selectedOption);
-  };
+    setResource(selectedOption)
+  }
 
   const handleRoomChange = (selectedOption) => {
-    setRoom(selectedOption);
-  };
+    setRoom(selectedOption)
+  }
 
   const handleEventTypeChange = (selectedOption) => {
-    setEventType(selectedOption);
-  };
+    setEventType(selectedOption)
+  }
 
   return (
     <Dialog isOpen={formType === 'event'}>
@@ -522,5 +522,5 @@ export default function EventForm(props) {
         </ButtonGroup>
       </Form>
     </Dialog>
-  );
+  )
 }
