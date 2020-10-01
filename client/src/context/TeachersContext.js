@@ -1,5 +1,5 @@
-import React, { createContext } from 'react';
-import useTeachersState from '../hooks/useTeachersState';
+import React, { createContext } from 'react'
+import useTeachersState from '../hooks/useTeachersState'
 
 const defaultTeachers = [
   {
@@ -20,16 +20,16 @@ const defaultTeachers = [
     dependentsNum: 0,
     isPartTime: false,
   },
-];
+]
 
-export const TeachersContext = createContext();
+export const TeachersContext = createContext()
 
 export function TeachersProvider(props) {
-  const teachers = useTeachersState(defaultTeachers);
+  const teachers = useTeachersState(defaultTeachers)
 
   return (
     <TeachersContext.Provider value={teachers}>
       {props.children}
     </TeachersContext.Provider>
-  );
+  )
 }

@@ -1,8 +1,8 @@
-import React from 'react';
-import ReactSelect from 'react-select';
-import styled from 'styled-components';
+import React from 'react'
+import ReactSelect from 'react-select'
+import styled from 'styled-components'
 
-const StyledSelect = styled(ReactSelect)`
+export const StyledSelect = styled(ReactSelect)`
   height: 30px;
   & > div {
     color: ${({ theme }) => theme.colors.primaryText};
@@ -14,6 +14,4 @@ const StyledSelect = styled(ReactSelect)`
       width: 160px;
     }
   }
-`;
-
-export default ({ props }) => <StyledSelect {...props} />;
+`

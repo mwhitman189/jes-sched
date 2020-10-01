@@ -99,7 +99,6 @@ const getDbTeachers = (setTeachers, user) => {
     .get('/api/teachers', tokenConfig(user))
     .then((res) => {
       if (res.data.length > 0) {
-        console.log(res.data)
         return setTeachers(res.data)
       }
     })

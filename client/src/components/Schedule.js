@@ -68,8 +68,8 @@ const SchedulePrePrintBtn = () => {
   useEffect(() => {
     // Pass current dateTime to compare to recurrence events to check if a new batch of recurrences
     // is needed
+    setTimeout(getTeachers(), 100)
     getEvents(now.getTime())
-    getTeachers()
     getStudents()
   }, [])
 
