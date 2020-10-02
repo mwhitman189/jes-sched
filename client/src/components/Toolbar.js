@@ -1,12 +1,12 @@
-import React, { useContext, useState } from 'react';
-import moment from 'moment';
-import styled from 'styled-components';
-import { UserContext } from '../context/UserContext';
-import TeacherList from './TeacherList';
-import ModalContainer from './templates/ModalContainer';
-import NewEntryDialog from './NewEntryDialog';
-import theme from '../constants/styles';
-import 'react-big-calendar/lib/sass/toolbar.scss';
+import React, { useContext, useState } from 'react'
+import moment from 'moment'
+import styled from 'styled-components'
+import { UserContext } from '../context/UserContext'
+import TeacherList from './TeacherList'
+import ModalContainer from './templates/ModalContainer'
+import NewEntryDialog from './NewEntryDialog'
+import theme from '../constants/styles'
+import 'react-big-calendar/lib/sass/toolbar.scss'
 
 const ToolbarContainer = styled.div`
   height: 40px;
@@ -15,7 +15,7 @@ const ToolbarContainer = styled.div`
   margin: 0;
   padding: 0 10px;
   justify-content: space-between;
-`;
+`
 
 const Menu = styled.nav`
   position: fixed;
@@ -40,7 +40,7 @@ const Menu = styled.nav`
     background: #fff;
     padding: 2px;
   }
-`;
+`
 
 const ButtonContainer = styled.div`
   margin: 0;
@@ -48,14 +48,14 @@ const ButtonContainer = styled.div`
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  flex: 1 1 0px;
+  flex: 1 0 auto;
   padding: 0;
   flex-direction: ${({ isRow }) => (isRow ? 'row' : 'column')};
   @media (min-width: ${({ theme }) => theme.breakpoints.lg}) {
     height: 100%;
     flex-direction: row;
   }
-`;
+`
 
 const Button = styled.button`
   display: ${({ theme }) => theme.btnStyles.display};
@@ -82,7 +82,7 @@ const Button = styled.button`
     margin: 0 4px;
     justify-content: center;
   }
-`;
+`
 
 const MenuButton = styled(Button)`
   position: relative;
@@ -90,7 +90,7 @@ const MenuButton = styled(Button)`
   @media (min-width: ${({ theme }) => theme.breakpoints.lg}) {
     display: none;
   }
-`;
+`
 
 const CloseButton = styled(Button)`
   right: 0;
@@ -108,13 +108,13 @@ const CloseButton = styled(Button)`
   @media (min-width: ${({ theme }) => theme.breakpoints.lg}) {
     display: none;
   }
-`;
+`
 
 const DateDisplay = styled.span`
   color: rgba(68, 68, 68, 0.7);
   margin: 0 0.2rem;
   cursor: pointer;
-`;
+`
 
 const Toolbar = (props) => {
   const {
@@ -125,10 +125,10 @@ const Toolbar = (props) => {
     handlePayrollNav,
     handleAddStaffNav,
     handleAddStudentNav,
-  } = props;
+  } = props
 
-  const { user, dispatch } = useContext(UserContext);
-  const [isClosed, setIsClosed] = useState(true);
+  const { user, dispatch } = useContext(UserContext)
+  const [ isClosed, setIsClosed ] = useState(true)
 
   // Set the types of items to display in the "Create new..." dialog
   const ITEM_TYPES = [
@@ -147,20 +147,20 @@ const Toolbar = (props) => {
       title: 'Student',
       onClickEvent: handleAddStudentNav,
     },
-  ];
+  ]
 
   const handleLogout = (e) => {
-    e.preventDefault();
-    dispatch({ type: 'LOGOUT_SUCCESS' });
-  };
+    e.preventDefault()
+    dispatch({ type: 'LOGOUT_SUCCESS' })
+  }
 
   const openDrawer = () => {
-    setIsClosed(false);
-  };
+    setIsClosed(false)
+  }
 
   const closeDrawer = () => {
-    setIsClosed(true);
-  };
+    setIsClosed(true)
+  }
 
   return (
     <ToolbarContainer>
@@ -205,6 +205,6 @@ const Toolbar = (props) => {
         </ButtonContainer>
       </Menu>
     </ToolbarContainer>
-  );
-};
-export default Toolbar;
+  )
+}
+export default Toolbar

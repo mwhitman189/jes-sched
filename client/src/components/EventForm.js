@@ -60,7 +60,7 @@ const ButtonGroup = styled.div`
   justify-content: space-between;
   align-items: center;
   flex-direction: column;
-  flex: 1 1 0px;
+  flex: 1 0 auto;
   padding: 0;
   flex-direction: row;
 `
