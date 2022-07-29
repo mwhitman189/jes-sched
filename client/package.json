@@ -19,7 +19,7 @@
     "react": "^16.8",
     "react-async": "^10.0.0",
     "react-big-calendar": "github:mwhitman189/react-big-calendar",
-    "react-dev-utils": "^10.0.0",
+    "react-dev-utils": "^11.0.4",
     "react-dom": "^16.8",
     "react-is": "^16.8",
     "react-material-ui-form-validator": "^2.0.9",
