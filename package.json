@@ -23,7 +23,7 @@
     "japanese-holidays": "^1.0.9",
     "jsonwebtoken": "^8.5.1",
     "moment": "^2.24.0",
-    "mongoose": "^5.9.10",
+    "mongoose": "^5.13.15",
     "node-sass": "^4.14.1",
     "prop-types": "^15.6.0",
     "proptypes": "^1.1.0",
